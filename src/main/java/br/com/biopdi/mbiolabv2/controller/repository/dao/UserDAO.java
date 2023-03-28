@@ -15,9 +15,9 @@ public class UserDAO extends DBConnection {
     /**
      * Construtor da classe, que cria a tabela tb_user, caso ela não exista
      */
-    public UserDAO(){
-        openConnection();
-        try {
+    public UserDAO() {
+       try {
+            openConnection();
             PreparedStatement stm = conn.prepareStatement("CREATE TABLE IF NOT EXISTS tb_user ("
                     + "userId INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + "userName TEXT,"
@@ -35,7 +35,7 @@ public class UserDAO extends DBConnection {
      //     * Método de inclusão de usuario na tabela tb_user
      //     * @param user
      //     *
-     //     * @Description chamar a função, instanciando DBConnection db e User user. Então, chama db.create()
+     //     * @Description chamar a função, instanciando UserDAO userDAO e User user. Então, chama db.create()
      //     */
     public void create(User user){
         openConnection();
@@ -79,11 +79,6 @@ public class UserDAO extends DBConnection {
         }
         return result;
     }
-
-
-
-
-
 
     /**
      * Método que atualiza as informações de um usuario específico
@@ -131,7 +126,7 @@ public class UserDAO extends DBConnection {
      * @param pk
      * @return Cadastro do usuario pela primary key
      */
-    public User find(int pk){
+    public User findById(int pk){
         User result = null;
         openConnection();
         try{

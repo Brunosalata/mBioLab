@@ -3,6 +3,7 @@ module br.com.biopdi.mbiolabv2 {
     requires javafx.fxml;
     requires com.fazecast.jSerialComm;
     requires java.sql;
+    requires sqlite.jdbc;
 
 
     opens br.com.biopdi.mbiolabv2 to javafx.fxml;

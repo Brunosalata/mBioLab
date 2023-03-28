@@ -1,43 +1,116 @@
 package br.com.biopdi.mbiolabv2.model.bean;
 
+import br.com.biopdi.mbiolabv2.controller.repository.dao.EssayDAO;
+import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
+
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class Essay {
 
-    private int userId, essayId;
-    private String essayIdentification, essayNorm, ChargeCell, usedMachine;
-    private double initialForce, finalForce, initialPosition, finalPosition, displacementVelocity, temperature, preCharge, relativeHumidity;
+    private Integer essayId, userId;
+    private String essayIdentification, essayNorm, essayUsedMachine;
+    private double essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, essayFinalPosition, essayDislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity;
+    private byte[] essayGraphic;
     private Date essayData;
 
     public Essay() {
     }
-    public Essay(int userId, int essayId, String essayIdentification, String essayNorm, String chargeCell, String usedMachine, double initialForce, double finalForce, double initialPosition, double finalPosition, double displacementVelocity, double temperature, double preCharge, double relativeHumidity, Date essayData) {
-        this.userId = userId;
+    public Essay(Integer essayId, Integer userId, String essayIdentification, String essayNorm, String essayUsedMachine, double essayChargeCell, double essayInitialForce, double essayFinalForce, double essayInitialPosition, double essayFinalPosition, double essayDislocationVelocity, double essayTemperature, double essayPreCharge, double essayRelativeHumidity, byte[] essayGraphic) {
         this.essayId = essayId;
+        this.userId = userId;
         this.essayIdentification = essayIdentification;
         this.essayNorm = essayNorm;
-        ChargeCell = chargeCell;
-        this.usedMachine = usedMachine;
-        this.initialForce = initialForce;
-        this.finalForce = finalForce;
-        this.initialPosition = initialPosition;
-        this.finalPosition = finalPosition;
-        this.displacementVelocity = displacementVelocity;
-        this.temperature = temperature;
-        this.preCharge = preCharge;
-        this.relativeHumidity = relativeHumidity;
+        this.essayChargeCell = essayChargeCell;
+        this.essayUsedMachine = essayUsedMachine;
+        this.essayInitialForce = essayInitialForce;
+        this.essayFinalForce = essayFinalForce;
+        this.essayInitialPosition = essayInitialPosition;
+        this.essayFinalPosition = essayFinalPosition;
+        this.essayDislocationVelocity = essayDislocationVelocity;
+        this.essayTemperature = essayTemperature;
+        this.essayPreCharge = essayPreCharge;
+        this.essayRelativeHumidity = essayRelativeHumidity;
+        this.essayGraphic = essayGraphic;
+    }
+    public Essay(Integer userId, String essayIdentification, String essayNorm, String essayUsedMachine, double essayChargeCell, double essayInitialForce, double essayFinalForce, double essayInitialPosition, double essayFinalPosition, double essayDislocationVelocity, double essayTemperature, double essayPreCharge, double essayRelativeHumidity, byte[] essayGraphic) {
+        this.userId = userId;
+        this.essayIdentification = essayIdentification;
+        this.essayNorm = essayNorm;
+        this.essayChargeCell = essayChargeCell;
+        this.essayUsedMachine = essayUsedMachine;
+        this.essayInitialForce = essayInitialForce;
+        this.essayFinalForce = essayFinalForce;
+        this.essayInitialPosition = essayInitialPosition;
+        this.essayFinalPosition = essayFinalPosition;
+        this.essayDislocationVelocity = essayDislocationVelocity;
+        this.essayTemperature = essayTemperature;
+        this.essayPreCharge = essayPreCharge;
+        this.essayRelativeHumidity = essayRelativeHumidity;
+        this.essayGraphic = essayGraphic;
+    }
+    public Essay(Integer essayId, Integer userId, String essayIdentification, String essayNorm, String essayUsedMachine, double essayChargeCell, double essayInitialForce, double essayFinalForce, double essayInitialPosition, double essayFinalPosition, double essayDislocationVelocity, double essayTemperature, double essayPreCharge, double essayRelativeHumidity) {
+        this.essayId = essayId;
+        this.userId = userId;
+        this.essayIdentification = essayIdentification;
+        this.essayNorm = essayNorm;
+        this.essayChargeCell = essayChargeCell;
+        this.essayUsedMachine = essayUsedMachine;
+        this.essayInitialForce = essayInitialForce;
+        this.essayFinalForce = essayFinalForce;
+        this.essayInitialPosition = essayInitialPosition;
+        this.essayFinalPosition = essayFinalPosition;
+        this.essayDislocationVelocity = essayDislocationVelocity;
+        this.essayTemperature = essayTemperature;
+        this.essayPreCharge = essayPreCharge;
+        this.essayRelativeHumidity = essayRelativeHumidity;
+    }
+    public Essay(Integer userId, String essayIdentification, String essayNorm, String essayUsedMachine, double essayChargeCell, double essayInitialForce, double essayFinalForce, double essayInitialPosition, double essayFinalPosition, double essayDislocationVelocity, double essayTemperature, double essayPreCharge, double essayRelativeHumidity) {
+        this.userId = userId;
+        this.essayIdentification = essayIdentification;
+        this.essayNorm = essayNorm;
+        this.essayChargeCell = essayChargeCell;
+        this.essayUsedMachine = essayUsedMachine;
+        this.essayInitialForce = essayInitialForce;
+        this.essayFinalForce = essayFinalForce;
+        this.essayInitialPosition = essayInitialPosition;
+        this.essayFinalPosition = essayFinalPosition;
+        this.essayDislocationVelocity = essayDislocationVelocity;
+        this.essayTemperature = essayTemperature;
+        this.essayPreCharge = essayPreCharge;
+        this.essayRelativeHumidity = essayRelativeHumidity;
+    }
+
+    public Essay(Integer essayId, Integer userId, String essayIdentification, String essayNorm, String essayUsedMachine, double essayChargeCell, double essayInitialForce, double essayFinalForce, double essayInitialPosition, double essayFinalPosition, double essayDislocationVelocity, double essayTemperature, double essayPreCharge, double essayRelativeHumidity, byte[] essayGraphic, Date essayData) {
+        this.essayId = essayId;
+        this.userId = userId;
+        this.essayIdentification = essayIdentification;
+        this.essayNorm = essayNorm;
+        this.essayUsedMachine = essayUsedMachine;
+        this.essayChargeCell = essayChargeCell;
+        this.essayInitialForce = essayInitialForce;
+        this.essayFinalForce = essayFinalForce;
+        this.essayInitialPosition = essayInitialPosition;
+        this.essayFinalPosition = essayFinalPosition;
+        this.essayDislocationVelocity = essayDislocationVelocity;
+        this.essayTemperature = essayTemperature;
+        this.essayPreCharge = essayPreCharge;
+        this.essayRelativeHumidity = essayRelativeHumidity;
+        this.essayGraphic = essayGraphic;
         this.essayData = essayData;
     }
-    public int getUserId() {
+
+    public Integer getUserId() {
         return userId;
     }
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
-    public int getEssayId() {
+    public Integer getEssayId() {
         return essayId;
     }
-    public void setEssayId(int essayId) {
+    public void setEssayId(Integer essayId) {
         this.essayId = essayId;
     }
     public String getEssayIdentification() {
@@ -52,65 +125,71 @@ public class Essay {
     public void setEssayNorm(String essayNorm) {
         this.essayNorm = essayNorm;
     }
-    public String getChargeCell() {
-        return ChargeCell;
+    public double getEssayChargeCell() {
+        return essayChargeCell;
     }
-    public void setChargeCell(String chargeCell) {
-        ChargeCell = chargeCell;
+    public void setEssayChargeCell(double essayChargeCell) {
+        this.essayChargeCell = essayChargeCell;
     }
-    public String getUsedMachine() {
-        return usedMachine;
+    public String getEssayUsedMachine() {
+        return essayUsedMachine;
     }
-    public void setUsedMachine(String usedMachine) {
-        this.usedMachine = usedMachine;
+    public void setEssayUsedMachine(String essayUsedMachine) {
+        this.essayUsedMachine = essayUsedMachine;
     }
-    public double getInitialForce() {
-        return initialForce;
+    public double getEssayInitialForce() {
+        return essayInitialForce;
     }
-    public void setInitialForce(double initialForce) {
-        this.initialForce = initialForce;
+    public void setEssayInitialForce(double essayInitialForce) {
+        this.essayInitialForce = essayInitialForce;
     }
-    public double getFinalForce() {
-        return finalForce;
+    public double getEssayFinalForce() {
+        return essayFinalForce;
     }
-    public void setFinalForce(double finalForce) {
-        this.finalForce = finalForce;
+    public void setEssayFinalForce(double essayFinalForce) {
+        this.essayFinalForce = essayFinalForce;
     }
-    public double getInitialPosition() {
-        return initialPosition;
+    public double getEssayInitialPosition() {
+        return essayInitialPosition;
     }
-    public void setInitialPosition(double initialPosition) {
-        this.initialPosition = initialPosition;
+    public void setEssayInitialPosition(double essayInitialPosition) {
+        this.essayInitialPosition = essayInitialPosition;
     }
-    public double getFinalPosition() {
-        return finalPosition;
+    public double getEssayFinalPosition() {
+        return essayFinalPosition;
     }
-    public void setFinalPosition(double finalPosition) {
-        this.finalPosition = finalPosition;
+    public void setEssayFinalPosition(double essayFinalPosition) {
+        this.essayFinalPosition = essayFinalPosition;
     }
-    public double getDisplacementVelocity() {
-        return displacementVelocity;
+    public double getEssayDislocationVelocity() {
+        return essayDislocationVelocity;
     }
-    public void setDisplacementVelocity(double displacementVelocity) {
-        this.displacementVelocity = displacementVelocity;
+    public void setEssayDislocationVelocity(double essayDislocationVelocity) {
+        this.essayDislocationVelocity = essayDislocationVelocity;
     }
-    public double getTemperature() {
-        return temperature;
+    public double getEssayTemperature() {
+        return essayTemperature;
     }
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
+    public void setEssayTemperature(double essayTemperature) {
+        this.essayTemperature = essayTemperature;
     }
-    public double getPreCharge() {
-        return preCharge;
+    public double getEssayPreCharge() {
+        return essayPreCharge;
     }
-    public void setPreCharge(double preCharge) {
-        this.preCharge = preCharge;
+    public void setEssayPreCharge(double essayPreCharge) {
+        this.essayPreCharge = essayPreCharge;
     }
-    public double getRelativeHumidity() {
-        return relativeHumidity;
+    public double getEssayRelativeHumidity() {
+        return essayRelativeHumidity;
     }
-    public void setRelativeHumidity(double relativeHumidity) {
-        this.relativeHumidity = relativeHumidity;
+    public void setEssayRelativeHumidity(double essayRelativeHumidity) {
+        this.essayRelativeHumidity = essayRelativeHumidity;
+    }
+    public byte[] getEssayGraphic() {
+        return essayGraphic;
+    }
+    public void setEssayGraphic(byte[] essayGraphic) {
+        this.essayGraphic = essayGraphic;
     }
     public Date getEssayData() {
         return essayData;
@@ -118,4 +197,62 @@ public class Essay {
     public void setEssayData(Date essayData) {
         this.essayData = essayData;
     }
+
+    @Override
+    public String toString() {
+        return "Essay{" +
+                "essayId=" + essayId +
+                ", userId=" + userId +
+                ", essayIdentification='" + essayIdentification + '\'' +
+                ", essayNorm='" + essayNorm + '\'' +
+                ", essayUsedMachine='" + essayUsedMachine + '\'' +
+                ", essayChargeCell=" + essayChargeCell +
+                ", essayInitialForce=" + essayInitialForce +
+                ", essayFinalForce=" + essayFinalForce +
+                ", essayInitialPosition=" + essayInitialPosition +
+                ", essayFinalPosition=" + essayFinalPosition +
+                ", essayDislocationVelocity=" + essayDislocationVelocity +
+                ", essayTemperature=" + essayTemperature +
+                ", essayPreCharge=" + essayPreCharge +
+                ", essayRelativeHumidity=" + essayRelativeHumidity +
+                ", essayGraphic=" + Arrays.toString(essayGraphic) +
+                ", essayData=" + essayData +
+                '}';
+    }
+    //------------------ DAO VERIFY -----------------
+
+    private static EssayDAO dao = new EssayDAO();
+
+    /**
+     * Método save() que pode ser chamado diretamente da classe Essay
+     */
+    public void save(Essay essay){
+        if(essayId != null && dao.findById(essayId) != null){
+            dao.update(essay);
+        } else {
+            dao.create(essay);
+        }
+    }
+    /**
+     * Método delete() que pode ser chamado diretamente da classe Essay
+     */
+    public void delete(int i){
+        if(dao.findById(essayId) != null){
+            dao.delete(this);
+        }
+    }
+    /**
+     * Método findAll() que pode ser chamado diretamente da classe Essay
+     */
+    public static List<Essay> findAll(){
+        return dao.findAll();
+    }
+    /**
+     * Método find() que pode ser chamado diretamente da classe Essay
+     */
+    public static Essay findById(int pk){
+        return dao.findById(pk);
+    }
+
+
 }

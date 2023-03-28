@@ -2,23 +2,39 @@ package br.com.biopdi.mbiolabv2.model.bean;
 
 import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class User {
     private Integer userId;
     private String userName, userLogin, userPassword;
+    private byte[] userImage;
 
+    public User(){
+    }
     public User(String userName, String userLogin, String userPassword) {
         this.userName = userName;
         this.userLogin = userLogin;
         this.userPassword = userPassword;
     }
-
-    public User(int userId, String userName, String userLogin, String userPassword) {
+    public User(Integer userId, String userName, String userLogin, String userPassword) {
         this.userId = userId;
         this.userName = userName;
         this.userLogin = userLogin;
         this.userPassword = userPassword;
+    }
+    public User(String userName, String userLogin, String userPassword, byte[] userImage) {
+        this.userName = userName;
+        this.userLogin = userLogin;
+        this.userPassword = userPassword;
+        this.userImage = userImage;
+    }
+    public User(Integer userId, String userName, String userLogin, String userPassword, byte[] userImage) {
+        this.userId = userId;
+        this.userName = userName;
+        this.userLogin = userLogin;
+        this.userPassword = userPassword;
+        this.userImage = userImage;
     }
 
     public Integer getUserId() {
@@ -53,6 +69,13 @@ public class User {
         this.userPassword = userPassword;
     }
 
+    public byte[] getUserImage() {
+        return userImage;
+    }
+    public void setUserImage(byte[] userImage) {
+        this.userImage = userImage;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -69,32 +92,32 @@ public class User {
     /**
      * Método save() que pode ser chamado diretamente da classe User
      */
-//    public void save(){
-//        if(userId != null && dao.find(userId) != null){
-//            dao.update(this);
-//        } else {
-//            dao.create(this);
-//        }
-//    }
-//    /**
-//     * Método delete() que pode ser chamado diretamente da classe User
-//     */
-//    public void delete(){
-//        if(dao.find(userId) != null){
-//            dao.delete(this);
-//        }
-//    }
-//    /**
-//     * Método findAll() que pode ser chamado diretamente da classe User
-//     */
-//    public static List<User> findAll(){
-//        return dao.findAll();
-//    }
-//    /**
-//     * Método find() que pode ser chamado diretamente da classe User
-//     */
-//    public static User find(int pk){
-//        return dao.find(pk);
-//    }
+    public void save(User user){
+        if(userId != null && dao.findById(userId) != null){
+            dao.update(this);
+        } else {
+            dao.create(this);
+        }
+    }
+    /**
+     * Método delete() que pode ser chamado diretamente da classe User
+     */
+    public void delete(int i){
+        if(dao.findById(userId) != null){
+            dao.delete(this);
+        }
+    }
+    /**
+     * Método findAll() que pode ser chamado diretamente da classe User
+     */
+    public static List<User> findAll(){
+        return dao.findAll();
+    }
+    /**
+     * Método find() que pode ser chamado diretamente da classe User
+     */
+    public static User findById(int pk){
+        return dao.findById(pk);
+    }
 
 }

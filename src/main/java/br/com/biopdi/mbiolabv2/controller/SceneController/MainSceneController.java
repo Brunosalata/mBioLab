@@ -2,8 +2,9 @@ package br.com.biopdi.mbiolabv2.controller.SceneController;
 
 import java.io.*;
 
-import br.com.biopdi.mbiolabv2.controller.repository.DBConnection;
+import br.com.biopdi.mbiolabv2.controller.repository.dao.EssayDAO;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
+import br.com.biopdi.mbiolabv2.model.bean.Essay;
 import br.com.biopdi.mbiolabv2.model.bean.User;
 import com.fazecast.jSerialComm.*;
 import javafx.fxml.FXML;
@@ -19,7 +20,10 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class MainSceneController implements Initializable {
-
+    User user = new User();
+    UserDAO userDao = new UserDAO();
+    Essay essay = new Essay();
+    EssayDAO essayDAO = new EssayDAO();
     @FXML
     private Chart chForcePosition;
 
@@ -27,7 +31,7 @@ public class MainSceneController implements Initializable {
     private TextField txtAdjustVelocity, txtAssayVelocity;
 
     @FXML
-    private Label lbForceView, lbPositionView, lbAutoConnection;
+    private Label lbForceView, lbPositionView, lbAutoConnection, lbUserId, lbUserName, lbUserLogin, lbUserPassword;
 
     @FXML
     private ComboBox cbPorts;
@@ -108,7 +112,7 @@ public class MainSceneController implements Initializable {
      * Método de abertura e fechamento de conexão
      */
     @FXML
-    private void connect() throws InterruptedException {
+    private void connect() {
 
         //Método de abertura e fechamento de conexão serial
         if (btnConnect.getText().equals("Conectar")) {
@@ -278,38 +282,89 @@ public class MainSceneController implements Initializable {
 
     @FXML
     private void led() throws InterruptedException{
-        System.out.println("Iniciando");
-        System.out.println("Desce");
-        outputInjection("5");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Sobe");
-        outputInjection("4");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Parar");
-        outputInjection("3");
-        Thread.sleep(1000);
+//        System.out.println("Iniciando");
+//        System.out.println("Desce");
+//        outputInjection("5");
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//        System.out.println("Sobe");
+//        outputInjection("4");
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//        System.out.println("Parar");
+//        outputInjection("3");
+//        Thread.sleep(1000);
 
-        UserDAO uDao = new UserDAO();
-        User user = new User("Bruno", "brunosl","1234");
-        System.out.println(user);
-        UserDAO uDAO = new UserDAO();
-        uDAO.create(user);
-        System.out.println("Salvo com sucesso");
-        System.out.println(uDAO.findAll());
+        EssayDAO eDAO = new EssayDAO();
+        Essay essay = new Essay();
+        System.out.println(essayDAO.findAll());
+//        eDAO.delete(Essay.findById(1));
+//        System.out.println(essayDAO.findAll());
+//        Essay essay2 = eDAO.findById(1);
+//        System.out.println(essay2);
+//        essay2.setEssayIdentification("Teste de update");
+//        essay2.save(essay2);
 
-
-
-
-
+        //3,"Teste 2","ISO 9001","mBio portátil", 0.003, 0,30000,0,-40500,5,25,0,35
+//        eDAO.update(new Essay(2,3,"Teste 2","ISO 9001","mBio portátil", 0.003, 0,30000,0,-40500,5,25,0,35));
+//        System.out.println(essayDAO.findAll());
 
 
     }
+
+
+//    ************************** NECESSÁRIO TESTAR AINDA *************************
+//        System.out.println(userDao.findAll());
+//        System.out.println(userDao.findById(3));
+//        userDao.delete(userDao.findById(3));
+//        System.out.println(userDao.findAll());
+//
+//        userDao.update(new User(1,"Lucia","mlsalata","mlucia123"));
+//        System.out.println(userDao.findAll());
+
+
+    // USER OK
+    @FXML
+    public void userSave(){
+        user.save(new User(lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
+    }
+    @FXML
+    public void userDelete(){
+        userDao.delete(userDao.findById(Integer.parseInt(lbUserId.getText())));
+    }
+    @FXML
+    public void userUpdate(){
+        user.save(new User((Integer.parseInt(lbUserId.getText())), lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
+    }
+    // SETUP REQUER VARIAVEIS SETUP
+    @FXML
+    public void setupSave(){
+        user.save(new User(lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
+    }
+    @FXML
+    public void setupDelete(){
+        userDao.delete(userDao.findById(Integer.parseInt(lbUserId.getText())));
+    }
+    @FXML
+    public void setupUpdate(){
+        user.save(new User((Integer.parseInt(lbUserId.getText())), lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
+    }
+    // ESSAY REQUER VARIAVEIS ESSAY
+    @FXML
+    public void essaySave(){
+        user.save(new User(lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
+    }
+    @FXML
+    public void essayDelete(){
+        userDao.delete(userDao.findById(Integer.parseInt(lbUserId.getText())));
+    }
+
+
+
 }
