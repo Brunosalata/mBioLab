@@ -102,7 +102,7 @@ public class EssayDAO extends DBConnection {
                     rs.getDouble(13),//essay Pre Charge
                     rs.getDouble(14),//essay Relative Humidity
                     rs.getBytes(15),//essay Graphic
-                    rs.getDate(16));//essay Data
+                    rs.getString(16));//essay Data
                 result.add(essay);
             }
         } catch (SQLException e) {
@@ -207,7 +207,7 @@ public class EssayDAO extends DBConnection {
                     rs.getDouble(13),//essay Pre Charge
                     rs.getDouble(14),//essay Relative Humidity
                     rs.getBytes(15),//essay Graphic
-                    rs.getTimestamp(16));//essay Data
+                    rs.getString(16));//essay Data
                 result = essay;
             }
         } catch (SQLException e){
@@ -245,7 +245,7 @@ public class EssayDAO extends DBConnection {
                         rs.getDouble(13),//essay Pre Charge
                         rs.getDouble(14),//essay Relative Humidity
                         rs.getBytes(15),//essay Graphic
-                        rs.getTimestamp(16));//essay Data
+                        rs.getString(16));//essay Data
                 result.add(essay);
             }
         } catch (SQLException e) {

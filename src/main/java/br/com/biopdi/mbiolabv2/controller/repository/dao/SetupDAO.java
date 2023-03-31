@@ -187,7 +187,7 @@ public class SetupDAO extends DBConnection {
                     rs.getInt(40),//setup channel4ext2
                     rs.getString(41),//setup Name
                     rs.getString(42),//setup Author
-                    rs.getDate(43));//setup Data
+                    rs.getString(43));//setup Data
                 result.add(setup);
             }
         } catch (SQLException e) {
@@ -374,7 +374,7 @@ public class SetupDAO extends DBConnection {
                     rs.getInt(40),//setup channel4ext2
                     rs.getString(41),//setup Name
                     rs.getString(42),//setup Author
-                    rs.getDate(43));//setup Data
+                    rs.getString(43));//setup Data
                 result = setup;
             }
         } catch (SQLException e){

@@ -18,8 +18,8 @@ import javafx.scene.chart.Chart;
 import javafx.scene.control.*;
 
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 public class MainSceneController implements Initializable {
@@ -59,9 +59,13 @@ public class MainSceneController implements Initializable {
     private ObservableList<Essay> obsEssayByUserIdList;
     private SerialPort port;
 
-    Date currentDate = new Date();
-    String date = new SimpleDateFormat("dd/MM/yyyy").format(currentDate);
-    String hour = new SimpleDateFormat("HH:mm:ss").format(currentDate);
+    Date systemDate = new Date();
+    SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat brasilianDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    String currentDate = brasilianDate.format(systemDate);
+
+    public MainSceneController() throws ParseException {
+    }
 
 
     /**
@@ -77,7 +81,7 @@ public class MainSceneController implements Initializable {
         portConnectionList();
 
         // Mostra data local na base da aplicação
-        lbCurrentData.setText(String.valueOf(currentDate));
+        lbCurrentData.setText(String.valueOf(systemDate));
     }
 
     /**
@@ -323,9 +327,11 @@ public class MainSceneController implements Initializable {
 //        outputInjection("3");
 //        Thread.sleep(1000);
 
-        Setup setup = new Setup(5,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,200,200,0,0,100,100,0,"Teste Setup 1","Bruno",null);
-        SetupDAO setupDAO = new SetupDAO();
-        setupDAO.create(setup);
+//        Setup setup = new Setup(6,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,200,200,0,0,100,100,0,"Teste Setup 1","Bruno", currentDate);
+//        SetupDAO setupDAO = new SetupDAO();
+//        setupDAO.create(setup);
+//        System.out.println(setup);
+//        System.out.println(setupDAO.findAll());
 //        Setup setup2 = setupDAO.findById(1);
 //        setup2.setMC1M1(20500);
 //        setup2.setSetupName("Teste Update");
@@ -342,8 +348,8 @@ public class MainSceneController implements Initializable {
 ////        user = new User("Bruno", "brunoslima","biopdi");
 ////        user.save(user);
 //        System.out.println(userDAO.findAll());
-////        essay = new Essay(1,"Abemus data","ISO 9999","mBio portátil",220,0,45000,0,-65000,20000,25.4,0,35.0);
-////        essay.save(essay);
+        essay = new Essay(1,"Abemus data","ISO 9999","mBio portátil",220,0,45000,0,-65000,20000,25.4,0,35.0,null,currentDate);
+        essay.save(essay);
 //        System.out.println(essayDAO.findAll());
 //        Essay essay2 = essayDAO.findById(1);
 //        System.out.println(essay2);

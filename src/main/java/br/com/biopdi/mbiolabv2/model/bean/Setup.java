@@ -7,11 +7,11 @@ public class Setup {
     private Integer setupId, userId, MC1M1, MC2M1, MC3M1, MC4M1, MC5M1, MC6M1, MC7M1, MC8M1, MC9M1, MC10M1, MC11M1, MC12M1, MC13M1, MC14M1, MC15M1, MC16M1, MC17M1, MC18M1, MC19M1, MC20M1, MC21M1, MC22M1, MC23M1, MC24M1, MC25M1, MC26M1, MC27M1, MC28M1, MC29M1, MC30M1, channel1ext1, channel2ext1, channel3ext1, channel4ext1, channel1ext2, channel2ext2, channel3ext2, channel4ext2;
     private String setupName, setupAuthor;
 
-    private Date setupDate;
+    private String setupDate;
 
     public Setup() {
     }
-    public Setup(Integer userId, Integer MC1M1, Integer MC2M1, Integer MC3M1, Integer MC4M1, Integer MC5M1, Integer MC6M1, Integer MC7M1, Integer MC8M1, Integer MC9M1, Integer MC10M1, Integer MC11M1, Integer MC12M1, Integer MC13M1, Integer MC14M1, Integer MC15M1, Integer MC16M1, Integer MC17M1, Integer MC18M1, Integer MC19M1, Integer MC20M1, Integer MC21M1, Integer MC22M1, Integer MC23M1, Integer MC24M1, Integer MC25M1, Integer MC26M1, Integer MC27M1, Integer MC28M1, Integer MC29M1, Integer MC30M1, Integer channel1ext1, Integer channel2ext1, Integer channel3ext1, Integer channel4ext1, Integer channel1ext2, Integer channel2ext2, Integer channel3ext2, Integer channel4ext2, String setupName, String setupAuthor, Date setupDate) {
+    public Setup(Integer userId, Integer MC1M1, Integer MC2M1, Integer MC3M1, Integer MC4M1, Integer MC5M1, Integer MC6M1, Integer MC7M1, Integer MC8M1, Integer MC9M1, Integer MC10M1, Integer MC11M1, Integer MC12M1, Integer MC13M1, Integer MC14M1, Integer MC15M1, Integer MC16M1, Integer MC17M1, Integer MC18M1, Integer MC19M1, Integer MC20M1, Integer MC21M1, Integer MC22M1, Integer MC23M1, Integer MC24M1, Integer MC25M1, Integer MC26M1, Integer MC27M1, Integer MC28M1, Integer MC29M1, Integer MC30M1, Integer channel1ext1, Integer channel2ext1, Integer channel3ext1, Integer channel4ext1, Integer channel1ext2, Integer channel2ext2, Integer channel3ext2, Integer channel4ext2, String setupName, String setupAuthor, String setupDate) {
         this.userId = userId;
         this.MC1M1 = MC1M1;
         this.MC2M1 = MC2M1;
@@ -55,7 +55,7 @@ public class Setup {
         this.setupAuthor = setupAuthor;
         this.setupDate = setupDate;
     }
-    public Setup(Integer setupId, Integer userId, Integer MC1M1, Integer MC2M1, Integer MC3M1, Integer MC4M1, Integer MC5M1, Integer MC6M1, Integer MC7M1, Integer MC8M1, Integer MC9M1, Integer MC10M1, Integer MC11M1, Integer MC12M1, Integer MC13M1, Integer MC14M1, Integer MC15M1, Integer MC16M1, Integer MC17M1, Integer MC18M1, Integer MC19M1, Integer MC20M1, Integer MC21M1, Integer MC22M1, Integer MC23M1, Integer MC24M1, Integer MC25M1, Integer MC26M1, Integer MC27M1, Integer MC28M1, Integer MC29M1, Integer MC30M1, Integer channel1ext1, Integer channel2ext1, Integer channel3ext1, Integer channel4ext1, Integer channel1ext2, Integer channel2ext2, Integer channel3ext2, Integer channel4ext2, String setupName, String setupAuthor, Date setupDate) {
+    public Setup(Integer setupId, Integer userId, Integer MC1M1, Integer MC2M1, Integer MC3M1, Integer MC4M1, Integer MC5M1, Integer MC6M1, Integer MC7M1, Integer MC8M1, Integer MC9M1, Integer MC10M1, Integer MC11M1, Integer MC12M1, Integer MC13M1, Integer MC14M1, Integer MC15M1, Integer MC16M1, Integer MC17M1, Integer MC18M1, Integer MC19M1, Integer MC20M1, Integer MC21M1, Integer MC22M1, Integer MC23M1, Integer MC24M1, Integer MC25M1, Integer MC26M1, Integer MC27M1, Integer MC28M1, Integer MC29M1, Integer MC30M1, Integer channel1ext1, Integer channel2ext1, Integer channel3ext1, Integer channel4ext1, Integer channel1ext2, Integer channel2ext2, Integer channel3ext2, Integer channel4ext2, String setupName, String setupAuthor, String setupDate) {
         this.setupId = setupId;
         this.userId = userId;
         this.MC1M1 = MC1M1;
@@ -353,10 +353,10 @@ public class Setup {
     public void setSetupAuthor(String setupAuthor) {
         this.setupAuthor = setupAuthor;
     }
-    public Date getSetupDate() {
+    public String getSetupDate() {
         return setupDate;
     }
-    public void setSetupData(Date setupData) {
+    public void setSetupData(String setupData) {
         this.setupDate = setupData;
     }
 

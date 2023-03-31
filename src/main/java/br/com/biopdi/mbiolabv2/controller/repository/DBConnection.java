@@ -14,7 +14,7 @@ import org.sqlite.SQLiteConfig;
 import java.sql.*;
 
 public class DBConnection {
-    public static final String URL = "jdbc:sqlite:mBioLabDB.db";
+    public static final String URL = "jdbc:sqlite:database/mBioLabDB.db";
     public static final String DRIVER = "org.sqlite.JDBC";
     protected Connection conn;
     public Connection openConnection(){

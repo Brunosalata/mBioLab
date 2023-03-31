@@ -3,7 +3,6 @@ package br.com.biopdi.mbiolabv2.model.bean;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.EssayDAO;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,11 +12,11 @@ public class Essay {
     private String essayIdentification, essayNorm, essayUsedMachine;
     private double essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, essayFinalPosition, essayDislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity;
     private byte[] essayGraphic;
-    private Date essayDate;
+    private String essayDate;
 
     public Essay() {
     }
-    public Essay(Integer essayId, Integer userId, String essayIdentification, String essayNorm, String essayUsedMachine, double essayChargeCell, double essayInitialForce, double essayFinalForce, double essayInitialPosition, double essayFinalPosition, double essayDislocationVelocity, double essayTemperature, double essayPreCharge, double essayRelativeHumidity, byte[] essayGraphic, Date essayDate) {
+    public Essay(Integer essayId, Integer userId, String essayIdentification, String essayNorm, String essayUsedMachine, double essayChargeCell, double essayInitialForce, double essayFinalForce, double essayInitialPosition, double essayFinalPosition, double essayDislocationVelocity, double essayTemperature, double essayPreCharge, double essayRelativeHumidity, byte[] essayGraphic, String essayDate) {
         this.essayId = essayId;
         this.userId = userId;
         this.essayIdentification = essayIdentification;
@@ -36,7 +35,7 @@ public class Essay {
         this.essayDate = essayDate;
     }
 
-    public Essay(Integer userId, String essayIdentification, String essayNorm, String essayUsedMachine, double essayChargeCell, double essayInitialForce, double essayFinalForce, double essayInitialPosition, double essayFinalPosition, double essayDislocationVelocity, double essayTemperature, double essayPreCharge, double essayRelativeHumidity, byte[] essayGraphic, Date essayDate) {
+    public Essay(Integer userId, String essayIdentification, String essayNorm, String essayUsedMachine, double essayChargeCell, double essayInitialForce, double essayFinalForce, double essayInitialPosition, double essayFinalPosition, double essayDislocationVelocity, double essayTemperature, double essayPreCharge, double essayRelativeHumidity, byte[] essayGraphic, String essayDate) {
         this.userId = userId;
         this.essayIdentification = essayIdentification;
         this.essayNorm = essayNorm;
@@ -144,10 +143,10 @@ public class Essay {
     public void setEssayGraphic(byte[] essayGraphic) {
         this.essayGraphic = essayGraphic;
     }
-    public Date getEssayDate() {
+    public String getEssayDate() {
         return essayDate;
     }
-    public void setEssayData(Date essayDate) {
+    public void setEssayData(String essayDate) {
         this.essayDate = essayDate;
     }
 
