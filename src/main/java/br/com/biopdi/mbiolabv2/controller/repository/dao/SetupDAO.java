@@ -1,7 +1,6 @@
 package br.com.biopdi.mbiolabv2.controller.repository.dao;
 
 import br.com.biopdi.mbiolabv2.controller.repository.DBConnection;
-import br.com.biopdi.mbiolabv2.model.bean.Essay;
 import br.com.biopdi.mbiolabv2.model.bean.Setup;
 
 import java.sql.Date;
@@ -20,8 +19,8 @@ public class SetupDAO extends DBConnection {
         try {
             openConnection();
             PreparedStatement stm = conn.prepareStatement("CREATE TABLE IF NOT EXISTS tb_setup ("
-                + "setu pId INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "setupUserId INTEGER,"
+                + "setupId INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "userId INTEGER,"
 //                    CONSTRAINT essayUserId FOREIGN KEY (userId) REFERENCES tb_user (userId)
                 + "MC1M1 INTEGER,"
                 + "MC2M1 INTEGER,"
@@ -53,8 +52,6 @@ public class SetupDAO extends DBConnection {
                 + "MC28M1 INTEGER,"
                 + "MC29M1 INTEGER,"
                 + "MC30M1 INTEGER,"
-                + "setupName TEXT,"
-                + "setupAuthor TEXT,"
                 + "channel1ext1 DOUBLE,"
                 + "channel2ext1 DOUBLE,"
                 + "channel3ext1 DOUBLE,"
@@ -63,7 +60,9 @@ public class SetupDAO extends DBConnection {
                 + "channel2ext2 DOUBLE,"
                 + "channel3ext2 DOUBLE,"
                 + "channel4ext2 DOUBLE,"
-                + "setupData TIMESTAMP DEFAULT CURRENT_TIMESTAMP);");
+                + "setupName TEXT,"
+                + "setupAuthor TEXT,"
+                + "setupData DATE NOT NULL);");
             stm.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -123,6 +122,7 @@ public class SetupDAO extends DBConnection {
             stm.setInt(40, setup.getChannel4ext2());
             stm.setString(41, setup.getSetupName());
             stm.setString(42, setup.getSetupAuthor());
+            stm.setString(43, String.valueOf((setup.getSetupDate())));
             stm.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();
@@ -291,7 +291,7 @@ public class SetupDAO extends DBConnection {
             stm.setInt(39, setup.getChannel4ext2());
             stm.setString(40, setup.getSetupName());
             stm.setString(41, setup.getSetupAuthor());
-            stm.setDate(42, (Date) setup.getSetupData());
+            stm.setString(42,String.valueOf((setup.getSetupDate())));
             stm.setInt(43, setup.getSetupId());
             stm.executeUpdate();
         } catch (SQLException e){

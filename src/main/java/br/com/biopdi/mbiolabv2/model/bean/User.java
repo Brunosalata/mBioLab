@@ -4,6 +4,7 @@ import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class User {
     private Integer userId;
@@ -74,6 +75,24 @@ public class User {
     }
     public void setUserImage(byte[] userImage) {
         this.userImage = userImage;
+    }
+
+    /**
+     * Método equals e hashCode, para permitir a comparação entre elementos
+     * @param o
+     * @return
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return userId.equals(user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
     }
 
     @Override

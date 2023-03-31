@@ -2,115 +2,88 @@ package br.com.biopdi.mbiolabv2.controller.SceneController;
 
 import java.io.*;
 
+import br.com.biopdi.mbiolabv2.controller.SceneController.runnable.RunnableThread;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.EssayDAO;
+import br.com.biopdi.mbiolabv2.controller.repository.dao.SetupDAO;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
+import br.com.biopdi.mbiolabv2.model.bean.Setup;
 import br.com.biopdi.mbiolabv2.model.bean.User;
 import com.fazecast.jSerialComm.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.Chart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 
 public class MainSceneController implements Initializable {
+    //    INICIO ******************** Declarações iniciais **********************
     User user = new User();
-    UserDAO userDao = new UserDAO();
+    UserDAO userDAO = new UserDAO();
     Essay essay = new Essay();
     EssayDAO essayDAO = new EssayDAO();
+    Setup setup = new Setup();
+    SetupDAO setupDAO = new SetupDAO();
     @FXML
     private Chart chForcePosition;
-
     @FXML
-    private TextField txtAdjustVelocity, txtAssayVelocity;
-
+    private TextField txtAdjustVelocity, txtAssayVelocity, txtEssayUserId;
     @FXML
-    private Label lbForceView, lbPositionView, lbAutoConnection, lbUserId, lbUserName, lbUserLogin, lbUserPassword;
-
+    private Label lbForceView, lbPositionView, lbCurrentData, lbAutoConnection, lbUserId, lbUserName, lbUserLogin, lbUserPassword;
     @FXML
     private ComboBox cbPorts;
-
     @FXML
-    private Button btnConnect, btnLed, btnPosition;
+    private Button btnConnect, btnEssayByUserId;
+    @FXML
+    private ListView<Setup> setupListView;
+    @FXML
+    private ListView<User> userListView;
+    @FXML
+    private ListView<Essay> essayListView;
+    @FXML
+    private ListView<Essay> essayByUserListView;
 
+    private List<Setup> setupList = new ArrayList<>();
+    private List<User> userList = new ArrayList<>();
+    private List<Essay> essayList = new ArrayList<>();
+    private List<Essay> essayByUserIdList = new ArrayList<>();
+    private ObservableList<Setup> obsSetupList;
+    private ObservableList<User> obsUserList;
+    private ObservableList<Essay> obsEssayList;
+    private ObservableList<Essay> obsEssayByUserIdList;
     private SerialPort port;
 
+    Date currentDate = new Date();
+    String date = new SimpleDateFormat("dd/MM/yyyy").format(currentDate);
+    String hour = new SimpleDateFormat("HH:mm:ss").format(currentDate);
+
+
+    /**
+         * Thread que faz a leitura da posição em tempo real
+         */
+//    RunnableThread RTthread = new RunnableThread("RealtimeDisplay"); //Realtime force and position thread
+//    Thread rtthread = new Thread(RTthread);
+
+//    FIM ******************** Declarações iniciais **********************
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         portConnectionList();
-        //realTime();
 
-        /**
-         * Thread que faz a leitura da posição em tempo real
-         */
-//        Platform.runLater( () ->  {
-//            while(true){
-//                try {
-//                    forceRequest();
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        });
+        // Mostra data local na base da aplicação
+        lbCurrentData.setText(String.valueOf(currentDate));
     }
 
-
-    public void autoConnection(){
-//        /**
-//         * autoconexão via contains("UART")
-//         */
-//        if(lbAutoConnection.getText().equals("Conectando")){
-//            SerialPort[] portNames = SerialPort.getCommPorts();
-//            for (SerialPort port : portNames) {
-//                    port.openPort();
-//                if(port.getPortDescription().contains("UART")) {
-//                    lbAutoConnection.setText("Conectado");
-//                    port.setComPortParameters(115200, 8, 1, 0);
-//                }
-//            }
-//        } else {
-//            cbPorts.setDisable(false);
-//            lbAutoConnection.setText("Desconectado");
-//        }
-
-//        /**
-//         * autoconexão via output e input validator
-//         */
-//        if(lbAutoConnection.getText().equals("Conectando")){
-//
-//            SerialPort[] portNames = SerialPort.getCommPorts();
-//            for (SerialPort portName : portNames) {
-//
-//                port = SerialPort.getCommPort(portName.getSystemPortName());
-//                if(port.openPort()){
-//                    Thread.sleep(2000);
-//                    outputInjection("x");
-//                    Thread.sleep(20);
-//                    if(inputValue()!="10") {
-//                        port.closePort();
-//                    } else{
-//                        System.out.printf("Conexão realizada com sucesso na porta %s", port.getSystemPortName());
-//                        lbAutoConnection.setText("Conectado");
-//                        port.setComPortParameters(115200, 8, 1, 0);
-//                    }
-//                }
-//
-//            }
-//        } else {
-//            cbPorts.setDisable(false);
-//            lbAutoConnection.setText("Desconectado");
-//        }
-    }
     /**
      * Método de abertura e fechamento de conexão
      */
+
     @FXML
     private void connect() {
 
@@ -121,6 +94,7 @@ public class MainSceneController implements Initializable {
                 btnConnect.setText("Desconectar");
                 cbPorts.setDisable(true);
                 port.setBaudRate(115200);
+//                rtthread.start(); //start da thread RealtimeDisplay, configurada na classe RunnableThread, para leitura de valor de força e posição
             }
         } else {
             port.closePort();
@@ -129,7 +103,6 @@ public class MainSceneController implements Initializable {
         }
 
     }
-
     /**
      * Método de listagem de portas Seriais disponíveis dentro do ComboBox (cbPorts)
      */
@@ -140,7 +113,6 @@ public class MainSceneController implements Initializable {
             cbPorts.getItems().add(portName.getSystemPortName());
         }
     }
-
     /**
      * Método genérico para injeção do output, aplicável para os diferentes processos port.OutputStream() que requeiram uma string
      *
@@ -151,7 +123,6 @@ public class MainSceneController implements Initializable {
         output.print(stg);
         output.flush();
     }
-
     /**
      * Método que recebe o valor real do input
      * @return String
@@ -170,7 +141,6 @@ public class MainSceneController implements Initializable {
     private void resetPosition() {
         outputInjection("0");
     }
-
     /**
      * Método que solicita o valor da força (injeção de '1')
      */
@@ -179,30 +149,17 @@ public class MainSceneController implements Initializable {
         outputInjection("1");
         Thread.sleep(20);
         lbForceView.setText(inputValue());
+        //incluir tara para força
     }
-
     /**
      * Método que solicita o valor da posição (injeção de '2')
      */
-    public void realTime() {
-        while(port.openPort()){
-            new Thread(() -> {
-                outputInjection("2");
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                lbPositionView.setText(inputValue());
-            }).start();
-        }
-    }
-
     @FXML
     private void positionRequest() throws InterruptedException {
         outputInjection("2");
         Thread.sleep(20);
         lbPositionView.setText(inputValue());
+        //incluir validação de real movimento do eixo
     }
 
     // FIM*********** Métodos pré ensaio ***********
@@ -216,7 +173,6 @@ public class MainSceneController implements Initializable {
     private void stopMove() {
         outputInjection("3");
     }
-
     /**
      * Método que solicita movimento de ajuste para cima (injeção de '4')
      */
@@ -224,7 +180,6 @@ public class MainSceneController implements Initializable {
     private void moveUp() {
         outputInjection("4");
     }
-
     /**
      * Método que solicita movimento de ajuste para baixo (injeção de '5')
      */
@@ -232,7 +187,6 @@ public class MainSceneController implements Initializable {
     private void moveDown() {
         outputInjection("5");
     }
-
     /**
      * Método que solicita movimento de ensaio para cima (injeção de '6')
      */
@@ -240,7 +194,6 @@ public class MainSceneController implements Initializable {
     private void moveUpAssay() {
         outputInjection("6");
     }
-
     /**
      * Método que solicita movimento de ensaio para baixo (injeção de '7')
      */
@@ -256,7 +209,6 @@ public class MainSceneController implements Initializable {
         String adjust = 8 + txtAdjustVelocity.getText();
         outputInjection(adjust);
     }
-
     /**
      * Método que solicita velocidade de ensaio (injeção de '9')
      */
@@ -278,6 +230,76 @@ public class MainSceneController implements Initializable {
 
     // FIM*********** Métodos de setup ***********
 
+
+    // INICIO******** Métodos de Busca no Banco de Dados ********
+
+    @FXML
+    private void essayFindByUser(){
+        try{
+            essayByUserIdList.addAll(essayDAO.findByUser(Integer.parseInt(txtEssayUserId.getText())));
+            obsEssayByUserIdList = FXCollections.observableList(essayByUserIdList);
+            essayByUserListView.setItems(obsEssayByUserIdList);
+        } catch (Exception e){
+        System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void DBDataPull(){
+
+        userList.addAll(userDAO.findAll());
+        obsUserList = FXCollections.observableList(userList);
+        userListView.setItems(obsUserList);
+
+        setupList.addAll(setupDAO.findAll());
+        obsSetupList = FXCollections.observableList(setupList);
+        setupListView.setItems(obsSetupList);
+
+        essayList.addAll(essayDAO.findAll());
+        obsEssayList = FXCollections.observableList(essayList);
+        essayListView.setItems(obsEssayList);
+    }
+
+
+//                 ******** NECESSÁRIO TESTAR AINDA *********
+
+    // USER OK
+//    @FXML
+//    public void userSave(){
+//        user.save(new User(lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
+//    }
+//    @FXML
+//    public void userDelete(){
+//        userDAO.delete(userDAO.findById(Integer.parseInt(lbUserId.getText())));
+//    }
+//    @FXML
+//    public void userUpdate(){
+//        user.save(new User((Integer.parseInt(lbUserId.getText())), lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
+//    }
+    // SETUP OK
+//    @FXML
+//    public void setupSave(){
+//        user.save(new User(lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
+//    }
+//    @FXML
+//    public void setupDelete(){
+//        userDAO.delete(userDAO.findById(Integer.parseInt(lbUserId.getText())));
+//    }
+//    @FXML
+//    public void setupUpdate(){
+//        user.save(new User((Integer.parseInt(lbUserId.getText())), lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
+//    }
+//    // ESSAY OK
+//    @FXML
+//    public void essaySave(){
+//        user.save(new User(lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
+//    }
+//    @FXML
+//    public void essayDelete(){
+//        userDAO.delete(userDAO.findById(Integer.parseInt(lbUserId.getText())));
+//    }
+
+    // FIM******** Métodos de Busca no Banco de Dados ********
 
 
     @FXML
@@ -301,12 +323,29 @@ public class MainSceneController implements Initializable {
 //        outputInjection("3");
 //        Thread.sleep(1000);
 
-        EssayDAO eDAO = new EssayDAO();
-        Essay essay = new Essay();
-        System.out.println(essayDAO.findAll());
-//        eDAO.delete(Essay.findById(1));
+        Setup setup = new Setup(5,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,200,200,0,0,100,100,0,"Teste Setup 1","Bruno",null);
+        SetupDAO setupDAO = new SetupDAO();
+        setupDAO.create(setup);
+//        Setup setup2 = setupDAO.findById(1);
+//        setup2.setMC1M1(20500);
+//        setup2.setSetupName("Teste Update");
+//        setupDAO.update(setup2);
+//        System.out.println(setupDAO.findAll());
+////
+////        System.out.println(essayDAO.findAll());
+////        System.out.println(userDao.findAll());
+//
+//
+//
+////        user = new User("Diego","diegoDev","12345");
+////        user.save(user);
+////        user = new User("Bruno", "brunoslima","biopdi");
+////        user.save(user);
+//        System.out.println(userDAO.findAll());
+////        essay = new Essay(1,"Abemus data","ISO 9999","mBio portátil",220,0,45000,0,-65000,20000,25.4,0,35.0);
+////        essay.save(essay);
 //        System.out.println(essayDAO.findAll());
-//        Essay essay2 = eDAO.findById(1);
+//        Essay essay2 = essayDAO.findById(1);
 //        System.out.println(essay2);
 //        essay2.setEssayIdentification("Teste de update");
 //        essay2.save(essay2);
@@ -316,54 +355,12 @@ public class MainSceneController implements Initializable {
 //        System.out.println(essayDAO.findAll());
 
 
+
+
+
     }
 
 
-//    ************************** NECESSÁRIO TESTAR AINDA *************************
-//        System.out.println(userDao.findAll());
-//        System.out.println(userDao.findById(3));
-//        userDao.delete(userDao.findById(3));
-//        System.out.println(userDao.findAll());
-//
-//        userDao.update(new User(1,"Lucia","mlsalata","mlucia123"));
-//        System.out.println(userDao.findAll());
-
-
-    // USER OK
-    @FXML
-    public void userSave(){
-        user.save(new User(lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
-    }
-    @FXML
-    public void userDelete(){
-        userDao.delete(userDao.findById(Integer.parseInt(lbUserId.getText())));
-    }
-    @FXML
-    public void userUpdate(){
-        user.save(new User((Integer.parseInt(lbUserId.getText())), lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
-    }
-    // SETUP REQUER VARIAVEIS SETUP
-    @FXML
-    public void setupSave(){
-        user.save(new User(lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
-    }
-    @FXML
-    public void setupDelete(){
-        userDao.delete(userDao.findById(Integer.parseInt(lbUserId.getText())));
-    }
-    @FXML
-    public void setupUpdate(){
-        user.save(new User((Integer.parseInt(lbUserId.getText())), lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
-    }
-    // ESSAY REQUER VARIAVEIS ESSAY
-    @FXML
-    public void essaySave(){
-        user.save(new User(lbUserName.getText(), lbUserLogin.getText(), lbUserPassword.getText()));
-    }
-    @FXML
-    public void essayDelete(){
-        userDao.delete(userDao.findById(Integer.parseInt(lbUserId.getText())));
-    }
 
 
 
