@@ -22,7 +22,8 @@ public class UserDAO extends DBConnection {
                     + "userId INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + "userName TEXT,"
                     + "userLogin TEXT,"
-                    + "userPassword TEXT);");
+                    + "userPassword TEXT,"
+                    + "userImage BLOB);");
             stm.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -44,6 +45,7 @@ public class UserDAO extends DBConnection {
             stm.setString(2, user.getUserName());
             stm.setString(3, user.getUserLogin());
             stm.setString(4, user.getUserPassword());
+            stm.setBytes(5, user.getUserImage());
             stm.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();
@@ -70,6 +72,7 @@ public class UserDAO extends DBConnection {
                         rs.getString(2),//username
                         rs.getString(3),//user login
                         rs.getString(4));//user password
+                        rs.getBytes(5);//user image
                 result.add(user);
             }
         } catch (SQLException e) {
@@ -90,12 +93,14 @@ public class UserDAO extends DBConnection {
             PreparedStatement stm = conn.prepareStatement("UPDATE tb_user SET "
                     + "userName = ?, "
                     + "userLogin = ?, "
-                    + "userPassword = ? "
+                    + "userPassword = ?, "
+                    + "UserImage = ? "
                     + "WHERE userId = ?;");
             stm.setString(1, user.getUserName());
             stm.setString(2, user.getUserLogin());
             stm.setString(3, user.getUserPassword());
             stm.setInt(4, user.getUserId());
+            stm.setBytes(5, user.getUserImage());
             stm.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();
@@ -135,10 +140,11 @@ public class UserDAO extends DBConnection {
             ResultSet rs = stm.executeQuery();
             if(rs.next()){
                 User user = new User(
-                        rs.getInt(1),//user id
-                        rs.getString(2),//username
-                        rs.getString(3),//user login
-                        rs.getString(4));//user password
+                    rs.getInt(1),//user id
+                    rs.getString(2),//username
+                    rs.getString(3),//user login
+                    rs.getString(4));//user password
+                    rs.getBytes(5);//user image
                 result = user;
             }
         } catch (SQLException e){

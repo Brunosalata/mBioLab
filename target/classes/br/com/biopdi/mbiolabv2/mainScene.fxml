@@ -15,6 +15,8 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -85,6 +87,12 @@
                             </yAxis>
                         </LineChart>
                         <TextField fx:id="txtAssayVelocity" layoutX="80.0" layoutY="48.0" />
+                  <ImageView blendMode="DARKEN" fitHeight="150.0" fitWidth="163.0" layoutX="47.0" layoutY="117.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../../../Users/User/Downloads/biopdi_logo.jpg" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="100.0" layoutY="100.0" text="Imagem" />
                     </children>
                 </AnchorPane>
                 <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
@@ -101,7 +109,7 @@
                                 <Button fx:id="btnPosition" layoutX="16.0" layoutY="185.0" mnemonicParsing="false" onAction="#positionRequest" text="Posição" />
                                 <Label fx:id="lbAutoConnection" layoutX="101.0" layoutY="33.0" />
                               <Button fx:id="btnVelocity" layoutX="13.0" layoutY="281.0" mnemonicParsing="false" onAction="#adjustVelocity" text="Velocidade Ajuste" />
-                              <TextField fx:id="txtAdjustVelocity" alignment="CENTER" layoutX="16.0" layoutY="316.0" prefHeight="25.0" prefWidth="106.0" />
+                              <TextField fx:id="txtAdjustVelocity" alignment="CENTER" layoutX="16.0" layoutY="316.0" prefHeight="25.0" prefWidth="106.0" promptText="15000.00" />
                               <Button fx:id="btnAssayUp" layoutX="146.0" layoutY="387.0" mnemonicParsing="false" onAction="#moveUpAssay" prefHeight="25.0" prefWidth="91.0" text="Subir Ensaio" />
                               <Label layoutX="173.0" layoutY="361.0" text="Ensaio" />
                               <Button fx:id="btnAssayDown" layoutX="147.0" layoutY="419.0" mnemonicParsing="false" onAction="#moveDownAssay" text="Descer Ensaio" />

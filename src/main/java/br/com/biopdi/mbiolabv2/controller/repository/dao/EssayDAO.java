@@ -64,6 +64,7 @@ public class EssayDAO extends DBConnection {
             stm.setDouble(12, essay.getEssayTemperature());
             stm.setDouble(13, essay.getEssayPreCharge());
             stm.setDouble(14, essay.getEssayRelativeHumidity());
+            stm.setBytes(15, essay.getEssayGraphic());
             stm.setString(16, String.valueOf((essay.getEssayDate())));
             stm.executeUpdate();
         } catch (SQLException e){
@@ -217,8 +218,6 @@ public class EssayDAO extends DBConnection {
         }
         return result;
     }
-
-
 
 
     public List<Essay> findByUser(int userId) {

@@ -12,6 +12,8 @@ import br.com.biopdi.mbiolabv2.model.bean.User;
 import com.fazecast.jSerialComm.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.Chart;
@@ -21,6 +23,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ThreadFactory;
 
 public class MainSceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
@@ -59,54 +62,98 @@ public class MainSceneController implements Initializable {
     private ObservableList<Essay> obsEssayByUserIdList;
     private SerialPort port;
 
+
+    public ComboBox getCbPorts() {
+        return cbPorts;
+    }
+
     Date systemDate = new Date();
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat brasilianDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     String currentDate = brasilianDate.format(systemDate);
 
-    public MainSceneController() throws ParseException {
-    }
-
+    Thread thread1;
 
     /**
-         * Thread que faz a leitura da posição em tempo real
-         */
-//    RunnableThread RTthread = new RunnableThread("RealtimeDisplay"); //Realtime force and position thread
-//    Thread rtthread = new Thread(RTthread);
+     * Thread que faz a leitura da posição em tempo real
+     */
+
 
 //    FIM ******************** Declarações iniciais **********************
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        port = SerialPort.getCommPort("0");
         portConnectionList();
+
+
+
 
         // Mostra data local na base da aplicação
         lbCurrentData.setText(String.valueOf(systemDate));
     }
 
+
+    /**
+     * Método que define o algorítmo da Thread que faz a leitura dinâmica da Força e da Posição
+     */
+    private void FPReadingThread() {
+
+        try{
+            Thread.sleep(1000);
+        outputInjection("1x");
+        Thread.sleep(20);
+//          String impF = inputValue();
+        System.out.println(inputValue());
+//          lbForceView.setText(impF);
+        outputInjection("2x");
+        Thread.sleep(20);
+//          String impP = inputValue();
+        System.out.println(inputValue());
+//          lbPositionView.setText(impP);
+        Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Método de abertura e fechamento de conexão
      */
-
     @FXML
     private void connect() {
+        if (port != null) {
+            //Método de abertura e fechamento de conexão serial
+            if (btnConnect.getText().equals("Conectar")) {
+                port = SerialPort.getCommPort(cbPorts.getSelectionModel().getSelectedItem().toString());
+                if (port.openPort()) {
+                    btnConnect.setText("Desconectar");
+                    cbPorts.setDisable(true);
+                    port.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+                    port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 50, 50);
+                    port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+//
+                    Thread t = new Thread(() -> {
 
-        //Método de abertura e fechamento de conexão serial
-        if (btnConnect.getText().equals("Conectar")) {
-            port = SerialPort.getCommPort(cbPorts.getSelectionModel().getSelectedItem().toString());
-            if (port.openPort()) {
-                btnConnect.setText("Desconectar");
-                cbPorts.setDisable(true);
-                port.setBaudRate(115200);
-//                rtthread.start(); //start da thread RealtimeDisplay, configurada na classe RunnableThread, para leitura de valor de força e posição
+                        while (true) {
+                            System.out.println("foi");
+                            FPReadingThread();
+                        }
+                    });
+                    t.start();
+                }
+            } else {
+                port.closePort();
+                cbPorts.setDisable(false);
+                btnConnect.setText("Conectar");
             }
-        } else {
-            port.closePort();
-            cbPorts.setDisable(false);
-            btnConnect.setText("Conectar");
+        } else{
+            System.out.println("Nenhuma porta encontrada!");;
         }
 
     }
+
+
     /**
      * Método de listagem de portas Seriais disponíveis dentro do ComboBox (cbPorts)
      */
@@ -150,7 +197,7 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     private void forceRequest() throws InterruptedException {
-        outputInjection("1");
+        outputInjection("1x");
         Thread.sleep(20);
         lbForceView.setText(inputValue());
         //incluir tara para força
@@ -160,7 +207,7 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     private void positionRequest() throws InterruptedException {
-        outputInjection("2");
+        outputInjection("2x");
         Thread.sleep(20);
         lbPositionView.setText(inputValue());
         //incluir validação de real movimento do eixo
@@ -210,16 +257,29 @@ public class MainSceneController implements Initializable {
      */
     @FXML
     private void adjustVelocity() {
+        //Incluir range minimo, maximo e null (IF ou SWITCH)
+        if(txtAdjustVelocity.getText()!=null){
         String adjust = 8 + txtAdjustVelocity.getText();
         outputInjection(adjust);
+        } else {
+            txtAdjustVelocity.setText("15000");
+            outputInjection("815000");
+        }
+
     }
     /**
      * Método que solicita velocidade de ensaio (injeção de '9')
      */
     @FXML
     private void assayVelocity() {
+        //Incluir range minimo, maximo e null (IF ou SWITCH)
+        if(txtAssayVelocity.getText()!=null){
         String adjust = 9 + txtAssayVelocity.getText();
         outputInjection(adjust);
+        } else {
+            txtAssayVelocity.setText("15000.00");
+        outputInjection("915000");
+        }
     }
 
     // FIM*********** Métodos de Movimento ***********
@@ -264,6 +324,23 @@ public class MainSceneController implements Initializable {
         essayListView.setItems(obsEssayList);
     }
 
+    private void ImagemInclusion(){
+        //Compactação para armazenamento
+        // imagenBitmap é a imagem a ser armazenada
+//        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+//        byte imageBitmap[]=stream.toByteArray();
+    }
+    private void ImagemConsulta(){
+        //Descompactação para leitura
+//        DataBaseHandler db = new DataBaseHandler(this);
+//        User user = db.getUserById(userId);
+//
+//        byte[] outImage=contato.getUserImage();
+//        ByteArrayOutputStream imageStream = new ByteArrayInputStream(outImage);
+//        Bitmap imageBitmap = BitmapFactory.decodeStream(imageStream);
+//        image.setImageBitmap(imageBitmap);
+    }
 
 //                 ******** NECESSÁRIO TESTAR AINDA *********
 
@@ -348,8 +425,8 @@ public class MainSceneController implements Initializable {
 ////        user = new User("Bruno", "brunoslima","biopdi");
 ////        user.save(user);
 //        System.out.println(userDAO.findAll());
-        essay = new Essay(1,"Abemus data","ISO 9999","mBio portátil",220,0,45000,0,-65000,20000,25.4,0,35.0,null,currentDate);
-        essay.save(essay);
+//        essay = new Essay(1,"Abemus data","ISO 9999","mBio portátil",220,0,45000,0,-65000,20000,25.4,0,35.0,null,currentDate);
+//        essay.save(essay);
 //        System.out.println(essayDAO.findAll());
 //        Essay essay2 = essayDAO.findById(1);
 //        System.out.println(essay2);
@@ -365,8 +442,6 @@ public class MainSceneController implements Initializable {
 
 
     }
-
-
 
 
 

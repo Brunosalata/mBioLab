@@ -2,6 +2,7 @@ package br.com.biopdi.mbiolabv2.model.bean;
 
 import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
