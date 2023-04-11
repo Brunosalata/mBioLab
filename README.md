@@ -1,10 +1,15 @@
-# mBioLab - v01
+<head># mBioLab - v01
 
 ## Projeto do software mBioLab - v01 - Biopdi
-<br>### Setup inicial
+</head>
+
+<body>
+<br>
+### Setup inicial
+
 **********************************
-<ol>
-<li>Estrutura do projeto Maven JavaFX - Modelo MVC
+
+<ol><li>Estrutura do projeto Maven JavaFX - Modelo MVC
 <ol><li>java
 <ol><li>br
 <ol><li>model
@@ -84,8 +89,8 @@
 Scanner s = new Scanner(port.getInputStream());<br>
 &#09return s.nextLine();<br>
 &#09}<br>
-<li>Funções de monitoramento automático <Threads>
-  <li>Gestão dos intervalos <Thread.sleep(2000)></ol><br>
+<li>Funções de monitoramento automático (Threads)
+  <li>Gestão dos intervalos (Thread.sleep(2000))</ol><br>
 
 <li>Implementação das Regras de Negócio<br><br>
 
@@ -94,14 +99,14 @@ Scanner s = new Scanner(port.getInputStream());<br>
 <li>Adicionais
 <ol><li>Autoconexão
   <li>Construção da rotina do ensaio (flexibilidade na construção do método criado)</ol></ol>
-  
+
+</body>
 ********************************
   
-  
-  
+<footer>
 <br>### Comunicação Serial via biblioteca jSerialComm
 
 <p>Repositório remoto: <a>https://github.com/Biopdi/mBiov01</a></p>
 
-<footer><center>autor: Bruno Salata Lima<br>Git: /Brunosalata</center></footer>
 
+<div style="text-align:center">autor: Bruno Salata Lima<br>Git: /Brunosalata</div></footer>
