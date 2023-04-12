@@ -5,19 +5,26 @@ import java.io.*;
 import br.com.biopdi.mbiolabv2.controller.SceneController.runnable.RunnableThread;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.EssayDAO;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.SetupDAO;
+import br.com.biopdi.mbiolabv2.controller.repository.dao.SystemParameterDAO;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
 import br.com.biopdi.mbiolabv2.model.bean.Setup;
+import br.com.biopdi.mbiolabv2.model.bean.SystemParameter;
 import br.com.biopdi.mbiolabv2.model.bean.User;
 import com.fazecast.jSerialComm.*;
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.Chart;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.text.ParseException;
@@ -27,12 +34,10 @@ import java.util.concurrent.ThreadFactory;
 
 public class MainSceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
-    User user = new User();
     UserDAO userDAO = new UserDAO();
-    Essay essay = new Essay();
     EssayDAO essayDAO = new EssayDAO();
-    Setup setup = new Setup();
     SetupDAO setupDAO = new SetupDAO();
+    SystemParameterDAO systemParameterDAO = new SystemParameterDAO();
     @FXML
     private Chart chForcePosition;
     @FXML
@@ -63,7 +68,7 @@ public class MainSceneController implements Initializable {
     private SerialPort port;
 
 
-    public ComboBox getCbPorts() {
+    public final ComboBox getCbPorts() {
         return cbPorts;
     }
 
@@ -83,16 +88,13 @@ public class MainSceneController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        port = SerialPort.getCommPort("0");
-        portConnectionList();
-
-
-
+//        port = SerialPort.getCommPort("0");
+//        portConnectionList();
+        autoConnect();
 
         // Mostra data local na base da aplicação
         lbCurrentData.setText(String.valueOf(systemDate));
     }
-
 
     /**
      * Método que define o algorítmo da Thread que faz a leitura dinâmica da Força e da Posição
@@ -100,21 +102,56 @@ public class MainSceneController implements Initializable {
     private void FPReadingThread() {
 
         try{
-            Thread.sleep(1000);
         outputInjection("1x");
-        Thread.sleep(20);
-//          String impF = inputValue();
+        Thread.sleep(10);
         System.out.println(inputValue());
-//          lbForceView.setText(impF);
+//        String impF = inputValue();
+//        lbForceView.setText(impF);
+//        lbForceView.setText(inputValue());
         outputInjection("2x");
-        Thread.sleep(20);
-//          String impP = inputValue();
+        Thread.sleep(10);
         System.out.println(inputValue());
-//          lbPositionView.setText(impP);
+//        String impP = inputValue();
+//        lbPositionView.setText(impP);
+//        lbPositionView.setText(inputValue());
         Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    /**
+     * Método de conexão automática
+     */
+    private void autoConnect(){
+//        if(port!=null) {
+
+            SystemParameter sysPar = systemParameterDAO.find();
+            System.out.println(sysPar);
+                    if(sysPar==null){
+                        sysPar.setPortName(cbPorts.getSelectionModel().getSelectedItem().toString());
+                        sysPar.setSystemLanguage("pt");
+                        sysPar.setSoundOn("false");
+                        systemParameterDAO.create(sysPar);
+                    }
+            port = SerialPort.getCommPort(sysPar.getPortName());
+            System.out.println(port);
+            if (port.openPort()) {
+                btnConnect.setText("Conectado");
+                cbPorts.setDisable(true);
+                port.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+                port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 50, 50);
+                port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+
+            } else {
+                port.closePort();
+                cbPorts.setDisable(false);
+                btnConnect.setText("Conectar");
+            }
+//        } else {
+//            System.out.println("Nenhuma porta encontrada!");
+//        }
     }
 
     /**
@@ -125,6 +162,8 @@ public class MainSceneController implements Initializable {
         if (port != null) {
             //Método de abertura e fechamento de conexão serial
             if (btnConnect.getText().equals("Conectar")) {
+                Setup setupCom = setupDAO.findById(1);
+
                 port = SerialPort.getCommPort(cbPorts.getSelectionModel().getSelectedItem().toString());
                 if (port.openPort()) {
                     btnConnect.setText("Desconectar");
@@ -132,15 +171,74 @@ public class MainSceneController implements Initializable {
                     port.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
                     port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 50, 50);
                     port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
-//
-                    Thread t = new Thread(() -> {
 
-                        while (true) {
-                            System.out.println("foi");
-                            FPReadingThread();
-                        }
-                    });
-                    t.start();
+
+/////////////////////////////////////////////////// Platform.runLAter()
+
+//                    Platform.runLater( () ->  {
+//                        try {
+//                            outputInjection("1x");
+//                            Thread.sleep(10);
+//                            String inpF = inputValue();
+//                            lbForceView.setText(inpF);
+//                            System.out.println(inpF);
+//                            outputInjection("2x");
+//                            Thread.sleep(10);
+//                            String inpP = inputValue();
+//                            lbPositionView.setText(inpP);
+//                            System.out.println(inpP);
+//                            Thread.sleep(1000);
+//                        } catch (InterruptedException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    });
+
+
+/////////////////////////////////////////////////// Service<Void>
+
+//                    Service<Void> ser = new Service<Void>() {
+//                        @Override protected Task createTask() {
+//                            return new Task<Void>() {
+//                                @Override protected Void call() throws InterruptedException {
+//                                    // You code you want to execute in service backgroundgoes here
+//                                    outputInjection("1x");
+//                                    Thread.sleep(10);
+//                                        String inpF = inputValue();
+//                                        lbForceView.setText(inpF);
+//                                    System.out.println(inpF);
+//                                    outputInjection("2x");
+//                                    Thread.sleep(10);
+//                                        String inpP = inputValue();
+//                                        lbPositionView.setText(inpP);
+//                                    System.out.println(inpP);
+//                                    Thread.sleep(1000);
+//
+//
+//
+//                                    return null;
+//                                }
+//                            };
+//                        }
+//                    };
+//                    ser.setOnSucceeded((WorkerStateEvent event) -> {
+//                        // Anything which you want to update on javafx thread (GUI) after completion of background process.
+//                    });
+//
+//                    ser.restart();
+
+
+/////////////////////////////////////////////////// Chama FPReadingThread (mas se mantem na mesma Thread do GUI do JavaFX.. não permite atualização na GUI
+
+//                    Thread t = new Thread(() -> {
+//
+//                        while (true) {
+//                            FPReadingThread();
+//                        }
+//                    });
+//                    t.start();
+
+///////////////////////////////////////////////////
+
                 }
             } else {
                 port.closePort();
@@ -148,7 +246,7 @@ public class MainSceneController implements Initializable {
                 btnConnect.setText("Conectar");
             }
         } else{
-            System.out.println("Nenhuma porta encontrada!");;
+            System.out.println("Nenhuma porta encontrada!");
         }
 
     }

@@ -6,7 +6,6 @@ import java.util.Objects;
 public class Setup {
     private Integer setupId, userId, MC1M1, MC2M1, MC3M1, MC4M1, MC5M1, MC6M1, MC7M1, MC8M1, MC9M1, MC10M1, MC11M1, MC12M1, MC13M1, MC14M1, MC15M1, MC16M1, MC17M1, MC18M1, MC19M1, MC20M1, MC21M1, MC22M1, MC23M1, MC24M1, MC25M1, MC26M1, MC27M1, MC28M1, MC29M1, MC30M1, channel1ext1, channel2ext1, channel3ext1, channel4ext1, channel1ext2, channel2ext2, channel3ext2, channel4ext2;
     private String setupName, setupAuthor;
-
     private String setupDate;
 
     public Setup() {
@@ -372,7 +371,6 @@ public class Setup {
         Setup setup = (Setup) o;
         return setupId.equals(setup.setupId) && Objects.equals(userId, setup.userId) && Objects.equals(setupName, setup.setupName) && Objects.equals(setupAuthor, setup.setupAuthor);
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(setupId, userId, setupName, setupAuthor);
@@ -423,7 +421,7 @@ public class Setup {
                 ", channel4ext2=" + channel4ext2 +
                 ", setupName='" + setupName + '\'' +
                 ", setupAuthor='" + setupAuthor + '\'' +
-                ", setupData=" + setupDate +
+                ", setupDate='" + setupDate + '\'' +
                 '}';
     }
 }
