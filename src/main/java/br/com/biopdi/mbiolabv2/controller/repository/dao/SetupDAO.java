@@ -199,7 +199,7 @@ public class SetupDAO extends DBConnection {
     }
 
     /**
-     * Método que atualiza as informações de um método específico
+     * Método que atualiza as informações do sistema, baseado no equipamento. Manipulação pela equipe técnica
      * @param setup
      */
     public void update(Setup setup){
@@ -291,8 +291,8 @@ public class SetupDAO extends DBConnection {
             stm.setInt(39, setup.getChannel4ext2());
             stm.setString(40, setup.getSetupName());
             stm.setString(41, setup.getSetupAuthor());
-            stm.setString(42,String.valueOf((setup.getSetupDate())));
-            stm.setInt(43, setup.getSetupId());
+            stm.setString(45, String.valueOf((setup.getSetupDate())));
+            stm.setInt(46, setup.getSetupId());
             stm.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();
