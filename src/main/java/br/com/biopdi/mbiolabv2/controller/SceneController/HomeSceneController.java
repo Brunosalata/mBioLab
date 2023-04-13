@@ -88,9 +88,9 @@ public class HomeSceneController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        port = SerialPort.getCommPort("0");
-        portConnectionList();
-//        autoConnect();
+//        port = SerialPort.getCommPort("0");
+//        portConnectionList();
+        autoConnect();
 
 
 
@@ -104,7 +104,7 @@ public class HomeSceneController implements Initializable {
     private void FPReadingThread() {
 
         try{
-            Thread.sleep(1000);
+            Thread.sleep(2000);
             outputInjection("1x");
             Thread.sleep(20);
             String impF = inputValue();
@@ -113,7 +113,6 @@ public class HomeSceneController implements Initializable {
             Thread.sleep(20);
             String impP = inputValue();
 //            System.out.println(impP);
-            Thread.sleep(1000);
 
             SystemVariable sysVar = new SystemVariable(1,Double.valueOf(impF),Double.valueOf(impP));
             systemVariableDAO.update(sysVar);
@@ -147,19 +146,49 @@ public class HomeSceneController implements Initializable {
             port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 50, 50);
             port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
 
-            new Thread(() -> {
+            // Thread para solicitar Posição e Força pela porta serial e persistir em tb_systemVariable
+            Thread t = new Thread(() -> {
 
-                while(true){
-                    System.out.println("loop: ");
-                    try{
-                       forceRequest();
-                       positionRequest();
-                       Thread.sleep(1000);
-                    } catch (InterruptedException e){
-                        throw new RuntimeException(e);
-                    }
+                while (true) {
+                    System.out.println("foi");
+                    FPReadingThread();
                 }
-            }).start();
+            });
+            t.start();
+
+            //Estrutura testada e deixou extremamente pesada a aplicação.
+//            // Thread alternativo para puxar dados BD e setText nas JLabel
+//            Runnable task = () -> {
+//                Platform.runLater(() -> {
+//                    while (true) {
+//                        #My code here
+//                    }
+//                });
+//            };
+//            Thread thread = new Thread(task);
+//            thread.setDaemon(true);
+//            thread.start();
+
+
+            // Thread que puxa informação de tb_systemVariable para printar no console ou setText nas JLabel
+                    Thread t2 = new Thread(() -> {
+                        SystemVariable sysVar2;
+                        while (true) {
+                            System.out.println("Boa");
+                            try {
+                                Thread.sleep(1000);
+                                sysVar2 = systemVariableDAO.find();
+                                System.out.println(sysVar2.getForce());
+                                System.out.println(sysVar2.getPosition());
+//                                lbForceView.setText(Double.toString(sysVar2.getForce())); //Conversão double to String de force para setText em lbForce
+//                                lbPositionView.setText(Double.toString(sysVar2.getPosition())); //Conversão double to String de position para setText em lbPosition
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e){
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
+                    t2.start();
 
         } else {
             port.closePort();
