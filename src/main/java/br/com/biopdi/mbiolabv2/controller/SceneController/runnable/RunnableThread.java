@@ -1,57 +1,50 @@
 package br.com.biopdi.mbiolabv2.controller.SceneController.runnable;
 
-import br.com.biopdi.mbiolabv2.controller.SceneController.MainSceneController;
+import br.com.biopdi.mbiolabv2.controller.SceneController.HomeSceneController;
+import br.com.biopdi.mbiolabv2.controller.repository.dao.SystemParameterDAO;
+import br.com.biopdi.mbiolabv2.controller.repository.dao.SystemVariableDAO;
+import br.com.biopdi.mbiolabv2.model.bean.SystemParameter;
+import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import com.fazecast.jSerialComm.SerialPort;
 import javafx.application.Platform;
-import javafx.scene.control.ComboBox;
+import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class RunnableThread extends Thread {
-
-    MainSceneController ms = new MainSceneController();
-    public Label lbPositionView, lbForceView;
-    public String name;
-    public String SelectedPort;
-    public SerialPort port;
+    @FXML
+    private Label lbPositionView, lbForceView;
+    private String name;
+    private SerialPort port;
+    private SystemVariableDAO systemVariableDAO;
 
     public RunnableThread(String name) {
         this.name = name;
     }
 
+    @FXML
     @Override
     public void run() {
-        if (port!=null) {
-            System.out.println(port);
-            try{
-                SelectedPort = ms.getCbPorts().getSelectionModel().getSelectedItem().toString();
-            port = SerialPort.getCommPort(SelectedPort);
-                System.out.println(port);
-            port.openPort();
-                System.out.println(port);
-            while (true) {
-                System.out.println(port);
-                try {
-                    Thread.sleep(1000);
-                    outputInjection("1x");
-                    Thread.sleep(20);
 
-                    double impF = Double.parseDouble(inputValue());
-                    outputInjection("2x");
-                    Thread.sleep(20);
-                    double impP = Double.parseDouble(inputValue());
-                    Platform.runLater(() -> {
-                    lbForceView.setText(String.valueOf(impF));
-                    lbPositionView.setText(String.valueOf(impP));
-                    });
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            } catch (RuntimeException e) {
+        while (true) {
+
+            try{
+
+                outputInjection("1x");
+                Thread.sleep(20);
+                String impF = inputValue();
+                System.out.println(impF);
+                outputInjection("2x");
+                Thread.sleep(20);
+                String impP = inputValue();
+                System.out.println(impP);
+
+                SystemVariable sysVar = new SystemVariable(1,Double.valueOf(impF),Double.valueOf(impP));
+                systemVariableDAO.update(sysVar);
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }

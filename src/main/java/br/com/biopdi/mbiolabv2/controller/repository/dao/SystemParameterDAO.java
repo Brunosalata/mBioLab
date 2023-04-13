@@ -30,7 +30,7 @@ public class SystemParameterDAO extends DBConnection {
 
     /**
      //     * Método de inclusão de parametros na tabela tb_systemParameter
-     //     * @param user
+     //     * @param systemParameter
      //     *
      //     * @Description chamar a função, instanciando SystemParameterDAO systemParameterDAO e SystemParameter systemParameter.
      //     * Então, chama systemParameterDAO.create()
@@ -60,7 +60,7 @@ public class SystemParameterDAO extends DBConnection {
             PreparedStatement stm = conn.prepareStatement("UPDATE tb_systemParameter SET "
                     + "portName = ?, "
                     + "systemLanguage = ?, "
-                    + "soundOn = ?, "
+                    + "soundOn = ? "
                     + "WHERE id = 1;");
             stm.setString(1, systemParameter.getPortName());
             stm.setString(2, systemParameter.getSystemLanguage());
@@ -73,6 +73,11 @@ public class SystemParameterDAO extends DBConnection {
         }
     }
 
+    /**
+     * Método de busca por um método específico
+     * Não possui parametro pois é tabela de linha única
+     * @return Cadastro de método pela primary key
+     */
     public SystemParameter find(){
         SystemParameter result = null;
         openConnection();
