@@ -10,4 +10,6 @@ module br.com.biopdi.mbiolabv2 {
     exports br.com.biopdi.mbiolabv2;
     exports br.com.biopdi.mbiolabv2.controller.SceneController;
     opens br.com.biopdi.mbiolabv2.controller.SceneController to javafx.fxml;
+    exports br.com.biopdi.mbiolabv2.controller.SceneController.switchScene;
+    opens br.com.biopdi.mbiolabv2.controller.SceneController.switchScene to javafx.fxml;
 }
