@@ -16,7 +16,7 @@ public class SystemParameterDAO extends DBConnection {
         try {
             openConnection();
             PreparedStatement stm = conn.prepareStatement("CREATE TABLE IF NOT EXISTS tb_systemParameter ("
-                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "id,"
                     + "portName TEXT,"
                     + "systemLanguage TEXT,"
                     + "soundOn TEXT);");
@@ -39,6 +39,7 @@ public class SystemParameterDAO extends DBConnection {
         openConnection();
         try{
             PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_systemParameter VALUES(?,?,?,?);");
+            stm.setInt(1, 1);
             stm.setString(2, systemParameter.getPortName());
             stm.setString(3, systemParameter.getSystemLanguage());
             stm.setString(4, systemParameter.getSoundOn());

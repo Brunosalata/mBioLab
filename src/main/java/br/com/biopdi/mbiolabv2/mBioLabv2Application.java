@@ -22,7 +22,6 @@ public class mBioLabv2Application extends Application {
             stage.setScene(scene);
             stage.show();
 
-
 //            FXMLLoader fxmlLoader = new FXMLLoader(mBioLabv2Application.class.getResource("homeScene.fxml"));
 //            Scene scene = new Scene(fxmlLoader.load(), 900, 675);
 //            stage.setTitle("mBioLab");
