@@ -142,21 +142,6 @@ public class HomeSceneController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-    private void FPWritingThread(){
-        SystemVariable sysVar2;
-        try {
-            Thread.sleep(2000);
-            sysVar2 = systemVariableDAO.find();
-            System.out.println(sysVar2.getForce());
-            System.out.println(sysVar2.getPosition());
-//            lbForceView.setText(Double.toString(sysVar2.getForce())); //Conversão double to String de force para setText em lbForce
-//            lbPositionView.setText(Double.toString(sysVar2.getPosition())); //Conversão double to String de position para setText em lbPosition
-            Thread.sleep(1000);
-        } catch (InterruptedException e){
-            throw new RuntimeException(e);
-        }
-    }
-
 
     /**
      * Método de conexão automática
@@ -166,12 +151,12 @@ public class HomeSceneController implements Initializable {
 
         SystemParameter sysPar = systemParameterDAO.find();
         System.out.println("Conectado");
-            if(sysPar==null){
-                sysPar.setPortName(cbPorts.getSelectionModel().getSelectedItem().toString());
-                sysPar.setSystemLanguage("pt");
-                sysPar.setSoundOn("false");
-                systemParameterDAO.create(sysPar);
-            }
+        if(sysPar==null){
+            sysPar.setPortName(cbPorts.getSelectionModel().getSelectedItem().toString());
+            sysPar.setSystemLanguage("pt");
+            sysPar.setSoundOn("false");
+            systemParameterDAO.create(sysPar);
+        }
         port = SerialPort.getCommPort(sysPar.getPortName());
         System.out.println(port);
         if (port.openPort()) {
@@ -181,52 +166,14 @@ public class HomeSceneController implements Initializable {
             port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 50, 50);
             port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
 
-            // Thread para solicitar Posição e Força pela porta serial e persistir em tb_systemVariable
+            // Thread para solicitar Posição e Força e atualizar lbForceView e lbPositionView
             Thread t = new Thread(() -> {
 
                 while (true) {
                     FPReadingThread();
-                    System.out.println("Dados salvos");
                 }
             });
             t.start();
-
-            //Estrutura testada e deixou extremamente pesada a aplicação.
-//            // Thread alternativo para puxar dados BD e setText nas JLabel
-//            Runnable task = () -> {
-//                Platform.runLater(() -> {
-//                    while (true) {
-//                        #My code here
-//                    }
-//                });
-//            };
-//            Thread thread = new Thread(task);
-//            thread.setDaemon(true);
-//            thread.start();
-
-
-            // Thread que puxa informação de tb_systemVariable para printar no console ou setText nas JLabel
-                Thread t2 = new Thread(() -> {
-//                        SystemVariable sysVar2;
-                    while (true) {
-                        System.out.println("Leitura de dados");
-                        FPWritingThread();
-
-//                            try {
-//                                Thread.sleep(1000);
-//                                System.out.println("Leitura de dados");
-//                                sysVar2 = systemVariableDAO.find();
-//                                System.out.println(sysVar2.getForce());
-//                                System.out.println(sysVar2.getPosition());
-////                                lbForceView.setText(Double.toString(sysVar2.getForce())); //Conversão double to String de force para setText em lbForce
-////                                lbPositionView.setText(Double.toString(sysVar2.getPosition())); //Conversão double to String de position para setText em lbPosition
-//                                Thread.sleep(1000);
-//                            } catch (InterruptedException e){
-//                                throw new RuntimeException(e);
-//                            }
-                    }
-                });
-                t2.start();
 
         } else {
             port.closePort();
@@ -234,165 +181,6 @@ public class HomeSceneController implements Initializable {
         }
     }
 
-    /**
-     * Método de abertura e fechamento de conexão
-     */
-    @FXML
-    private void connect() {
-        if (port != null) {
-            //Método de abertura e fechamento de conexão serial
-            if (btnConnect.getText().equals("Conectar")) {
-                port = SerialPort.getCommPort(cbPorts.getSelectionModel().getSelectedItem().toString());
-                if (port.openPort()) {
-                    btnConnect.setText("Desconectar");
-                    cbPorts.setDisable(true);
-                    port.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-                    port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 50, 50);
-                    port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
-
-                    // Thread para solicitar Posição e Força pela porta serial e persistir em tb_systemVariable
-                    Thread t = new Thread(() -> {
-
-                        while (true) {
-                            System.out.println("foi");
-                            FPReadingThread();
-                        }
-                    });
-                    t.start();
-
-                    // Thread alternativo para puxar dados BD e setText nas JLabel
-                    Runnable task = () -> {
-                        Platform.runLater(() -> {
-                            System.out.println("I'm running later...");
-                            SystemVariable sysVar2;
-                            while (true) {
-                                System.out.println("Boa");
-                                try {
-                                    Thread.sleep(1000);
-                                    sysVar2 = systemVariableDAO.find();
-                                    System.out.println(sysVar2.getForce());
-                                    System.out.println(sysVar2.getPosition());
-                                    lbForceView.setText(Double.toString(sysVar2.getForce())); //Conversão double to String de force para setText em lbForce
-                                    lbPositionView.setText(Double.toString(sysVar2.getPosition())); //Conversão double to String de position para setText em lbPosition
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e){
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                        });
-                    };
-                    Thread thread = new Thread(task);
-                    thread.setDaemon(true);
-                    thread.start();
-
-
-                    // Thread que puxa informação de tb_systemVariable para printar no console ou setText nas JLabel
-//                    Thread t2 = new Thread(() -> {
-//                        SystemVariable sysVar2;
-//                        while (true) {
-//                            System.out.println("Boa");
-//                            try {
-//                                Thread.sleep(1000);
-//                                sysVar2 = systemVariableDAO.find();
-//                                System.out.println(sysVar2.getForce());
-//                                System.out.println(sysVar2.getPosition());
-////                                lbForceView.setText(Double.toString(sysVar2.getForce())); //Conversão double to String de force para setText em lbForce
-////                                lbPositionView.setText(Double.toString(sysVar2.getPosition())); //Conversão double to String de position para setText em lbPosition
-//                                Thread.sleep(1000);
-//                            } catch (InterruptedException e){
-//                                throw new RuntimeException(e);
-//                            }
-//                        }
-//                    });
-//                    t2.start();
-
-/////////////////////////////////////////////////// Platform.runLAter()
-
-//                    Platform.runLater( () ->  {
-//                        try {
-//                            outputInjection("1x");
-//                            Thread.sleep(10);
-//                            System.out.println(inputValue());
-////                            lbForceView.setText(inputValue());
-//                            outputInjection("2x");
-//                            Thread.sleep(10);
-//                            System.out.println(inputValue());
-////                            lbPositionView.setText(inputValue());
-//                            Thread.sleep(1000);
-//                        } catch (InterruptedException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                    });
-
-
-/////////////////////////////////////////////////// Service<Void>
-
-//                    Service<Void> ser = new Service<Void>() {
-//                        @Override protected Task createTask() {
-//                            return new Task<Void>() {
-//                                @Override protected Void call() throws InterruptedException {
-//                                    // You code you want to execute in service backgroundgoes here
-//                                    outputInjection("1x");
-//                                    Thread.sleep(10);
-//                                        String inpF = inputValue();
-//                                        lbForceView.setText(inpF);
-//                                    System.out.println(inpF);
-//                                    outputInjection("2x");
-//                                    Thread.sleep(10);
-//                                        String inpP = inputValue();
-//                                        lbPositionView.setText(inpP);
-//                                    System.out.println(inpP);
-//                                    Thread.sleep(1000);
-//
-//
-//
-//                                    return null;
-//                                }
-//                            };
-//                        }
-//                    };
-//                    ser.setOnSucceeded((WorkerStateEvent event) -> {
-//                        // Anything which you want to update on javafx thread (GUI) after completion of background process.
-//                    });
-//
-//                    ser.restart();
-
-
-/////////////////////////////////////////////////// Chama FPReadingThread (mas se mantem na mesma Thread do GUI do JavaFX.. não permite atualização na GUI
-
-//                    Thread t = new Thread(() -> {
-//                        while (true) {
-//                            FPReadingThread();
-//                        }
-//                    });
-//                    t.start();
-
-///////////////////////////////////////////////////
-
-                }
-            } else {
-                port.closePort();
-                cbPorts.setDisable(false);
-                btnConnect.setText("Conectar");
-            }
-
-        }else{
-            System.out.println("Nenhuma porta encontrada!");
-        }
-
-    }
-
-
-    /**
-     * Método de listagem de portas Seriais disponíveis dentro do ComboBox (cbPorts)
-     */
-    private void portConnectionList() {
-
-        SerialPort[] portNames = SerialPort.getCommPorts();
-        for (SerialPort portName : portNames) {
-            cbPorts.getItems().add(portName.getSystemPortName());
-        }
-    }
     /**
      * Método genérico para injeção do output, aplicável para os diferentes processos port.OutputStream() que requeiram uma string
      *
