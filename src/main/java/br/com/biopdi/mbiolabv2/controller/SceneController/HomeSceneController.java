@@ -1,13 +1,13 @@
 package br.com.biopdi.mbiolabv2.controller.SceneController;
 
-import br.com.biopdi.mbiolabv2.controller.SceneController.runnable.RunnableThread;
 import br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.SwitchSceneController;
+import br.com.biopdi.mbiolabv2.controller.SceneController.task.ForcePositionViewTask;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
 import br.com.biopdi.mbiolabv2.model.bean.*;
 import com.fazecast.jSerialComm.SerialPort;
-import com.fazecast.jSerialComm.SerialPortIOException;
-import com.fazecast.jSerialComm.SerialPortTimeoutException;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,14 +19,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.Chart;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -92,11 +89,29 @@ public class HomeSceneController implements Initializable {
 //        portConnectionList();
         autoConnect();
 
+//        invokeForcePositionViewTask();
+
 
 
         // Mostra data local na base da aplicação
         lbCurrentData.setText(String.valueOf(systemDate));
     }
+
+    /**
+     * Método que invoca a TaskForcePositionViewTask, com atuação paralela à Thread principal e retorna o valor a ser atualizado na lbForceView e lbPositionView
+     */
+//    private void invokeForcePositionViewTask() {
+//        ForcePositionViewTask forcePositionViewTask = new ForcePositionViewTask();
+//        forcePositionViewTask.valueProperty().addListener(new ChangeListener<String>() {
+//            @Override
+//            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+//                    lbForceView.setText(newValue);
+//            }
+//        });
+//        Thread th = new Thread(forcePositionViewTask);
+//        th.setDaemon(true);
+//        th.start();
+//    }
 
     /**
      * Método que define o algorítmo da Thread que faz a leitura dinâmica da Força e da Posição
@@ -114,10 +129,30 @@ public class HomeSceneController implements Initializable {
             String impP = inputValue();
 //            System.out.println(impP);
 
+            //Atualização da UI pela Thread
+            Platform.runLater(() -> {
+                lbForceView.setText(impF);
+                lbPositionView.setText(impP);
+            });
+
             SystemVariable sysVar = new SystemVariable(1,Double.valueOf(impF),Double.valueOf(impP));
             systemVariableDAO.update(sysVar);
-            Thread.sleep(1000);
+
         } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void FPWritingThread(){
+        SystemVariable sysVar2;
+        try {
+            Thread.sleep(2000);
+            sysVar2 = systemVariableDAO.find();
+            System.out.println(sysVar2.getForce());
+            System.out.println(sysVar2.getPosition());
+//            lbForceView.setText(Double.toString(sysVar2.getForce())); //Conversão double to String de force para setText em lbForce
+//            lbPositionView.setText(Double.toString(sysVar2.getPosition())); //Conversão double to String de position para setText em lbPosition
+            Thread.sleep(1000);
+        } catch (InterruptedException e){
             throw new RuntimeException(e);
         }
     }
@@ -150,8 +185,8 @@ public class HomeSceneController implements Initializable {
             Thread t = new Thread(() -> {
 
                 while (true) {
-                    System.out.println("foi");
                     FPReadingThread();
+                    System.out.println("Dados salvos");
                 }
             });
             t.start();
@@ -171,24 +206,27 @@ public class HomeSceneController implements Initializable {
 
 
             // Thread que puxa informação de tb_systemVariable para printar no console ou setText nas JLabel
-                    Thread t2 = new Thread(() -> {
-                        SystemVariable sysVar2;
-                        while (true) {
-                            System.out.println("Boa");
-                            try {
-                                Thread.sleep(1000);
-                                sysVar2 = systemVariableDAO.find();
-                                System.out.println(sysVar2.getForce());
-                                System.out.println(sysVar2.getPosition());
-//                                lbForceView.setText(Double.toString(sysVar2.getForce())); //Conversão double to String de force para setText em lbForce
-//                                lbPositionView.setText(Double.toString(sysVar2.getPosition())); //Conversão double to String de position para setText em lbPosition
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e){
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    });
-                    t2.start();
+                Thread t2 = new Thread(() -> {
+//                        SystemVariable sysVar2;
+                    while (true) {
+                        System.out.println("Leitura de dados");
+                        FPWritingThread();
+
+//                            try {
+//                                Thread.sleep(1000);
+//                                System.out.println("Leitura de dados");
+//                                sysVar2 = systemVariableDAO.find();
+//                                System.out.println(sysVar2.getForce());
+//                                System.out.println(sysVar2.getPosition());
+////                                lbForceView.setText(Double.toString(sysVar2.getForce())); //Conversão double to String de force para setText em lbForce
+////                                lbPositionView.setText(Double.toString(sysVar2.getPosition())); //Conversão double to String de position para setText em lbPosition
+//                                Thread.sleep(1000);
+//                            } catch (InterruptedException e){
+//                                throw new RuntimeException(e);
+//                            }
+                    }
+                });
+                t2.start();
 
         } else {
             port.closePort();
