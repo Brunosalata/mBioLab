@@ -2,7 +2,6 @@ package br.com.biopdi.mbiolabv2.controller.repository.dao;
 
 import br.com.biopdi.mbiolabv2.controller.repository.DBConnection;
 import br.com.biopdi.mbiolabv2.model.bean.SystemParameter;
-import br.com.biopdi.mbiolabv2.model.bean.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,8 +35,8 @@ public class SystemParameterDAO extends DBConnection {
      //     * Então, chama systemParameterDAO.create()
      //     */
     public void create(SystemParameter systemParameter){
-        openConnection();
         try{
+            openConnection();
             PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_systemParameter VALUES(?,?,?,?);");
             stm.setInt(1, 1);
             stm.setString(2, systemParameter.getPortName());
@@ -56,8 +55,8 @@ public class SystemParameterDAO extends DBConnection {
      * @param systemParameter
      */
     public void update(SystemParameter systemParameter){
-        openConnection();
         try{
+            openConnection();
             PreparedStatement stm = conn.prepareStatement("UPDATE tb_systemParameter SET "
                     + "portName = ?, "
                     + "systemLanguage = ?, "
@@ -81,8 +80,8 @@ public class SystemParameterDAO extends DBConnection {
      */
     public SystemParameter find(){
         SystemParameter result = null;
-        openConnection();
         try{
+            openConnection();
             PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_systemParameter WHERE id = 1;");
             ResultSet rs = stm.executeQuery();
             if(rs.next()){
