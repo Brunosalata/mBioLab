@@ -8,17 +8,22 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 
 public class mBioLabv2Application extends Application {
-    HomeSceneController ms = new HomeSceneController();
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
         try{
-
-            Parent root = FXMLLoader.load(getClass().getResource("homeScene.fxml"));
-            Scene scene = new Scene(root);
+            Parent root = FXMLLoader.load(getClass().getResource("switchMenuScene.fxml"));
+//            Parent root = FXMLLoader.load(getClass().getResource("homeScene.fxml"));
+//            Parent root = FXMLLoader.load(getClass().getResource("dashboardScene.fxml"));
+//            Parent root = FXMLLoader.load(getClass().getResource("essayScene.fxml"));
+//            Parent root = FXMLLoader.load(getClass().getResource("reportScene.fxml"));
+//            Parent root = FXMLLoader.load(getClass().getResource("systemSettingScene.fxml"));
+//            Parent root = FXMLLoader.load(getClass().getResource("loginScene.fxml"));
+//            Parent root = FXMLLoader.load(getClass().getResource("userRegisterScene.fxml"));
+            Scene scene = new Scene(root, 900, 675);
+            stage.setTitle("mBioLab");
             stage.setScene(scene);
             stage.show();
 

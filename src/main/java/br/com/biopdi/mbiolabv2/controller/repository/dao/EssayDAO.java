@@ -31,7 +31,7 @@ public class EssayDAO extends DBConnection {
                 + "essayTemperature DOUBLE,"
                 + "essayPreCharge DOUBLE,"
                 + "essayRelativeHumidity DOUBLE,"
-                + "essayGraphic BLOB,"
+                + "essayChart TEXT,"
                 + "essayData DATE NOT NULL);");
             stm.executeUpdate();
         } catch (SQLException e) {
@@ -64,7 +64,7 @@ public class EssayDAO extends DBConnection {
             stm.setDouble(12, essay.getEssayTemperature());
             stm.setDouble(13, essay.getEssayPreCharge());
             stm.setDouble(14, essay.getEssayRelativeHumidity());
-            stm.setBytes(15, essay.getEssayGraphic());
+            stm.setString(15, essay.getEssayChart());
             stm.setString(16, String.valueOf((essay.getEssayDate())));
             stm.executeUpdate();
         } catch (SQLException e){
@@ -102,7 +102,7 @@ public class EssayDAO extends DBConnection {
                     rs.getDouble(12),//essay Temperature
                     rs.getDouble(13),//essay Pre Charge
                     rs.getDouble(14),//essay Relative Humidity
-                    rs.getBytes(15),//essay Graphic
+                    rs.getString(15),//essay Chart
                     rs.getString(16));//essay Data
                 result.add(essay);
             }
@@ -135,7 +135,7 @@ public class EssayDAO extends DBConnection {
                 + "essayTemperature = ?,"
                 + "essayPreCharge = ?,"
                 + "essayRelativeHumidity = ?,"
-                + "essayGraphic = ?,"
+                + "essayChart = ?,"
                 + "essayData = ? "
                 + "WHERE essayId = ?;");
             stm.setInt(1, essay.getUserId());
@@ -151,7 +151,7 @@ public class EssayDAO extends DBConnection {
             stm.setDouble(11, essay.getEssayPreCharge());
             stm.setDouble(12, essay.getEssayPreCharge());
             stm.setDouble(13, essay.getEssayRelativeHumidity());
-            stm.setBytes(14, essay.getEssayGraphic());
+            stm.setString(14, essay.getEssayChart());
             stm.setString(15, String.valueOf((essay.getEssayDate())));
             stm.setInt(16, essay.getEssayId());
             stm.executeUpdate();
@@ -207,7 +207,7 @@ public class EssayDAO extends DBConnection {
                     rs.getDouble(12),//essay Temperature
                     rs.getDouble(13),//essay Pre Charge
                     rs.getDouble(14),//essay Relative Humidity
-                    rs.getBytes(15),//essay Graphic
+                    rs.getString(15),//essay Chart
                     rs.getString(16));//essay Data
                 result = essay;
             }
@@ -243,7 +243,7 @@ public class EssayDAO extends DBConnection {
                         rs.getDouble(12),//essay Temperature
                         rs.getDouble(13),//essay Pre Charge
                         rs.getDouble(14),//essay Relative Humidity
-                        rs.getBytes(15),//essay Graphic
+                        rs.getString(15),//essay Chart
                         rs.getString(16));//essay Data
                 result.add(essay);
             }
