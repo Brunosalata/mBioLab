@@ -31,10 +31,10 @@ public class ForcePositionViewTask extends Task<String> {
             if (port.openPort()) {
                 try {
                     Thread.sleep(2000);
-                    outputInjection("1x");
+                    outputInjection("1");
                     Thread.sleep(20);
                     impF = inputValue();
-//                    outputInjection("2x");
+//                    outputInjection("2");
 //                    Thread.sleep(20);
 //                    String impP = inputValue();
 
