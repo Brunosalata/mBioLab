@@ -24,7 +24,6 @@ import java.util.ResourceBundle;
 
 public class HomeSceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
-    SwitchMenuSceneController switchScene = new SwitchMenuSceneController();
     private final UserDAO userDAO = new UserDAO();
     private final EssayDAO essayDAO = new EssayDAO();
     private final SetupDAO setupDAO = new SetupDAO();
@@ -34,9 +33,9 @@ public class HomeSceneController implements Initializable {
     @FXML
     private TextField txtEssayUserId;
     @FXML
-    private Label lbCurrentData, lbUserId, lbUserName, lbUserLogin, lbUserPassword;
+    private Label lbUserId, lbUserName, lbUserLogin, lbUserPassword;
     @FXML
-    private Button btnEssayByUserId, btnSwitchToHomeScene, btnSwitchToDashboardScene, btnSwitchToEssayScene, btnSwitchToReportScene, btnSwitchToSettingScene;
+    private Button btnEssayByUserId, btnDataPull;
     @FXML
     private ListView<Setup> setupListView;
     @FXML
@@ -57,18 +56,6 @@ public class HomeSceneController implements Initializable {
 
 
 
-    Date systemDate = new Date();
-    SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    SimpleDateFormat brasilianDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-    String currentDate = brasilianDate.format(systemDate);
-
-
-
-    /**
-     * Thread que faz a leitura da posição em tempo real
-     */
-
-
 //    FIM ******************** Declarações iniciais **********************
 
     @Override
@@ -76,9 +63,6 @@ public class HomeSceneController implements Initializable {
 
 
 
-
-        // Mostra data local na base da aplicação
-        lbCurrentData.setText(String.valueOf(systemDate));
     }
 
     /**

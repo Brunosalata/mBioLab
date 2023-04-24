@@ -5,21 +5,19 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.SystemSettingSceneController">
+<AnchorPane prefHeight="650.0" prefWidth="665.0" style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.SystemSettingSceneController">
    <children>
-      <ComboBox fx:id="cbPorts" layoutX="408.0" layoutY="50.0" prefWidth="150.0" promptText="selecionar" />
-      <ComboBox fx:id="cbLanguage" layoutX="408.0" layoutY="90.0" prefWidth="150.0" promptText="Selecionar" />
-      <ComboBox fx:id="cbSound" layoutX="408.0" layoutY="131.0" prefWidth="150.0" promptText="Selecionar" />
-      <Label alignment="CENTER" layoutX="327.0" layoutY="54.0" prefHeight="17.0" prefWidth="79.0" text="Porta Serial" textAlignment="CENTER" />
-      <Label alignment="CENTER" layoutX="327.0" layoutY="94.0" prefHeight="17.0" prefWidth="79.0" text="Idioma" textAlignment="CENTER" />
-      <Label alignment="CENTER" layoutX="327.0" layoutY="135.0" prefHeight="17.0" prefWidth="79.0" text="Som" textAlignment="CENTER" />
-      <Button fx:id="btnSettingSave" layoutX="534.0" layoutY="361.0" mnemonicParsing="false" text="Salvar" />
-      <Button fx:id="btnUserSettingSave" layoutX="343.0" layoutY="179.0" mnemonicParsing="false" onAction="#userSettingSave" text="Salvar" />
-      <Button fx:id="btnSwitchToHomeScene" layoutX="32.0" layoutY="67.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" text="Principal" />
-      <Button fx:id="btnSwitchToDashboardScene" layoutX="32.0" layoutY="102.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" text="Dashboard" />
-      <Button fx:id="btnSwitchToEssayScene" layoutX="32.0" layoutY="136.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" text="Ensaio" />
-      <Button fx:id="btnSwitchToReportScene" layoutX="32.0" layoutY="169.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" text="Relatório" />
-      <Button fx:id="btnSwitchToSettingScene" layoutX="32.0" layoutY="203.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" text="Settings" />
-      <Label fx:id="lbCurrentData" alignment="CENTER" layoutX="201.0" layoutY="378.0" prefHeight="17.0" prefWidth="198.0" text="data" />
+      <AnchorPane prefHeight="640.0" prefWidth="640.0" style="-fx-background-color: #E5E5E5;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <ComboBox fx:id="cbPorts" prefWidth="150.0" promptText="selecionar" AnchorPane.rightAnchor="42.0" AnchorPane.topAnchor="54.0" />
+            <ComboBox fx:id="cbLanguage" prefWidth="150.0" promptText="Selecionar" AnchorPane.rightAnchor="42.0" AnchorPane.topAnchor="94.0" />
+            <ComboBox fx:id="cbSound" prefWidth="150.0" promptText="Selecionar" AnchorPane.rightAnchor="42.0" AnchorPane.topAnchor="131.0" />
+            <Label alignment="CENTER" prefHeight="17.0" prefWidth="79.0" text="Porta Serial" textAlignment="CENTER" AnchorPane.rightAnchor="194.0" AnchorPane.topAnchor="58.0" />
+            <Label alignment="CENTER" prefHeight="17.0" prefWidth="79.0" text="Idioma" textAlignment="CENTER" AnchorPane.rightAnchor="194.0" AnchorPane.topAnchor="98.0" />
+            <Label alignment="CENTER" prefHeight="17.0" prefWidth="79.0" text="Som" textAlignment="CENTER" AnchorPane.rightAnchor="194.0" AnchorPane.topAnchor="139.0" />
+            <Button fx:id="btnSettingSave" mnemonicParsing="false" text="Salvar" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="18.0" />
+            <Button fx:id="btnUserSettingSave" mnemonicParsing="false" onAction="#userSettingSave" text="Salvar" AnchorPane.rightAnchor="209.0" AnchorPane.topAnchor="179.0" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

@@ -44,7 +44,6 @@ public class ReportSceneController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
 
-        // Mostra data local na base da aplicação
-        lbCurrentData.setText(String.valueOf(systemDate));
+
     }
 }

@@ -1,18 +1,50 @@
 package br.com.biopdi.mbiolabv2.controller.SceneController.switchScene;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.Timer;
 
 public class SwitchMenuSceneController implements Initializable {
     @FXML
+    private Label lbCurrentData;
+    @FXML
     private BorderPane mainPane;
+
+    Date systemDate = new Date();
+    SimpleDateFormat dateComplete = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat brasilianDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    String currentDate = brasilianDate.format(systemDate);
+
+    @FXML
+    private void clockView(){
+
+
+    }
+
+    private void clockActualize(){
+        Date now = new Date();
+        lbCurrentData.setText(dateComplete.format(systemDate));
+    }
+
+
+
 
     @FXML
     private void switchToHomeScene(ActionEvent event) {
@@ -67,6 +99,9 @@ public class SwitchMenuSceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+
+        // Mostra data local na base da aplicação
 
     }
 }
