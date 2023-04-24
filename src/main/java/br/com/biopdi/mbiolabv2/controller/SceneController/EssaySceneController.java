@@ -1,7 +1,6 @@
 package br.com.biopdi.mbiolabv2.controller.SceneController;
 
 
-import br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.SwitchMenuSceneController;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
 import br.com.biopdi.mbiolabv2.model.bean.SystemParameter;
@@ -29,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 
 public class EssaySceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
-    SwitchMenuSceneController switchScene = new SwitchMenuSceneController();
     private final UserDAO userDAO = new UserDAO();
     private final EssayDAO essayDAO = new EssayDAO();
     private final SetupDAO setupDAO = new SetupDAO();
@@ -61,7 +59,9 @@ public class EssaySceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         autoConnect();
+
 
 
         //dá para usar no gráfico
@@ -69,44 +69,6 @@ public class EssaySceneController implements Initializable {
 
 
 
-        // Mostra data local na base da aplicação
-        lbCurrentData.setText(String.valueOf(systemDate));
-    }
-
-    /**
-     * Método de conexão automática
-     */
-    @FXML
-    private void autoConnect(){
-
-        SystemParameter sysPar = systemParameterDAO.find();
-        port = SerialPort.getCommPort(sysPar.getPortName());
-        System.out.println("Conectado à porta: " + sysPar.getPortName() + " - " + port);
-        if (port.openPort()) {
-            txtConnected.setText("Conectado");
-//            txtConnected.setStyle("NOME DO ESTILO");
-            port.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-            port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 50, 50);
-            port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
-
-            // Thread para solicitar Posição e Força e atualizar lbForceView e lbPositionView
-            Thread t = new Thread(() -> {
-                try {
-                    Thread.sleep(2000);
-                    while (true) {
-                        FPReadingThread();
-                    }
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            t.start();
-
-        } else {
-            port.closePort();
-            txtConnected.setText("Desconectado");
-//            txtConnected.setStyle("NOME DO ESTILO");
-        }
     }
 
     /**
@@ -115,12 +77,12 @@ public class EssaySceneController implements Initializable {
     private void FPReadingThread() {
 
         try{
-            Thread.sleep(500);
             outputInjection("1");  // Requerimento do valor da força
-            Thread.sleep(20);
+            Thread.sleep(13);
             String impF = inputValue();
+            System.out.println(impF);
             outputInjection("2");  // requerimento do valor da posição
-            Thread.sleep(20);
+            Thread.sleep(13);
             String impP = inputValue();
 
             //Atualização da UI pela Thread
@@ -137,6 +99,43 @@ public class EssaySceneController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Método de conexão automática
+     */
+    @FXML
+    private void autoConnect(){
+
+        SystemParameter sysPar = systemParameterDAO.find();
+        port = SerialPort.getCommPort(sysPar.getPortName());
+        System.out.println("Conectado à porta: " + sysPar.getPortName() + " - " + port);
+        if (port.openPort()) {
+            txtConnected.setText("Conectado");
+            txtConnected.setStyle("-fx-background-color: #06BC0E");
+            port.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+            port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 50, 50);
+            port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+
+            // Thread para solicitar Posição e Força e atualizar lbForceView e lbPositionView
+            Thread t = new Thread(() -> {
+                try {
+                    Thread.sleep(1000);
+                    while (true) {
+                        FPReadingThread();
+                    }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            t.start();
+
+        } else {
+            port.closePort();
+            txtConnected.setText("Desconectado");
+            txtConnected.setStyle("-fx-background-color: #BCAA06");
+        }
+    }
+
 
     @FXML
     private void chartTry(){

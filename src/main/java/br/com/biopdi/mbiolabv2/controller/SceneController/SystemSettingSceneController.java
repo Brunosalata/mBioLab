@@ -35,8 +35,6 @@ public class SystemSettingSceneController implements Initializable {
         systemLanguageList();
         soundSelect();
 
-        // Mostra data local na base da aplicação
-        lbCurrentData.setText(String.valueOf(systemDate));
     }
 
     /**
