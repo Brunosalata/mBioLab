@@ -3,54 +3,51 @@ package br.com.biopdi.mbiolabv2.controller.SceneController;
 
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
+import br.com.biopdi.mbiolabv2.model.bean.Method;
 import br.com.biopdi.mbiolabv2.model.bean.SystemParameter;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import com.fazecast.jSerialComm.SerialPort;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 
 import java.io.PrintWriter;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 public class EssaySceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
     private final UserDAO userDAO = new UserDAO();
     private final EssayDAO essayDAO = new EssayDAO();
     private final SetupDAO setupDAO = new SetupDAO();
+    private final MethodDAO methodDAO = new MethodDAO();
     private final SystemParameterDAO systemParameterDAO = new SystemParameterDAO();
     private final SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
 
 
     // Puxar dados do DB systemVariable salvas na Thread de leitura FPReadingThread()
-
     @FXML
-    private CategoryAxis xChartSingle;
+    private ComboBox cbMethodList;
+    //    @FXML
+//    private NumberAxis xEssayChart, yEssayChart, xChartSingle, yChartSingle,xChartMulti, yChartMulti;
     @FXML
-    private NumberAxis yChartSingle,xChartMulti, yChartMulti;// xChartSingle,
+    private LineChart<Number, Number> chartEssayLine, chartSingleLine, chartMultiLine;
+    private XYChart.Series<Number, Number> series;
     @FXML
-    private LineChart<?,?> xyChartSingle, xyChartMulti;
-    @FXML
-    private TextField txtConnected, txtForceView, txtPositionView, txtAdjustVelocity, txtAssayVelocity, txtEssayUserId, txtLed;
+    private TextField txtConnected, txtForceView, txtPositionView, txtAdjustVelocity, txtEssayVelocity, txtEssayUserId, txtLed;
     @FXML
     private Label lbCurrentData, lbUserId, lbUserName, lbUserLogin, lbUserPassword;
     @FXML
-    private Button btnEssayByUserId, btnSwitchToHomeScene, btnSwitchToDashboardScene, btnSwitchToEssayScene, btnSwitchToReportScene, btnSwitchToSettingScene;
+    private Button btnChargeMethod, btnEssayByUserId;
     private SerialPort port;
-    private XYChart.Series series;
+
+
+
 
     Date systemDate = new Date();
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -60,13 +57,14 @@ public class EssaySceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        autoConnect();
 
+
+        autoConnect();
+        savedMethodList();
 
 
         //dá para usar no gráfico
 //        invokeForcePositionViewTask();
-
 
 
     }
@@ -74,26 +72,26 @@ public class EssaySceneController implements Initializable {
     /**
      * Método que define o algorítmo da Thread que faz a leitura dinâmica da Força e da Posição
      */
-    private void FPReadingThread() {
+    private synchronized void FPReadingThread() {
 
-        try{
+        try {
             outputInjection("1");  // Requerimento do valor da força
             Thread.sleep(13);
             String impF = inputValue();
-            System.out.println(impF);
+//            System.out.println(impF);
             outputInjection("2");  // requerimento do valor da posição
             Thread.sleep(13);
             String impP = inputValue();
 
-            //Atualização da UI pela Thread
-            Platform.runLater(() -> {
-                txtForceView.setText(impF);
-                txtPositionView.setText(impP);
-            });
-
-            // Salvando dados no banco de dados - estratégia para alimentar um array que será usado para construir gráfico e armazenar os valores
-            SystemVariable sysVar = new SystemVariable(1,Double.valueOf(impF),Double.valueOf(impP));
+            // Salvando dados no banco de dados - dados persistentes como variável global
+            SystemVariable sysVar = new SystemVariable(1, Double.valueOf(impF), Double.valueOf(impP));
             systemVariableDAO.update(sysVar);
+
+            //Atualização da UI pela Thread a partir dos dados salvos no DB
+            Platform.runLater(() -> {
+                txtForceView.setText(String.format("%.2f", Double.valueOf(impF)));
+                txtPositionView.setText(String.format("%.2f", Double.valueOf(impP)));
+            });
 
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -104,7 +102,7 @@ public class EssaySceneController implements Initializable {
      * Método de conexão automática
      */
     @FXML
-    private void autoConnect(){
+    private void autoConnect() {
 
         SystemParameter sysPar = systemParameterDAO.find();
         port = SerialPort.getCommPort(sysPar.getPortName());
@@ -133,58 +131,72 @@ public class EssaySceneController implements Initializable {
             port.closePort();
             txtConnected.setText("Desconectado");
             txtConnected.setStyle("-fx-background-color: #BCAA06");
+
         }
     }
 
-
+    /**
+     * Método que lista todos os methodName salvos na tb_method do banco de dados
+     */
     @FXML
-    private void chartTry(){
-        ScheduledExecutorService scheduledExecutorService;
-        int WINDOW_SIZE = 50;
-
-        xChartSingle.setLabel("Time/s");
-        xChartSingle.setAnimated(false); // axis animations are removed
-        yChartSingle.setLabel("Value");
-        yChartSingle.setAnimated(false); // axis animations are removed
-
-        //creating the line chart with two axis created above
-        xyChartSingle.setTitle("Realtime JavaFX Charts");
-        xyChartSingle.setAnimated(false); // disable animations
-
-        // add series to chart
-        xyChartSingle.getData().add(series);
-
-        // this is used to display time in HH:mm:ss format
-        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-
-        // setup a scheduled executor to periodically put data into the chart
-        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-
-        // put dummy data onto graph per second
-        scheduledExecutorService.scheduleAtFixedRate(() -> {
-            // get a random integer between 0-10
-            Integer random = ThreadLocalRandom.current().nextInt(10);
-
-            // Update the chart
-            Platform.runLater(() -> {
-                // get current time
-                Date now = new Date();
-                // put random number with current time
-                series.getData().add(new XYChart.Data<>(simpleDateFormat.format(now), random));
-
-                if (series.getData().size() > WINDOW_SIZE)
-                    series.getData().remove(0);
-            });
-        }, 0, 1, TimeUnit.SECONDS);
-
+    private void savedMethodList() {
+        List<Method> methodList = methodDAO.findAll();
+        for (Method method : methodList) {
+            cbMethodList.getItems().add(method.getMethodName());
+        }
     }
 
+    /**
+     * Método que carrega um método já salvo a partir de uma comboBox
+     *
+     * @return method
+     */
     @FXML
-    private void essayChartReader() throws InterruptedException {
-        //defining a series
-        int count = 0;
+    private Method chargeMethod() {
+        Method method = new MethodDAO().findByMethod(cbMethodList.getSelectionModel().getSelectedItem().toString());
+        System.out.println(method);
+        return method;
+    }
 
-        Double[] chartDotVector;                                    // vetor que recebe Double Força e Posição do DB (systemVariable)
+
+//    ************* Chart Construction *****************
+    class dotValueReader implements Runnable{
+        SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
+        @Override
+        public void run() {
+            try{
+                while (true){
+
+                    Thread.sleep(50);
+                        SystemVariable sysVar = systemVariableDAO.find();
+                        double x = sysVar.getForce();
+                        double y = sysVar.getPosition();
+                        System.out.println(x + " " + y);
+                    // Avoid throwing IllegalStateException by running from a non-JavaFX thread.
+                    Platform.runLater(() -> {
+                        // Update UI.
+                        series.getData().add(new XYChart.Data<>(x,y));
+                    });
+                }
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+}
+
+    @FXML
+    private synchronized void chartTry() {
+
+
+
+
+}
+
+    @FXML
+    private synchronized void essayChartReader() throws InterruptedException {
+        //defining a series
+
         String chartDotVectorStg;                                   // variável que recebe a String, da conversão do vetor chartDotVector
         List<String> essayChartFinalString = new ArrayList<>();     // ArrayList que recebe as Strings dos vetores para salvar no DB (essay.setEssayChart)
         String[] essayChartArrayReceiver;                           //
@@ -193,72 +205,49 @@ public class EssaySceneController implements Initializable {
 
         XYChart.Series series = new XYChart.Series();
 
+        SystemVariable sysVar = systemVariableDAO.find();
+        Double chartDotVector[] = new Double[]{sysVar.getForce(), sysVar.getPosition()};  // vetor que recebe Double Força e Posição do DB (systemVariable)
+        System.out.println(chartDotVector[0]);
+        System.out.println(chartDotVector[1]);
+
+        chartDotVectorStg = chartDotVector[0] + "; " + chartDotVector[1];
+        essayChartFinalString.add(chartDotVectorStg);
+
         //Obtenção dos valores dos pontos
-        while(count<10) {
+//        Thread essayChartThread = new Thread(() -> {
 //
-            //Atualização da UI pela Thread
-
-            SystemVariable sysVar = systemVariableDAO.find();
-            chartDotVector = new Double[]{sysVar.getForce(), sysVar.getPosition()};
-            System.out.println(chartDotVector[0]);
-            System.out.println(chartDotVector[1]);
-
-            //Conversão de Double[] para String e adicionar String do vetor ao arrayList<String>
-            chartDotVectorStg = chartDotVector[0] + "; " + chartDotVector[1];
-            essayChartFinalString.add(chartDotVectorStg);
-
-            for(String item : essayChartFinalString){
-                System.out.print(item);
-            }
-
-
-            count++;
-            System.out.println(count);
-        }
-//            Platform.runLater(() -> {
-        Essay essay = essayDAO.findById(27);
-        essayChartArrayReceiver = new String[]{essay.getEssayChart()};
-        for(String item : essayChartArrayReceiver){
-            essayChartSplit = new Double[]{Double.valueOf(Arrays.toString(item.split(";")))};
-            essayChartFinalDouble.add(essayChartSplit);
-            series.getData().add(new XYChart.Data(essayChartSplit[0], essayChartSplit[1]));
-            xyChartSingle.getData().add(series);
-        }
-
-//            });
-
-//            SystemVariable sysVar = systemVariableDAO.find();
-//            series1.getData().add(new XYChart.Data(sysVar.getForce(), sysVar.getPosition()));
-//            xyChartSingle.getData().add(series1);
-//            chartDotVector = new Double[]{sysVar.getForce(), sysVar.getPosition()};
-//            essayChartArray.add(chartDotVector);
-//            System.out.println(count);
-//            count++;
-//            Thread.sleep(500);
-
-
-//        Essay essayChart = new Essay();
-//        essayChart.setUserId(3);
-//        essayChart.setEssayChart(essayChartFinalDouble.toString());
-//        essayDAO.create(essayChart);
-
-
-
+//            while(true) {
+//
+//                //Conversão de Double[] para String e adicionar String do vetor ao arrayList<String>
+//
+//                for(String item : essayChartFinalString){
+//                    System.out.print(item);
+//                }
+//
+//                //Atualização da UI pela Thread
+//                Platform.runLater(() -> {
+//                    series.getData().add(new XYChart.Data(chartDotVector[0],chartDotVector[1]));
+//                    xyEssayChart.getData().add(series);
+//                });
+//            }
+//        });
+//        essayChartThread.start();
 
     }
 
     @FXML
-    private void essayChart(){
+    private void essayChart() {
         //defining the axes
-        xChartSingle.setLabel("Deslocamento");
-        yChartSingle.setLabel("Força");
+//        xEssayChart.setLabel("Deslocamento");
+//        yEssayChart.setLabel("Força");
 
-        xyChartSingle.setTitle("Gráfico Força x Posição");
+//        xyEssayChart.setTitle("Gráfico Força x Posição");
         //defining a series
         XYChart.Series series = new XYChart.Series();
         series.setName("Chart de ensaio único");
         //populating the series with data
         Essay essay = essayDAO.findById(1);
+        System.out.println(essay.getEssayChart());
         essay.getEssayChart().split(";");
 
         series.getData().add(new XYChart.Data(1, 23));
@@ -274,7 +263,7 @@ public class EssaySceneController implements Initializable {
         series.getData().add(new XYChart.Data(11, 29));
         series.getData().add(new XYChart.Data(12, 25));
 
-        xyChartSingle.getData().add(series);
+//        xyEssayChart.getData().add(series);
 
     }
 
@@ -288,8 +277,10 @@ public class EssaySceneController implements Initializable {
         output.print(stg);
         output.flush();
     }
+
     /**
      * Método que recebe o valor real do input
+     *
      * @return String
      */
     private String inputValue() {
@@ -306,6 +297,7 @@ public class EssaySceneController implements Initializable {
     private void resetPosition() {
         outputInjection("0");
     }
+
     /**
      * Método que solicita o valor da força (injeção de '1')
      */
@@ -313,9 +305,10 @@ public class EssaySceneController implements Initializable {
     private void forceRequest() throws InterruptedException {
         outputInjection("1");
         Thread.sleep(20);
-        txtForceView.setText(inputValue());
+//        txtForceView.setText(inputValue());
         //incluir tara para força
     }
+
     /**
      * Método que solicita o valor da posição (injeção de '2')
      */
@@ -323,7 +316,7 @@ public class EssaySceneController implements Initializable {
     private void positionRequest() throws InterruptedException {
         outputInjection("2");
         Thread.sleep(20);
-        txtPositionView.setText(inputValue());
+//        txtPositionView.setText(inputValue());
         //incluir validação de real movimento do eixo
     }
 
@@ -338,6 +331,7 @@ public class EssaySceneController implements Initializable {
     private void stopMove() {
         outputInjection("3");
     }
+
     /**
      * Método que solicita movimento de ajuste para cima (injeção de '4')
      */
@@ -345,6 +339,7 @@ public class EssaySceneController implements Initializable {
     private void moveUp() {
         outputInjection("4");
     }
+
     /**
      * Método que solicita movimento de ajuste para baixo (injeção de '5')
      */
@@ -352,6 +347,7 @@ public class EssaySceneController implements Initializable {
     private void moveDown() {
         outputInjection("5");
     }
+
     /**
      * Método que solicita movimento de ensaio para cima (injeção de '6')
      */
@@ -359,6 +355,7 @@ public class EssaySceneController implements Initializable {
     private void moveUpAssay() {
         outputInjection("6");
     }
+
     /**
      * Método que solicita movimento de ensaio para baixo (injeção de '7')
      */
@@ -366,13 +363,14 @@ public class EssaySceneController implements Initializable {
     private void moveDownAssay() {
         outputInjection("7");
     }
+
     /**
      * Método que solicita velocidade de ajuste (injeção de '8')
      */
     @FXML
     private void adjustVelocity() {
         //Incluir range minimo, maximo e null (IF ou SWITCH)
-        if(txtAdjustVelocity.getText()!=null){
+        if (txtAdjustVelocity.getText() != null) {
             String adjust = 8 + txtAdjustVelocity.getText();
             outputInjection(adjust);
         } else {
@@ -381,17 +379,18 @@ public class EssaySceneController implements Initializable {
         }
 
     }
+
     /**
      * Método que solicita velocidade de ensaio (injeção de '9')
      */
     @FXML
-    private void assayVelocity() {
+    private void essayVelocity() {
         //Incluir range minimo, maximo e null (IF ou SWITCH)
-        if(txtAssayVelocity.getText()!=null){
-            String adjust = 9 + txtAssayVelocity.getText();
+        if (txtEssayVelocity.getText() != null) {
+            String adjust = 9 + txtEssayVelocity.getText();
             outputInjection(adjust);
         } else {
-            txtAssayVelocity.setText("15000.00");
+            txtEssayVelocity.setText("15000.00");
             outputInjection("915000");
         }
     }
@@ -400,9 +399,19 @@ public class EssaySceneController implements Initializable {
 
 
     @FXML
-    private void led() throws InterruptedException{
+    private void led() throws InterruptedException {
 
-        chartTry();
+        chartEssayLine.getData().clear();
+        series = new XYChart.Series<>();
+        series.setName("Leitura");
+        chartEssayLine.getData().add(series);
+        Thread chartThread = new Thread(new dotValueReader());
+        chartThread.start();
+
+
+
+
+//        chartTry();
 //        essayChartReader();
 //        essayChart();
 
