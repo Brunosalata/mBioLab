@@ -24,7 +24,7 @@
                   <NumberAxis fx:id="yAxis" label="Força" side="LEFT" />
                </yAxis>
             </LineChart>
-            <LineChart animated="false" layoutX="331.0" layoutY="372.0" prefHeight="240.0" prefWidth="300.0" title="Comparativo Força x Posição" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="14.0" fx:id="xyChartMulti">
+            <LineChart fx:id="chartMultiLine" animated="false" layoutX="331.0" layoutY="372.0" prefHeight="240.0" prefWidth="300.0" title="Comparativo Força x Posição" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="14.0">
                <xAxis>
                   <NumberAxis label="Deslocamento" side="BOTTOM" fx:id="xChartMulti" />
                </xAxis>
@@ -55,6 +55,9 @@
             <ComboBox fx:id="cbMethodList" layoutX="72.0" layoutY="500.0" onAction="#savedMethodList" prefWidth="150.0" />
             <Label layoutX="72.0" layoutY="484.0" text="Métodos" />
             <Button fx:id="btnChargeMethod" layoutX="230.0" layoutY="500.0" mnemonicParsing="false" onAction="#chargeMethod" text="Carregar" />
+            <Button fx:id="btnStart" layoutX="261.0" layoutY="36.0" mnemonicParsing="false" onAction="#essayStart" text="Start" />
+            <Button fx:id="btnPause" layoutX="323.0" layoutY="36.0" mnemonicParsing="false" onAction="#essayPause" text="Pause" />
+            <Button fx:id="btnStop1" layoutX="385.0" layoutY="36.0" mnemonicParsing="false" onAction="#essayStop" text="Stop" />
          </children>
       </AnchorPane>
    </children>

@@ -43,7 +43,7 @@ public class EssaySceneController implements Initializable {
     @FXML
     private Label lbCurrentData, lbUserId, lbUserName, lbUserLogin, lbUserPassword;
     @FXML
-    private Button btnChargeMethod, btnEssayByUserId;
+    private Button btnStart, btnPause, btnStop, btnChargeMethod, btnEssayByUserId;
     private SerialPort port;
 
 
@@ -57,44 +57,47 @@ public class EssaySceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-
-
         autoConnect();
         savedMethodList();
 
 
-        //dá para usar no gráfico
-//        invokeForcePositionViewTask();
-
-
     }
 
+
     /**
-     * Método que define o algorítmo da Thread que faz a leitura dinâmica da Força e da Posição
+     * Classe que define o algorítmo da Thread que faz a leitura dinâmica da Força e da Posição
      */
-    private synchronized void FPReadingThread() {
+    class SystemVariableReader implements Runnable {
+        SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
 
-        try {
-            outputInjection("1");  // Requerimento do valor da força
-            Thread.sleep(13);
-            String impF = inputValue();
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(1000);
+                while (true) {
+                    outputInjection("1");  // Requerimento do valor da força
+                    Thread.sleep(13);
+                    String impF = inputValue();
 //            System.out.println(impF);
-            outputInjection("2");  // requerimento do valor da posição
-            Thread.sleep(13);
-            String impP = inputValue();
+                    outputInjection("2");  // requerimento do valor da posição
+                    Thread.sleep(13);
+                    String impP = inputValue();
 
-            // Salvando dados no banco de dados - dados persistentes como variável global
-            SystemVariable sysVar = new SystemVariable(1, Double.valueOf(impF), Double.valueOf(impP));
-            systemVariableDAO.update(sysVar);
+                    // Salvando dados no banco de dados - dados persistentes como variável global
+                    SystemVariable sysVar = new SystemVariable(1, Double.valueOf(impF), Double.valueOf(impP));
+                    systemVariableDAO.update(sysVar);
 
-            //Atualização da UI pela Thread a partir dos dados salvos no DB
-            Platform.runLater(() -> {
-                txtForceView.setText(String.format("%.2f", Double.valueOf(impF)));
-                txtPositionView.setText(String.format("%.2f", Double.valueOf(impP)));
-            });
+                    //Atualização da UI pela Thread a partir dos dados salvos no DB
+                    Platform.runLater(() -> {
+                        txtForceView.setText(String.format("%.2f", Double.valueOf(impF)));
+                        txtPositionView.setText(String.format("%.2f", Double.valueOf(impP)));
+                    });
+                }
 
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
         }
     }
 
@@ -104,7 +107,9 @@ public class EssaySceneController implements Initializable {
     @FXML
     private void autoConnect() {
 
+        // Instance to get an object SystemParameter from tb_systemParameter (single line)
         SystemParameter sysPar = systemParameterDAO.find();
+        // portName receives portName from systemParameterDAO
         port = SerialPort.getCommPort(sysPar.getPortName());
         System.out.println("Conectado à porta: " + sysPar.getPortName() + " - " + port);
         if (port.openPort()) {
@@ -114,18 +119,9 @@ public class EssaySceneController implements Initializable {
             port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 50, 50);
             port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
 
-            // Thread para solicitar Posição e Força e atualizar lbForceView e lbPositionView
-            Thread t = new Thread(() -> {
-                try {
-                    Thread.sleep(1000);
-                    while (true) {
-                        FPReadingThread();
-                    }
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            t.start();
+            // Thread to update the Força and Posição textLabel from GUI
+            Thread sysVarThread = new Thread(new SystemVariableReader());
+            sysVarThread.start();
 
         } else {
             port.closePort();
@@ -160,7 +156,11 @@ public class EssaySceneController implements Initializable {
 
 
 //    ************* Chart Construction *****************
-    class dotValueReader implements Runnable{
+
+    /**
+     * MODIFICAR CÓDIGO >> Método que cria, em tempo real, o gráfico do ensaio. Nele, podemos implementar switch (para alteração dos parâmetros N/mm ou MPa/%)
+     */
+    class RTChartCreate implements Runnable{
         SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
         @Override
         public void run() {
@@ -183,87 +183,26 @@ public class EssaySceneController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
-}
-
-    @FXML
-    private synchronized void chartTry() {
-
-
-
-
-}
-
-    @FXML
-    private synchronized void essayChartReader() throws InterruptedException {
-        //defining a series
-
-        String chartDotVectorStg;                                   // variável que recebe a String, da conversão do vetor chartDotVector
-        List<String> essayChartFinalString = new ArrayList<>();     // ArrayList que recebe as Strings dos vetores para salvar no DB (essay.setEssayChart)
-        String[] essayChartArrayReceiver;                           //
-        Double[] essayChartSplit;                                   // vetor que recebe cada elemento do Array de String do DB
-        List<Double[]> essayChartFinalDouble = new ArrayList<>();   //
-
-        XYChart.Series series = new XYChart.Series();
-
-        SystemVariable sysVar = systemVariableDAO.find();
-        Double chartDotVector[] = new Double[]{sysVar.getForce(), sysVar.getPosition()};  // vetor que recebe Double Força e Posição do DB (systemVariable)
-        System.out.println(chartDotVector[0]);
-        System.out.println(chartDotVector[1]);
-
-        chartDotVectorStg = chartDotVector[0] + "; " + chartDotVector[1];
-        essayChartFinalString.add(chartDotVectorStg);
-
-        //Obtenção dos valores dos pontos
-//        Thread essayChartThread = new Thread(() -> {
-//
-//            while(true) {
-//
-//                //Conversão de Double[] para String e adicionar String do vetor ao arrayList<String>
-//
-//                for(String item : essayChartFinalString){
-//                    System.out.print(item);
-//                }
-//
-//                //Atualização da UI pela Thread
-//                Platform.runLater(() -> {
-//                    series.getData().add(new XYChart.Data(chartDotVector[0],chartDotVector[1]));
-//                    xyEssayChart.getData().add(series);
-//                });
-//            }
-//        });
-//        essayChartThread.start();
-
     }
 
     @FXML
-    private void essayChart() {
-        //defining the axes
-//        xEssayChart.setLabel("Deslocamento");
-//        yEssayChart.setLabel("Força");
-
-//        xyEssayChart.setTitle("Gráfico Força x Posição");
-        //defining a series
-        XYChart.Series series = new XYChart.Series();
-        series.setName("Chart de ensaio único");
+    private void essayChart(int pk) {
+        XYChart.Series seriesSingle = new XYChart.Series();
         //populating the series with data
-        Essay essay = essayDAO.findById(1);
-        System.out.println(essay.getEssayChart());
-        essay.getEssayChart().split(";");
 
-        series.getData().add(new XYChart.Data(1, 23));
-        series.getData().add(new XYChart.Data(2, 14));
-        series.getData().add(new XYChart.Data(3, 15));
-        series.getData().add(new XYChart.Data(4, 24));
-        series.getData().add(new XYChart.Data(5, 34));
-        series.getData().add(new XYChart.Data(6, 36));
-        series.getData().add(new XYChart.Data(7, 22));
-        series.getData().add(new XYChart.Data(8, 45));
-        series.getData().add(new XYChart.Data(9, 43));
-        series.getData().add(new XYChart.Data(10, 17));
-        series.getData().add(new XYChart.Data(11, 29));
-        series.getData().add(new XYChart.Data(12, 25));
+        Essay essay = essayDAO.findById(pk);
+        seriesSingle.setName(essay.getEssayIdentification());
+        // 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
 
-//        xyEssayChart.getData().add(series);
+        String strArraySplit[] = essay.getEssayChart().split(",");
+        for(String str : strArraySplit){
+            String dot[] = str.split(";");
+            for(int i = 0; i<dot.length;i+=2){
+                System.out.println(dot[i] + " " + dot[i+1]);
+                seriesSingle.getData().add(new XYChart.Data(Double.parseDouble(dot[i]),Double.parseDouble(dot[i+1])));
+            }
+        }
+        chartMultiLine.getData().add(seriesSingle);
 
     }
 
@@ -394,6 +333,27 @@ public class EssaySceneController implements Initializable {
             outputInjection("915000");
         }
     }
+    @FXML
+    private void essayStart(){
+
+        // Essay Chart construction and parameters
+        chartEssayLine.getData().clear();
+        series = new XYChart.Series<>();
+        series.setName("Leitura");
+        chartEssayLine.getData().add(series);
+
+        // Thread to update the series on chart
+        Thread chartThread = new Thread(new RTChartCreate());
+        chartThread.start();
+    }
+    @FXML
+    private void essayPause(){
+
+    }
+    @FXML
+    private void essayStop(){
+
+    }
 
     // FIM*********** Métodos de Movimento ***********
 
@@ -401,19 +361,9 @@ public class EssaySceneController implements Initializable {
     @FXML
     private void led() throws InterruptedException {
 
-        chartEssayLine.getData().clear();
-        series = new XYChart.Series<>();
-        series.setName("Leitura");
-        chartEssayLine.getData().add(series);
-        Thread chartThread = new Thread(new dotValueReader());
-        chartThread.start();
+        essayChart(Integer.parseInt(txtLed.getText()));
 
 
-
-
-//        chartTry();
-//        essayChartReader();
-//        essayChart();
 
 
 //        System.out.println("Iniciando");
@@ -460,3 +410,64 @@ public class EssaySceneController implements Initializable {
 
     }
 }
+
+
+//         Criando Thread >> Método contendo Thread, que chama método que contém Platform.runLater
+//         Método padronizado no projeto é Criação de uma class que implements Runnable, contendo
+//         Platform.runLater (para atualização da GUI), Thread iniciada no método de aplicação
+
+//  private synchronized void FPReadingThread() {
+//
+//        try {
+//            outputInjection("1");  // Requerimento do valor da força
+//            Thread.sleep(13);
+//            String impF = inputValue();
+//            outputInjection("2");  // requerimento do valor da posição
+//            Thread.sleep(13);
+//            String impP = inputValue();
+//
+//            // Salvando dados no banco de dados - dados persistentes como variável global
+//            SystemVariable sysVar = new SystemVariable(1, Double.valueOf(impF), Double.valueOf(impP));
+//            systemVariableDAO.update(sysVar);
+//
+//            //Atualização da UI pela Thread a partir dos dados salvos no DB
+//            Platform.runLater(() -> {
+//                txtForceView.setText(String.format("%.2f", Double.valueOf(impF)));
+//                txtPositionView.setText(String.format("%.2f", Double.valueOf(impP)));
+//            });
+//
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    /**
+//     * Método de conexão automática
+//     */
+//  @FXML
+//  private void autoConnect() {
+//
+//    SystemParameter sysPar = systemParameterDAO.find();
+//    port = SerialPort.getCommPort(sysPar.getPortName());
+//    System.out.println("Conectado à porta: " + sysPar.getPortName() + " - " + port);
+//    if (port.openPort()) {
+//        txtConnected.setText("Conectado");
+//        txtConnected.setStyle("-fx-background-color: #06BC0E");
+//        port.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+//        port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 50, 50);
+//        port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+//
+//        // Thread para solicitar Posição e Força e atualizar lbForceView e lbPositionView
+//            Thread t = new Thread(() -> {
+//                try {
+//                    Thread.sleep(1000);
+//                    while (true) {
+//                        FPReadingThread();
+//                    }
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            t.start();
+//    }
+//  }
