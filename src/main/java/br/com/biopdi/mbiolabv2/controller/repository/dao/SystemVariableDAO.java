@@ -1,7 +1,6 @@
 package br.com.biopdi.mbiolabv2.controller.repository.dao;
 
 import br.com.biopdi.mbiolabv2.controller.repository.DBConnection;
-import br.com.biopdi.mbiolabv2.model.bean.SystemParameter;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 
 import java.sql.PreparedStatement;
@@ -29,21 +28,21 @@ public class SystemVariableDAO extends DBConnection {
     }
 
     /**
-     //     * Método de inclusão de valores de força e posição na tabela tb_systemVariable
-     //     * @param systemVariable
-     //     *
-     //     * @Description chamar a função, instanciando SystemVariableDAO systemVariableDAO e SystemVariable systemVariable.
-     //     * Então, chama systemVariableDAO.create()
-     //     */
-    public void create(SystemVariable systemVariable){
+     * Método de inclusão de valores de força e posição na tabela tb_systemVariable
+     *
+     * @param systemVariable
+     * @Description chamar a função, instanciando SystemVariableDAO systemVariableDAO e SystemVariable systemVariable.
+     * Então, chama systemVariableDAO.create()
+     */
+    public void create(SystemVariable systemVariable) {
         openConnection();
-        try{
+        try {
             PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_systemVariable VALUES(?,?,?);");
             stm.setDouble(1, systemVariable.getId());
             stm.setDouble(2, systemVariable.getForce());
             stm.setDouble(3, systemVariable.getPosition());
             stm.executeUpdate();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeConnection();
@@ -52,11 +51,12 @@ public class SystemVariableDAO extends DBConnection {
 
     /**
      * Método que atualiza os parâmetros do sistema, informados pelo usuario
+     *
      * @param systemVariable
      */
-    public void update(SystemVariable systemVariable){
+    public void update(SystemVariable systemVariable) {
         openConnection();
-        try{
+        try {
             PreparedStatement stm = conn.prepareStatement("UPDATE tb_systemVariable SET "
                     + "force = ?, "
                     + "position = ? "
@@ -64,27 +64,33 @@ public class SystemVariableDAO extends DBConnection {
             stm.setDouble(1, systemVariable.getForce());
             stm.setDouble(2, systemVariable.getPosition());
             stm.executeUpdate();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeConnection();
         }
     }
 
-    public SystemVariable find(){
+    /**
+     * Método de busca pelas variáveis de sistema
+     * Não possui parametro pois é tabela de linha única
+     *
+     * @return Cadastro de método pela primary key
+     */
+    public SystemVariable find() {
         SystemVariable result = null;
         openConnection();
-        try{
+        try {
             PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_systemVariable WHERE id = 1;");
             ResultSet rs = stm.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 SystemVariable systemVariable = new SystemVariable(
                         rs.getInt(1),//id
                         rs.getDouble(2),//force
                         rs.getDouble(3));//position
                 result = systemVariable;
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeConnection();

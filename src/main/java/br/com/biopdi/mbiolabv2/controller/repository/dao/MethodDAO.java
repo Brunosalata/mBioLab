@@ -44,14 +44,14 @@ public class MethodDAO extends DBConnection {
     }
 
     /**
-     //     * Método de inclusão de metodo na tabela tb_method
-     //     * @param method
-     //     *
-     //     * @Description chamar a função, instanciando MethodDAO methodDAO e Method method. Então, chama db.create()
-     //     */
-    public void create(Method method){
+     * Método de inclusão de metodo na tabela tb_method
+     *
+     * @param method
+     * @Description chamar a função, instanciando MethodDAO methodDAO e Method method. Então, chama db.create()
+     */
+    public void create(Method method) {
         openConnection();
-        try{
+        try {
             PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_method VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
             stm.setInt(2, method.getAutoBreakIndex());
             stm.setInt(3, method.getSpecimenTypeIndex());
@@ -70,7 +70,7 @@ public class MethodDAO extends DBConnection {
             stm.setDouble(16, method.getOffsetIntersectionLine());
             stm.setDouble(17, method.getGainIntersectionLine());
             stm.executeUpdate();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeConnection();
@@ -79,8 +79,8 @@ public class MethodDAO extends DBConnection {
 
     /**
      * Método que lista todos os elementos da tabela tb_method
-     * @return lista de objetos em tb_method
      *
+     * @return lista de objetos em tb_method
      * @Description chamada da função: db.findAll()
      */
     public List<Method> findAll() {
@@ -120,11 +120,12 @@ public class MethodDAO extends DBConnection {
 
     /**
      * Método que atualiza as informações de um usuario específico
+     *
      * @param method
      */
-    public void update(Method method){
+    public void update(Method method) {
         openConnection();
-        try{
+        try {
             PreparedStatement stm = conn.prepareStatement("UPDATE tb_method SET "
                     + "autoBreakIndex INTEGER,"
                     + "specimenTypeIndex INTEGER,"
@@ -161,7 +162,7 @@ public class MethodDAO extends DBConnection {
             stm.setDouble(15, method.getOffsetIntersectionLine());
             stm.setDouble(16, method.getGainIntersectionLine());
             stm.executeUpdate();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeConnection();
@@ -170,15 +171,16 @@ public class MethodDAO extends DBConnection {
 
     /**
      * Método que deleta o cadastro de um usuario específico
+     *
      * @param method
      */
-    public void delete(Method method){
+    public void delete(Method method) {
         openConnection();
-        try{
+        try {
             PreparedStatement stm = conn.prepareStatement("DELETE FROM tb_method WHERE id = ?;");
             stm.setInt(1, method.getId());
             stm.executeUpdate();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeConnection();
@@ -187,58 +189,18 @@ public class MethodDAO extends DBConnection {
 
     /**
      * Método de busca por um cadastro específico
+     *
      * @param pk
      * @return Cadastro do usuario pela primary key
      */
-    public Method findById(int pk){
+    public Method findById(int pk) {
         Method result = null;
         openConnection();
-        try{
+        try {
             PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_method WHERE id = ?;");
             stm.setInt(1, pk);
             ResultSet rs = stm.executeQuery();
-            if(rs.next()){
-                Method method = new Method(
-                    rs.getInt(1),//method id
-                    rs.getInt(2),//method autoBreakIndex
-                    rs.getInt(3),//method specimenTypeIndex
-                    rs.getString(4),//methodName
-                    rs.getString(5),//norm
-                    rs.getString(6),//essayType
-                    rs.getString(7),//normDescription
-                    rs.getString(8),//extensometer1
-                    rs.getString(9),//extensometer2
-                    rs.getString(10),//method Date
-                    rs.getDouble(11),//essayVelocity
-                    rs.getDouble(12),//specimenAValue
-                    rs.getDouble(13),//specimenBValue
-                    rs.getDouble(14),//specimenCrossSectionArea
-                    rs.getDouble(15),//specimenCrossSectionLength
-                    rs.getDouble(16),//offsetIntersectionLine
-                    rs.getDouble(17));//gain Intersection line
-                result = method;
-            }
-        } catch (SQLException e){
-            e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
-        return result;
-    }
-
-    /**
-     * Método de busca por um cadastro específico
-     * @param methodName
-     * @return Cadastro do usuario pela primary key
-     */
-    public Method findByMethod(String methodName){
-        Method result = null;
-        openConnection();
-        try{
-            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_method WHERE methodName = ?;");
-            stm.setString(1, methodName);
-            ResultSet rs = stm.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 Method method = new Method(
                         rs.getInt(1),//method id
                         rs.getInt(2),//method autoBreakIndex
@@ -259,7 +221,49 @@ public class MethodDAO extends DBConnection {
                         rs.getDouble(17));//gain Intersection line
                 result = method;
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
+
+    /**
+     * Método de busca por um cadastro específico
+     *
+     * @param methodName
+     * @return Cadastro do usuario pela primary key
+     */
+    public Method findByMethod(String methodName) {
+        Method result = null;
+        openConnection();
+        try {
+            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_method WHERE methodName = ?;");
+            stm.setString(1, methodName);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Method method = new Method(
+                        rs.getInt(1),//method id
+                        rs.getInt(2),//method autoBreakIndex
+                        rs.getInt(3),//method specimenTypeIndex
+                        rs.getString(4),//methodName
+                        rs.getString(5),//norm
+                        rs.getString(6),//essayType
+                        rs.getString(7),//normDescription
+                        rs.getString(8),//extensometer1
+                        rs.getString(9),//extensometer2
+                        rs.getString(10),//method Date
+                        rs.getDouble(11),//essayVelocity
+                        rs.getDouble(12),//specimenAValue
+                        rs.getDouble(13),//specimenBValue
+                        rs.getDouble(14),//specimenCrossSectionArea
+                        rs.getDouble(15),//specimenCrossSectionLength
+                        rs.getDouble(16),//offsetIntersectionLine
+                        rs.getDouble(17));//gain Intersection line
+                result = method;
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeConnection();

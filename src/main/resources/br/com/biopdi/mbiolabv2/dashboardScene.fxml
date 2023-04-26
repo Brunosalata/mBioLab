@@ -30,7 +30,7 @@
                   </LineChart>
                </children>
             </AnchorPane>
-            <Button fx:id="btnLed" layoutX="366.0" layoutY="601.0" mnemonicParsing="false" onAction="#led" text="LED" AnchorPane.bottomAnchor="14.0" />
+            <Button fx:id="btnLed" layoutX="366.0" layoutY="601.0" mnemonicParsing="false" text="LED" AnchorPane.bottomAnchor="14.0" />
             <TextField fx:id="txtLed" layoutX="410.0" layoutY="601.0" AnchorPane.bottomAnchor="14.0" />
             <Button fx:id="btnChartClear" layoutX="576.0" layoutY="601.0" mnemonicParsing="false" onAction="#multiDataReset" text="Apagar" />
             <AnchorPane layoutY="418.0" prefHeight="173.0" prefWidth="645.0">
