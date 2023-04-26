@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="650.0" prefWidth="665.0" style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.ReportSceneController">
    <children>
       <AnchorPane prefHeight="640.0" prefWidth="640.0" style="-fx-background-color: #E5E5E5;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>
-            <Label alignment="CENTER" layoutX="194.0" layoutY="288.0" text="Report Scene">
-               <font>
-                  <Font size="43.0" />
-               </font>
-            </Label>
+            <AnchorPane prefHeight="450.0" prefWidth="500.0">
+               <children>
+                  <LineChart fx:id="chartSingleLine" animated="false" prefHeight="240.0" prefWidth="300.0" title="Comparativo Força x Posição" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                     <xAxis>
+                        <NumberAxis label="Deslocamento" side="BOTTOM" fx:id="xChartMulti" />
+                     </xAxis>
+                     <yAxis>
+                        <NumberAxis fx:id="yChartMulti" label="Força" side="LEFT" />
+                     </yAxis>
+                  </LineChart>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="22.0" layoutY="426.0" prefHeight="200.0" prefWidth="150.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+               <children>
+                  <ListView fx:id="lwSavedEssay" layoutX="81.0" layoutY="72.0" prefHeight="100.0" prefWidth="615.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="72.0" />
+                  <ListView fx:id="lwLastEssay" layoutX="18.0" layoutY="21.0" prefHeight="50.0" prefWidth="615.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>

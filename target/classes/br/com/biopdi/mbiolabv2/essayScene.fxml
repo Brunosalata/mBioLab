@@ -16,20 +16,12 @@
             <TextField fx:id="txtConnected" alignment="CENTER" prefHeight="25.0" prefWidth="106.0" promptText="Desconectado" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="23.0" />
             <TextField fx:id="txtPositionView" alignment="CENTER" layoutX="99.0" layoutY="54.0" prefHeight="25.0" prefWidth="64.0" promptText="0.000" AnchorPane.leftAnchor="99.0" AnchorPane.topAnchor="54.0" />
             <TextField fx:id="txtForceView" alignment="CENTER" layoutX="29.0" layoutY="54.0" prefHeight="25.0" prefWidth="64.0" promptText="0.000" AnchorPane.leftAnchor="29.0" AnchorPane.topAnchor="54.0" />
-            <LineChart fx:id="chartEssayLine" animated="false" layoutX="331.0" layoutY="123.0" prefHeight="240.0" prefWidth="300.0" title="Gráfico Força x Posição" AnchorPane.bottomAnchor="277.0" AnchorPane.rightAnchor="14.0">
+            <LineChart fx:id="chartEssayLine" animated="false" layoutX="331.0" layoutY="88.0" prefHeight="240.0" prefWidth="300.0" title="Gráfico Força x Posição" AnchorPane.bottomAnchor="312.0" AnchorPane.rightAnchor="14.0">
                <xAxis>
                   <NumberAxis label="Deslocamento" side="BOTTOM" fx:id="xAxis" />
                </xAxis>
                <yAxis>
                   <NumberAxis fx:id="yAxis" label="Força" side="LEFT" />
-               </yAxis>
-            </LineChart>
-            <LineChart fx:id="chartMultiLine" animated="false" layoutX="331.0" layoutY="372.0" prefHeight="240.0" prefWidth="300.0" title="Comparativo Força x Posição" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="14.0">
-               <xAxis>
-                  <NumberAxis label="Deslocamento" side="BOTTOM" fx:id="xChartMulti" />
-               </xAxis>
-               <yAxis>
-                  <NumberAxis fx:id="yChartMulti" label="Força" side="LEFT" />
                </yAxis>
             </LineChart>
             <Button fx:id="btnPositionUp" layoutX="32.0" layoutY="259.0" mnemonicParsing="false" onAction="#moveUp" onTouchStationary="#moveUp" prefHeight="25.0" prefWidth="64.0" text="Subir" AnchorPane.leftAnchor="32.0" />
@@ -40,8 +32,8 @@
             <Button fx:id="btnAssayUp" layoutX="72.0" layoutY="327.0" mnemonicParsing="false" onAction="#moveUpAssay" prefHeight="25.0" prefWidth="91.0" text="Subir Ensaio" AnchorPane.leftAnchor="72.0" />
             <Label layoutX="99.0" layoutY="301.0" text="Ensaio" AnchorPane.leftAnchor="99.0" AnchorPane.topAnchor="301.0" />
             <Button fx:id="btnAssayDown" layoutX="72.0" layoutY="359.0" mnemonicParsing="false" onAction="#moveDownAssay" text="Descer Ensaio" AnchorPane.leftAnchor="72.0" />
-            <Button fx:id="btnLed" mnemonicParsing="false" onAction="#led" text="LED" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="18.0" />
-            <TextField fx:id="txtLed" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="72.0" />
+            <Button fx:id="btnLed" mnemonicParsing="false" onAction="#led" text="LED" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
+            <TextField fx:id="txtLed" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="72.0" />
             <Label alignment="CENTER" layoutX="34.0" layoutY="27.0" prefHeight="17.0" prefWidth="54.0" text="Força" AnchorPane.leftAnchor="34.0" AnchorPane.topAnchor="27.0">
                <font>
                   <Font size="15.0" />
@@ -58,6 +50,7 @@
             <Button fx:id="btnStart" layoutX="261.0" layoutY="36.0" mnemonicParsing="false" onAction="#essayStart" text="Start" />
             <Button fx:id="btnPause" layoutX="323.0" layoutY="36.0" mnemonicParsing="false" onAction="#essayPause" text="Pause" />
             <Button fx:id="btnStop1" layoutX="385.0" layoutY="36.0" mnemonicParsing="false" onAction="#essayStop" text="Stop" />
+            <Button fx:id="btnEssaySave" layoutX="455.0" layoutY="459.0" mnemonicParsing="false" onAction="#essaySave" text="Salvar Ensaio" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
          </children>
       </AnchorPane>
    </children>

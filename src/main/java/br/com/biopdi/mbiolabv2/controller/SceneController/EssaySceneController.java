@@ -12,8 +12,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 import java.io.PrintWriter;
 import java.net.URL;
@@ -22,6 +24,7 @@ import java.util.*;
 
 public class EssaySceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
+    private Essay essayExp;
     private final UserDAO userDAO = new UserDAO();
     private final EssayDAO essayDAO = new EssayDAO();
     private final SetupDAO setupDAO = new SetupDAO();
@@ -36,17 +39,21 @@ public class EssaySceneController implements Initializable {
     //    @FXML
 //    private NumberAxis xEssayChart, yEssayChart, xChartSingle, yChartSingle,xChartMulti, yChartMulti;
     @FXML
-    private LineChart<Number, Number> chartEssayLine, chartSingleLine, chartMultiLine;
+    private LineChart<Number, Number> chartEssayLine;
     private XYChart.Series<Number, Number> series;
     @FXML
     private TextField txtConnected, txtForceView, txtPositionView, txtAdjustVelocity, txtEssayVelocity, txtEssayUserId, txtLed;
     @FXML
-    private Label lbCurrentData, lbUserId, lbUserName, lbUserLogin, lbUserPassword;
+    private Label lbEssayTemperature, lbEssayRelativeHumidity;
     @FXML
-    private Button btnStart, btnPause, btnStop, btnChargeMethod, btnEssayByUserId;
+    private TextField txtEssayIdentification, txtEssayNorm, txtUsedMachine, txtEssayChargeCell, txtInitialForce, txtFinalForce, txtInitialPosition, txtFinalPosition, txtDislocationVelocity, txtEssayPreCharge;
+    @FXML
+    private Button btnStart, btnPause, btnStop, btnChargeMethod, btnEssayByUserId, btnEssaySave;
     private SerialPort port;
 
-
+    private Double initialForce, finalForce, initialPosition, finalPosition;
+    private String chartString = null;
+    private Boolean moving = false;
 
 
     Date systemDate = new Date();
@@ -162,22 +169,35 @@ public class EssaySceneController implements Initializable {
      */
     class RTChartCreate implements Runnable{
         SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
+        int count = 0;
         @Override
         public void run() {
             try{
-                while (true){
+                while (count<10){
 
                     Thread.sleep(50);
-                        SystemVariable sysVar = systemVariableDAO.find();
-                        double x = sysVar.getForce();
-                        double y = sysVar.getPosition();
-                        System.out.println(x + " " + y);
+                    SystemVariable sysVar = systemVariableDAO.find();
+                    double x = sysVar.getForce();
+                    double y = sysVar.getPosition();
+                    System.out.println(x + " " + y);
                     // Avoid throwing IllegalStateException by running from a non-JavaFX thread.
                     Platform.runLater(() -> {
                         // Update UI.
                         series.getData().add(new XYChart.Data<>(x,y));
                     });
+
+                    // Adding dot values in a global String chartString
+                    // essayChart String type: 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
+                    if(chartString!=null){
+                        chartString += "," + x + ";" + y;
+                    } else{
+                        chartString = x + ";" + y;
+                    }
+
+                    System.out.println(chartString);
+                    count++;
                 }
+
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -185,6 +205,10 @@ public class EssaySceneController implements Initializable {
         }
     }
 
+    /**
+     * Método de construção do gráfico no ensaio, tendo como referência essayChart, na tb_essay do DB.
+     * @param pk
+     */
     @FXML
     private void essayChart(int pk) {
         XYChart.Series seriesSingle = new XYChart.Series();
@@ -192,18 +216,20 @@ public class EssaySceneController implements Initializable {
 
         Essay essay = essayDAO.findById(pk);
         seriesSingle.setName(essay.getEssayIdentification());
-        // 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
 
+        // essayChart String type: 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
+        // array receives the split parts of the essayChart string
         String strArraySplit[] = essay.getEssayChart().split(",");
         for(String str : strArraySplit){
+            // each part creates a dot[2] to receive x and y value
             String dot[] = str.split(";");
             for(int i = 0; i<dot.length;i+=2){
                 System.out.println(dot[i] + " " + dot[i+1]);
+                // seriesSingle receives two sequencial values, representing x and y value
                 seriesSingle.getData().add(new XYChart.Data(Double.parseDouble(dot[i]),Double.parseDouble(dot[i+1])));
             }
         }
-        chartMultiLine.getData().add(seriesSingle);
-
+        chartEssayLine.getData().add(seriesSingle);
     }
 
     /**
@@ -334,7 +360,12 @@ public class EssaySceneController implements Initializable {
         }
     }
     @FXML
-    private void essayStart(){
+    private void essayStart() throws InterruptedException {
+        moving=true;
+        // Setting initial values
+        SystemVariable sysVarInit = systemVariableDAO.find();
+        initialForce = sysVarInit.getForce();
+        initialPosition = sysVarInit.getPosition();
 
         // Essay Chart construction and parameters
         chartEssayLine.getData().clear();
@@ -345,16 +376,83 @@ public class EssaySceneController implements Initializable {
         // Thread to update the series on chart
         Thread chartThread = new Thread(new RTChartCreate());
         chartThread.start();
+        chartThread.join();
+
+        // Setting final values
+        SystemVariable sysVarFinal = systemVariableDAO.find();
+        finalForce = sysVarFinal.getForce();
+        finalPosition = sysVarFinal.getPosition();
+
+
+        essayExp = new Essay();
+        essayExp.setUserId(1); // Substituir por ID referente ao login
+        essayExp.setEssayIdentification("Teste botão Iniciar");
+        essayExp.setEssayNorm("Norma Padrão");
+        essayExp.setEssayUsedMachine("Máquina do Tempo");
+        essayExp.setEssayChargeCell(0.300);
+        essayExp.setEssayInitialForce(initialForce);
+        essayExp.setEssayFinalForce(finalForce);
+        essayExp.setEssayInitialPosition(initialPosition);
+        essayExp.setEssayFinalPosition(finalPosition);
+        essayExp.setEssayDislocationVelocity(15000);
+        essayExp.setEssayTemperature(35.0);
+        essayExp.setEssayPreCharge(0.0);
+        essayExp.setEssayRelativeHumidity(40);
+        essayExp.setEssayChart(chartString);
+        essayExp.setEssayDate(currentDate);
+        System.out.println(essayExp);
+
+        // Create essay to call essaySave method inserting this object essay as parameter
+//        essayExp = new Essay();
+//        essayExp.setUserId(1); // Substituir por ID referente ao login
+//        essayExp.setEssayIdentification(txtEssayIdentification.getText());
+//        essayExp.setEssayNorm(txtEssayNorm.getText());
+//        essayExp.setEssayUsedMachine(txtUsedMachine.getText());
+//        essayExp.setEssayChargeCell(Double.parseDouble(txtEssayChargeCell.getText()));
+//        essayExp.setEssayInitialForce(initialForce);
+//        essayExp.setEssayFinalForce(finalForce);
+//        essayExp.setEssayInitialPosition(initialPosition);
+//        essayExp.setEssayFinalPosition(finalPosition);
+//        essayExp.setEssayDislocationVelocity(Double.parseDouble(txtDislocationVelocity.getText()));
+//        essayExp.setEssayTemperature(Double.parseDouble(lbEssayTemperature.getText()));
+//        essayExp.setEssayPreCharge(Double.parseDouble(txtEssayPreCharge.getText()));
+//        essayExp.setEssayRelativeHumidity(Double.parseDouble(lbEssayRelativeHumidity.getText()));
+//        essayExp.setEssayChart(chartString);
+//        essayExp.setEssayDate(currentDate);
+//        System.out.println(essayExp);
     }
     @FXML
     private void essayPause(){
-
+        if(moving==true){
+            stopMove();
+            moving=false;
+        } else {
+            System.out.println("Implementar retorno do movimento cima ou baixo");
+        }
     }
     @FXML
     private void essayStop(){
-
+        if(moving==true){
+            stopMove();
+            moving=false;
+        } else {
+            System.out.println("O ensaio não foi iniciado!");
+        }
     }
 
+    /**
+     * Método que cria um essay e salva no DB
+     */
+    @FXML
+    public void essaySave(){
+        essayDAO.create(essayExp);
+        System.out.println(essayExp);
+    }
+    @FXML
+    public void essayDiscart(){
+        essayExp = null;
+        System.out.println(essayExp);
+    }
     // FIM*********** Métodos de Movimento ***********
 
 
