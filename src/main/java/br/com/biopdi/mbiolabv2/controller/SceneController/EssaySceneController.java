@@ -85,7 +85,6 @@ public class EssaySceneController implements Initializable {
                     outputInjection("1");  // Requerimento do valor da força
                     Thread.sleep(13);
                     String impF = inputValue();
-//            System.out.println(impF);
                     outputInjection("2");  // requerimento do valor da posição
                     Thread.sleep(13);
                     String impP = inputValue();
@@ -100,16 +99,14 @@ public class EssaySceneController implements Initializable {
                         txtPositionView.setText(String.format("%.2f", Double.valueOf(impP)));
                     });
                 }
-
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-
         }
     }
 
     /**
-     * Método de conexão automática
+     * Método de conexão automática, buscando o portName do systemSetting no DB
      */
     @FXML
     private void autoConnect() {
@@ -165,15 +162,16 @@ public class EssaySceneController implements Initializable {
 //    ************* Chart Construction *****************
 
     /**
-     * MODIFICAR CÓDIGO >> Método que cria, em tempo real, o gráfico do ensaio. Nele, podemos implementar switch (para alteração dos parâmetros N/mm ou MPa/%)
+     * MODIFICAR CÓDIGO (TROCAR COUNT POR CONTIÇÔES) >> Método que cria, em tempo real, o gráfico do ensaio. Nele, podemos implementar switch (para alteração dos parâmetros N/mm ou MPa/%)
      */
-    class RTChartCreate implements Runnable{
+    class RTChartCreate implements Runnable {
         SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
         int count = 0;
+
         @Override
         public void run() {
-            try{
-                while (count<10){
+            try {
+                while (count < 10) {
 
                     Thread.sleep(50);
                     SystemVariable sysVar = systemVariableDAO.find();
@@ -183,14 +181,14 @@ public class EssaySceneController implements Initializable {
                     // Avoid throwing IllegalStateException by running from a non-JavaFX thread.
                     Platform.runLater(() -> {
                         // Update UI.
-                        series.getData().add(new XYChart.Data<>(x,y));
+                        series.getData().add(new XYChart.Data<>(x, y));
                     });
 
                     // Adding dot values in a global String chartString
                     // essayChart String type: 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
-                    if(chartString!=null){
+                    if (chartString != null) {
                         chartString += "," + x + ";" + y;
-                    } else{
+                    } else {
                         chartString = x + ";" + y;
                     }
                     System.out.println(chartString);
@@ -206,6 +204,7 @@ public class EssaySceneController implements Initializable {
 
     /**
      * Método de construção do gráfico no ensaio, tendo como referência essayChart, na tb_essay do DB.
+     *
      * @param pk
      */
     @FXML
@@ -219,13 +218,13 @@ public class EssaySceneController implements Initializable {
         // essayChart String type: 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
         // array receives the split parts of the essayChart string
         String strArraySplit[] = essay.getEssayChart().split(",");
-        for(String str : strArraySplit){
+        for (String str : strArraySplit) {
             // each part creates a dot[2] to receive x and y value
             String dot[] = str.split(";");
-            for(int i = 0; i<dot.length;i+=2){
-                System.out.println(dot[i] + " " + dot[i+1]);
+            for (int i = 0; i < dot.length; i += 2) {
+                System.out.println(dot[i] + " " + dot[i + 1]);
                 // seriesSingle receives two sequencial values, representing x and y value
-                seriesSingle.getData().add(new XYChart.Data(Double.parseDouble(dot[i]),Double.parseDouble(dot[i+1])));
+                seriesSingle.getData().add(new XYChart.Data(Double.parseDouble(dot[i]), Double.parseDouble(dot[i + 1])));
             }
         }
         chartEssayLine.getData().add(seriesSingle);
@@ -358,9 +357,15 @@ public class EssaySceneController implements Initializable {
             outputInjection("915000");
         }
     }
+
+    /**
+     * Método que inicia o ensaio
+     *
+     * @throws InterruptedException
+     */
     @FXML
     private void essayStart() throws InterruptedException {
-        moving=true;
+        moving = true;
         // Setting initial values
         SystemVariable sysVarInit = systemVariableDAO.find();
         initialForce = sysVarInit.getForce();
@@ -420,20 +425,28 @@ public class EssaySceneController implements Initializable {
 //        essayExp.setEssayDate(currentDate);
 //        System.out.println(essayExp);
     }
+
+    /**
+     * REQUER IMPLAMTANÇÃO >> Método que pausa se o eixo estiver em movimento e retoma se estiver parado
+     */
     @FXML
-    private void essayPause(){
-        if(moving==true){
+    private void essayPause() {
+        if (moving == true) {
             stopMove();
-            moving=false;
+            moving = false;
         } else {
             System.out.println("Implementar retorno do movimento cima ou baixo");
         }
     }
+
+    /**
+     * Método que pára o ensaio
+     */
     @FXML
-    private void essayStop(){
-        if(moving==true){
+    private void essayStop() {
+        if (moving == true) {
             stopMove();
-            moving=false;
+            moving = false;
         } else {
             System.out.println("O ensaio não foi iniciado!");
         }
@@ -443,70 +456,25 @@ public class EssaySceneController implements Initializable {
      * Método que cria um essay e salva no DB
      */
     @FXML
-    public void essaySave(){
+    public void essaySave() {
         essayDAO.create(essayExp);
         System.out.println(essayExp);
     }
+
+    /**
+     * Método que descarta as infomrações coletadas no ensaio realizado
+     */
     @FXML
-    public void essayDiscart(){
+    public void essayDiscart() {
         essayExp = null;
         System.out.println(essayExp);
     }
     // FIM*********** Métodos de Movimento ***********
 
 
-    @FXML
-    private void led() throws InterruptedException {
-
-        essayChart(Integer.parseInt(txtLed.getText()));
-
-
-
-
-//        System.out.println("Iniciando");
-//        System.out.println("Desce");
-//        outputInjection("5");
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//        System.out.println("Sobe");
-//        outputInjection("4");
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//        System.out.println("Parar");
-//        outputInjection("3");
-//        Thread.sleep(1000);
-
-//        Setup setup = new Setup(6,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,200,200,0,0,100,100,0,"Teste Setup 1","Bruno", currentDate);
-//        SetupDAO setupDAO = new SetupDAO();
-//        setupDAO.create(setup);
-//        System.out.println(setup);
-//        System.out.println(setupDAO.findAll());
-//
-//        user = new User("Diego","diegoDev","12345");
-//        user.save(user);
-//        user = new User("Bruno", "brunoslima","biopdi");
-//        user.save(user);
-//        System.out.println(userDAO.findAll());
-//        essay = new Essay(1,"Abemus data","ISO 9999","mBio portátil",220,0,45000,0,-65000,20000,25.4,0,35.0,null,currentDate);
-//        essay.save(essay);
-//        System.out.println(essayDAO.findAll());
-//        Essay essay2 = essayDAO.findById(1);
-//        System.out.println(essay2);
-//        essay2.setEssayIdentification("Teste de update");
-//        essay2.save(essay2);
-
-        //3,"Teste 2","ISO 9001","mBio portátil", 0.003, 0,30000,0,-40500,5,25,0,35
-//        eDAO.update(new Essay(2,3,"Teste 2","ISO 9001","mBio portátil", 0.003, 0,30000,0,-40500,5,25,0,35));
-//        System.out.println(essayDAO.findAll());
-
-    }
 }
+
+
 
 
 //         Criando Thread >> Método contendo Thread, que chama método que contém Platform.runLater

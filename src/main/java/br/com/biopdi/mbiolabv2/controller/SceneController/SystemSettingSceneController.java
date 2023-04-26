@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 
 public class SystemSettingSceneController implements Initializable {
     private SystemParameterDAO systemParameterDAO = new SystemParameterDAO();
+    private SystemParameter systemParameter = systemParameterDAO.find();
     @FXML
     private ComboBox cbPorts, cbLanguage, cbSound;
     @FXML
@@ -35,6 +36,11 @@ public class SystemSettingSceneController implements Initializable {
         systemLanguageList();
         soundSelect();
 
+        //Insere valor inicial aos comboBox
+        cbPorts.setPromptText(systemParameter.getPortName());
+        cbLanguage.setPromptText(systemParameter.getSystemLanguage());
+        cbSound.setPromptText(systemParameter.getSoundOn());
+
     }
 
     /**
@@ -46,33 +52,44 @@ public class SystemSettingSceneController implements Initializable {
             cbPorts.getItems().add(portName.getSystemPortName());
         }
     }
+
+    /**
+     * Método de listagem de idiomas dentro do ComboBox (cbLanguage)
+     */
     private void systemLanguageList() {
         String[] language = new String[]{"Português", "Inglês", "Espanhol"};
         for (String lang : language) {
             cbLanguage.getItems().add(lang);
         }
     }
+
+    /**
+     * Método de listagem status ON e OFF dentro do ComboBox (cbSound)
+     */
     private void soundSelect() {
         String[] sound = new String[]{"ON", "OFF"};
         for (String option : sound) {
             cbSound.getItems().add(option);
         }
     }
-    public void userSettingSave(){
+
+    /**
+     * Método que salva os parâmetros selecionados
+     */
+    public void userSettingSave() {
         SystemParameter sysPar = systemParameterDAO.find();
-        if(sysPar!=null){
+        if (sysPar != null) {
             sysPar.setPortName(cbPorts.getSelectionModel().getSelectedItem().toString());
             sysPar.setSystemLanguage(cbLanguage.getSelectionModel().getSelectedItem().toString());
             sysPar.setSoundOn(cbSound.getSelectionModel().getSelectedItem().toString());
             systemParameterDAO.update(sysPar);
-        } else{
+        } else {
             SystemParameter systemParameter = new SystemParameter(
                 cbPorts.getSelectionModel().getSelectedItem().toString(),
                 cbLanguage.getSelectionModel().getSelectedItem().toString(),
                 cbSound.getSelectionModel().getSelectedItem().toString());
-            systemParameterDAO.create(systemParameter);
+                systemParameterDAO.create(systemParameter);
         }
-
 
     }
 }

@@ -1,6 +1,5 @@
 package br.com.biopdi.mbiolabv2.controller.SceneController;
 
-import br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.SwitchMenuSceneController;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
 import br.com.biopdi.mbiolabv2.model.bean.Setup;
@@ -14,11 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
-import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -105,6 +101,9 @@ public class HomeSceneController implements Initializable {
 
     // INICIO******** Métodos de Busca no Banco de Dados ********
 
+    /**
+     * Método que busca e apresenta listagem de ensaios em função do essayId
+     */
     @FXML
     private void essayFindByUser(){
         try{
@@ -116,6 +115,9 @@ public class HomeSceneController implements Initializable {
         }
     }
 
+    /**
+     * Função que busca e apresenta lista completa de user, essay e setup nas devidas ListView
+     */
     @FXML
     private void DBDataPull(){
 
@@ -132,6 +134,9 @@ public class HomeSceneController implements Initializable {
         essayListView.setItems(obsEssayList);
     }
 
+    /**
+     * Método que converte imagem em BYTE para armazenamento no DB
+     */
     private void ImagemInclusion(){
         //Compactação para armazenamento
         // imagenBitmap é a imagem a ser armazenada
@@ -139,6 +144,10 @@ public class HomeSceneController implements Initializable {
 //        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 //        byte imageBitmap[]=stream.toByteArray();
     }
+
+    /**
+     * Método que busca BYTE no DB e converte em imagem
+     */
     private void ImagemConsulta(){
         //Descompactação para leitura
 //        DataBaseHandler db = new DataBaseHandler(this);

@@ -28,14 +28,14 @@ public class SystemParameterDAO extends DBConnection {
     }
 
     /**
-     //     * Método de inclusão de parametros na tabela tb_systemParameter
-     //     * @param systemParameter
-     //     *
-     //     * @Description chamar a função, instanciando SystemParameterDAO systemParameterDAO e SystemParameter systemParameter.
-     //     * Então, chama systemParameterDAO.create()
-     //     */
-    public void create(SystemParameter systemParameter){
-        try{
+     * Método de inclusão de parametros na tabela tb_systemParameter
+     *
+     * @param systemParameter
+     * @Description chamar a função, instanciando SystemParameterDAO systemParameterDAO e SystemParameter systemParameter.
+     * Então, chama systemParameterDAO.create()
+     */
+    public void create(SystemParameter systemParameter) {
+        try {
             openConnection();
             PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_systemParameter VALUES(?,?,?,?);");
             stm.setInt(1, 1);
@@ -43,7 +43,7 @@ public class SystemParameterDAO extends DBConnection {
             stm.setString(3, systemParameter.getSystemLanguage());
             stm.setString(4, systemParameter.getSoundOn());
             stm.executeUpdate();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeConnection();
@@ -52,10 +52,11 @@ public class SystemParameterDAO extends DBConnection {
 
     /**
      * Método que atualiza os parâmetros do sistema, informados pelo usuario
+     *
      * @param systemParameter
      */
-    public void update(SystemParameter systemParameter){
-        try{
+    public void update(SystemParameter systemParameter) {
+        try {
             openConnection();
             PreparedStatement stm = conn.prepareStatement("UPDATE tb_systemParameter SET "
                     + "portName = ?, "
@@ -66,7 +67,7 @@ public class SystemParameterDAO extends DBConnection {
             stm.setString(2, systemParameter.getSystemLanguage());
             stm.setString(3, systemParameter.getSoundOn());
             stm.executeUpdate();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeConnection();
@@ -76,15 +77,16 @@ public class SystemParameterDAO extends DBConnection {
     /**
      * Método de busca por um método específico
      * Não possui parametro pois é tabela de linha única
+     *
      * @return Cadastro de método pela primary key
      */
-    public SystemParameter find(){
+    public SystemParameter find() {
         SystemParameter result = null;
-        try{
+        try {
             openConnection();
             PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_systemParameter WHERE id = 1;");
             ResultSet rs = stm.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 SystemParameter systemParameter = new SystemParameter(
                         rs.getInt(1),//user id
                         rs.getString(2),//portName
@@ -92,7 +94,7 @@ public class SystemParameterDAO extends DBConnection {
                         rs.getString(4));//soundOn
                 result = systemParameter;
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeConnection();
