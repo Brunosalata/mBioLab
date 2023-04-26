@@ -219,7 +219,11 @@ public class EssayDAO extends DBConnection {
         return result;
     }
 
-
+    /**
+     * Método que chama todos os ensaios relacionados ao usuário indicado
+     * @param userId
+     * @return
+     */
     public List<Essay> findByUser(int userId) {
         ArrayList<Essay> result = new ArrayList<>();
         openConnection();
@@ -256,5 +260,41 @@ public class EssayDAO extends DBConnection {
     }
 
 
+    /**
+     * Método de busca o último ensaio salvo
+     */
+    public Essay findLastId(){
+        Essay result = null;
+        openConnection();
+        try{
+            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_essay ORDER BY essayId DESC limit 1;");
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()){
+                Essay essay = new Essay(
+                        rs.getInt(1),//essay id
+                        rs.getInt(2),//essay user id
+                        rs.getString(3),//essay identification
+                        rs.getString(4),//essay norm
+                        rs.getString(5),//essay Charge cell
+                        rs.getDouble(6),//essay Used Machine
+                        rs.getDouble(7),//essay Initial Force
+                        rs.getDouble(8),//essay Final Force
+                        rs.getDouble(9),//essay Initial Position
+                        rs.getDouble(10),//essay Final Position
+                        rs.getDouble(11),//essay Dislocation velocity
+                        rs.getDouble(12),//essay Temperature
+                        rs.getDouble(13),//essay Pre Charge
+                        rs.getDouble(14),//essay Relative Humidity
+                        rs.getString(15),//essay Chart
+                        rs.getString(16));//essay Data
+                result = essay;
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
 
 }

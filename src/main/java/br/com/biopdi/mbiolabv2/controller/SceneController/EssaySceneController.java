@@ -193,7 +193,6 @@ public class EssaySceneController implements Initializable {
                     } else{
                         chartString = x + ";" + y;
                     }
-
                     System.out.println(chartString);
                     count++;
                 }
