@@ -51,6 +51,15 @@ public class Essay {
         this.essayDate = essayDate;
     }
 
+    public Essay(Integer essayId, Integer userId, String essayIdentification, String essayNorm, String essayChart, String essayDate) {
+        this.essayId = essayId;
+        this.userId = userId;
+        this.essayIdentification = essayIdentification;
+        this.essayNorm = essayNorm;
+        this.essayChart = essayChart;
+        this.essayDate = essayDate;
+    }
+
     public Integer getUserId() {
         return userId;
     }

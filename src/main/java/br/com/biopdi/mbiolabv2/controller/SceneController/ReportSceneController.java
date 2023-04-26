@@ -2,11 +2,11 @@ package br.com.biopdi.mbiolabv2.controller.SceneController;
 
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,6 +15,7 @@ import javafx.scene.control.ListView;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ReportSceneController implements Initializable {
@@ -28,12 +29,13 @@ public class ReportSceneController implements Initializable {
     @FXML
     private Label lbCurrentData;
     @FXML
-    private Button btnEssayByUserId, btnSwitchToHomeScene, btnSwitchToDashboardScene, btnSwitchToEssayScene, btnSwitchToReportScene, btnSwitchToSettingScene;
+    private Button btnEssayByUserId;
     @FXML
-    private ListView lwLastEssay, lwSavedEssay;
+    private ListView<Essay> lwEssayInfo, lwSavedEssay;
     @FXML
     private LineChart<Number,Number> chartSingleLine;
     private XYChart.Series seriesSingle;
+    private Essay currentEssay;
 
     Date systemDate = new Date();
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -42,12 +44,25 @@ public class ReportSceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        lastEssay();
 
+        savedEssayView();
+        lwSavedEssay.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Essay>() {
+            @Override
+            public void changed(ObservableValue<? extends Essay> observable, Essay oldValue, Essay newValue) {
+                currentEssay = lwSavedEssay.getSelectionModel().getSelectedItem();
+                lwEssayInfo.getItems().add(currentEssay);
+                essayChart(currentEssay.getEssayId());
+                essayInfo(currentEssay.getEssayId());
+
+            }
+        });
 
     }
 
     @FXML
     private void essayChart(int pk) {
+        chartSingleLine.getData().clear();
         XYChart.Series seriesSingle = new XYChart.Series();
         //populating the series with data
 
@@ -64,19 +79,40 @@ public class ReportSceneController implements Initializable {
             }
         }
         chartSingleLine.getData().add(seriesSingle);
+    }
+
+    @FXML
+    private void essayDataReturn(int pk){
+
+        //Calculos here
 
     }
 
     @FXML
-    private void selectEssayMouseClick(){
-        Essay essay = essayDAO.findById(lwSavedEssay.getSelectionModel().getSelectedIndex());
-        essayChart(essay.getEssayId());
-
+    private void lastEssay(){
+        lwEssayInfo.getItems().clear();
+        currentEssay = essayDAO.findLastId();
+        lwEssayInfo.getItems().add(currentEssay);
+        essayChart(currentEssay.getEssayId());
+    }
+    @FXML
+    private void essayInfo(int pk){
+        lwEssayInfo.getItems().clear();
+        Essay essayInfo = essayDAO.findById(pk);
+        lwEssayInfo.getItems().addAll(essayInfo);
     }
 
     @FXML
-    private void chartClear(){
+    private void savedEssayView(){
+        List<Essay> essayList = essayDAO.findAll();
+        lwSavedEssay.getItems().addAll(essayList);
+    }
+
+    @FXML
+    private void dataReset(){
         chartSingleLine.getData().clear();
+        lastEssay();
+        savedEssayView();
     }
 
 
