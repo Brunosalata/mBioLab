@@ -11,7 +11,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="665.0" style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.HomeSceneController">
    <children>
       <SplitPane dividerPositions="0.2505567928730512" focusTraversable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <items>
@@ -49,10 +49,10 @@
                   <Label layoutX="20.0" layoutY="154.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="79.0" text="Setup" AnchorPane.leftAnchor="20.0" />
                   <ListView fx:id="essayListView" layoutX="5.0" layoutY="290.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="300.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
                   <Label layoutX="20.0" layoutY="252.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="39.0" prefWidth="61.0" text="Ensaios" AnchorPane.leftAnchor="20.0" />
-                  <Button fx:id="btnDataPull" layoutX="190.0" layoutY="33.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="94.0" text="Puxar dados" AnchorPane.rightAnchor="17.0" />
+                  <Button fx:id="btnDataPull" layoutX="190.0" layoutY="33.0" mnemonicParsing="false" onAction="#DBDataPull" prefHeight="25.0" prefWidth="94.0" text="Puxar dados" AnchorPane.rightAnchor="17.0" />
                   <ListView fx:id="essayByUserListView" layoutX="5.0" layoutY="424.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="334.0" AnchorPane.bottomAnchor="149.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
                   <Label layoutX="20.0" layoutY="385.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" text="Ensaios por Usuario" AnchorPane.leftAnchor="20.0" />
-                  <Button fx:id="btnEssayByUserId" layoutX="266.0" layoutY="384.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Solicitar" AnchorPane.rightAnchor="14.0" />
+                  <Button fx:id="btnEssayByUserId" layoutX="266.0" layoutY="384.0" mnemonicParsing="false" onAction="#essayFindByUser" prefHeight="25.0" prefWidth="64.0" text="Solicitar" AnchorPane.rightAnchor="14.0" />
                   <TextField fx:id="txtEssayUserId" alignment="CENTER" layoutX="188.0" layoutY="385.0" prefHeight="25.0" prefWidth="64.0" AnchorPane.rightAnchor="92.0" />
                   <Label alignment="CENTER" layoutX="188.0" layoutY="367.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="64.0" text="User ID" AnchorPane.rightAnchor="92.0" />
                </children>
