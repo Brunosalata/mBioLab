@@ -2,8 +2,6 @@ package br.com.biopdi.mbiolabv2.model.bean;
 
 import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 
-import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -119,6 +117,7 @@ public class User {
             dao.create(this);
         }
     }
+
     /**
      * Método delete() que pode ser chamado diretamente da classe User
      */
@@ -127,12 +126,14 @@ public class User {
             dao.delete(this);
         }
     }
+
     /**
      * Método findAll() que pode ser chamado diretamente da classe User
      */
     public static List<User> findAll(){
         return dao.findAll();
     }
+
     /**
      * Método find() que pode ser chamado diretamente da classe User
      */

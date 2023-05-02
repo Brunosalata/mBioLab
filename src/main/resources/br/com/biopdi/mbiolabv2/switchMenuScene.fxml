@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.SwitchMenuSceneController">
+<AnchorPane fx:id="apSwitchMenu" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.SwitchMenuSceneController">
    <children>
       <BorderPane fx:id="mainPane" layoutX="200.0" layoutY="100.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #005897;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <bottom>
             <HBox id="HBox" alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="444.0" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="670.0" text="Soluções em ensaios de materiais © Biopdi 2023" HBox.hgrow="ALWAYS">
+                  <Label maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="405.0" text="LABEL" textFill="#e4e4e4" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="11.0" fx:id="x3" />
                      </font>
-                     <textFill>
-                        <Color blue="0.625" green="0.625" red="0.625" fx:id="x4" />
-                     </textFill>
                      <HBox.margin>
-                        <Insets left="5.0" />
+                        <Insets left="20.0" />
                      </HBox.margin>
                   </Label>
-                  <Label fx:id="lbCurrentData" alignment="CENTER_RIGHT" font="$x3" graphicTextGap="5.0" maxHeight="1.7976931348623157E308" maxWidth="-1.0" prefHeight="21.0" prefWidth="355.0" text="data" textFill="$x4" HBox.hgrow="ALWAYS">
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="473.0" text="Soluções em ensaios de materiais © Biopdi 2023" textFill="#e4e4e4" />
+                  <Label fx:id="lbCurrentData" alignment="CENTER_RIGHT" font="$x3" graphicTextGap="5.0" maxHeight="1.7976931348623157E308" maxWidth="-1.0" prefHeight="21.0" prefWidth="405.0" text="DATA : HORA" textFill="#e4e4e4" HBox.hgrow="ALWAYS">
                      <HBox.margin>
-                        <Insets right="5.0" />
+                        <Insets right="20.0" />
                      </HBox.margin>
                   </Label>
                </children>
@@ -41,49 +41,84 @@
          <left>
             <VBox prefHeight="693.0" prefWidth="234.0" style="-fx-background-color: #2C2C2C;" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="btnSwitchHome" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToHomeScene" prefHeight="40.0" prefWidth="180.0" text="Home">
+                  <AnchorPane prefHeight="445.0" prefWidth="234.0">
+                     <children>
+                        <ImageView fitHeight="70.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="30.0">
+                           <image>
+                              <Image url="@img/lightLogo.png" />
+                           </image>
+                           <viewport>
+                              <Rectangle2D />
+                           </viewport>
+                        </ImageView>
+                        <Button fx:id="btnSwitchHome" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToHomeScene" prefHeight="40.0" prefWidth="180.0" text="Home" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="120.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnSwitchDashboard" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToDashboardScene" prefHeight="40.0" prefWidth="180.0" text="Dashboard" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="170.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnSwitchEssay" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToEssayScene" prefHeight="40.0" prefWidth="180.0" text="Ensaio" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="220.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnSwitchReport" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToReportScene" prefHeight="40.0" prefWidth="180.0" text="Relatório" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="270.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="329.0" prefWidth="234.0">
+                     <children>
+                        <Button fx:id="btnSwitchSupport" layoutX="26.0" layoutY="21.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSupportScene" prefHeight="40.0" prefWidth="180.0" text="Suporte" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="24.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </Button>
+                        <Button fx:id="btnSwitchSystemSetting" layoutX="26.0" layoutY="69.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSystemSettingScene" prefHeight="40.0" prefWidth="180.0" text="Configurações" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="24.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </Button>
+                        <Label fx:id="lbUserName" alignment="CENTER" layoutX="87.0" layoutY="215.0" onMouseClicked="#editProfile" prefHeight="60.0" prefWidth="123.0" text="Usuário" textAlignment="JUSTIFY" textFill="#d9d9d9" wrapText="true" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="24.0">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="ivUserImage" fitHeight="60.0" fitWidth="60.0" layoutX="26.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="25.0">
+                           <image>
+                              <Image url="@img/lightIcon/user96.png" />
+                           </image>
+                        </ImageView>
+                     </children>
                      <VBox.margin>
-                        <Insets left="25.0" right="25.0" top="50.0" />
+                        <Insets />
                      </VBox.margin>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnSwitchDashboard" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToDashboardScene" prefHeight="40.0" prefWidth="180.0" text="Dashboard">
-                     <VBox.margin>
-                        <Insets left="25.0" right="25.0" top="5.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnSwitchEssay" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToEssayScene" prefHeight="40.0" prefWidth="180.0" text="Ensaio">
-                     <VBox.margin>
-                        <Insets left="25.0" right="25.0" top="5.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnSwitchReport" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToReportScene" prefHeight="40.0" prefWidth="180.0" text="Relatório">
-                     <VBox.margin>
-                        <Insets left="25.0" right="25.0" top="5.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnSwitchSystemSetting" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSystemSettingScene" prefHeight="40.0" prefWidth="180.0" text="Configurações">
-                     <VBox.margin>
-                        <Insets left="25.0" right="25.0" top="120.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
+                  </AnchorPane>
                </children>
             </VBox>
          </left>
+         <center>
+            <ImageView fitHeight="250.0" fitWidth="934.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@img/lightLogo.png" />
+               </image>
+               <BorderPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </BorderPane.margin>
+            </ImageView>
+         </center>
       </BorderPane>
    </children>
 </AnchorPane>
