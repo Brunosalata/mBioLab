@@ -32,7 +32,29 @@ public class UserDAO extends DBConnection {
     }
 
     /**
-     * Método de inclusão de usuario na tabela tb_user
+     * Método de inclusão de usuario com foto na tabela tb_user
+     *
+     * @param user
+     * @Description chamar a função, instanciando UserDAO userDAO e User user. Então, chama db.create()
+     */
+    public void createWithImage(User user) {
+        openConnection();
+        try {
+            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_user VALUES(?,?,?,?,?);");
+            stm.setString(2, user.getUserName());
+            stm.setString(3, user.getUserLogin());
+            stm.setString(4, user.getUserPassword());
+            stm.setBytes(5, user.getUserImage());
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+    }
+
+    /**
+     * Método de inclusão de usuario sem imagem na tabela tb_user
      *
      * @param user
      * @Description chamar a função, instanciando UserDAO userDAO e User user. Então, chama db.create()
@@ -40,11 +62,10 @@ public class UserDAO extends DBConnection {
     public void create(User user) {
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_user VALUES(?,?,?,?);");
+            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_user VALUES(?,?,?,?,?);");
             stm.setString(2, user.getUserName());
             stm.setString(3, user.getUserLogin());
             stm.setString(4, user.getUserPassword());
-            stm.setBytes(5, user.getUserImage());
             stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -147,6 +168,36 @@ public class UserDAO extends DBConnection {
                         rs.getString(3),//user login
                         rs.getString(4));//user password
                 rs.getBytes(5);//user image
+                result = user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
+
+    /**
+     * Método de busca por um cadastro específico
+     *
+     * @param stg
+     * @return Cadastro do usuario pela primary key
+     */
+    public User findByLogin(String stg) {
+        User result = null;
+        openConnection();
+        try {
+            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_user WHERE userLogin = ?;");
+            stm.setString(1, stg);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                User user = new User(
+                    rs.getInt(1),//user id
+                    rs.getString(2),//username
+                    rs.getString(3),//user login
+                    rs.getString(4));//user password
+                    rs.getBytes(5);//user image
                 result = user;
             }
         } catch (SQLException e) {

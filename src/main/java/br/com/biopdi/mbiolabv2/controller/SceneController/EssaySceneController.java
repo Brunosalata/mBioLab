@@ -91,7 +91,7 @@ public class EssaySceneController implements Initializable {
 
                     // Salvando dados no banco de dados - dados persistentes como variável global
                     SystemVariable sysVar = new SystemVariable(1, Double.valueOf(impF), Double.valueOf(impP));
-                    systemVariableDAO.update(sysVar);
+                    systemVariableDAO.updateEssay(sysVar);
 
                     //Atualização da UI pela Thread a partir dos dados salvos no DB
                     Platform.runLater(() -> {

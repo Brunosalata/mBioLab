@@ -1,16 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.UserRegisterSceneController">
+<AnchorPane fx:id="apUserRegister" prefHeight="550.0" prefWidth="800.0" style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.UserRegisterSceneController">
    <children>
-      <Label alignment="CENTER" layoutX="143.0" layoutY="171.0" text="USer Register Scene">
-         <font>
-            <Font size="41.0" />
-         </font>
-      </Label>
+      <AnchorPane layoutX="100.0" layoutY="75.0" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2C2C2C;" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="75.0">
+         <children>
+            <ImageView fx:id="btnRegisterSupport" fitHeight="25.0" fitWidth="20.0" layoutX="485.0" layoutY="358.0" onMouseClicked="#supportRegisterMessage" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="22.0" AnchorPane.rightAnchor="95.0">
+               <image>
+                  <Image url="@img/lightIcon/doubt.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="504.0" layoutY="349.0" prefHeight="38.0" prefWidth="66.0" text="Suporte" textFill="#d9d9d9" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="30.0">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <AnchorPane layoutX="4.0" layoutY="140.0" prefHeight="195.0" prefWidth="600.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="140.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" layoutX="58.0" layoutY="17.0" prefHeight="38.0" prefWidth="79.0" text="Nome" textFill="#d9d9d9">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <padding>
+                        <Insets right="20.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="txtName" alignment="CENTER" layoutX="137.0" layoutY="23.0" prefHeight="25.0" prefWidth="220.0" promptText="Digite seu nome" AnchorPane.topAnchor="23.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="58.0" layoutY="52.0" prefHeight="38.0" prefWidth="79.0" text="Login" textFill="#d9d9d9">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <padding>
+                        <Insets right="20.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="txtLogin" alignment="CENTER" layoutX="137.0" layoutY="58.0" prefHeight="25.0" prefWidth="220.0" promptText="Digite um login" AnchorPane.topAnchor="58.0" />
+                  <Button fx:id="btnRegister" layoutX="420.0" layoutY="174.0" mnemonicParsing="false" onAction="#register" prefHeight="25.0" prefWidth="105.0" stylesheets="@css/style.css" text="Cadastrar" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="75.0" />
+                  <Button fx:id="btnCancel" layoutX="305.0" layoutY="174.0" mnemonicParsing="false" onAction="#cancelRegister" prefHeight="25.0" prefWidth="105.0" stylesheets="@css/style.css" text="Cancelar" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="190.0" />
+                  <Button fx:id="btnEdit" layoutX="190.0" layoutY="174.0" mnemonicParsing="false" onAction="#profileEdit" prefHeight="25.0" prefWidth="105.0" stylesheets="@css/style.css" text="Editar" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="305.0" />
+                  <Button fx:id="btnDelete" layoutX="75.0" layoutY="174.0" mnemonicParsing="false" onAction="#userDelete" prefHeight="25.0" prefWidth="105.0" stylesheets="@css/style.css" text="Excluir" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="420.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="58.0" layoutY="87.0" prefHeight="38.0" prefWidth="79.0" text="Senha" textFill="#d9d9d9">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <padding>
+                        <Insets right="20.0" />
+                     </padding>
+                  </Label>
+                  <ImageView fx:id="ivUser" disable="true" fitHeight="130.0" fitWidth="151.0" layoutX="401.0" layoutY="25.0" onMouseClicked="#imageSelect" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="69.0" AnchorPane.topAnchor="25.0">
+                     <image>
+                        <Image url="@img/lightIcon/user96.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="ivUser1" fitHeight="130.0" fitWidth="151.0" layoutX="389.0" layoutY="25.0" onMouseClicked="#imageSelect" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="25.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="391.0" prefHeight="38.0" prefWidth="151.0" text="Imagem de perfil" textFill="#d9d9d9">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <padding>
+                        <Insets right="20.0" />
+                     </padding>
+                  </Label>
+                  <Label alignment="CENTER_RIGHT" layoutX="59.0" layoutY="121.0" prefHeight="38.0" prefWidth="79.0" text="Senha" textFill="#d9d9d9">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <padding>
+                        <Insets right="20.0" />
+                     </padding>
+                  </Label>
+                  <PasswordField fx:id="txtPasswordConfirm" alignment="CENTER" layoutX="137.0" layoutY="127.0" prefHeight="25.0" prefWidth="220.0" promptText="Confirme sua senha" AnchorPane.topAnchor="127.0" />
+                  <PasswordField fx:id="txtPassword" alignment="CENTER" layoutX="137.0" layoutY="92.0" prefHeight="25.0" prefWidth="220.0" promptText="Digite uma senha" AnchorPane.topAnchor="92.0" />
+               </children>
+            </AnchorPane>
+            <ImageView fitHeight="103.0" fitWidth="284.0" layoutX="158.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="158.0" AnchorPane.rightAnchor="158.0" AnchorPane.topAnchor="40.0">
+               <image>
+                  <Image url="@img/lightLogo.png" />
+               </image>
+            </ImageView>
+            <RadioButton fx:id="rbAgreement" layoutX="219.0" layoutY="359.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="179.0" text="Li e aceito os termos de uso." textFill="#d9d9d9" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="30.0" />
+            <Hyperlink layoutX="208.0" layoutY="357.0" text="Acesse aqui" textFill="#188fff" />
+         </children>
+      </AnchorPane>
+      <Label alignment="CENTER" layoutX="164.0" layoutY="528.0" prefHeight="17.0" prefWidth="473.0" text="Soluções em ensaios de materiais © Biopdi 2023" textFill="#e4e4e4" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
    </children>
 </AnchorPane>

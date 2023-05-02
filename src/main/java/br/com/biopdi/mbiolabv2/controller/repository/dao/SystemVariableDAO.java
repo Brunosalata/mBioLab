@@ -16,9 +16,10 @@ public class SystemVariableDAO extends DBConnection {
         try {
             openConnection();
             PreparedStatement stm = conn.prepareStatement("CREATE TABLE IF NOT EXISTS tb_systemVariable ("
-                    + "id,"
+                    + "id INTEGER,"
                     + "force REAL,"
-                    + "position REAL);");
+                    + "position REAL,"
+                    + "userId INTEGER);");
             stm.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -37,10 +38,11 @@ public class SystemVariableDAO extends DBConnection {
     public void create(SystemVariable systemVariable) {
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_systemVariable VALUES(?,?,?);");
-            stm.setDouble(1, systemVariable.getId());
+            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_systemVariable VALUES(?,?,?,?);");
+            stm.setInt(1, systemVariable.getId());
             stm.setDouble(2, systemVariable.getForce());
             stm.setDouble(3, systemVariable.getPosition());
+            stm.setInt(4,systemVariable.getUserId());
             stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -54,7 +56,7 @@ public class SystemVariableDAO extends DBConnection {
      *
      * @param systemVariable
      */
-    public void update(SystemVariable systemVariable) {
+    public void updateEssay(SystemVariable systemVariable) {
         openConnection();
         try {
             PreparedStatement stm = conn.prepareStatement("UPDATE tb_systemVariable SET "
@@ -63,6 +65,21 @@ public class SystemVariableDAO extends DBConnection {
                     + "WHERE id = 1;");
             stm.setDouble(1, systemVariable.getForce());
             stm.setDouble(2, systemVariable.getPosition());
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+    }
+
+    public void updateUser(SystemVariable systemVariable) {
+        openConnection();
+        try {
+            PreparedStatement stm = conn.prepareStatement("UPDATE tb_systemVariable SET "
+                    + "userId = ? "
+                    + "WHERE id = 1;");
+            stm.setInt(1,systemVariable.getUserId());
             stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,7 +104,8 @@ public class SystemVariableDAO extends DBConnection {
                 SystemVariable systemVariable = new SystemVariable(
                         rs.getInt(1),//id
                         rs.getDouble(2),//force
-                        rs.getDouble(3));//position
+                        rs.getDouble(3),//position
+                        rs.getInt(4));//userId
                 result = systemVariable;
             }
         } catch (SQLException e) {

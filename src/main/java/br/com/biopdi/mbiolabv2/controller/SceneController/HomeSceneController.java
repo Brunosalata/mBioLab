@@ -107,6 +107,7 @@ public class HomeSceneController implements Initializable {
     @FXML
     private void essayFindByUser(){
         try{
+            essayByUserListView.getItems().clear();
             essayByUserIdList.addAll(essayDAO.findByUser(Integer.parseInt(txtEssayUserId.getText())));
             obsEssayByUserIdList = FXCollections.observableList(essayByUserIdList);
             essayByUserListView.setItems(obsEssayByUserIdList);
@@ -121,14 +122,17 @@ public class HomeSceneController implements Initializable {
     @FXML
     private void DBDataPull(){
 
+        userListView.getItems().clear();
         userList.addAll(userDAO.findAll());
         obsUserList = FXCollections.observableList(userList);
         userListView.setItems(obsUserList);
 
+        setupListView.getItems().clear();
         setupList.addAll(setupDAO.findAll());
         obsSetupList = FXCollections.observableList(setupList);
         setupListView.setItems(obsSetupList);
 
+        essayListView.getItems().clear();
         essayList.addAll(essayDAO.findAll());
         obsEssayList = FXCollections.observableList(essayList);
         essayListView.setItems(obsEssayList);
