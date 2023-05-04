@@ -91,16 +91,32 @@
                               <Insets left="25.0" right="25.0" />
                            </padding>
                         </Button>
-                        <Label fx:id="lbUserName" alignment="CENTER" layoutX="87.0" layoutY="215.0" onMouseClicked="#editProfile" prefHeight="60.0" prefWidth="123.0" text="Usuário" textAlignment="JUSTIFY" textFill="#d9d9d9" wrapText="true" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="24.0">
+                        <Label fx:id="lbUserName" layoutX="87.0" layoutY="215.0" onMouseClicked="#editProfile" prefHeight="60.0" prefWidth="123.0" text="Usuário" textAlignment="JUSTIFY" textFill="#d9d9d9" wrapText="true" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="24.0">
                            <font>
                               <Font size="20.0" />
                            </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
                         </Label>
-                        <ImageView fx:id="ivUserImage" fitHeight="60.0" fitWidth="60.0" layoutX="26.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="25.0">
+                        <ImageView fx:id="ivUserImage" fitHeight="60.0" fitWidth="60.0" layoutX="26.0" layoutY="217.0" onMouseClicked="#editProfile" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="25.0">
                            <image>
                               <Image url="@img/lightIcon/user96.png" />
                            </image>
                         </ImageView>
+                        <ImageView fx:id="ivLogin" fitHeight="30.0" fitWidth="30.0" layoutX="40.0" layoutY="270.0" onMouseClicked="#logout" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/lightIcon/logout.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="lbLogin" layoutX="87.0" layoutY="270.0" onMouseClicked="#logout" prefHeight="30.0" prefWidth="123.0" text="Logout" textFill="#d9d9d9" wrapText="true" AnchorPane.rightAnchor="25.0">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Label>
                      </children>
                      <VBox.margin>
                         <Insets />

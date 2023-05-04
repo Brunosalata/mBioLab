@@ -12,10 +12,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,28 +27,51 @@ import java.util.ResourceBundle;
 
 public class SwitchMenuSceneController implements Initializable {
     private final SystemVariableDAO sysVarDAO = new SystemVariableDAO();
-    private final SystemVariable sysVar = sysVarDAO.find();
+    private SystemVariable sysVar = sysVarDAO.find();
     private final UserDAO userDAO = new UserDAO();
-    private final User user = userDAO.findById(sysVar.getUserId());
+    private User user = userDAO.findById(sysVar.getUserId());
     @FXML
-    private Label lbCurrentData, lbUserName;
+    private Label lbCurrentData, lbUserName, lbLogin;
     @FXML
     private AnchorPane apSwitchMenu;
     @FXML
     private BorderPane mainPane;
+    @FXML
+    private ImageView ivLogin, ivUserImage;
 
     Date systemDate = new Date();
     SimpleDateFormat dateComplete = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat brasilianDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     String currentDate = brasilianDate.format(systemDate);
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Alteração do lbUserName e lbLogin dependendo do retorno do banco de dados (null indica que userId do banco é 0, logo, sem login)
+        if(user==null){
+            lbUserName.setText("Visitante");
+            lbLogin.setText("Login");
+            ivLogin.setImage(new Image(mBioLabv2Application.class.getResource("img/lightIcon/login.png").toExternalForm()));
+        } else{
+            System.out.println(user);
+            lbUserName.setText(user.getUserName());
+            lbLogin.setText("Logout");
+            ivLogin.setImage(new Image(mBioLabv2Application.class.getResource("img/lightIcon/logout.png").toExternalForm()));
+            System.out.println(user.getUserImagePath());
+            // AJUSTAR para imagem do usuário (Não está puxando userImagePath do DB)
+            if(user.getUserImagePath()==null){
+                ivUserImage.setImage(new Image(mBioLabv2Application.class.getResource("img/lightIcon/user96.png").toExternalForm()));
+            } else{
+                ivUserImage.setImage(new Image(user.getUserImagePath()));
+            }
+        }
+    }
+
+    /**
+     * Método de exibição do relógio no rodapé da janela
+     */
     @FXML
     private void clockView() {
 
-
-    }
-
-    private void clockActualize() {
 
     }
 
@@ -133,11 +158,12 @@ public class SwitchMenuSceneController implements Initializable {
      * @param event
      */
     @FXML
-    private void logout(ActionEvent event) {
-        System.out.println("Carregando Login");
-        FxmlLoader object = new FxmlLoader();
-        Pane view = object.getPage("loginScene.fxml");
-        mainPane.setCenter(view);
+    private void logout(ActionEvent event) throws IOException {
+        SystemVariable sysVar = sysVarDAO.find();
+        sysVar.setUserId(0);
+        sysVarDAO.updateUser(sysVar);
+        apSwitchMenu.getScene().getWindow().hide();
+        openNewScene("loginScene.fxml");
     }
 
     /**
@@ -150,11 +176,11 @@ public class SwitchMenuSceneController implements Initializable {
         openNewScene("userRegisterScene.fxml");
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        lbUserName.setText(user.getUserName());
-    }
-
+    /**
+     * Método genbérico para abertura de nova janela
+     * @param fxmlFile
+     * @throws IOException
+     */
     @FXML
     private void openNewScene(String fxmlFile) throws IOException {
         // abre janela de cadastro

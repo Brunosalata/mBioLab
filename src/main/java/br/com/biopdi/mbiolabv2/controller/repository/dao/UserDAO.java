@@ -44,7 +44,7 @@ public class UserDAO extends DBConnection {
             stm.setString(2, user.getUserName());
             stm.setString(3, user.getUserLogin());
             stm.setString(4, user.getUserPassword());
-            stm.setBytes(5, user.getUserImage());
+            stm.setString(5, user.getUserImagePath());
             stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,11 +88,11 @@ public class UserDAO extends DBConnection {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 User user = new User(
-                        rs.getInt(1),//user id
-                        rs.getString(2),//username
-                        rs.getString(3),//user login
-                        rs.getString(4));//user password
-                rs.getBytes(5);//user image
+                    rs.getInt(1),//user id
+                    rs.getString(2),//username
+                    rs.getString(3),//user login
+                    rs.getString(4));//user password
+                    rs.getString(5);//user image
                 result.add(user);
             }
         } catch (SQLException e) {
@@ -115,13 +115,13 @@ public class UserDAO extends DBConnection {
                     + "userName = ?, "
                     + "userLogin = ?, "
                     + "userPassword = ?, "
-                    + "UserImage = ? "
+                    + "userImagePath = ? "
                     + "WHERE userId = ?;");
             stm.setString(1, user.getUserName());
             stm.setString(2, user.getUserLogin());
             stm.setString(3, user.getUserPassword());
-            stm.setInt(4, user.getUserId());
-            stm.setBytes(5, user.getUserImage());
+            stm.setString(4, user.getUserImagePath());
+            stm.setInt(5, user.getUserId());
             stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -167,7 +167,7 @@ public class UserDAO extends DBConnection {
                         rs.getString(2),//username
                         rs.getString(3),//user login
                         rs.getString(4));//user password
-                rs.getBytes(5);//user image
+                        rs.getString(5);//user image
                 result = user;
             }
         } catch (SQLException e) {
@@ -197,7 +197,7 @@ public class UserDAO extends DBConnection {
                     rs.getString(2),//username
                     rs.getString(3),//user login
                     rs.getString(4));//user password
-                    rs.getBytes(5);//user image
+                    rs.getString(5);//user image
                 result = user;
             }
         } catch (SQLException e) {

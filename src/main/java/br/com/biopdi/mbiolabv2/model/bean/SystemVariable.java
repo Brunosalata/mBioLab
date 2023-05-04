@@ -36,7 +36,17 @@ public class SystemVariable {
     public Integer getUserId() {
         return userId;
     }
-    public void setUseId(Integer userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    @Override
+    public String toString() {
+        return "SystemVariable{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", force=" + force +
+                ", position=" + position +
+                '}';
     }
 }

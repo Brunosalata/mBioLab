@@ -153,7 +153,7 @@ public class ReportSceneController implements Initializable {
     }
 
     /**
-     * DISPENSÁVEL >> Método que reseta o gráfico da essay analizada
+     * Método que reseta o gráfico da essay analizada
      */
     @FXML
     private void dataReset() {
