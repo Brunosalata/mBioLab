@@ -8,74 +8,79 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="apLogin" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.LoginSceneController">
    <children>
-      <AnchorPane layoutX="100.0" layoutY="75.0" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2C2C2C;" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="75.0">
+      <Label alignment="CENTER" layoutX="164.0" layoutY="528.0" prefHeight="17.0" prefWidth="473.0" text="Soluções em ensaios de materiais © Biopdi 2023" textFill="#e4e4e4" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <VBox alignment="CENTER" fillWidth="false" layoutX="8.0" layoutY="198.0" prefHeight="280.0" prefWidth="295.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="CENTER_RIGHT" layoutX="322.0" layoutY="346.0" prefHeight="38.0" prefWidth="171.0" text="Não possui um perfil?" textFill="#d9d9d9" AnchorPane.leftAnchor="322.0" AnchorPane.rightAnchor="108.0">
-               <font>
-                  <Font size="15.0" />
-               </font>
-               <padding>
-                  <Insets right="10.0" />
-               </padding>
-            </Label>
-            <Button fx:id="btnRegister" layoutX="520.0" layoutY="355.0" mnemonicParsing="false" onAction="#openRegisterScene" stylesheets="@css/style.css" text="Cadastrar" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-            <ImageView fx:id="btnLoginSupport" fitHeight="25.0" fitWidth="20.0" layoutX="20.0" layoutY="357.0" onMouseClicked="#supportMessage" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="20.0">
-               <image>
-                  <Image url="@img/lightIcon/doubt.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="40.0" layoutY="348.0" prefHeight="38.0" prefWidth="165.0" text="Suporte" textFill="#d9d9d9">
-               <font>
-                  <Font size="15.0" />
-               </font>
-               <padding>
-                  <Insets left="10.0" />
-               </padding>
-            </Label>
-            <AnchorPane layoutX="78.0" layoutY="140.0" prefHeight="167.0" prefWidth="444.0" AnchorPane.bottomAnchor="120.0" AnchorPane.topAnchor="140.0">
+            <AnchorPane fx:id="apDarkArea" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2C2C2C;">
                <children>
-                  <Label alignment="CENTER_RIGHT" layoutX="73.0" layoutY="14.0" prefHeight="38.0" prefWidth="79.0" text="Login" textFill="#d9d9d9">
+                  <Label alignment="CENTER_RIGHT" layoutX="322.0" layoutY="346.0" prefHeight="38.0" prefWidth="171.0" text="Não possui um perfil?" textFill="#d9d9d9" AnchorPane.leftAnchor="322.0" AnchorPane.rightAnchor="108.0">
                      <font>
-                        <Font size="20.0" />
+                        <Font size="15.0" />
                      </font>
                      <padding>
-                        <Insets right="20.0" />
+                        <Insets right="10.0" />
                      </padding>
                   </Label>
-                  <TextField fx:id="txtLogin" alignment="CENTER" layoutX="152.0" layoutY="20.0" prefHeight="25.0" prefWidth="220.0" promptText="Digite seu login" />
-                  <Label alignment="CENTER_RIGHT" layoutX="73.0" layoutY="51.0" prefHeight="38.0" prefWidth="79.0" text="Senha" textFill="#d9d9d9">
+                  <Button fx:id="btnRegister" layoutX="520.0" layoutY="355.0" mnemonicParsing="false" onAction="#openRegisterScene" stylesheets="@css/style.css" text="Cadastrar" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+                  <ImageView fx:id="btnLoginSupport" fitHeight="25.0" fitWidth="20.0" layoutX="20.0" layoutY="357.0" onMouseClicked="#supportMessage" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="20.0">
+                     <image>
+                        <Image url="@img/lightIcon/doubt.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="40.0" layoutY="348.0" prefHeight="38.0" prefWidth="165.0" text="Suporte" textFill="#d9d9d9">
                      <font>
-                        <Font size="20.0" />
+                        <Font size="15.0" />
                      </font>
                      <padding>
-                        <Insets right="20.0" />
+                        <Insets left="10.0" />
                      </padding>
                   </Label>
-                  <PasswordField fx:id="txtPassword" alignment="CENTER" layoutX="152.0" layoutY="58.0" prefHeight="25.0" prefWidth="220.0" promptText="Digite sua senha" />
-                  <Button fx:id="btnLogin" layoutX="267.0" layoutY="96.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="105.0" stylesheets="@css/style.css" text="Entrar" />
-                  <Button fx:id="btnCancel" layoutX="152.0" layoutY="96.0" mnemonicParsing="false" onAction="#cancelLogin" prefHeight="25.0" prefWidth="105.0" stylesheets="@css/style.css" text="Cancelar" />
+                  <AnchorPane layoutX="78.0" layoutY="140.0" prefHeight="167.0" prefWidth="444.0" AnchorPane.bottomAnchor="120.0" AnchorPane.topAnchor="140.0">
+                     <children>
+                        <Label alignment="CENTER_RIGHT" layoutX="73.0" layoutY="14.0" prefHeight="38.0" prefWidth="79.0" text="Login" textFill="#d9d9d9">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </Label>
+                        <TextField fx:id="txtLogin" alignment="CENTER" layoutX="152.0" layoutY="20.0" prefHeight="25.0" prefWidth="220.0" promptText="Digite seu login" />
+                        <Label alignment="CENTER_RIGHT" layoutX="73.0" layoutY="51.0" prefHeight="38.0" prefWidth="79.0" text="Senha" textFill="#d9d9d9">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </Label>
+                        <PasswordField fx:id="txtPassword" alignment="CENTER" layoutX="152.0" layoutY="58.0" prefHeight="25.0" prefWidth="220.0" promptText="Digite sua senha" />
+                        <Button fx:id="btnLogin" layoutX="267.0" layoutY="96.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="105.0" stylesheets="@css/style.css" text="Entrar" />
+                        <Button fx:id="btnCancel" layoutX="152.0" layoutY="96.0" mnemonicParsing="false" onAction="#cancelLogin" prefHeight="25.0" prefWidth="105.0" stylesheets="@css/style.css" text="Cancelar" />
+                     </children>
+                  </AnchorPane>
+                  <ImageView fitHeight="103.0" fitWidth="284.0" layoutX="158.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="158.0" AnchorPane.rightAnchor="158.0" AnchorPane.topAnchor="40.0">
+                     <image>
+                        <Image url="@img/lightLogo.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER_RIGHT" layoutX="322.0" layoutY="302.0" prefHeight="38.0" prefWidth="171.0" text="Acesso sem login" textFill="#d9d9d9">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
+                  </Label>
+                  <Button fx:id="btnFastAccess" layoutX="492.0" layoutY="305.0" mnemonicParsing="false" onAction="#fastAccess" prefHeight="31.0" prefWidth="88.0" stylesheets="@css/style.css" text="Acessar" />
                </children>
             </AnchorPane>
-            <ImageView fitHeight="103.0" fitWidth="284.0" layoutX="158.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="158.0" AnchorPane.rightAnchor="158.0" AnchorPane.topAnchor="40.0">
-               <image>
-                  <Image url="@img/lightLogo.png" />
-               </image>
-            </ImageView>
-            <Label alignment="CENTER_RIGHT" layoutX="322.0" layoutY="302.0" prefHeight="38.0" prefWidth="171.0" text="Acesso sem login" textFill="#d9d9d9">
-               <font>
-                  <Font size="15.0" />
-               </font>
-               <padding>
-                  <Insets right="10.0" />
-               </padding>
-            </Label>
-            <Button fx:id="btnFastAccess" layoutX="492.0" layoutY="305.0" mnemonicParsing="false" onAction="#fastAccess" prefHeight="31.0" prefWidth="88.0" stylesheets="@css/style.css" text="Acessar" />
          </children>
-      </AnchorPane>
-      <Label alignment="CENTER" layoutX="164.0" layoutY="528.0" prefHeight="17.0" prefWidth="473.0" text="Soluções em ensaios de materiais © Biopdi 2023" textFill="#e4e4e4" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      </VBox>
    </children>
 </AnchorPane>
