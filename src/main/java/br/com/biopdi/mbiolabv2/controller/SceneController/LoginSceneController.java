@@ -15,7 +15,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,13 +27,16 @@ public class LoginSceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
     private final UserDAO userDAO = new UserDAO();
     private final SystemVariableDAO sysVarDAO = new SystemVariableDAO();
-    Stage stage;
     @FXML
     private AnchorPane apLogin, apUserRegister;
     @FXML
     private TextField txtLogin;
     @FXML
     private PasswordField txtPassword;
+    @FXML
+    private VBox vbRegister;
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -65,7 +68,7 @@ public class LoginSceneController implements Initializable {
                 if (txtLogin.getText().equals(user.getUserLogin()) && txtPassword.getText().equals(user.getUserPassword())) {
                     // Armazena userId nas variáveis de sistema para consulta global
                     SystemVariable systemVariable = sysVarDAO.find();
-                    systemVariable.setUseId(user.getUserId());
+                    systemVariable.setUserId(user.getUserId());
                     sysVarDAO.updateUser(systemVariable);
                     // Código para iniciar o menu principal
                     // abre janela de cadastro
@@ -98,14 +101,14 @@ public class LoginSceneController implements Initializable {
     }
 
     /**
-     * REQUER CORREÇÃO >> Método que retorna a cena de Registro de usuário
+     * Método que retorna a cena de Registro de usuário
      * @throws IOException
      */
     @FXML
     private void openRegisterScene() throws IOException {
         // abre janela de cadastro
         openNewScene("userRegisterScene.fxml");
-        apLogin.getScene().getWindow().hide();
+//        apLogin.getScene().getWindow().hide();
     }
 
     /**
@@ -115,10 +118,11 @@ public class LoginSceneController implements Initializable {
     @FXML
     private void fastAccess() throws IOException {
         // Armazena userId = 0 nas variáveis de sistema para consulta global e limitação de acesso a dados
-        SystemVariable systemVariable = sysVarDAO.find();
-        systemVariable.setUseId(0);
-        sysVarDAO.updateUser(systemVariable);
+        SystemVariable sysVar = sysVarDAO.find();
+        sysVar.setUserId(0);
+        sysVarDAO.updateUser(sysVar);
         openNewScene("switchMenuScene.fxml");
+        apLogin.getScene().getWindow().hide();
     }
 
     /**
@@ -150,6 +154,7 @@ public class LoginSceneController implements Initializable {
         Stage stage = new Stage();
         stage.setTitle("mBioLab");
         stage.getIcons().add(new Image(mBioLabv2Application.class.getResourceAsStream("img/iconBiopdi.png")));
+        stage.setFullScreen(true);
         stage.setResizable(false);  // Impede redimensionamento da janela
         stage.setScene(scene);
         stage.show();

@@ -138,32 +138,10 @@ public class HomeSceneController implements Initializable {
         essayListView.setItems(obsEssayList);
     }
 
-    /**
-     * Método que converte imagem em BYTE para armazenamento no DB
-     */
-    private void ImagemInclusion(){
-        //Compactação para armazenamento
-        // imagenBitmap é a imagem a ser armazenada
-//        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-//        byte imageBitmap[]=stream.toByteArray();
-    }
 
-    /**
-     * Método que busca BYTE no DB e converte em imagem
-     */
-    private void ImagemConsulta(){
-        //Descompactação para leitura
-//        DataBaseHandler db = new DataBaseHandler(this);
-//        User user = db.getUserById(userId);
-//
-//        byte[] outImage=contato.getUserImage();
-//        ByteArrayOutputStream imageStream = new ByteArrayInputStream(outImage);
-//        Bitmap imageBitmap = BitmapFactory.decodeStream(imageStream);
-//        image.setImageBitmap(imageBitmap);
-    }
 
-//                 ******** NECESSÁRIO TESTAR AINDA *********
+}
+
 
     // USER OK
 //    @FXML
@@ -212,5 +190,3 @@ public class HomeSceneController implements Initializable {
 
 
     // FIM*********** Métodos de setup ***********
-
-}
