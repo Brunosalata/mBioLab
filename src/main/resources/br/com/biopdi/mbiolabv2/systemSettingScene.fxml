@@ -1,23 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="665.0" style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.SystemSettingSceneController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="693.0" prefWidth="1026.0" style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.SystemSettingSceneController">
    <children>
-      <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="640.0" style="-fx-background-color: #E5E5E5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #E5E5E5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>
-            <ComboBox fx:id="cbPorts" prefWidth="150.0" promptText="selecionar" AnchorPane.rightAnchor="42.0" AnchorPane.topAnchor="54.0" />
-            <ComboBox fx:id="cbLanguage" prefWidth="150.0" promptText="Selecionar" AnchorPane.rightAnchor="42.0" AnchorPane.topAnchor="94.0" />
-            <ComboBox fx:id="cbSound" prefWidth="150.0" promptText="Selecionar" AnchorPane.rightAnchor="42.0" AnchorPane.topAnchor="131.0" />
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="79.0" text="Porta Serial" textAlignment="CENTER" AnchorPane.rightAnchor="194.0" AnchorPane.topAnchor="58.0" />
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="79.0" text="Idioma" textAlignment="CENTER" AnchorPane.rightAnchor="194.0" AnchorPane.topAnchor="98.0" />
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="79.0" text="Som" textAlignment="CENTER" AnchorPane.rightAnchor="194.0" AnchorPane.topAnchor="139.0" />
-            <Button fx:id="btnSettingSave" mnemonicParsing="false" text="Salvar" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="18.0" />
-            <Button fx:id="btnUserSettingSave" mnemonicParsing="false" onAction="#userSettingSave" text="Salvar" AnchorPane.rightAnchor="209.0" AnchorPane.topAnchor="179.0" />
+            <VBox alignment="TOP_CENTER" prefHeight="683.0" prefWidth="224.0">
+               <children>
+                  <AnchorPane minWidth="-Infinity" prefHeight="298.0" prefWidth="277.0" style="-fx-background-color: #dddddd;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <ComboBox fx:id="cbPorts" layoutX="92.0" layoutY="34.0" prefWidth="150.0" promptText="selecionar" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="34.0" />
+                        <ComboBox fx:id="cbLanguage" layoutX="92.0" layoutY="74.0" prefWidth="150.0" promptText="Selecionar" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="74.0" />
+                        <ComboBox fx:id="cbSound" layoutX="92.0" layoutY="111.0" prefWidth="150.0" promptText="Selecionar" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="111.0" />
+                        <Label alignment="CENTER" layoutX="11.0" layoutY="38.0" prefHeight="17.0" prefWidth="79.0" text="Porta Serial" textAlignment="CENTER" AnchorPane.rightAnchor="187.0" AnchorPane.topAnchor="38.0" />
+                        <Label alignment="CENTER" layoutX="11.0" layoutY="78.0" prefHeight="17.0" prefWidth="79.0" text="Idioma" textAlignment="CENTER" AnchorPane.rightAnchor="187.0" AnchorPane.topAnchor="78.0" />
+                        <Label alignment="CENTER" layoutX="11.0" layoutY="119.0" prefHeight="17.0" prefWidth="79.0" text="Som" textAlignment="CENTER" AnchorPane.rightAnchor="187.0" AnchorPane.topAnchor="119.0" />
+                        <Button fx:id="btnUserSettingSave" layoutX="27.0" layoutY="159.0" mnemonicParsing="false" onAction="#userSettingSave" text="Salvar" AnchorPane.rightAnchor="202.0" AnchorPane.topAnchor="159.0" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #dddddd;" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" />
+                     </VBox.margin>
+                  </AnchorPane>
+                  <Button fx:id="btnSettingSave" mnemonicParsing="false" text="Salvar" />
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefHeight="640.0" prefWidth="247.0" style="-fx-background-color: #dddddd;" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </HBox.margin>
+               <children>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefHeight="683.0" prefWidth="310.0" style="-fx-background-color: #dddddd;">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" text="Controles Admin" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <AnchorPane prefHeight="314.0" prefWidth="386.0" style="-fx-background-color: #d2d2d2;">
+                     <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" text="Editar usuário">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="15.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="79.0" text="Nome" VBox.vgrow="ALWAYS">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="20.0" right="20.0" top="20.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="txtName" alignment="CENTER" prefHeight="25.0" prefWidth="220.0" promptText="Digite seu nome">
+                                 <VBox.margin>
+                                    <Insets left="20.0" right="20.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="79.0" text="Login" VBox.vgrow="ALWAYS">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="20.0" right="20.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="txtLogin" alignment="CENTER" prefHeight="25.0" prefWidth="220.0" promptText="Digite um login">
+                                 <VBox.margin>
+                                    <Insets left="20.0" right="20.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="79.0" text="Senha" VBox.vgrow="ALWAYS">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="20.0" right="20.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <PasswordField fx:id="txtPassword" alignment="CENTER" prefHeight="25.0" prefWidth="220.0" promptText="Digite uma senha">
+                                 <VBox.margin>
+                                    <Insets left="20.0" right="20.0" />
+                                 </VBox.margin>
+                              </PasswordField>
+                           </children>
+                        </VBox>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="V_RESIZE" />
+                     </cursor>
+                  </AnchorPane>
+               </children>
+            </VBox>
          </children>
-      </AnchorPane>
+      </HBox>
    </children>
 </AnchorPane>
