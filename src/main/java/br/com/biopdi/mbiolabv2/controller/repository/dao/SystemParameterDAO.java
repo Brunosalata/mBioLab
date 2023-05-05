@@ -18,7 +18,8 @@ public class SystemParameterDAO extends DBConnection {
                     + "id,"
                     + "portName TEXT,"
                     + "systemLanguage TEXT,"
-                    + "soundOn TEXT);");
+                    + "soundOn TEXT,"
+                    + "theme TEXT);");
             stm.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -37,11 +38,12 @@ public class SystemParameterDAO extends DBConnection {
     public void create(SystemParameter systemParameter) {
         try {
             openConnection();
-            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_systemParameter VALUES(?,?,?,?);");
+            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_systemParameter VALUES(?,?,?,?,?);");
             stm.setInt(1, 1);
             stm.setString(2, systemParameter.getPortName());
             stm.setString(3, systemParameter.getSystemLanguage());
             stm.setString(4, systemParameter.getSoundOn());
+            stm.setString(5,systemParameter.getTheme());
             stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,11 +63,13 @@ public class SystemParameterDAO extends DBConnection {
             PreparedStatement stm = conn.prepareStatement("UPDATE tb_systemParameter SET "
                     + "portName = ?, "
                     + "systemLanguage = ?, "
-                    + "soundOn = ? "
+                    + "soundOn = ?, "
+                    + "theme = ? "
                     + "WHERE id = 1;");
             stm.setString(1, systemParameter.getPortName());
             stm.setString(2, systemParameter.getSystemLanguage());
             stm.setString(3, systemParameter.getSoundOn());
+            stm.setString(4,systemParameter.getTheme());
             stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,10 +92,11 @@ public class SystemParameterDAO extends DBConnection {
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 SystemParameter systemParameter = new SystemParameter(
-                        rs.getInt(1),//user id
-                        rs.getString(2),//portName
-                        rs.getString(3),//system Language
-                        rs.getString(4));//soundOn
+                    rs.getInt(1),//user id
+                    rs.getString(2),//portName
+                    rs.getString(3),//system Language
+                    rs.getString(4),//soundOn
+                    rs.getString(5));//theme
                 result = systemParameter;
             }
         } catch (SQLException e) {

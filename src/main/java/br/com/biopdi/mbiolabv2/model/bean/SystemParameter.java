@@ -3,22 +3,23 @@ package br.com.biopdi.mbiolabv2.model.bean;
 public class SystemParameter {
 
     private Integer id;
-    private String portName, systemLanguage, soundOn;
+    private String portName, systemLanguage, soundOn, theme;
 
     public SystemParameter() {
     }
-
-    public SystemParameter(String portName, String systemLanguage, String soundOn) {
+    public SystemParameter(String portName, String systemLanguage, String soundOn, String theme) {
         this.portName = portName;
         this.systemLanguage = systemLanguage;
         this.soundOn = soundOn;
+        this.theme = theme;
     }
 
-    public SystemParameter(Integer id, String portName, String systemLanguage, String soundOn) {
+    public SystemParameter(Integer id, String portName, String systemLanguage, String soundOn, String theme) {
         this.id = id;
         this.portName = portName;
         this.systemLanguage = systemLanguage;
         this.soundOn = soundOn;
+        this.theme = theme;
     }
 
     public Integer getId() {
@@ -45,14 +46,21 @@ public class SystemParameter {
     public void setSoundOn(String soundOn) {
         this.soundOn = soundOn;
     }
+    public String getTheme() {
+        return theme;
+    }
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
 
     @Override
     public String toString() {
-        return "systemParameters{" +
+        return "SystemParameter{" +
                 "id=" + id +
                 ", portName='" + portName + '\'' +
                 ", systemLanguage='" + systemLanguage + '\'' +
-                ", soundOn=" + soundOn +
+                ", soundOn='" + soundOn + '\'' +
+                ", theme='" + theme + '\'' +
                 '}';
     }
 }

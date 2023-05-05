@@ -173,7 +173,7 @@ public class EssayDAO extends DBConnection {
         openConnection();
         try {
             PreparedStatement stm = conn.prepareStatement("DELETE FROM tb_essay WHERE essayId = ?;");
-            stm.setInt(1, essay.getUserId());
+            stm.setInt(1, essay.getEssayId());
             stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
