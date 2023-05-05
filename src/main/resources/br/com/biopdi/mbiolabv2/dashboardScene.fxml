@@ -14,15 +14,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="693.0" prefWidth="1026.0" style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.DashboardSceneController">
+<AnchorPane prefHeight="890.0" prefWidth="1363.0" style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.DashboardSceneController">
    <children>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #E5E5E5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <BorderPane prefHeight="870.0" prefWidth="1006.0" style="-fx-background-color: #E5E5E5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <center>
             <VBox BorderPane.alignment="CENTER">
                <children>
-                  <HBox minHeight="-Infinity" prefHeight="650.0" prefWidth="986.0">
+                  <HBox prefHeight="650.0" prefWidth="986.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <VBox prefHeight="484.0" prefWidth="919.0">
+                        <VBox prefHeight="484.0" prefWidth="919.0" HBox.hgrow="ALWAYS">
                            <children>
                               <AnchorPane minHeight="-Infinity" prefHeight="25.0" prefWidth="200.0">
                                  <children>
@@ -33,10 +33,10 @@
                                     </Label>
                                  </children>
                                  <VBox.margin>
-                                    <Insets left="10.0" right="10.0" top="10.0" />
+                                    <Insets top="10.0" />
                                  </VBox.margin>
                               </AnchorPane>
-                              <LineChart fx:id="chartMultiLine" animated="false" legendSide="RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="693.0" VBox.vgrow="ALWAYS">
+                              <LineChart fx:id="chartMultiLine" animated="false" legendSide="RIGHT" prefHeight="500.0" prefWidth="693.0" VBox.vgrow="ALWAYS">
                                  <xAxis>
                                     <NumberAxis label="Deslocamento" side="BOTTOM" fx:id="xChartMulti" />
                                  </xAxis>
@@ -44,7 +44,7 @@
                                     <NumberAxis fx:id="yChartMulti" label="Força" side="LEFT" />
                                  </yAxis>
                                  <VBox.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    <Insets top="10.0" />
                                  </VBox.margin>
                               </LineChart>
                            </children>
@@ -52,7 +52,7 @@
                               <Insets right="10.0" />
                            </HBox.margin>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" prefHeight="377.0" prefWidth="459.0">
+                        <VBox alignment="TOP_CENTER" prefHeight="377.0" HBox.hgrow="ALWAYS">
                            <HBox.margin>
                               <Insets right="10.0" />
                            </HBox.margin>
@@ -66,10 +66,10 @@
                                     </Label>
                                  </children>
                                  <VBox.margin>
-                                    <Insets left="10.0" right="10.0" top="10.0" />
+                                    <Insets top="10.0" />
                                  </VBox.margin>
                               </AnchorPane>
-                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                              <VBox alignment="TOP_CENTER" prefHeight="467.0" prefWidth="432.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="467.0" prefWidth="253.0" text="Anuncie Aqui">
                                        <font>
@@ -77,6 +77,9 @@
                                        </font>
                                     </Label>
                                  </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
                               </VBox>
                               <Button fx:id="btnChartClear" alignment="BOTTOM_CENTER" mnemonicParsing="false" onAction="#multiDataReset" prefHeight="25.0" prefWidth="99.0" text="Apagar">
                                  <VBox.margin>
@@ -87,7 +90,7 @@
                         </VBox>
                      </children>
                      <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" />
+                        <Insets bottom="10.0" left="10.0" />
                      </VBox.margin>
                   </HBox>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
