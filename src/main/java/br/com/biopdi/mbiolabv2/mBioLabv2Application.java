@@ -18,14 +18,14 @@ public class mBioLabv2Application extends Application {
     private SystemVariableDAO sysVarDAO = new SystemVariableDAO();
     private SystemVariable sysVar = sysVarDAO.find();
     @FXML
-    private AnchorPane apDarkArea;
+    public Stage loginStage;
     @Override
     public void start(Stage stage) throws IOException {
 
         initialSetup();
         Parent login = FXMLLoader.load(getClass().getResource("loginScene.fxml"));
         Scene scene = new Scene(login);
-        Stage loginStage = new Stage();
+        loginStage = new Stage();
         loginStage.setTitle("mBioLab");
         loginStage.getIcons().add(new Image(getClass().getResourceAsStream("img/iconBiopdi.png")));
         loginStage.setResizable(false);  // Impede redimensionamento da janela

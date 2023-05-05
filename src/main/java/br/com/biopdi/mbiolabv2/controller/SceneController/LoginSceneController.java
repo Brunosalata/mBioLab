@@ -1,18 +1,19 @@
 package br.com.biopdi.mbiolabv2.controller.SceneController;
 
+import br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.SwitchMenuSceneController;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.SystemVariableDAO;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 import br.com.biopdi.mbiolabv2.mBioLabv2Application;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import br.com.biopdi.mbiolabv2.model.bean.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -35,6 +36,7 @@ public class LoginSceneController implements Initializable {
     private PasswordField txtPassword;
     @FXML
     private VBox vbRegister;
+    private Stage stage;
 
 
     @Override
@@ -46,7 +48,7 @@ public class LoginSceneController implements Initializable {
      *  Método para realização do ‘login’, mediante senha
      */
     @FXML
-    private void login() throws IOException {
+    private void login(ActionEvent event) throws IOException {
         // Busca user pelo login
         User user = userDAO.findByLogin(txtLogin.getText());
         // Verifica se os campos de login e senha estão preenchidos
@@ -72,7 +74,7 @@ public class LoginSceneController implements Initializable {
                     sysVarDAO.updateUser(systemVariable);
                     // Código para iniciar o menu principal
                     // abre janela de cadastro
-                    openNewScene("switchMenuScene.fxml");
+                    openSwitchMenuFullScene(event);
                     apLogin.getScene().getWindow().hide();
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -105,10 +107,9 @@ public class LoginSceneController implements Initializable {
      * @throws IOException
      */
     @FXML
-    private void openRegisterScene() throws IOException {
+    private void openRegisterScene(ActionEvent event) throws IOException {
         // abre janela de cadastro
-        openNewScene("userRegisterScene.fxml");
-//        apLogin.getScene().getWindow().hide();
+        openUserRegisterScene(event);
     }
 
     /**
@@ -116,13 +117,12 @@ public class LoginSceneController implements Initializable {
      * Não permite acessar ensaios salvos ou salvar ensaios
      */
     @FXML
-    private void fastAccess() throws IOException {
+    private void fastAccess(ActionEvent event) throws IOException {
         // Armazena userId = 0 nas variáveis de sistema para consulta global e limitação de acesso a dados
         SystemVariable sysVar = sysVarDAO.find();
         sysVar.setUserId(0);
         sysVarDAO.updateUser(sysVar);
-        openNewScene("switchMenuScene.fxml");
-        apLogin.getScene().getWindow().hide();
+        openSwitchMenuFullScene(event);
     }
 
     /**
@@ -142,21 +142,45 @@ public class LoginSceneController implements Initializable {
     }
 
     /**
-     * Método genbérico para abertura de nova janela
-     * @param fxmlFile
+     * Metodo generico para abertura de nova janela
+     * @param event
      * @throws IOException
      */
     @FXML
-    private void openNewScene(String fxmlFile) throws IOException {
+    private void openUserRegisterScene(ActionEvent event) throws IOException {
         // abre janela de cadastro
-        AnchorPane ap = FXMLLoader.load(mBioLabv2Application.class.getResource(fxmlFile));
-        Scene scene = new Scene(ap);
-        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(mBioLabv2Application.class.getResource("userRegisterScene.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
         stage.setTitle("mBioLab");
         stage.getIcons().add(new Image(mBioLabv2Application.class.getResourceAsStream("img/iconBiopdi.png")));
-        stage.setFullScreen(true);
         stage.setResizable(false);  // Impede redimensionamento da janela
         stage.setScene(scene);
         stage.show();
+
+    }
+
+    /**
+     * Metodo generico para abertura de nova janela full screem
+     * @param event
+     * @throws IOException
+     */
+    @FXML
+    private void openSwitchMenuFullScene(ActionEvent event) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(mBioLabv2Application.class.getResource("switchMenuScene.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setTitle("mBioLab");
+        stage.getIcons().add(new Image(mBioLabv2Application.class.getResourceAsStream("img/iconBiopdi.png")));
+        stage.setResizable(false);  // Impede redimensionamento da janela
+        stage.setScene(scene);
+        stage.show();
+        stage.setFullScreen(true);
+
     }
 }
