@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="apSwitchMenu" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.SwitchMenuSceneController">
+<AnchorPane fx:id="apSwitchMenu" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.SwitchMenuSceneController">
    <children>
       <BorderPane fx:id="mainPane" layoutX="200.0" layoutY="100.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #005897;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <bottom>
