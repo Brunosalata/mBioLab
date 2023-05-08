@@ -38,7 +38,7 @@ public class SystemVariableDAO extends DBConnection {
     public void create(SystemVariable systemVariable) {
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_systemVariable VALUES(?,?,?,?);");
+            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_systemVariable(id, force, position, userId) VALUES(?,?,?,?);");
             stm.setInt(1, systemVariable.getId());
             stm.setDouble(2, systemVariable.getForce());
             stm.setDouble(3, systemVariable.getPosition());
@@ -73,6 +73,11 @@ public class SystemVariableDAO extends DBConnection {
         }
     }
 
+    /**
+     * Método que atualiza o valor do parâmetro userId ({id}), ao fazer login ou iniciar sistema (0)
+     *
+     * @param systemVariable
+     */
     public void updateUser(SystemVariable systemVariable) {
         openConnection();
         try {
@@ -98,14 +103,14 @@ public class SystemVariableDAO extends DBConnection {
         SystemVariable result = null;
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_systemVariable WHERE id = 1;");
+            PreparedStatement stm = conn.prepareStatement("SELECT id, force, position, userId FROM tb_systemVariable WHERE id = 1;");
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 SystemVariable systemVariable = new SystemVariable(
-                        rs.getInt(1),//id
-                        rs.getDouble(2),//force
-                        rs.getDouble(3),//position
-                        rs.getInt(4));//userId
+                        rs.getInt("id"),//id
+                        rs.getDouble("force"),//force
+                        rs.getDouble("position"),//position
+                        rs.getInt("userId"));//userId
                 result = systemVariable;
             }
         } catch (SQLException e) {

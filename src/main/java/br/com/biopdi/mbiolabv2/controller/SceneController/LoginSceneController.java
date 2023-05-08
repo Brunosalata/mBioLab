@@ -1,6 +1,5 @@
 package br.com.biopdi.mbiolabv2.controller.SceneController;
 
-import br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.SwitchMenuSceneController;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.SystemVariableDAO;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 import br.com.biopdi.mbiolabv2.mBioLabv2Application;
@@ -13,7 +12,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -75,7 +77,6 @@ public class LoginSceneController implements Initializable {
                     // Código para iniciar o menu principal
                     // abre janela de cadastro
                     openSwitchMenuFullScene(event);
-                    apLogin.getScene().getWindow().hide();
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Login");

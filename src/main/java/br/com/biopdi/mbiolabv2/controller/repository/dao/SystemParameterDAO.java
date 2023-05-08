@@ -38,7 +38,7 @@ public class SystemParameterDAO extends DBConnection {
     public void create(SystemParameter systemParameter) {
         try {
             openConnection();
-            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_systemParameter VALUES(?,?,?,?,?);");
+            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_systemParameter(id, portName, systemLanguage, soundOn, theme) VALUES(?,?,?,?,?);");
             stm.setInt(1, 1);
             stm.setString(2, systemParameter.getPortName());
             stm.setString(3, systemParameter.getSystemLanguage());
@@ -88,15 +88,15 @@ public class SystemParameterDAO extends DBConnection {
         SystemParameter result = null;
         try {
             openConnection();
-            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_systemParameter WHERE id = 1;");
+            PreparedStatement stm = conn.prepareStatement("SELECT id, portName, systemLanguage, soundOn, theme FROM tb_systemParameter WHERE id = 1;");
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 SystemParameter systemParameter = new SystemParameter(
-                    rs.getInt(1),//user id
-                    rs.getString(2),//portName
-                    rs.getString(3),//system Language
-                    rs.getString(4),//soundOn
-                    rs.getString(5));//theme
+                    rs.getInt("id"),//user id
+                    rs.getString("portName"),//portName
+                    rs.getString("systemLanguage"),//system Language
+                    rs.getString("soundOn"),//soundOn
+                    rs.getString("theme"));//theme
                 result = systemParameter;
             }
         } catch (SQLException e) {

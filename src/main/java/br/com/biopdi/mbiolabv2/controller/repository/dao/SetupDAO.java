@@ -79,7 +79,12 @@ public class SetupDAO extends DBConnection {
     public void create(Setup setup) {
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_setup VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_setup(setupId, setupUserId, MC1M1, MC2M1, " +
+                    "MC3M1, MC4M1, MC5M1, MC6M1, MC7M1, MC8M1, MC9M1, MC10M1, MC11M1, MC12M1, MC13M1, MC14M1, MC15M1, " +
+                    "MC16M1, MC17M1, MC18M1, MC19M1, MC20M1, MC21M1, MC22M1, MC23M1, MC24M1, MC25M1, MC26M1, MC27M1, " +
+                    "MC28M1, MC29M1, MC30M1, channel1ext1, channel2ext1, channel3ext1, channel4ext1, channel1ext2, " +
+                    "channel2ext2, channel3ext2, channel4ext2, setupName, setupAuthor, setupData) " +
+                    "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
             stm.setInt(2, setup.getUserId());
             stm.setInt(3, setup.getMC1M1());
             stm.setInt(4, setup.getMC2M1());
@@ -140,53 +145,57 @@ public class SetupDAO extends DBConnection {
         ArrayList<Setup> result = new ArrayList<>();
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_setup ORDER BY setupId ASC;");
+            PreparedStatement stm = conn.prepareStatement("SELECT setupId, setupUserId, MC1M1, MC2M1, MC3M1, MC4M1, " +
+                    "MC5M1, MC6M1, MC7M1, MC8M1, MC9M1, MC10M1, MC11M1, MC12M1, MC13M1, MC14M1, MC15M1, MC16M1, MC17M1, " +
+                    "MC18M1, MC19M1, MC20M1, MC21M1, MC22M1, MC23M1, MC24M1, MC25M1, MC26M1, MC27M1, MC28M1, MC29M1, " +
+                    "MC30M1, channel1ext1, channel2ext1, channel3ext1, channel4ext1, channel1ext2, channel2ext2, " +
+                    "channel3ext2, channel4ext2, setupName, setupAuthor, setupData FROM tb_setup ORDER BY setupId ASC;");
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Setup setup = new Setup(
-                        rs.getInt(1),//setup id
-                        rs.getInt(2),//setup user id
-                        rs.getInt(3),//setup MC1M1
-                        rs.getInt(4),//setup MC2M1
-                        rs.getInt(5),//setup MC3M1
-                        rs.getInt(6),//setup MC4M1
-                        rs.getInt(7),//setup MC5M1
-                        rs.getInt(8),//setup MC6M1
-                        rs.getInt(9),//setup MC7M1
-                        rs.getInt(10),//setup MC8M1
-                        rs.getInt(11),//setup MC9M1
-                        rs.getInt(12),//setup MC10M1
-                        rs.getInt(13),//setup MC11M1
-                        rs.getInt(14),//setup MC12M1
-                        rs.getInt(15),//setup MC13M1
-                        rs.getInt(16),//setup MC14M1
-                        rs.getInt(17),//setup MC15M1
-                        rs.getInt(18),//setup MC16M1
-                        rs.getInt(19),//setup MC17M1
-                        rs.getInt(20),//setup MC18M1
-                        rs.getInt(21),//setup MC19M1
-                        rs.getInt(22),//setup MC20M1
-                        rs.getInt(23),//setup MC21M1
-                        rs.getInt(24),//setup MC22M1
-                        rs.getInt(25),//setup MC23M1
-                        rs.getInt(26),//setup MC24M1
-                        rs.getInt(27),//setup MC25M1
-                        rs.getInt(28),//setup MC26M1
-                        rs.getInt(29),//setup MC27M1
-                        rs.getInt(30),//setup MC28M1
-                        rs.getInt(31),//setup MC29M1
-                        rs.getInt(32),//setup MC30M1
-                        rs.getInt(33),//setup channel1ext1
-                        rs.getInt(34),//setup channel2ext1
-                        rs.getInt(35),//setup channel3ext1
-                        rs.getInt(36),//setup channel4ext1
-                        rs.getInt(37),//setup channel1ext2
-                        rs.getInt(38),//setup channel2ext2
-                        rs.getInt(39),//setup channel3ext2
-                        rs.getInt(40),//setup channel4ext2
-                        rs.getString(41),//setup Name
-                        rs.getString(42),//setup Author
-                        rs.getString(43));//setup Date
+                        rs.getInt("setupId"),//setup id
+                        rs.getInt("setupUserId"),//setup user id
+                        rs.getInt("MC1M1"),//setup MC1M1
+                        rs.getInt("MC2M1"),//setup MC2M1
+                        rs.getInt("MC3M1"),//setup MC3M1
+                        rs.getInt("MC4M1"),//setup MC4M1
+                        rs.getInt("MC5M1"),//setup MC5M1
+                        rs.getInt("MC6M1"),//setup MC6M1
+                        rs.getInt("MC7M1"),//setup MC7M1
+                        rs.getInt("MC8M1"),//setup MC8M1
+                        rs.getInt("MC9M1"),//setup MC9M1
+                        rs.getInt("MC10M1"),//setup MC10M1
+                        rs.getInt("MC11M1"),//setup MC11M1
+                        rs.getInt("MC12M1"),//setup MC12M1
+                        rs.getInt("MC13M1"),//setup MC13M1
+                        rs.getInt("MC14M1"),//setup MC14M1
+                        rs.getInt("MC15M1"),//setup MC15M1
+                        rs.getInt("MC16M1"),//setup MC16M1
+                        rs.getInt("MC17M1"),//setup MC17M1
+                        rs.getInt("MC18M1"),//setup MC18M1
+                        rs.getInt("MC19M1"),//setup MC19M1
+                        rs.getInt("MC20M1"),//setup MC20M1
+                        rs.getInt("MC21M1"),//setup MC21M1
+                        rs.getInt("MC22M1"),//setup MC22M1
+                        rs.getInt("MC23M1"),//setup MC23M1
+                        rs.getInt("MC24M1"),//setup MC24M1
+                        rs.getInt("MC25M1"),//setup MC25M1
+                        rs.getInt("MC26M1"),//setup MC26M1
+                        rs.getInt("MC27M1"),//setup MC27M1
+                        rs.getInt("MC28M1"),//setup MC28M1
+                        rs.getInt("MC29M1"),//setup MC29M1
+                        rs.getInt("MC30M1"),//setup MC30M1
+                        rs.getInt("channel1ext1"),//setup channel1ext1
+                        rs.getInt("channel2ext1"),//setup channel2ext1
+                        rs.getInt("channel3ext1"),//setup channel3ext1
+                        rs.getInt("channel4ext1"),//setup channel4ext1
+                        rs.getInt("channel1ext2"),//setup channel1ext2
+                        rs.getInt("channel2ext2"),//setup channel2ext2
+                        rs.getInt("channel3ext2"),//setup channel3ext2
+                        rs.getInt("channel4ext2"),//setup channel4ext2
+                        rs.getString("setupName"),//setup Name
+                        rs.getString("setupAuthor"),//setup Author
+                        rs.getString("setupData"));//setup Date
                 result.add(setup);
             }
         } catch (SQLException e) {
@@ -329,54 +338,58 @@ public class SetupDAO extends DBConnection {
         Setup result = null;
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_setup WHERE setupId = ?;");
+            PreparedStatement stm = conn.prepareStatement("SELECT setupId, setupUserId, MC1M1, MC2M1, MC3M1, MC4M1, " +
+                    "MC5M1, MC6M1, MC7M1, MC8M1, MC9M1, MC10M1, MC11M1, MC12M1, MC13M1, MC14M1, MC15M1, MC16M1, MC17M1, " +
+                    "MC18M1, MC19M1, MC20M1, MC21M1, MC22M1, MC23M1, MC24M1, MC25M1, MC26M1, MC27M1, MC28M1, MC29M1, " +
+                    "MC30M1, channel1ext1, channel2ext1, channel3ext1, channel4ext1, channel1ext2, channel2ext2, " +
+                    "channel3ext2, channel4ext2, setupName, setupAuthor, setupData FROM tb_setup WHERE setupId = ?;");
             stm.setInt(1, pk);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Setup setup = new Setup(
-                        rs.getInt(1),//setup id
-                        rs.getInt(2),//setup user id
-                        rs.getInt(3),//setup MC1M1
-                        rs.getInt(4),//setup MC2M1
-                        rs.getInt(5),//setup MC3M1
-                        rs.getInt(6),//setup MC4M1
-                        rs.getInt(7),//setup MC5M1
-                        rs.getInt(8),//setup MC6M1
-                        rs.getInt(9),//setup MC7M1
-                        rs.getInt(10),//setup MC8M1
-                        rs.getInt(11),//setup MC9M1
-                        rs.getInt(12),//setup MC10M1
-                        rs.getInt(13),//setup MC11M1
-                        rs.getInt(14),//setup MC12M1
-                        rs.getInt(15),//setup MC13M1
-                        rs.getInt(16),//setup MC14M1
-                        rs.getInt(17),//setup MC15M1
-                        rs.getInt(18),//setup MC16M1
-                        rs.getInt(19),//setup MC17M1
-                        rs.getInt(20),//setup MC18M1
-                        rs.getInt(21),//setup MC19M1
-                        rs.getInt(22),//setup MC20M1
-                        rs.getInt(23),//setup MC21M1
-                        rs.getInt(24),//setup MC22M1
-                        rs.getInt(25),//setup MC23M1
-                        rs.getInt(26),//setup MC24M1
-                        rs.getInt(27),//setup MC25M1
-                        rs.getInt(28),//setup MC26M1
-                        rs.getInt(29),//setup MC27M1
-                        rs.getInt(30),//setup MC28M1
-                        rs.getInt(31),//setup MC29M1
-                        rs.getInt(32),//setup MC30M1
-                        rs.getInt(33),//setup channel1ext1
-                        rs.getInt(34),//setup channel2ext1
-                        rs.getInt(35),//setup channel3ext1
-                        rs.getInt(36),//setup channel4ext1
-                        rs.getInt(37),//setup channel1ext2
-                        rs.getInt(38),//setup channel2ext2
-                        rs.getInt(39),//setup channel3ext2
-                        rs.getInt(40),//setup channel4ext2
-                        rs.getString(41),//setup Name
-                        rs.getString(42),//setup Author
-                        rs.getString(43));//setup Data
+                        rs.getInt("setupId"),//setup id
+                        rs.getInt("setupUserId"),//setup user id
+                        rs.getInt("MC1M1"),//setup MC1M1
+                        rs.getInt("MC2M1"),//setup MC2M1
+                        rs.getInt("MC3M1"),//setup MC3M1
+                        rs.getInt("MC4M1"),//setup MC4M1
+                        rs.getInt("MC5M1"),//setup MC5M1
+                        rs.getInt("MC6M1"),//setup MC6M1
+                        rs.getInt("MC7M1"),//setup MC7M1
+                        rs.getInt("MC8M1"),//setup MC8M1
+                        rs.getInt("MC9M1"),//setup MC9M1
+                        rs.getInt("MC10M1"),//setup MC10M1
+                        rs.getInt("MC11M1"),//setup MC11M1
+                        rs.getInt("MC12M1"),//setup MC12M1
+                        rs.getInt("MC13M1"),//setup MC13M1
+                        rs.getInt("MC14M1"),//setup MC14M1
+                        rs.getInt("MC15M1"),//setup MC15M1
+                        rs.getInt("MC16M1"),//setup MC16M1
+                        rs.getInt("MC17M1"),//setup MC17M1
+                        rs.getInt("MC18M1"),//setup MC18M1
+                        rs.getInt("MC19M1"),//setup MC19M1
+                        rs.getInt("MC20M1"),//setup MC20M1
+                        rs.getInt("MC21M1"),//setup MC21M1
+                        rs.getInt("MC22M1"),//setup MC22M1
+                        rs.getInt("MC23M1"),//setup MC23M1
+                        rs.getInt("MC24M1"),//setup MC24M1
+                        rs.getInt("MC25M1"),//setup MC25M1
+                        rs.getInt("MC26M1"),//setup MC26M1
+                        rs.getInt("MC27M1"),//setup MC27M1
+                        rs.getInt("MC28M1"),//setup MC28M1
+                        rs.getInt("MC29M1"),//setup MC29M1
+                        rs.getInt("MC30M1"),//setup MC30M1
+                        rs.getInt("channel1ext1"),//setup channel1ext1
+                        rs.getInt("channel2ext1"),//setup channel2ext1
+                        rs.getInt("channel3ext1"),//setup channel3ext1
+                        rs.getInt("channel4ext1"),//setup channel4ext1
+                        rs.getInt("channel1ext2"),//setup channel1ext2
+                        rs.getInt("channel2ext2"),//setup channel2ext2
+                        rs.getInt("channel3ext2"),//setup channel3ext2
+                        rs.getInt("channel4ext2"),//setup channel4ext2
+                        rs.getString("setupName"),//setup Name
+                        rs.getString("setupAuthor"),//setup Author
+                        rs.getString("setupData"));//setup Date
                 result = setup;
             }
         } catch (SQLException e) {

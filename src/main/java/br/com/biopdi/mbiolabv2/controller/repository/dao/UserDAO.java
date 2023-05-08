@@ -40,7 +40,7 @@ public class UserDAO extends DBConnection {
     public void createWithImage(User user) {
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_user VALUES(?,?,?,?,?);");
+            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_user(userId, userName, userLogin, userPassword, userImagePath) VALUES(?,?,?,?,?);");
             stm.setString(2, user.getUserName());
             stm.setString(3, user.getUserLogin());
             stm.setString(4, user.getUserPassword());
@@ -62,7 +62,7 @@ public class UserDAO extends DBConnection {
     public void create(User user) {
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_user VALUES(?,?,?,?,?);");
+            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_user(userId, userName, userLogin, userPassword, userImagePath) VALUES (?,?,?,?,?);");
             stm.setString(2, user.getUserName());
             stm.setString(3, user.getUserLogin());
             stm.setString(4, user.getUserPassword());
@@ -84,15 +84,15 @@ public class UserDAO extends DBConnection {
         ArrayList<User> result = new ArrayList<>();
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_user ORDER BY userId ASC;");
+            PreparedStatement stm = conn.prepareStatement("SELECT userId, userName, userLogin, userPassword, userImagePath FROM tb_user ORDER BY userId ASC;");
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 User user = new User(
-                    rs.getInt(1),//user id
-                    rs.getString(2),//username
-                    rs.getString(3),//user login
-                    rs.getString(4));//user password
-                    rs.getString(5);//user image
+                    rs.getInt("userId"),//user id
+                    rs.getString("userName"),//username
+                    rs.getString("userLogin"),//user login
+                    rs.getString("userPassword"));//user password
+                    rs.getString("userImagePath");//user image
                 result.add(user);
             }
         } catch (SQLException e) {
@@ -158,16 +158,16 @@ public class UserDAO extends DBConnection {
         User result = null;
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_user WHERE userId = ?;");
+            PreparedStatement stm = conn.prepareStatement("SELECT userId, userName, userLogin, userPassword, userImagePath FROM tb_user WHERE userId = ?;");
             stm.setInt(1, pk);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 User user = new User(
-                        rs.getInt(1),//user id
-                        rs.getString(2),//username
-                        rs.getString(3),//user login
-                        rs.getString(4));//user password
-                        rs.getString(5);//user image
+                        rs.getInt("userId"),//user id
+                        rs.getString("userName"),//username
+                        rs.getString("userLogin"),//user login
+                        rs.getString("userPassword"));//user password
+                        rs.getString("userImagePath");//user image
                 result = user;
             }
         } catch (SQLException e) {
@@ -188,16 +188,16 @@ public class UserDAO extends DBConnection {
         User result = null;
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_user WHERE userLogin = ?;");
+            PreparedStatement stm = conn.prepareStatement("SELECT userId, userName, userLogin, userPassword, userImagePath FROM tb_user WHERE userLogin = ?;");
             stm.setString(1, stg);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 User user = new User(
-                    rs.getInt(1),//user id
-                    rs.getString(2),//username
-                    rs.getString(3),//user login
-                    rs.getString(4));//user password
-                    rs.getString(5);//user image
+                    rs.getInt("userId"),//user id
+                    rs.getString("userName"),//username
+                    rs.getString("userLogin"),//user login
+                    rs.getString("userPassword"));//user password
+                    rs.getString("userImagePath");//user image
                 result = user;
             }
         } catch (SQLException e) {
