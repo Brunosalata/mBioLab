@@ -51,7 +51,10 @@ public class EssayDAO extends DBConnection {
     public void create(Essay essay) {
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_essay VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_essay(essayId, essayUser, essayIdentification, " +
+                    "essayNorm, essayUsedMachine, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, " +
+                    "essayFinalPosition, essaydislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, " +
+                    "essayChart, essayData) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
             stm.setInt(2, essay.getUserId());
             stm.setString(3, essay.getEssayIdentification());
             stm.setString(4, essay.getEssayNorm());
@@ -85,26 +88,29 @@ public class EssayDAO extends DBConnection {
         ArrayList<Essay> result = new ArrayList<>();
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_essay ORDER BY essayId ASC;");
+            PreparedStatement stm = conn.prepareStatement("SELECT essayId, essayUser, essayIdentification, essayNorm, " +
+                    "essayUsedMachine, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, " +
+                    "essayFinalPosition, essaydislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, " +
+                    "essayChart, essayData FROM tb_essay ORDER BY essayId ASC;");
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Essay essay = new Essay(
-                        rs.getInt(1),//essay id
-                        rs.getInt(2),//essay user id
-                        rs.getString(3),//essay identification
-                        rs.getString(4),//essay norm
-                        rs.getString(5),//essay Charge cell
-                        rs.getDouble(6),//essay Used Machine
-                        rs.getDouble(7),//essay Initial Force
-                        rs.getDouble(8),//essay Final Force
-                        rs.getDouble(9),//essay Initial Position
-                        rs.getDouble(10),//essay Final Position
-                        rs.getDouble(11),//essay Dislocation velocity
-                        rs.getDouble(12),//essay Temperature
-                        rs.getDouble(13),//essay Pre Charge
-                        rs.getDouble(14),//essay Relative Humidity
-                        rs.getString(15),//essay Chart
-                        rs.getString(16));//essay Data
+                        rs.getInt("essayId"),//essay id
+                        rs.getInt("essayUser"),//essay user id
+                        rs.getString("essayIdentification"),//essay identification
+                        rs.getString("essayNorm"),//essay norm
+                        rs.getString("essayUsedMachine"),//essay Charge cell
+                        rs.getDouble("essayChargeCell"),//essay Used Machine
+                        rs.getDouble("essayInitialForce"),//essay Initial Force
+                        rs.getDouble("essayFinalForce"),//essay Final Force
+                        rs.getDouble("essayInitialPosition"),//essay Initial Position
+                        rs.getDouble("essayFinalPosition"),//essay Final Position
+                        rs.getDouble("essaydislocationVelocity"),//essay Dislocation velocity
+                        rs.getDouble("essayTemperature"),//essay Temperature
+                        rs.getDouble("essayPreCharge"),//essay Pre Charge
+                        rs.getDouble("essayRelativeHumidity"),//essay Relative Humidity
+                        rs.getString("essayChart"),//essay Chart
+                        rs.getString("essayData"));//essay Data
                 result.add(essay);
             }
         } catch (SQLException e) {
@@ -192,27 +198,30 @@ public class EssayDAO extends DBConnection {
         Essay result = null;
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_essay WHERE essayId = ?;");
+            PreparedStatement stm = conn.prepareStatement("SELECT essayId, essayUser, essayIdentification, essayNorm, " +
+                    "essayUsedMachine, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, " +
+                    "essayFinalPosition, essaydislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, " +
+                    "essayChart, essayData FROM tb_essay WHERE essayId = ?;");
             stm.setInt(1, pk);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Essay essay = new Essay(
-                        rs.getInt(1),//essay id
-                        rs.getInt(2),//essay user id
-                        rs.getString(3),//essay identification
-                        rs.getString(4),//essay norm
-                        rs.getString(5),//essay Charge cell
-                        rs.getDouble(6),//essay Used Machine
-                        rs.getDouble(7),//essay Initial Force
-                        rs.getDouble(8),//essay Final Force
-                        rs.getDouble(9),//essay Initial Position
-                        rs.getDouble(10),//essay Final Position
-                        rs.getDouble(11),//essay Dislocation velocity
-                        rs.getDouble(12),//essay Temperature
-                        rs.getDouble(13),//essay Pre Charge
-                        rs.getDouble(14),//essay Relative Humidity
-                        rs.getString(15),//essay Chart
-                        rs.getString(16));//essay Data
+                        rs.getInt("essayId"),//essay id
+                        rs.getInt("essayUser"),//essay user id
+                        rs.getString("essayIdentification"),//essay identification
+                        rs.getString("essayNorm"),//essay norm
+                        rs.getString("essayUsedMachine"),//essay Charge cell
+                        rs.getDouble("essayChargeCell"),//essay Used Machine
+                        rs.getDouble("essayInitialForce"),//essay Initial Force
+                        rs.getDouble("essayFinalForce"),//essay Final Force
+                        rs.getDouble("essayInitialPosition"),//essay Initial Position
+                        rs.getDouble("essayFinalPosition"),//essay Final Position
+                        rs.getDouble("essaydislocationVelocity"),//essay Dislocation velocity
+                        rs.getDouble("essayTemperature"),//essay Temperature
+                        rs.getDouble("essayPreCharge"),//essay Pre Charge
+                        rs.getDouble("essayRelativeHumidity"),//essay Relative Humidity
+                        rs.getString("essayChart"),//essay Chart
+                        rs.getString("essayData"));//essay Data
                 result = essay;
             }
         } catch (SQLException e) {
@@ -233,27 +242,30 @@ public class EssayDAO extends DBConnection {
         ArrayList<Essay> result = new ArrayList<>();
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_essay WHERE essayUserId = ?;");
+            PreparedStatement stm = conn.prepareStatement("SELECT essayId, essayUser, essayIdentification, essayNorm, " +
+                    "essayUsedMachine, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, " +
+                    "essayFinalPosition, essaydislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, " +
+                    "essayChart, essayData FROM tb_essay WHERE essayUserId = ?;");
             stm.setInt(1, userId);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Essay essay = new Essay(
-                        rs.getInt(1),//essay id
-                        rs.getInt(2),//essay user id
-                        rs.getString(3),//essay identification
-                        rs.getString(4),//essay norm
-                        rs.getString(5),//essay Charge cell
-                        rs.getDouble(6),//essay Used Machine
-                        rs.getDouble(7),//essay Initial Force
-                        rs.getDouble(8),//essay Final Force
-                        rs.getDouble(9),//essay Initial Position
-                        rs.getDouble(10),//essay Final Position
-                        rs.getDouble(11),//essay Dislocation velocity
-                        rs.getDouble(12),//essay Temperature
-                        rs.getDouble(13),//essay Pre Charge
-                        rs.getDouble(14),//essay Relative Humidity
-                        rs.getString(15),//essay Chart
-                        rs.getString(16));//essay Data
+                        rs.getInt("essayId"),//essay id
+                        rs.getInt("essayUser"),//essay user id
+                        rs.getString("essayIdentification"),//essay identification
+                        rs.getString("essayNorm"),//essay norm
+                        rs.getString("essayUsedMachine"),//essay Charge cell
+                        rs.getDouble("essayChargeCell"),//essay Used Machine
+                        rs.getDouble("essayInitialForce"),//essay Initial Force
+                        rs.getDouble("essayFinalForce"),//essay Final Force
+                        rs.getDouble("essayInitialPosition"),//essay Initial Position
+                        rs.getDouble("essayFinalPosition"),//essay Final Position
+                        rs.getDouble("essaydislocationVelocity"),//essay Dislocation velocity
+                        rs.getDouble("essayTemperature"),//essay Temperature
+                        rs.getDouble("essayPreCharge"),//essay Pre Charge
+                        rs.getDouble("essayRelativeHumidity"),//essay Relative Humidity
+                        rs.getString("essayChart"),//essay Chart
+                        rs.getString("essayData"));//essay Data
                 result.add(essay);
             }
         } catch (SQLException e) {
@@ -271,26 +283,29 @@ public class EssayDAO extends DBConnection {
         Essay result = null;
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("SELECT * FROM tb_essay ORDER BY essayId DESC limit 1;");
+            PreparedStatement stm = conn.prepareStatement("essayId, essayUser, essayIdentification, essayNorm, " +
+                    "essayUsedMachine, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, " +
+                    "essayFinalPosition, essaydislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, " +
+                    "essayChart, essayData FROM tb_essay ORDER BY essayId DESC limit 1;");
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Essay essay = new Essay(
-                        rs.getInt(1),//essay id
-                        rs.getInt(2),//essay user id
-                        rs.getString(3),//essay identification
-                        rs.getString(4),//essay norm
-                        rs.getString(5),//essay Charge cell
-                        rs.getDouble(6),//essay Used Machine
-                        rs.getDouble(7),//essay Initial Force
-                        rs.getDouble(8),//essay Final Force
-                        rs.getDouble(9),//essay Initial Position
-                        rs.getDouble(10),//essay Final Position
-                        rs.getDouble(11),//essay Dislocation velocity
-                        rs.getDouble(12),//essay Temperature
-                        rs.getDouble(13),//essay Pre Charge
-                        rs.getDouble(14),//essay Relative Humidity
-                        rs.getString(15),//essay Chart
-                        rs.getString(16));//essay Data
+                        rs.getInt("essayId"),//essay id
+                        rs.getInt("essayUser"),//essay user id
+                        rs.getString("essayIdentification"),//essay identification
+                        rs.getString("essayNorm"),//essay norm
+                        rs.getString("essayUsedMachine"),//essay Charge cell
+                        rs.getDouble("essayChargeCell"),//essay Used Machine
+                        rs.getDouble("essayInitialForce"),//essay Initial Force
+                        rs.getDouble("essayFinalForce"),//essay Final Force
+                        rs.getDouble("essayInitialPosition"),//essay Initial Position
+                        rs.getDouble("essayFinalPosition"),//essay Final Position
+                        rs.getDouble("essaydislocationVelocity"),//essay Dislocation velocity
+                        rs.getDouble("essayTemperature"),//essay Temperature
+                        rs.getDouble("essayPreCharge"),//essay Pre Charge
+                        rs.getDouble("essayRelativeHumidity"),//essay Relative Humidity
+                        rs.getString("essayChart"),//essay Chart
+                        rs.getString("essayData"));//essay Data
                 result = essay;
             }
         } catch (SQLException e) {
