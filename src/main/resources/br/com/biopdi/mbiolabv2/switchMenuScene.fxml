@@ -15,29 +15,6 @@
 <AnchorPane fx:id="apSwitchMenu" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.SwitchMenuSceneController">
    <children>
       <BorderPane fx:id="mainPane" layoutX="200.0" layoutY="100.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #005897;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <bottom>
-            <HBox id="HBox" alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="444.0" spacing="5.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Label maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="405.0" text="LABEL" textFill="#e4e4e4" HBox.hgrow="ALWAYS">
-                     <font>
-                        <Font size="11.0" fx:id="x3" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="473.0" text="Soluções em ensaios de materiais © Biopdi 2023" textFill="#e4e4e4" />
-                  <Label fx:id="lbCurrentData" alignment="CENTER_RIGHT" font="$x3" graphicTextGap="5.0" maxHeight="1.7976931348623157E308" maxWidth="-1.0" prefHeight="21.0" prefWidth="405.0" text="DATA : HORA" textFill="#e4e4e4" HBox.hgrow="ALWAYS">
-                     <HBox.margin>
-                        <Insets right="20.0" />
-                     </HBox.margin>
-                  </Label>
-               </children>
-               <padding>
-                  <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-               </padding>
-            </HBox>
-         </bottom>
          <left>
             <VBox prefHeight="693.0" prefWidth="234.0" style="-fx-background-color: #2C2C2C;" BorderPane.alignment="CENTER">
                <children>
@@ -135,6 +112,44 @@
                </BorderPane.margin>
             </ImageView>
          </center>
+         <bottom>
+            <HBox id="HBox" alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="444.0" spacing="5.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox minWidth="-Infinity" prefHeight="200.0" prefWidth="250.0">
+                     <children>
+                        <Label maxWidth="-1.0" minWidth="-Infinity" prefHeight="21.0" prefWidth="250.0" text="LABEL" textFill="#e4e4e4" VBox.vgrow="ALWAYS">
+                           <font>
+                              <Font size="11.0" fx:id="x3" />
+                           </font>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="771.0" text="Soluções em ensaios de materiais © Biopdi 2023" textFill="#e4e4e4" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="250.0">
+                     <children>
+                        <Label fx:id="lbCurrentData" alignment="CENTER_RIGHT" graphicTextGap="5.0" maxHeight="1.7976931348623157E308" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="250.0" text="DATA : HORA" textFill="#e4e4e4" VBox.vgrow="ALWAYS">
+                           <font>
+                              <Font size="11.0" fx:id="x4" />
+                           </font>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+               </padding>
+            </HBox>
+         </bottom>
       </BorderPane>
    </children>
 </AnchorPane>

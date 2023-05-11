@@ -165,12 +165,8 @@ public class UserRegisterSceneController implements Initializable {
                 user.setUserName(txtName.getText());
                 user.setUserLogin(txtLogin.getText());
                 user.setUserPassword(txtPassword.getText());
-                if(imageFile!=null){
-                    user.setUserImagePath(imageFilePath);
-                    userDAO.createWithImage(user);
-                } else {
-                    userDAO.create(user);
-                }
+                user.setUserImagePath(imageFilePath);
+                userDAO.create(user);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Cadastro");
                 alert.setHeaderText("Sucesso!");

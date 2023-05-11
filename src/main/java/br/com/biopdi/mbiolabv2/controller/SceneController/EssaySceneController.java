@@ -12,10 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.io.PrintWriter;
 import java.net.URL;
@@ -35,25 +32,28 @@ public class EssaySceneController implements Initializable {
 
     // Puxar dados do DB systemVariable salvas na Thread de leitura FPReadingThread()
     @FXML
-    private ComboBox cbMethodList;
-    //    @FXML
-//    private NumberAxis xEssayChart, yEssayChart, xChartSingle, yChartSingle,xChartMulti, yChartMulti;
+    private ComboBox cbMethodList, cbNormList, cbEssayType;
     @FXML
     private LineChart<Number, Number> chartEssayLine;
     private XYChart.Series<Number, Number> series;
     @FXML
-    private TextField txtConnected, txtForceView, txtPositionView, txtAdjustVelocity, txtEssayVelocity, txtEssayUserId, txtLed;
+    private Label lbFMax, lbPMax, lbTMax, lbTEsc, lbAlong, lbRedArea, lbMYoung, lbEssayTemperature, lbEssayRelativeHumidity;
     @FXML
-    private Label lbEssayTemperature, lbEssayRelativeHumidity;
-    @FXML
-    private TextField txtEssayIdentification, txtEssayNorm, txtUsedMachine, txtEssayChargeCell, txtInitialForce, txtFinalForce, txtInitialPosition, txtFinalPosition, txtDislocationVelocity, txtEssayPreCharge;
+    private TextField txtConnected, txtForceView, txtPositionView, txtEssayVelocity, txtAdjustVelocity,
+            txtEssayIdentification, txtEssayNorm, txtUsedMachine, txtEssayChargeCell, txtInitialForce,
+            txtFinalForce, txtInitialPosition, txtFinalPosition, txtDislocationVelocity, txtEssayPreCharge,
+            txtMaxForceBreak, txtDislocationValueBreak, txtDislocationValuePause, txtForcePercentageBreak;
     @FXML
     private Button btnStart, btnPause, btnStop, btnChargeMethod, btnEssayByUserId, btnEssaySave;
+    @FXML
+    private RadioButton rbForceDown, rbMaxForce, rbDislocationStop, rbDislocationPause;
     private SerialPort port;
 
-    private Double initialForce, finalForce, initialPosition, finalPosition;
+    private Double initialForce, finalForce, initialPosition, finalPosition, fMax = 0.0D, pMax = 0.0D,
+            tMax = 0.0D, tEsc = 0.0D, along = 0.0D, redArea = 0.0D, mYoung = 0.0D;
     private String chartString = null;
     private Boolean moving = false;
+    private int autoBreakCount;
 
 
     Date systemDate = new Date();
@@ -63,7 +63,8 @@ public class EssaySceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        normList();
+        essayTypeList();
         autoConnect();
         savedMethodList();
 
@@ -76,17 +77,17 @@ public class EssaySceneController implements Initializable {
      */
     class SystemVariableReader implements Runnable {
         SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
-
         @Override
-        public void run() {
+        public synchronized void run() {
+
             try {
                 Thread.sleep(1000);
                 while (true) {
                     outputInjection("1");  // Requerimento do valor da força
-                    Thread.sleep(13);
+                    Thread.sleep(20);
                     String impF = inputValue();
                     outputInjection("2");  // requerimento do valor da posição
-                    Thread.sleep(13);
+                    Thread.sleep(20);
                     String impP = inputValue();
 
                     // Salvando dados no banco de dados - dados persistentes como variável global
@@ -99,6 +100,7 @@ public class EssaySceneController implements Initializable {
                         txtPositionView.setText(String.format("%.2f", Double.valueOf(impP)));
                     });
                 }
+
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -109,7 +111,7 @@ public class EssaySceneController implements Initializable {
      * Método de conexão automática, buscando o portName do systemSetting no DB
      */
     @FXML
-    private void autoConnect() {
+    private synchronized void autoConnect() {
 
         // Instance to get an object SystemParameter from tb_systemParameter (single line)
         SystemParameter sysPar = systemParameterDAO.find();
@@ -152,12 +154,31 @@ public class EssaySceneController implements Initializable {
      * @return method
      */
     @FXML
-    private Method chargeMethod() {
+    private void chargeMethod() {
         Method method = new MethodDAO().findByMethod(cbMethodList.getSelectionModel().getSelectedItem().toString());
         System.out.println(method);
-        return method;
+        //SETTAR VALORES NAS TEXTFIELD
     }
 
+    /**
+     * Método de listagem de idiomas dentro do ComboBox (cbLanguage)
+     */
+    private void normList() {
+        String[] normList = new String[]{"ISO 6892-1", "NBR13384", "NBR5739"};
+        for (String norm : normList) {
+            cbNormList.getItems().add(norm);
+        }
+    }
+
+    /**
+     * Método de listagem de idiomas dentro do ComboBox (cbLanguage)
+     */
+    private void essayTypeList() {
+        String[] essayTypes = new String[]{"Compressão", "Fadiga", "Flexão", "Tração"};
+        for (String type : essayTypes) {
+            cbEssayType.getItems().add(type);
+        }
+    }
 
 //    ************* Chart Construction *****************
 
@@ -169,27 +190,87 @@ public class EssaySceneController implements Initializable {
         int count = 0;
 
         @Override
-        public void run() {
+        public synchronized void run() {
+            List<Double> forceList = new ArrayList<>();
+            List<Double> positionList = new ArrayList<>();
+
             try {
                 while (count < 10) {
 
-                    Thread.sleep(50);
+                    Thread.sleep(15);
                     SystemVariable sysVar = systemVariableDAO.find();
-                    double x = sysVar.getForce();
-                    double y = sysVar.getPosition();
-                    System.out.println(x + " " + y);
+                    double f = sysVar.getForce();
+                    double p = sysVar.getPosition();
+
+                    // Armazenando Forca e Posicao em arrays
+                    forceList.add(f);
+                    positionList.add(p);
+
+                    //Identifica valor de Forca Max N
+                    Platform.runLater(() -> {
+                        // Update UI.
+                        for(Double force : forceList){
+                            if(force>fMax){
+                                fMax=force;
+                            }
+                            lbFMax.setText(String.format("%.2f", Double.valueOf(fMax)));
+                        }
+                    });
+                    //Identifica valor de Posicao Max mm
+                    Platform.runLater(() -> {
+                        // Update UI.
+                        for(Double position : positionList){
+                            if(position>pMax){
+                                pMax=position;
+                            }
+                            lbPMax.setText(String.format("%.2f", Double.valueOf(pMax)));
+                        }
+                    });
+                    //Identifica valor de Tensao Max MPa
+                    Platform.runLater(() -> {
+                        // Update UI.
+                        // condição
+                        lbTMax.setText(String.valueOf(1));
+
+                    });
+                    //Identifica valor de Tensao de escoamento MPa
+                    Platform.runLater(() -> {
+                        // Update UI.
+                        // condição
+                        lbTEsc.setText(String.valueOf(1));
+                    });
+                    //Identifica valor de Alongamento %
+                    Platform.runLater(() -> {
+                        // Update UI.
+                        // condição
+                        lbAlong.setText(String.valueOf(1));
+                    });
+                    //Identifica valor de Reducao de Area %
+                    Platform.runLater(() -> {
+                        // Update UI.
+                        // condição
+                        lbRedArea.setText(String.valueOf(1));
+                    });
+                    //Identifica valor de M. Young MPa
+                    Platform.runLater(() -> {
+                        // Update UI.
+                        // condição
+                        lbMYoung.setText(String.valueOf(1));
+                    });
+
+                    System.out.println(f + " " + p);
                     // Avoid throwing IllegalStateException by running from a non-JavaFX thread.
                     Platform.runLater(() -> {
                         // Update UI.
-                        series.getData().add(new XYChart.Data<>(x, y));
+                        series.getData().add(new XYChart.Data<>(f, p));
                     });
 
                     // Adding dot values in a global String chartString
                     // essayChart String type: 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
                     if (chartString != null) {
-                        chartString += "," + x + ";" + y;
+                        chartString += "," + f + ";" + p;
                     } else {
-                        chartString = x + ";" + y;
+                        chartString = f + ";" + p;
                     }
                     System.out.println(chartString);
                     count++;
@@ -268,7 +349,7 @@ public class EssaySceneController implements Initializable {
     private void forceRequest() throws InterruptedException {
         outputInjection("1");
         Thread.sleep(20);
-//        txtForceView.setText(inputValue());
+
         //incluir tara para força
     }
 
@@ -279,7 +360,7 @@ public class EssaySceneController implements Initializable {
     private void positionRequest() throws InterruptedException {
         outputInjection("2");
         Thread.sleep(20);
-//        txtPositionView.setText(inputValue());
+
         //incluir validação de real movimento do eixo
     }
 
@@ -365,11 +446,23 @@ public class EssaySceneController implements Initializable {
      */
     @FXML
     private void essayStart() throws InterruptedException {
+        try{
+            essayVelocity();
+            Thread.sleep(15);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+            //Comando para subir ou descer o eixo
+
+        if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Tração"){
+
+        } else if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Compressão" ||
+        cbEssayType.getSelectionModel().getSelectedItem().toString()=="Flexão"){
+
+        }
+        //SE PRA BAIXO, ESSAY DOWN
         moving = true;
-        // Setting initial values
-        SystemVariable sysVarInit = systemVariableDAO.find();
-        initialForce = sysVarInit.getForce();
-        initialPosition = sysVarInit.getPosition();
 
         // Essay Chart construction and parameters
         chartEssayLine.getData().clear();
@@ -377,10 +470,12 @@ public class EssaySceneController implements Initializable {
         series.setName("Leitura");
         chartEssayLine.getData().add(series);
 
-        // Thread to update the series on chart
-        Thread chartThread = new Thread(new RTChartCreate());
-        chartThread.start();
-        chartThread.join();
+
+            // Thread to update the series on chart
+            Thread chartThread = new Thread(new RTChartCreate());
+            chartThread.start();
+            chartThread.join();
+
 
         // Setting final values
         SystemVariable sysVarFinal = systemVariableDAO.find();
@@ -388,42 +483,76 @@ public class EssaySceneController implements Initializable {
         finalPosition = sysVarFinal.getPosition();
 
 
-        essayExp = new Essay();
-        essayExp.setUserId(1); // Substituir por ID referente ao login
-        essayExp.setEssayIdentification("Teste botão Iniciar");
-        essayExp.setEssayNorm("Norma Padrão");
-        essayExp.setEssayUsedMachine("Máquina do Tempo");
-        essayExp.setEssayChargeCell(0.300);
-        essayExp.setEssayInitialForce(initialForce);
-        essayExp.setEssayFinalForce(finalForce);
-        essayExp.setEssayInitialPosition(initialPosition);
-        essayExp.setEssayFinalPosition(finalPosition);
-        essayExp.setEssayDislocationVelocity(15000);
-        essayExp.setEssayTemperature(35.0);
-        essayExp.setEssayPreCharge(0.0);
-        essayExp.setEssayRelativeHumidity(40);
-        essayExp.setEssayChart(chartString);
-        essayExp.setEssayDate(currentDate);
-        System.out.println(essayExp);
-
-        // Create essay to call essaySave method inserting this object essay as parameter
 //        essayExp = new Essay();
 //        essayExp.setUserId(1); // Substituir por ID referente ao login
-//        essayExp.setEssayIdentification(txtEssayIdentification.getText());
-//        essayExp.setEssayNorm(txtEssayNorm.getText());
-//        essayExp.setEssayUsedMachine(txtUsedMachine.getText());
-//        essayExp.setEssayChargeCell(Double.parseDouble(txtEssayChargeCell.getText()));
+//        essayExp.setEssayIdentification("Teste botão Iniciar");
+//        essayExp.setEssayNorm("Norma Padrão");
+//        essayExp.setEssayUsedMachine("Máquina do Tempo");
+//        essayExp.setEssayChargeCell(0.300);
 //        essayExp.setEssayInitialForce(initialForce);
 //        essayExp.setEssayFinalForce(finalForce);
 //        essayExp.setEssayInitialPosition(initialPosition);
 //        essayExp.setEssayFinalPosition(finalPosition);
-//        essayExp.setEssayDislocationVelocity(Double.parseDouble(txtDislocationVelocity.getText()));
-//        essayExp.setEssayTemperature(Double.parseDouble(lbEssayTemperature.getText()));
-//        essayExp.setEssayPreCharge(Double.parseDouble(txtEssayPreCharge.getText()));
-//        essayExp.setEssayRelativeHumidity(Double.parseDouble(lbEssayRelativeHumidity.getText()));
+//        essayExp.setEssayDislocationVelocity(15000);
+//        essayExp.setEssayTemperature(35.0);
+//        essayExp.setEssayPreCharge(0.0);
+//        essayExp.setEssayRelativeHumidity(40);
 //        essayExp.setEssayChart(chartString);
 //        essayExp.setEssayDate(currentDate);
 //        System.out.println(essayExp);
+
+        // Create essay to call essaySave method inserting this object essay as parameter
+        essayExp = new Essay();
+        essayExp.setUserId(1); // Substituir por ID referente ao login
+        essayExp.setEssayIdentification(txtEssayIdentification.getText());
+        essayExp.setEssayNorm(txtEssayNorm.getText());
+        essayExp.setEssayUsedMachine(txtUsedMachine.getText());
+        essayExp.setEssayChargeCell(Double.parseDouble(txtEssayChargeCell.getText()));
+        essayExp.setEssayInitialForce(initialForce);
+        essayExp.setEssayFinalForce(finalForce);
+        essayExp.setEssayInitialPosition(initialPosition);
+        essayExp.setEssayFinalPosition(finalPosition);
+        essayExp.setEssayDislocationVelocity(Double.parseDouble(txtDislocationVelocity.getText()));
+        essayExp.setEssayTemperature(Double.parseDouble(lbEssayTemperature.getText()));
+        essayExp.setEssayPreCharge(Double.parseDouble(txtEssayPreCharge.getText()));
+        essayExp.setEssayRelativeHumidity(Double.parseDouble(lbEssayRelativeHumidity.getText()));
+        essayExp.setEssayChart(chartString);
+        essayExp.setEssayDate(currentDate);
+        System.out.println(essayExp);
+    }
+
+    /**
+     * Metodo de interrupção automatica do ensaio
+     */
+    private boolean autoBreak(){
+        SystemVariable sysVar = systemVariableDAO.find();
+        if(fMax>0 && pMax>0 ){
+            if(rbForceDown.isSelected()){
+                if(sysVar.getForce() <= fMax - fMax*(Double.valueOf(String.valueOf(txtForcePercentageBreak)))/100){
+                    stopMove();
+                    return true;
+                };
+            } else if(rbMaxForce.isSelected()){
+                Double forceLimit = Double.valueOf(String.valueOf(txtMaxForceBreak));
+                if(sysVar.getForce() >= forceLimit){
+                    stopMove();
+                    return true;
+                }
+            } else if(rbDislocationStop.isSelected()){
+                Double maxPosition = Double.valueOf(String.valueOf(txtDislocationValueBreak));
+                if(sysVar.getForce() >= maxPosition){
+                    stopMove();
+                    return true;
+                }
+            } else if(rbDislocationPause.isSelected()){
+                Double maxPosition = Double.valueOf(String.valueOf(txtDislocationValueBreak));
+                if(sysVar.getForce() >= maxPosition){
+                    essayPause();
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

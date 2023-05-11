@@ -40,7 +40,7 @@ public class DashboardSceneController implements Initializable {
     private LineChart<Number, Number> chartMultiLine;
     private XYChart.Series seriesMulti;
     @FXML
-    private ListView<Essay> lwEssayInfo, lwSavedEssay;
+    private ListView<Essay> lvEssayInfo, lvSavedEssay;
     @FXML
     private LineChart<Number, Number> chartSingleLine;
     private XYChart.Series seriesSingle;
@@ -60,21 +60,22 @@ public class DashboardSceneController implements Initializable {
         savedEssayList();
 
         // Permite a alteração do cenário mediante seleção de um item na ListView
-        lwSavedEssay.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Essay>() {
+        lvSavedEssay.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Essay>() {
             @Override
             public void changed(ObservableValue<? extends Essay> observable, Essay oldValue, Essay newValue) {
                 try {
-                    currentEssay = lwSavedEssay.getSelectionModel().getSelectedItem();
+                    currentEssay = lvSavedEssay.getSelectionModel().getSelectedItem();
                     if (currentEssay != null) {
                         if (currentEssay.getEssayChart() == null) {
-                            lwEssayInfo.getItems().clear();
+                            //condicao de nulidade?
                             System.out.println("Problema ao carregar os dados do gráfico! Verifique no banco de dados.");
                         }
-                        lwEssayInfo.getItems().add(currentEssay);
+                        //alterar calculos dos indicadores
+                        //labels
                         addEssayChart(currentEssay.getEssayId());
                         essayInfo(currentEssay.getEssayId());
                     } else {
-                        lwEssayInfo.getItems().clear();
+                        System.out.println("Problemas ao carregar ensaio. Ensaio = null.");
                     }
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());
@@ -127,9 +128,7 @@ public class DashboardSceneController implements Initializable {
      */
     @FXML
     private void essayInfo(int pk) {
-        lwEssayInfo.getItems().clear();
-        Essay essayInfo = essayDAO.findById(pk);
-        lwEssayInfo.getItems().addAll(essayInfo);
+        //labels indicadores
     }
 
     /**
@@ -139,7 +138,7 @@ public class DashboardSceneController implements Initializable {
     private void savedEssayList() {
         essayList.addAll(essayDAO.findAll());
         obsEssayList = FXCollections.observableList(essayList);
-        lwSavedEssay.setItems(obsEssayList);
+        lvSavedEssay.setItems(obsEssayList);
     }
 
     /**
@@ -148,7 +147,7 @@ public class DashboardSceneController implements Initializable {
     @FXML
     private void multiDataReset() {
         obsEssayList.clear();
-        lwEssayInfo.getItems().clear();
+        //zerar labels indicadores
         chartMultiLine.getData().clear();
         savedEssayList();
     }
