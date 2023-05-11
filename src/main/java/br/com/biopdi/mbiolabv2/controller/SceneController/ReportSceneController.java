@@ -3,6 +3,7 @@ package br.com.biopdi.mbiolabv2.controller.SceneController;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
 import br.com.biopdi.mbiolabv2.model.bean.Setup;
+import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import br.com.biopdi.mbiolabv2.model.bean.User;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,6 +16,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -28,15 +30,16 @@ public class ReportSceneController implements Initializable {
     private final UserDAO userDAO = new UserDAO();
     private final EssayDAO essayDAO = new EssayDAO();
     private final SetupDAO setupDAO = new SetupDAO();
-    private final SystemParameterDAO systemParameterDAO = new SystemParameterDAO();
-    private final SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
+    private final SystemParameterDAO sysParDAO = new SystemParameterDAO();
+    private final SystemVariableDAO sysVarDAO = new SystemVariableDAO();
+    private final SystemVariable sysVar = sysVarDAO.find();
 
     @FXML
-    private Label lbCurrentData;
+    private Label lbCurrentData, lbEssayUserName, lbFmax, lbPmax, lbTmax, lbTesc, lbAlong, lbRedArea, lbMYoung;
     @FXML
     private Button btnEssayByUserId;
     @FXML
-    private ListView<Essay> lwEssayInfo, lwSavedEssay;
+    private ListView<Essay> lvSavedEssay;
     @FXML
     private LineChart<Number, Number> chartSingleLine;
     private XYChart.Series seriesSingle;
@@ -58,19 +61,19 @@ public class ReportSceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         lastEssay();
+        savedEssayView(sysVar.getUserId());
 
-        savedEssayView();
-        lwSavedEssay.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Essay>() {
+        lvSavedEssay.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Essay>() {
+            @FXML
             @Override
             public void changed(ObservableValue<? extends Essay> observable, Essay oldValue, Essay newValue) {
 
                 try {
-                    lwEssayInfo.getItems().clear();
-                    currentEssay = lwSavedEssay.getSelectionModel().getSelectedItem();
+                    // currentEssay recebe o objeto selecionado na lvSavedEssay
+                    currentEssay = lvSavedEssay.getSelectionModel().getSelectedItem();
                     if (currentEssay.getEssayChart() == null) {
                         System.out.println("Problema ao carregar os dados do gráfico! Verifique no banco de dados.");
                     }
-                    lwEssayInfo.getItems().add(currentEssay);
                     essayChart(currentEssay.getEssayId());
                     essayInfo(currentEssay.getEssayId());
                 } catch (Exception e) {
@@ -114,20 +117,27 @@ public class ReportSceneController implements Initializable {
      */
     @FXML
     private void essayDataReturn(int pk) {
-
         //Calculos here
+
 
     }
 
     /**
-     * Método que busca o último essay registrado, bem como os parâmetros e gráfico
+     * Método que busca o último essay registrado, bem como os parâmetros e gráfico, considerando
+     * o userId global no system Variable
      */
     @FXML
     private void lastEssay() {
-        lwEssayInfo.getItems().clear();
         currentEssay = essayDAO.findLastId();
-        lwEssayInfo.getItems().add(currentEssay);
         essayChart(currentEssay.getEssayId());
+        //buscando informacoes do currentEssay
+        lbFmax.setText(String.valueOf(0.001));
+        lbPmax.setText(String.valueOf(0.002));
+        lbTmax.setText(String.valueOf(0.003));
+        lbTesc.setText(String.valueOf(0.004));
+        lbAlong.setText(String.valueOf(0.005));
+        lbRedArea.setText(String.valueOf(0.006));
+        lbMYoung.setText(String.valueOf(0.007));
     }
 
     /**
@@ -137,19 +147,26 @@ public class ReportSceneController implements Initializable {
      */
     @FXML
     private void essayInfo(int pk) {
-        lwEssayInfo.getItems().clear();
         Essay essayInfo = essayDAO.findById(pk);
-        lwEssayInfo.getItems().addAll(essayInfo);
+        //buscando informacoes do essayInfo
+        //Alterar para valores salvos nos ensaios
+        lbFmax.setText(String.valueOf(0.01));
+        lbPmax.setText(String.valueOf(0.02));
+        lbTmax.setText(String.valueOf(0.03));
+        lbTesc.setText(String.valueOf(0.04));
+        lbAlong.setText(String.valueOf(0.05));
+        lbRedArea.setText(String.valueOf(0.06));
+        lbMYoung.setText(String.valueOf(0.07));
     }
 
     /**
      * Método que lista todos os ensaios salvos na lwSavedEssay
      */
     @FXML
-    private void savedEssayView() {
-        essayList.addAll(essayDAO.findAll());
+    private void savedEssayView(Integer pk) {
+        essayList.addAll(essayDAO.findByUser(pk));
         obsEssayList = FXCollections.observableList(essayList);
-        lwSavedEssay.setItems(obsEssayList);
+        lvSavedEssay.setItems(obsEssayList);
     }
 
     /**

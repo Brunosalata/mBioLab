@@ -32,28 +32,6 @@ public class UserDAO extends DBConnection {
     }
 
     /**
-     * Método de inclusão de usuario com foto na tabela tb_user
-     *
-     * @param user
-     * @Description chamar a função, instanciando UserDAO userDAO e User user. Então, chama db.create()
-     */
-    public void createWithImage(User user) {
-        openConnection();
-        try {
-            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_user(userId, userName, userLogin, userPassword, userImagePath) VALUES(?,?,?,?,?);");
-            stm.setString(2, user.getUserName());
-            stm.setString(3, user.getUserLogin());
-            stm.setString(4, user.getUserPassword());
-            stm.setString(5, user.getUserImagePath());
-            stm.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
-    }
-
-    /**
      * Método de inclusão de usuario sem imagem na tabela tb_user
      *
      * @param user
@@ -63,9 +41,11 @@ public class UserDAO extends DBConnection {
         openConnection();
         try {
             PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_user(userId, userName, userLogin, userPassword, userImagePath) VALUES (?,?,?,?,?);");
-            stm.setString(2, user.getUserName());
-            stm.setString(3, user.getUserLogin());
-            stm.setString(4, user.getUserPassword());
+            var i = 1;
+            stm.setString(++i, user.getUserName());
+            stm.setString(++i, user.getUserLogin());
+            stm.setString(++i, user.getUserPassword());
+            stm.setString(++i, user.getUserImagePath() != null ? user.getUserImagePath() : null);
             stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

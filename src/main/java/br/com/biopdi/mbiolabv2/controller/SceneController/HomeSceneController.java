@@ -14,6 +14,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -33,30 +35,21 @@ public class HomeSceneController implements Initializable {
     @FXML
     private Button btnEssayByUserId, btnDataPull;
     @FXML
-    private ListView<Setup> setupListView;
-    @FXML
-    private ListView<User> userListView;
-    @FXML
-    private ListView<Essay> essayListView;
-    @FXML
-    private ListView<Essay> essayByUserListView;
+    private ListView<Essay> lvEssayByDate;
+    private final List<Essay> essayByDateList = new ArrayList<>();
+    private ObservableList<Essay> obsEssayByDateList;
 
-    private final List<Setup> setupList = new ArrayList<>();
-    private final List<User> userList = new ArrayList<>();
-    private final List<Essay> essayList = new ArrayList<>();
-    private final List<Essay> essayByUserIdList = new ArrayList<>();
-    private ObservableList<Setup> obsSetupList;
-    private ObservableList<User> obsUserList;
-    private ObservableList<Essay> obsEssayList;
-    private ObservableList<Essay> obsEssayByUserIdList;
-
+    java.util.Date systemDate = new java.util.Date();
+    SimpleDateFormat dateComplete = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat brasilianDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    String currentDate = brasilianDate.format(systemDate);
 
 
 //    FIM ******************** Declarações iniciais **********************
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        essayByDate();
 
 
     }
@@ -105,40 +98,16 @@ public class HomeSceneController implements Initializable {
      * Método que busca e apresenta listagem de ensaios em função do essayId
      */
     @FXML
-    private void essayFindByUser(){
+    private void essayByDate(){
         try{
-            essayByUserListView.getItems().clear();
-            essayByUserIdList.addAll(essayDAO.findByUser(Integer.parseInt(txtEssayUserId.getText())));
-            obsEssayByUserIdList = FXCollections.observableList(essayByUserIdList);
-            essayByUserListView.setItems(obsEssayByUserIdList);
+            lvEssayByDate.getItems().clear();
+            lvEssayByDate.getItems().addAll(essayDAO.findByDate(currentDate));
+            obsEssayByDateList = FXCollections.observableList(essayByDateList);
+            lvEssayByDate.setItems(obsEssayByDateList);
         } catch (Exception e){
         System.out.println("Error: " + e.getMessage());
         }
     }
-
-    /**
-     * Função que busca e apresenta lista completa de user, essay e setup nas devidas ListView
-     */
-    @FXML
-    private void DBDataPull(){
-
-        userListView.getItems().clear();
-        userList.addAll(userDAO.findAll());
-        obsUserList = FXCollections.observableList(userList);
-        userListView.setItems(obsUserList);
-
-        setupListView.getItems().clear();
-        setupList.addAll(setupDAO.findAll());
-        obsSetupList = FXCollections.observableList(setupList);
-        setupListView.setItems(obsSetupList);
-
-        essayListView.getItems().clear();
-        essayList.addAll(essayDAO.findAll());
-        obsEssayList = FXCollections.observableList(essayList);
-        essayListView.setItems(obsEssayList);
-    }
-
-
 
 }
 

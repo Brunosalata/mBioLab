@@ -121,7 +121,7 @@ public class LoginSceneController implements Initializable {
     private void fastAccess(ActionEvent event) throws IOException {
         // Armazena userId = 0 nas variáveis de sistema para consulta global e limitação de acesso a dados
         SystemVariable sysVar = sysVarDAO.find();
-        sysVar.setUserId(0);
+        sysVar.setUserId(1);
         sysVarDAO.updateUser(sysVar);
         openSwitchMenuFullScene(event);
     }
