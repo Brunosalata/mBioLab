@@ -52,7 +52,7 @@ public class SystemSettingSceneController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         SystemVariable systemVariable = sysVarDAO.find();
         //Se o usuario logado não for Biopdi ou admin, a manipulação dos usuarios fica indisponivel
-        if(systemVariable.getUserId()!=1 && systemVariable.getUserId()!=2){
+        if(systemVariable.getUserId()>2){
             apUserUpdate.setDisable(true);
         }
         lbUserUpdate.setVisible(false);
@@ -148,13 +148,14 @@ public class SystemSettingSceneController implements Initializable {
         SystemVariable sysVar = sysVarDAO.find();
         List<User> loginList = userDAO.findAll();
         for (User login : loginList) {
-            if(sysVar.getUserId()==1){
+            if(sysVar.getUserId()==1 && login.getUserId()>1){
                 cbLoginList.getItems().add(login.getUserLogin());
-            } else if(sysVar.getUserId()==2 && login.getUserId()>1){
-                cbLoginList.getItems().add(login.getUserLogin());
+            } else if(sysVar.getUserId()==2){
+                if(login.getUserId()==2 || login.getUserId()>3){
+                    cbLoginList.getItems().add(login.getUserLogin());
+                }
             }
         }
-
     }
 
     /**
@@ -214,7 +215,7 @@ public class SystemSettingSceneController implements Initializable {
      */
     @FXML
     private void userDelete(){
-        if(user.getUserId()>2){
+        if(user.getUserId()>3){
             if(rbUserEssayDelete.isSelected()){
                 userEssayDelete(user.getUserId());
             }

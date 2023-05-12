@@ -55,46 +55,6 @@ public class HomeSceneController implements Initializable {
     }
 
     /**
-     * Método que invoca a TaskForcePositionViewTask, com atuação paralela à Thread principal e retorna o valor a ser atualizado na lbForceView e lbPositionView
-     * Dá para usar no gráfico
-     */
-//    private void invokeForcePositionViewTask() {
-//        ForcePositionViewTask forcePositionViewTask = new ForcePositionViewTask();
-//        forcePositionViewTask.valueProperty().addListener(new ChangeListener<String>() {
-//            @Override
-//            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-//                    lbForceView.setText(newValue);
-//            }
-//        });
-//        Thread th = new Thread(forcePositionViewTask);
-//        th.setDaemon(true);
-//        th.start();
-//    }
-
-
-
-
-
-
-
-
-
-
-
-    // INICIO*********** Métodos de setup ***********
-
-
-
-
-
-
-
-    // FIM*********** Métodos de setup ***********
-
-
-    // INICIO******** Métodos de Busca no Banco de Dados ********
-
-    /**
      * Método que busca e apresenta listagem de ensaios em função do essayId
      */
     @FXML

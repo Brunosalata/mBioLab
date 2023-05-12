@@ -119,7 +119,7 @@ public class LoginSceneController implements Initializable {
      */
     @FXML
     private void fastAccess(ActionEvent event) throws IOException {
-        // Armazena userId = 0 nas variáveis de sistema para consulta global e limitação de acesso a dados
+        // ALTERAR Armazena userId = 3 nas variáveis de sistema para consulta global e limitação de acesso a dados
         SystemVariable sysVar = sysVarDAO.find();
         sysVar.setUserId(1);
         sysVarDAO.updateUser(sysVar);

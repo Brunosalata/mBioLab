@@ -111,24 +111,18 @@ public class ReportSceneController implements Initializable {
     }
 
     /**
-     * REQUER IMPLEMENTAÇÂO >> Método que calcula os índices para retornar na tela
-     *
-     * @param pk
-     */
-    @FXML
-    private void essayDataReturn(int pk) {
-        //Calculos here
-
-
-    }
-
-    /**
      * Método que busca o último essay registrado, bem como os parâmetros e gráfico, considerando
      * o userId global no system Variable
      */
     @FXML
     private void lastEssay() {
-        currentEssay = essayDAO.findLastId();
+        // Identifica se id do usuario logado
+        if(sysVar.getUserId()<=2){
+            currentEssay = essayDAO.findLastId();
+        } else{
+            currentEssay = essayDAO.findLastIdByUser(sysVar.getUserId());
+        }
+        // Construcao do grafico a partir das informacoes essayChart do DB do respectivo ensaio
         essayChart(currentEssay.getEssayId());
         //buscando informacoes do currentEssay
         lbFmax.setText(String.valueOf(0.001));
@@ -146,7 +140,7 @@ public class ReportSceneController implements Initializable {
      * @param pk
      */
     @FXML
-    private void essayInfo(int pk) {
+    private void essayInfo(Integer pk) {
         Essay essayInfo = essayDAO.findById(pk);
         //buscando informacoes do essayInfo
         //Alterar para valores salvos nos ensaios
@@ -164,7 +158,11 @@ public class ReportSceneController implements Initializable {
      */
     @FXML
     private void savedEssayView(Integer pk) {
-        essayList.addAll(essayDAO.findByUser(pk));
+        if(sysVar.getUserId()<=2){
+            essayList.addAll(essayDAO.findAll());
+        } else{
+            essayList.addAll(essayDAO.findByUser(pk));
+        }
         obsEssayList = FXCollections.observableList(essayList);
         lvSavedEssay.setItems(obsEssayList);
     }

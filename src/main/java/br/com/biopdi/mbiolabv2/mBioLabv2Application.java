@@ -37,7 +37,7 @@ public class mBioLabv2Application extends Application {
      * Método de inserção de parâmetros iniciais
      */
     private void initialSetup() {
-        sysVar.setUserId(0);
+        sysVar.setUserId(3);
         sysVarDAO.updateUser(sysVar);
     }
 
