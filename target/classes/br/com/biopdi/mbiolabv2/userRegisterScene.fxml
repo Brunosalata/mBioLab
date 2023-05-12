@@ -18,14 +18,14 @@
       <Label alignment="CENTER" layoutX="164.0" layoutY="528.0" prefHeight="17.0" prefWidth="473.0" text="Soluções em ensaios de materiais © Biopdi 2023" textFill="#e4e4e4" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
       <VBox fx:id="vbRegister" alignment="CENTER" fillWidth="false" prefHeight="550.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane centerShape="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2C2C2C;">
+            <AnchorPane fx:id="apUserRegisterDark" centerShape="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2C2C2C;">
                <children>
-                  <ImageView fx:id="btnRegisterSupport" fitHeight="25.0" fitWidth="20.0" layoutX="485.0" layoutY="358.0" onMouseClicked="#supportRegisterMessage" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="22.0" AnchorPane.rightAnchor="95.0">
+                  <ImageView fx:id="btnRegisterSupport" fitHeight="25.0" fitWidth="20.0" layoutX="485.0" layoutY="358.0" onMouseClicked="#supportRegisterMessage" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="95.0">
                      <image>
                         <Image url="@img/lightIcon/doubt.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="504.0" layoutY="349.0" prefHeight="38.0" prefWidth="66.0" text="Suporte" textFill="#d9d9d9" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="30.0">
+                  <Label layoutX="504.0" layoutY="349.0" prefHeight="25.0" prefWidth="66.0" text="Suporte" textFill="#d9d9d9" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="30.0">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -88,8 +88,12 @@
                         <Image url="@img/lightLogo.png" />
                      </image>
                   </ImageView>
-                  <RadioButton fx:id="rbAgreement" layoutX="219.0" layoutY="359.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="179.0" text="Li e aceito os termos de uso." textFill="#d9d9d9" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="30.0" />
-                  <Hyperlink layoutX="208.0" layoutY="357.0" text="Acesse aqui" textFill="#188fff" />
+                  <AnchorPane fx:id="apUseTerm" prefHeight="51.0" prefWidth="372.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                     <children>
+                        <RadioButton fx:id="rbAgreement" layoutX="25.0" layoutY="13.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="179.0" text="Li e aceito os termos de uso." textFill="#d9d9d9" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="30.0" />
+                        <Hyperlink layoutX="209.0" layoutY="14.0" text="Acesse aqui" textFill="#188fff" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="209.0" />
+                     </children>
+                  </AnchorPane>
                </children>
                <opaqueInsets>
                   <Insets />
