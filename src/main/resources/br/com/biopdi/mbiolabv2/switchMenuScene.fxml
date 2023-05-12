@@ -50,54 +50,86 @@
                         </Button>
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="329.0" prefWidth="234.0">
+                  <AnchorPane prefHeight="329.0" prefWidth="234.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Button fx:id="btnSwitchSupport" layoutX="26.0" layoutY="21.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSupportScene" prefHeight="40.0" prefWidth="180.0" text="Suporte" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="24.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                           <padding>
-                              <Insets left="25.0" right="25.0" />
-                           </padding>
-                        </Button>
-                        <Button fx:id="btnSwitchSystemSetting" layoutX="26.0" layoutY="69.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSystemSettingScene" prefHeight="40.0" prefWidth="180.0" text="Configurações" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="24.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                           <padding>
-                              <Insets left="25.0" right="25.0" />
-                           </padding>
-                        </Button>
-                        <Label fx:id="lbUserName" layoutX="87.0" layoutY="215.0" onMouseClicked="#editProfile" prefHeight="60.0" prefWidth="123.0" text="Usuário" textAlignment="JUSTIFY" textFill="#d9d9d9" wrapText="true" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="24.0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <padding>
-                              <Insets left="10.0" />
-                           </padding>
-                        </Label>
-                        <ImageView fx:id="ivUserImage" fitHeight="60.0" fitWidth="60.0" layoutX="26.0" layoutY="217.0" onMouseClicked="#editProfile" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="25.0">
-                           <image>
-                              <Image url="@img/lightIcon/user96.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="ivLogin" fitHeight="30.0" fitWidth="30.0" layoutX="40.0" layoutY="270.0" onMouseClicked="#logout" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@img/lightIcon/logout.png" />
-                           </image>
-                        </ImageView>
-                        <Label fx:id="lbLogin" layoutX="87.0" layoutY="270.0" onMouseClicked="#logout" prefHeight="30.0" prefWidth="123.0" text="Logout" textFill="#d9d9d9" wrapText="true" AnchorPane.rightAnchor="25.0">
-                           <font>
-                              <Font size="17.0" />
-                           </font>
-                        </Label>
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Button fx:id="btnSwitchSupport" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSupportScene" prefHeight="40.0" prefWidth="180.0" text="Suporte">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets left="25.0" right="25.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnSwitchSystemSetting" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSystemSettingScene" prefHeight="40.0" prefWidth="180.0" text="Configurações">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets left="25.0" right="25.0" />
+                                 </padding>
+                              </Button>
+                           </children>
+                        </VBox>
                      </children>
                      <VBox.margin>
-                        <Insets />
+                        <Insets bottom="30.0" />
                      </VBox.margin>
+                  </AnchorPane>
+                  <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="130.0" prefWidth="234.0">
+                     <children>
+                        <VBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <HBox alignment="BOTTOM_CENTER" maxHeight="-Infinity" minHeight="-Infinity" minWidth="100.0" prefHeight="60.0" prefWidth="130.0">
+                                 <children>
+                                    <ImageView fx:id="ivUserImage" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#editProfile" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/lightIcon/user96.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label fx:id="lbUserName" lineSpacing="1.0" maxHeight="-Infinity" minHeight="-Infinity" onMouseClicked="#editProfile" prefHeight="60.0" text="Usuário" textAlignment="JUSTIFY" textFill="#d9d9d9" wrapText="true" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </Label>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" prefWidth="200.0">
+                                 <children>
+                                    <ImageView fx:id="ivLogin" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#logout" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/lightIcon/logout.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label fx:id="lbLogin" onMouseClicked="#logout" prefHeight="30.0" text="Logout" textFill="#d9d9d9" wrapText="true">
+                                       <font>
+                                          <Font size="17.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <padding>
+                                          <Insets left="25.0" />
+                                       </padding>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
                   </AnchorPane>
                </children>
             </VBox>
@@ -113,11 +145,11 @@
             </ImageView>
          </center>
          <bottom>
-            <HBox id="HBox" alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="444.0" spacing="5.0" BorderPane.alignment="CENTER">
+            <HBox id="HBox" alignment="CENTER" prefHeight="27.0" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox minWidth="-Infinity" prefHeight="200.0" prefWidth="250.0">
+                  <VBox alignment="CENTER_LEFT" fillWidth="false" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0">
                      <children>
-                        <Label maxWidth="-1.0" minWidth="-Infinity" prefHeight="21.0" prefWidth="250.0" text="LABEL" textFill="#e4e4e4" VBox.vgrow="ALWAYS">
+                        <Label maxWidth="-1.0" prefHeight="21.0" text="LABEL" textFill="#e4e4e4" VBox.vgrow="ALWAYS">
                            <font>
                               <Font size="11.0" fx:id="x3" />
                            </font>
@@ -127,14 +159,14 @@
                         </Label>
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                  <VBox alignment="CENTER" prefHeight="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="771.0" text="Soluções em ensaios de materiais © Biopdi 2023" textFill="#e4e4e4" VBox.vgrow="ALWAYS" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" text="Soluções em ensaios de materiais © Biopdi 2023" textFill="#e4e4e4" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="250.0">
+                  <VBox alignment="CENTER_RIGHT" fillWidth="false" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0">
                      <children>
-                        <Label fx:id="lbCurrentData" alignment="CENTER_RIGHT" graphicTextGap="5.0" maxHeight="1.7976931348623157E308" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="250.0" text="DATA : HORA" textFill="#e4e4e4" VBox.vgrow="ALWAYS">
+                        <Label fx:id="lbCurrentData" alignment="CENTER_RIGHT" graphicTextGap="5.0" maxHeight="1.7976931348623157E308" maxWidth="-1.0" minHeight="-Infinity" prefHeight="21.0" text="DATA : HORA" textFill="#e4e4e4" VBox.vgrow="ALWAYS">
                            <font>
                               <Font size="11.0" fx:id="x4" />
                            </font>

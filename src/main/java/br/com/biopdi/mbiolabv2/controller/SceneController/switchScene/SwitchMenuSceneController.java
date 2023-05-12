@@ -47,7 +47,7 @@ public class SwitchMenuSceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Alteração do lbUserName e lbLogin dependendo do retorno do banco de dados (null indica que userId do banco é 0, logo, sem login)
-        if(user==null){
+        if(user.getUserId()==3){
             lbUserName.setText("Visitante");
             lbLogin.setText("Login");
             ivLogin.setImage(new Image(mBioLabv2Application.class.getResource("img/lightIcon/login.png").toExternalForm()));
@@ -139,6 +139,7 @@ public class SwitchMenuSceneController implements Initializable {
         Pane view = object.getPage("supportScene.fxml");
         mainPane.setCenter(view);
     }
+
     /**
      * Método que abre a Scene SystemSetting dentro da SwitchMenu
      *
@@ -160,7 +161,7 @@ public class SwitchMenuSceneController implements Initializable {
     @FXML
     private void logout(ActionEvent event) throws IOException {
         SystemVariable sysVar = sysVarDAO.find();
-        sysVar.setUserId(0);
+        sysVar.setUserId(3);
         sysVarDAO.updateUser(sysVar);
         apSwitchMenu.getScene().getWindow().hide();
         openNewScene("loginScene.fxml");

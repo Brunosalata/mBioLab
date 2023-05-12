@@ -5,7 +5,9 @@ import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 import br.com.biopdi.mbiolabv2.mBioLabv2Application;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import br.com.biopdi.mbiolabv2.model.bean.User;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +34,7 @@ public class UserRegisterSceneController implements Initializable {
     private SystemVariableDAO sysVarDAO = new SystemVariableDAO();
     private SystemVariable sysVar = sysVarDAO.find();
     @FXML
-    private AnchorPane apLogin, apUserRegister;
+    private AnchorPane apLogin, apUserRegister, apUseTerm;
     @FXML
     private TextField txtName, txtLogin;
     @FXML
@@ -46,12 +49,11 @@ public class UserRegisterSceneController implements Initializable {
     private String imageFilePath;
 
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Inicia instanciando um objeto SystemVariable para ler o userId armazenado.
         // Se getUserId()==null é porque não tem usuário logado, logo, botões Excluir e Editar são desabilitados
-        if(sysVar.getUserId()!=0){
+        if(sysVar.getUserId()==2 || sysVar.getUserId()>=4){
             User user = userDAO.findById(sysVar.getUserId());
             txtName.setText(user.getUserName());
             txtLogin.setText(user.getUserLogin());
@@ -61,10 +63,15 @@ public class UserRegisterSceneController implements Initializable {
             btnDelete.setVisible(true);
             btnRegister.setVisible(false);
             btnUserUpdate.setVisible(true);
-            rbAgreement.setVisible(false);
-        } else{
+            apUseTerm.setVisible(false);
+        } else if(sysVar.getUserId()==1){
+            btnRegister.setDisable(true);
+            btnDelete.setDisable(true);
+        }else{
             btnDelete.setVisible(false);
         }
+
+
     }
 
     /**
@@ -126,15 +133,15 @@ public class UserRegisterSceneController implements Initializable {
         User user = userDAO.findById(sysVar.getUserId());
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Excluir usuário");
-        alert.setHeaderText("Deseja mesmo excluir o usuário?");
-        alert.setContentText("Nome: " + user.getUserName() + "/nLogin: " + user.getUserLogin());
+        alert.setHeaderText("Deseja mesmo excluir " + user.getUserLogin() + "?");
+        alert.setContentText("ATENÇÃO: Seus ensaios não serão excluídos. Para excluí-los, solicite que o Administrador delete seu perfil.");
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get() == ButtonType.OK){
             userDAO.delete(user);
             // Retorna à janela de login
             openLoginScene(event);
-
-            // Deletar todos os ensaios realizados por ele?
+            // Ensaios não serão deletados automaticamente, apenas o Admin tem o poder de excluir um usuário e
+            // seus ensaios, utilizando o painel em SystemSetting (Configuracoes)
             // Manter os dados, mas juntando em um pacote único (com demais usuários excluídos?
         }
 
@@ -215,6 +222,5 @@ public class UserRegisterSceneController implements Initializable {
         stage.setResizable(false);  // Impede redimensionamento da janela
         stage.setScene(scene);
         stage.show();
-
     }
 }
