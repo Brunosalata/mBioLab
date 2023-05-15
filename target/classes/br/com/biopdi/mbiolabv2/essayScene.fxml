@@ -7,6 +7,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
@@ -1537,7 +1538,12 @@
                                                                                           </Label>
                                                                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="184.0" VBox.vgrow="ALWAYS">
                                                                                              <children>
-                                                                                                <TextField fx:id="txtAdjustVelocity" alignment="CENTER" prefWidth="150.0" text="15000">
+                                                                                                <Slider fx:id="shAdjustVelocity" majorTickUnit="45000.0" max="45000.0" min="10000.0" minorTickCount="10000" onMouseReleased="#adjustVelocity" showTickLabels="true" value="15000.0">
+                                                                                                   <HBox.margin>
+                                                                                                      <Insets left="10.0" right="10.0" />
+                                                                                                   </HBox.margin>
+                                                                                                </Slider>
+                                                                                                <TextField fx:id="txtAdjustVelocity" alignment="CENTER" prefHeight="25.0" prefWidth="93.0" text="15000">
                                                                                                    <HBox.margin>
                                                                                                       <Insets />
                                                                                                    </HBox.margin>
@@ -1547,6 +1553,11 @@
                                                                                                       <Insets left="5.0" />
                                                                                                    </HBox.margin>
                                                                                                 </Label>
+                                                                                                <Button fx:id="btnAdjustVelocity" mnemonicParsing="false" onAction="#adjustVelocity" text="Button">
+                                                                                                   <HBox.margin>
+                                                                                                      <Insets left="10.0" right="10.0" />
+                                                                                                   </HBox.margin>
+                                                                                                </Button>
                                                                                              </children>
                                                                                              <VBox.margin>
                                                                                                 <Insets />
@@ -1936,7 +1947,7 @@
                                                                         <Insets bottom="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
-                                                                  <Label fx:id="lbFmax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="73.0" text="0.000">
+                                                                  <Label fx:id="lbFMax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="73.0" text="0.000">
                                                                      <VBox.margin>
                                                                         <Insets />
                                                                      </VBox.margin>
@@ -1953,7 +1964,7 @@
                                                                         <Insets bottom="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
-                                                                  <Label fx:id="lbPmax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="81.0" text="0.000">
+                                                                  <Label fx:id="lbPMax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="81.0" text="0.000">
                                                                      <VBox.margin>
                                                                         <Insets />
                                                                      </VBox.margin>
@@ -1970,7 +1981,7 @@
                                                                         <Insets bottom="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
-                                                                  <Label fx:id="lbTmax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="74.0" text="0.000">
+                                                                  <Label fx:id="lbTMax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="74.0" text="0.000">
                                                                      <VBox.margin>
                                                                         <Insets />
                                                                      </VBox.margin>
@@ -1987,7 +1998,7 @@
                                                                         <Insets bottom="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
-                                                                  <Label fx:id="lbTesc" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="80.0" text="0.000">
+                                                                  <Label fx:id="lbTEsc" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="80.0" text="0.000">
                                                                      <VBox.margin>
                                                                         <Insets />
                                                                      </VBox.margin>
