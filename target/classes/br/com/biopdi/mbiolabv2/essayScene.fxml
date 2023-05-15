@@ -56,6 +56,14 @@
                                     <Font size="20.0" />
                                  </font>
                               </TextField>
+                              <Button fx:id="btnEmergency" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#stopMove" prefHeight="30.0" prefWidth="290.0" styleClass="emergency" stylesheets="@css/style.css" text="Parada de Emergência">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Button>
                            </children>
                            <HBox.margin>
                               <Insets left="10.0" top="10.0" />
@@ -149,7 +157,7 @@
                                     <Font size="20.0" />
                                  </font>
                               </TextField>
-                              <Button fx:id="btnForceZero" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" text="Zerar Força">
+                              <Button fx:id="btnForceZero" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#test" prefHeight="30.0" prefWidth="180.0" text="teste ensaio">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -416,7 +424,7 @@
                                                                               </Label>
                                                                               <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                                                                  <children>
-                                                                                    <TextField fx:id="txtEssayVelocity" alignment="CENTER" text="1.00">
+                                                                                    <TextField fx:id="txtEssayVelocity" alignment="CENTER" text="15000">
                                                                                        <HBox.margin>
                                                                                           <Insets />
                                                                                        </HBox.margin>
@@ -1502,7 +1510,7 @@
                                                                                     </AnchorPane>
                                                                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                                                                        <children>
-                                                                                          <Button fx:id="btnPositionUp" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" mnemonicParsing="false" onMousePressed="#moveUp" onMouseReleased="#stopMove" prefHeight="70.0" prefWidth="70.0" text="CIMA" />
+                                                                                          <Button fx:id="btnPositionUp" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" mnemonicParsing="false" onMousePressed="#moveUp" onMouseReleased="#stopMove" prefHeight="70.0" prefWidth="70.0" style="-fx-rotate: 180;" styleClass="moveUp" stylesheets="@css/style.css" />
                                                                                           <Label minWidth="50.0" prefWidth="50.0" text="UP" HBox.hgrow="ALWAYS">
                                                                                              <HBox.margin>
                                                                                                 <Insets left="30.0" />
@@ -1512,7 +1520,7 @@
                                                                                     </HBox>
                                                                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                                                                        <children>
-                                                                                          <Button fx:id="btnPositionDown" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" mnemonicParsing="false" onMousePressed="#moveDown" onMouseReleased="#stopMove" prefHeight="70.0" prefWidth="70.0" text="BAIXO" HBox.hgrow="ALWAYS" />
+                                                                                          <Button fx:id="btnPositionDown" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" mnemonicParsing="false" onMousePressed="#moveDown" onMouseReleased="#stopMove" prefHeight="70.0" prefWidth="70.0" styleClass="moveUp" stylesheets="@css/style.css" HBox.hgrow="ALWAYS" />
                                                                                           <Label minWidth="50.0" prefWidth="50.0" text="DOWN" HBox.hgrow="ALWAYS">
                                                                                              <HBox.margin>
                                                                                                 <Insets left="30.0" />
@@ -1529,7 +1537,7 @@
                                                                                           </Label>
                                                                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="184.0" VBox.vgrow="ALWAYS">
                                                                                              <children>
-                                                                                                <TextField fx:id="txtAdjustVelocity" alignment="CENTER" prefWidth="150.0" text="15000.00">
+                                                                                                <TextField fx:id="txtAdjustVelocity" alignment="CENTER" prefWidth="150.0" text="15000">
                                                                                                    <HBox.margin>
                                                                                                       <Insets />
                                                                                                    </HBox.margin>
@@ -1614,7 +1622,7 @@
                                                                         <Insets left="10.0" right="10.0" />
                                                                      </HBox.margin>
                                                                   </Button>
-                                                                  <Button fx:id="btnStopMove" alignment="CENTER" minHeight="35.0" minWidth="100.0" mnemonicParsing="false" onAction="#stopMove" prefHeight="35.0" prefWidth="100.0" text="Stop" HBox.hgrow="ALWAYS">
+                                                                  <Button fx:id="btnStopMove" alignment="CENTER" minHeight="35.0" minWidth="100.0" mnemonicParsing="false" onAction="#essayStop" prefHeight="35.0" prefWidth="100.0" text="Stop" HBox.hgrow="ALWAYS">
                                                                      <HBox.margin>
                                                                         <Insets left="10.0" />
                                                                      </HBox.margin>
@@ -1851,10 +1859,10 @@
                                                                               </AnchorPane>
                                                                               <LineChart fx:id="chartEssayLine" animated="false" legendVisible="false" prefHeight="191.0" prefWidth="646.0" title="Gráfico Força x Posição" VBox.vgrow="ALWAYS">
                                                                                  <xAxis>
-                                                                                    <NumberAxis label="Deslocamento" side="BOTTOM" fx:id="xAxis" />
+                                                                                    <NumberAxis animated="false" label="Deslocamento" side="BOTTOM" fx:id="xAxis" />
                                                                                  </xAxis>
                                                                                  <yAxis>
-                                                                                    <NumberAxis fx:id="yAxis" label="Força" side="LEFT" />
+                                                                                    <NumberAxis fx:id="yAxis" animated="false" label="Força" side="LEFT" />
                                                                                  </yAxis>
                                                                               </LineChart>
                                                                            </children>
