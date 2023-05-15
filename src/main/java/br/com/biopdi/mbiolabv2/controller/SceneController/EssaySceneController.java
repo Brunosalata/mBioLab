@@ -21,7 +21,7 @@ import java.util.*;
 
 public class EssaySceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
-    private Essay essayExp;
+    private Essay essayFinalyzed;
     private final UserDAO userDAO = new UserDAO();
     private final EssayDAO essayDAO = new EssayDAO();
     private final SetupDAO setupDAO = new SetupDAO();
@@ -45,12 +45,12 @@ public class EssaySceneController implements Initializable {
             txtFinalForce, txtInitialPosition, txtFinalPosition, txtDislocationVelocity, txtEssayPreCharge,
             txtMaxForceBreak, txtDislocationValueBreak, txtDislocationValuePause, txtForcePercentageBreak;
     @FXML
-    private Button btnStart, btnPause, btnStop, btnChargeMethod, btnEssayByUserId, btnEssaySave;
+    private Button btnPositionUp, btnPositionDown, btnStart, btnPause, btnStop, btnChargeMethod, btnEssayByUserId, btnEssaySave;
     @FXML
     private RadioButton rbForceXPosition, rbStrainXDeform, rbForceDownBreak, rbMaxForceBreak, rbDislocationBreak, rbDislocationPause;
     private SerialPort port;
 
-    private Double currentForce, currentPosition, initialForce, finalForce, initialPosition, finalPosition, fMax, pMax,
+    private Double currentForce = 0D, currentPosition = 0D, initialForce, finalForce, initialPosition, finalPosition, fMax, pMax,
             tMax, tEsc, along, redArea, mYoung;
     private String chartString = null;
     private Boolean moving = false;
@@ -200,129 +200,120 @@ public class EssaySceneController implements Initializable {
             List<Double> positionList = new ArrayList<>();
 
             try {
-                while (count < 100) {
+                while (count<100) {
 
-                    Thread.sleep(0);
-                    // Armazenando Forca e Posicao (variaveis globais) em arrays
-                    forceList.add(currentForce);
-                    positionList.add(currentPosition);
+                    Thread.sleep(50);
+
 
                     //Identifica valor de Forca Max N
-                    Platform.runLater(() -> {
-                        // Update UI.
-                        try {
-                            Thread.sleep(15);
-                            for(Double force : forceList){
-                                if(force>fMax){
-                                    fMax=force;
-                                }
-                                lbFMax.setText(String.format("%.2f", Double.valueOf(fMax)));
-                                System.out.println(forceList);
-                            }
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                    });
-                    //Identifica valor de Posicao Max mm
-                    Platform.runLater(() -> {
-                        // Update UI.
-                        try {
-                            Thread.sleep(15);
-                             for(Double position : positionList) {
-                                 if (position > pMax) {
-                                     pMax = position;
-                                 }
-                                 lbPMax.setText(String.format("%.2f", Double.valueOf(pMax)));
-                                 System.out.println(positionList);
-                             }
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                    //Identifica valor de Tensao Max MPa
-                    Platform.runLater(() -> {
-                        // Update UI.
-                        // condição
-                        try {
-                            Thread.sleep(15);
-                            for (int i = 0; i < count; i++) {
-                                lbTMax.setText(String.valueOf(i));
-                            }
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                    //Identifica valor de Tensao de escoamento MPa
-                    Platform.runLater(() -> {
-                        // Update UI.
-                        // condição
-                        try {
-                            Thread.sleep(15);
-                            for (int i = 0; i < count; i++) {
-                                lbTEsc.setText(String.valueOf(i));
-                            }
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                    //Identifica valor de Alongamento %
-                    Platform.runLater(() -> {
-                        // Update UI.
-                        // condição
-                        try {
-                            Thread.sleep(15);
-                            for (int i = 0; i < count; i++) {
-                                lbAlong.setText(String.valueOf(i));
-                            }
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                    //Identifica valor de Reducao de Area %
-                    Platform.runLater(() -> {
-                        // Update UI.
-                        // condição
-                        try {
-                            Thread.sleep(15);
-                            for (int i = 0; i < count; i++) {
-                                lbRedArea.setText(String.valueOf(i));
-                            }
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                    //Identifica valor de M. Young MPa
-                    Platform.runLater(() -> {
-                        // Update UI.
-                        // condição
-                        try {
-                            Thread.sleep(15);
-                            for (int i = 0; i < count; i++) {
-                                lbMYoung.setText(String.valueOf(i));
-                            }
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
+//                    Platform.runLater(() -> {
+//                        // Update UI.
+//                        try {
+//                            Thread.sleep(15);
+//                            for(Double force : forceList){
+//                                if(force>fMax){
+//                                    fMax=force;
+//                                }
+//                                lbFMax.setText(String.format("%.2f", Double.valueOf(fMax)));
+//                                System.out.println(forceList);
+//                            }
+//                        } catch (InterruptedException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//
+//                    });
+//                    //Identifica valor de Posicao Max mm
+//                    Platform.runLater(() -> {
+//                        // Update UI.
+//                        try {
+//                            Thread.sleep(15);
+//                             for(Double position : positionList) {
+//                                 if (position > pMax) {
+//                                     pMax = position;
+//                                 }
+//                                 lbPMax.setText(String.format("%.2f", Double.valueOf(pMax)));
+//                                 System.out.println(positionList);
+//                             }
+//                        } catch (InterruptedException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    });
+//                    //Identifica valor de Tensao Max MPa
+//                    Platform.runLater(() -> {
+//                        // Update UI.
+//                        // condição
+//                        try {
+//                            Thread.sleep(15);
+//                            for (int i = 0; i < count; i++) {
+//                                lbTMax.setText(String.valueOf(i));
+//                            }
+//                        } catch (InterruptedException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    });
+//                    //Identifica valor de Tensao de escoamento MPa
+//                    Platform.runLater(() -> {
+//                        // Update UI.
+//                        // condição
+//                        try {
+//                            Thread.sleep(15);
+//                            for (int i = 0; i < count; i++) {
+//                                lbTEsc.setText(String.valueOf(i));
+//                            }
+//                        } catch (InterruptedException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    });
+//                    //Identifica valor de Alongamento %
+//                    Platform.runLater(() -> {
+//                        // Update UI.
+//                        // condição
+//                        try {
+//                            Thread.sleep(15);
+//                            for (int i = 0; i < count; i++) {
+//                                lbAlong.setText(String.valueOf(i));
+//                            }
+//                        } catch (InterruptedException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    });
+//                    //Identifica valor de Reducao de Area %
+//                    Platform.runLater(() -> {
+//                        // Update UI.
+//                        // condição
+//                        try {
+//                            Thread.sleep(15);
+//                            for (int i = 0; i < count; i++) {
+//                                lbRedArea.setText(String.valueOf(i));
+//                            }
+//                        } catch (InterruptedException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    });
+//                    //Identifica valor de M. Young MPa
+//                    Platform.runLater(() -> {
+//                        // Update UI.
+//                        // condição
+//                        try {
+//                            Thread.sleep(15);
+//                            for (int i = 0; i < count; i++) {
+//                                lbMYoung.setText(String.valueOf(i));
+//                            }
+//                        } catch (InterruptedException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    });
 
                     System.out.println(currentForce + " " + currentPosition);
                     // Exposicao dos valores no grafico em funcao da escolha do usuario MPa x % ou N x mm
                     // INCLUIR FORMULA DE CONVERSAO DOS VALORES
                     Platform.runLater(() -> {
+
+                        // Armazenando Forca e Posicao (variaveis globais) em arrays
+                        forceList.add(currentForce);
+                        positionList.add(currentPosition);
                         // Update UI.
-                        try {
-                            Thread.sleep(15);
-                            if (rbForceXPosition.isSelected()) {
-                                series.getData().add(new XYChart.Data<>(currentForce, currentPosition));
-                            } else if (rbStrainXDeform.isSelected()) {
-                                double nf = currentForce * 1000;
-                                double np = currentPosition * 1000;
-                                series.getData().add(new XYChart.Data<>(nf, np));
-                            }
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
+                        series.getData().add(new XYChart.Data<>(currentPosition, currentForce));
                     });
 
                     // Adding dot values in a global String chartString
@@ -336,6 +327,7 @@ public class EssaySceneController implements Initializable {
                     count++;
                 }
 
+                stopMove();
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -408,9 +400,6 @@ public class EssaySceneController implements Initializable {
     @FXML
     private void forceRequest() throws InterruptedException {
         outputInjection("1");
-        Thread.sleep(20);
-
-        //incluir tara para força
     }
 
     /**
@@ -419,9 +408,6 @@ public class EssaySceneController implements Initializable {
     @FXML
     private void positionRequest() throws InterruptedException {
         outputInjection("2");
-        Thread.sleep(20);
-
-        //incluir validação de real movimento do eixo
     }
 
     // FIM*********** Métodos pré ensaio ***********
@@ -442,6 +428,7 @@ public class EssaySceneController implements Initializable {
     @FXML
     private void moveUp() {
         outputInjection("4");
+        System.out.println("Moveu CIMA");
     }
 
     /**
@@ -450,6 +437,7 @@ public class EssaySceneController implements Initializable {
     @FXML
     private void moveDown() {
         outputInjection("5");
+        System.out.println("Moveu BAIXO");
     }
 
     /**
@@ -468,36 +456,116 @@ public class EssaySceneController implements Initializable {
         outputInjection("7");
     }
 
+    // FIM*********** Métodos de Movimento ***********
+
+    // INICIO*********** Métodos Ajuste de Velocidade ***********
+
     /**
-     * Método que solicita velocidade de ajuste (injeção de '8')
+     * Método que define a velocidade de ajuste (injeção de '8')
      */
     @FXML
     private void adjustVelocity() {
+        int value = Integer.parseInt(txtAdjustVelocity.getText());
         //Incluir range minimo, maximo e null (IF ou SWITCH)
         if (txtAdjustVelocity.getText() != null) {
-            String adjust = 8 + txtAdjustVelocity.getText();
-            outputInjection(adjust);
+            if(value >= 40000){
+                txtAdjustVelocity.setText("40000");
+                outputInjection("840000");
+            } else if(value >= 15000){
+                String adjust = 8 + txtAdjustVelocity.getText();
+                outputInjection(adjust);
+            } else {
+                txtAdjustVelocity.setText("15000");
+                outputInjection("815000");
+            }
         } else {
             txtAdjustVelocity.setText("15000");
             outputInjection("815000");
         }
-
     }
 
     /**
-     * Método que solicita velocidade de ensaio (injeção de '9')
+     * Método que define a velocidade de ensaio (injeção de '9')
      */
     @FXML
     private void essayVelocity() {
+        int value = Integer.parseInt(txtEssayVelocity.getText());
         //Incluir range minimo, maximo e null (IF ou SWITCH)
         if (txtEssayVelocity.getText() != null) {
-            String adjust = 9 + txtEssayVelocity.getText();
-            outputInjection(adjust);
+            if(value >= 40000){
+                txtEssayVelocity.setText("40000");
+                outputInjection("940000");
+            } else if(value >= 15000){
+                String adjust = 9 + txtEssayVelocity.getText();
+                outputInjection(adjust);
+            } else {
+                txtEssayVelocity.setText("15000");
+                outputInjection("915000");
+            }
         } else {
-            txtEssayVelocity.setText("15000.00");
+            txtEssayVelocity.setText("15000");
             outputInjection("915000");
         }
     }
+
+    // FIM*********** Métodos Ajuste de Velocidade ***********
+
+    // INICIO*********** Métodos de realização do Ensaio ***********
+
+
+///////////////////////////////////
+    @FXML
+    private synchronized void test() throws InterruptedException {
+
+        // Construcao do grafico, da serie e inclusao de parametros do grafico
+        chartEssayLine.getData().clear();
+        series = new XYChart.Series<>();
+        series.setName("Leitura");
+        chartEssayLine.getData().add(series);
+
+        // Aquisicao de valores iniciais de Forca e Posicao
+        initialForce = currentForce;
+        initialPosition = currentPosition;
+
+
+        //indica que eixo está em movimento
+        moving = true;
+
+        // Thread que atualiza os valores no grafico
+        Thread chartThread = new Thread(new RTChartCreate());
+        Platform.runLater(() -> {
+            // Inicia o movimento
+            essayTypeMove();
+            while(true){
+                chartThread.start();
+            }
+        });
+
+        // Setting final values
+        finalForce = currentForce;
+        finalPosition = currentPosition;
+
+    }
+
+    @FXML
+    private synchronized void testRecover() throws InterruptedException {
+
+        // Thread que atualiza os valores no grafico
+        Thread chartThread = new Thread(new RTChartCreate());
+        Platform.runLater(() -> {
+            // Inicia o movimento
+            essayTypeMove();
+            while(true){
+                chartThread.start();
+            }
+        });
+
+        // Setting final values
+        finalForce = currentForce;
+        finalPosition = currentPosition;
+
+    }
+///////////////////////////////////
 
     /**
      * Método que inicia o ensaio
@@ -505,8 +573,9 @@ public class EssaySceneController implements Initializable {
      * @throws InterruptedException
      */
     @FXML
-    private void essayStart() throws InterruptedException {
+    private synchronized void essayStart() throws InterruptedException {
 
+        //Aquisicao dos parametros inseridos pelo usuario
         try{
             essayVelocity();
             Thread.sleep(15);
@@ -514,33 +583,30 @@ public class EssaySceneController implements Initializable {
             throw new RuntimeException(e);
         }
 
-            //Comando para subir ou descer o eixo
+        //Comando para subir ou descer o eixo, baseado no tipo de ensaio selecionado
+        Platform.runLater(()-> {
+            while(true){
+                essayTypeMove();
+            }
+        });
 
-        if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Tração"){
-
-        } else if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Compressão" ||
-        cbEssayType.getSelectionModel().getSelectedItem().toString()=="Flexão"){
-
-        }
-        //SE PRA BAIXO, ESSAY DOWN
+        //indica que eixo está em movimento
         moving = true;
 
-        // Essay Chart construction and parameters
+        // Construcao do grafico, da serie e inclusao de parametros do grafico
         chartEssayLine.getData().clear();
         series = new XYChart.Series<>();
         series.setName("Leitura");
         chartEssayLine.getData().add(series);
 
-        // Setting inicial values
+        // Aquisicao de valores iniciais de Forca e Posicao
         initialForce = currentForce;
         initialPosition = currentPosition;
 
-        // Thread to update the series on chart
+        // Thread que atualiza os valores no grafico
         Thread chartThread = new Thread(new RTChartCreate());
         chartThread.start();
         chartThread.join();
-
-
 
 
         // Setting final values
@@ -548,48 +614,60 @@ public class EssaySceneController implements Initializable {
         finalPosition = currentPosition;
 
 
-        essayExp = new Essay();
-        essayExp.setUserId(4); // Substituir por ID referente ao login
-        essayExp.setEssayIdentification("Teste Ensaio");
-        essayExp.setEssayNorm("null");
-        essayExp.setEssayUsedMachine("mBio Portátil");
-        essayExp.setEssayChargeCell(0.500);
-        essayExp.setEssayInitialForce(initialForce);
-        essayExp.setEssayFinalForce(finalForce);
-        essayExp.setEssayInitialPosition(initialPosition);
-        essayExp.setEssayFinalPosition(finalPosition);
-        essayExp.setEssayDislocationVelocity(15000);
-        essayExp.setEssayTemperature(35.0);
-        essayExp.setEssayPreCharge(0.0);
-        essayExp.setEssayRelativeHumidity(40);
-        essayExp.setEssayChart(chartString);
-        essayExp.setEssayDate(currentDate);
-        System.out.println(essayExp);
+        essayFinalyzed = new Essay();
+        essayFinalyzed.setUserId(4); // Substituir por ID referente ao login
+        essayFinalyzed.setEssayIdentification("Teste Ensaio");
+        essayFinalyzed.setEssayNorm("null");
+        essayFinalyzed.setEssayUsedMachine("mBio Portátil");
+        essayFinalyzed.setEssayChargeCell(0.500);
+        essayFinalyzed.setEssayInitialForce(initialForce);
+        essayFinalyzed.setEssayFinalForce(finalForce);
+        essayFinalyzed.setEssayInitialPosition(initialPosition);
+        essayFinalyzed.setEssayFinalPosition(finalPosition);
+        essayFinalyzed.setEssayDislocationVelocity(15000);
+        essayFinalyzed.setEssayTemperature(35.0);
+        essayFinalyzed.setEssayPreCharge(0.0);
+        essayFinalyzed.setEssayRelativeHumidity(40);
+        essayFinalyzed.setEssayChart(chartString);
+        essayFinalyzed.setEssayDate(currentDate);
+        System.out.println(essayFinalyzed);
 
 //        // Create essay to call essaySave method inserting this object essay as parameter
-//        essayExp = new Essay();
-//        essayExp.setUserId(1); // Substituir por ID referente ao login
-//        essayExp.setEssayIdentification(txtEssayIdentification.getText());
-//        essayExp.setEssayNorm(txtEssayNorm.getText());
-//        essayExp.setEssayUsedMachine(txtUsedMachine.getText());
-//        essayExp.setEssayChargeCell(Double.parseDouble(txtEssayChargeCell.getText()));
-//        essayExp.setEssayInitialForce(initialForce);
-//        essayExp.setEssayFinalForce(finalForce);
-//        essayExp.setEssayInitialPosition(initialPosition);
-//        essayExp.setEssayFinalPosition(finalPosition);
-//        essayExp.setEssayDislocationVelocity(Double.parseDouble(txtDislocationVelocity.getText()));
-//        essayExp.setEssayTemperature(Double.parseDouble(lbEssayTemperature.getText()));
-//        essayExp.setEssayPreCharge(Double.parseDouble(txtEssayPreCharge.getText()));
-//        essayExp.setEssayRelativeHumidity(Double.parseDouble(lbEssayRelativeHumidity.getText()));
-//        essayExp.setEssayChart(chartString);
-//        essayExp.setEssayDate(currentDate);
-//        System.out.println(essayExp);
+//        essayFinalyzed = new Essay();
+//        essayFinalyzed.setUserId(1); // Substituir por ID referente ao login
+//        essayFinalyzed.setEssayIdentification(txtEssayIdentification.getText());
+//        essayFinalyzed.setEssayNorm(txtEssayNorm.getText());
+//        essayFinalyzed.setEssayUsedMachine(txtUsedMachine.getText());
+//        essayFinalyzed.setEssayChargeCell(Double.parseDouble(txtEssayChargeCell.getText()));
+//        essayFinalyzed.setEssayInitialForce(initialForce);
+//        essayFinalyzed.setEssayFinalForce(finalForce);
+//        essayFinalyzed.setEssayInitialPosition(initialPosition);
+//        essayFinalyzed.setEssayFinalPosition(finalPosition);
+//        essayFinalyzed.setEssayDislocationVelocity(Double.parseDouble(txtDislocationVelocity.getText()));
+//        essayFinalyzed.setEssayTemperature(Double.parseDouble(lbEssayTemperature.getText()));
+//        essayFinalyzed.setEssayPreCharge(Double.parseDouble(txtEssayPreCharge.getText()));
+//        essayFinalyzed.setEssayRelativeHumidity(Double.parseDouble(lbEssayRelativeHumidity.getText()));
+//        essayFinalyzed.setEssayChart(chartString);
+//        essayFinalyzed.setEssayDate(currentDate);
+//        System.out.println(essayFinalyzed);
+    }
+
+    /**
+     * Metodo que define direcao do movimento do eixo, baseado no tipo de ensaio
+     */
+    private void essayTypeMove(){
+        if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Tração"){
+            moveUp();
+        } else if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Compressão" ||
+                cbEssayType.getSelectionModel().getSelectedItem().toString()=="Flexão"){
+            moveDown();
+        }
     }
 
     /**
      * Metodo de interrupção automatica do ensaio
      */
-    private boolean autoBreak(){
+    private boolean autoBreak() throws InterruptedException {
         if(fMax>0 && pMax>0 ){
             if(rbForceDownBreak.isSelected()){
                 if(currentForce <= fMax - fMax*(Double.valueOf(String.valueOf(txtForcePercentageBreak)))/100){
@@ -623,20 +701,15 @@ public class EssaySceneController implements Initializable {
      * REQUER IMPLAMTANÇÃO >> Método que pausa se o eixo estiver em movimento e retoma se estiver parado
      */
     @FXML
-    private void essayPause() {
+    private void essayPause() throws InterruptedException {
         if (moving == true) {
             stopMove();
             moving = false;
             btnPause.setText("Retomar");
         } else {
             moving = true;
-            if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Tração"){
-                outputInjection("4");
-            } else if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Compressão" ||
-                    cbEssayType.getSelectionModel().getSelectedItem().toString()=="Flexão"){
-                outputInjection("5");
-            }
             btnPause.setText("Pause");
+            testRecover();
         }
     }
 
@@ -659,12 +732,12 @@ public class EssaySceneController implements Initializable {
     @FXML
     public void essaySave() {
         if(sysVar.getUserId()==3){
-            essayExp.setEssayId(1);
-            essayDAO.update(essayExp);
+            essayFinalyzed.setEssayId(1);
+            essayDAO.update(essayFinalyzed);
         } else if(sysVar.getUserId()>3){
-            essayDAO.create(essayExp);
+            essayDAO.create(essayFinalyzed);
         }
-        System.out.println(essayExp);
+        System.out.println(essayFinalyzed);
     }
 
     /**
@@ -672,12 +745,11 @@ public class EssaySceneController implements Initializable {
      */
     @FXML
     public void essayDiscart() {
-        essayExp = null;
-        System.out.println(essayExp);
+        essayFinalyzed = null;
+        System.out.println(essayFinalyzed);
     }
-    // FIM*********** Métodos de Movimento ***********
 
-
+    // INICIO*********** Métodos de realização do Ensaio ***********
 }
 
 
