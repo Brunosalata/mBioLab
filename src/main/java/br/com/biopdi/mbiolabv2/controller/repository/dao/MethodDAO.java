@@ -304,3 +304,4 @@ public class MethodDAO extends DBConnection {
         return result;
     }
 }
+

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!--
+  ~  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~  Licensed under the Biopdi® License, Version 1.0.
+  ~  You may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~       https://biopdi.com.br/
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<!--
+  *  @project mBioLabv2
+  *  @version 1.0
+  *
+  *  @author Bruno Salata Lima
+  *          github.com/Brunosalata
+  -->
+
+<AnchorPane prefHeight="890.0" prefWidth="1363.0" style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.SupportSceneController">
+   <children>
+      <HBox alignment="TOP_CENTER" prefHeight="870.0" prefWidth="1006.0" style="-fx-background-color: #E5E5E5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="860.0" prefWidth="707.0" style="-fx-background-color: #dddddd;" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+               <children>
+                  <AnchorPane prefHeight="200.0" prefWidth="1206.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <BorderPane layoutX="384.0" layoutY="121.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <center>
+                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <ImageView fitHeight="153.0" fitWidth="614.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/darkLogo.png" />
+                                       </image>
+                                       <VBox.margin>
+                                          <Insets top="50.0" />
+                                       </VBox.margin>
+                                    </ImageView>
+                                    <VBox alignment="TOP_CENTER" prefHeight="352.0" prefWidth="928.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Whatsapp:" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets top="40.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <Label text="+55 (16) 9 8181-8732" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="Telefones:" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets top="20.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <Label text="+55 (16) 3416-7080" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <Label alignment="CENTER" contentDisplay="CENTER" text="+55 (16) 3413-6067" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="E-mail:" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets top="20.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <Label text="vendas@biopdi.com.br" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="Endereço:" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets top="20.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <Label text="Rua Francisco Maricondi, 338,São Carlos-SP, CEP 13566-400" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                           </center>
+                        </BorderPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="419.0" prefWidth="967.0" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                     <children>
+                        <BorderPane layoutX="384.0" layoutY="43.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d2d2d2;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                           <center>
+                              <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Label prefHeight="32.0" prefWidth="172.0" text="Download" VBox.vgrow="ALWAYS">
+                                       <font>
+                                          <Font name="System Bold" size="22.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="20.0" top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <ScrollPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                       <content>
+                                          <VBox prefHeight="143.0" prefWidth="320.0">
+                                             <children>
+                                                <Hyperlink text="Manual do Usuário">
+                                                   <VBox.margin>
+                                                      <Insets left="20.0" top="3.0" />
+                                                   </VBox.margin>
+                                                </Hyperlink>
+                                                <Hyperlink text="Descritivo normativo">
+                                                   <VBox.margin>
+                                                      <Insets left="20.0" top="3.0" />
+                                                   </VBox.margin>
+                                                </Hyperlink>
+                                                <Hyperlink text="Modelo de relatório">
+                                                   <VBox.margin>
+                                                      <Insets left="20.0" top="3.0" />
+                                                   </VBox.margin>
+                                                </Hyperlink>
+                                                <Hyperlink text="Tutorial guiado do uso do equipamento">
+                                                   <VBox.margin>
+                                                      <Insets left="20.0" top="3.0" />
+                                                   </VBox.margin>
+                                                </Hyperlink>
+                                                <Hyperlink text="Arquivo importante 1">
+                                                   <VBox.margin>
+                                                      <Insets left="20.0" top="3.0" />
+                                                   </VBox.margin>
+                                                </Hyperlink>
+                                             </children>
+                                          </VBox>
+                                       </content>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" />
+                                       </VBox.margin>
+                                    </ScrollPane>
+                                 </children>
+                              </VBox>
+                           </center>
+                        </BorderPane>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefHeight="683.0" prefWidth="310.0" style="-fx-background-color: #333333;" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets bottom="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+               <children>
+                  <BorderPane prefHeight="860.0" prefWidth="387.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

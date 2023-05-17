@@ -826,4 +826,3 @@ public class EssaySceneController implements Initializable {
 //            });
 //            t.start();
 //    }
-//  }
