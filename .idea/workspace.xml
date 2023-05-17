@@ -5,7 +5,53 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02b74ee7-7c41-4de8-9b11-7638723b4e97" name="Changes" comment="Proj organization, User, UserDAO and DBConnection classes done">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/mBioLabv2.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/EssaySceneController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/HomeSceneController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/LoginSceneController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/OpenSceneController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/SupportSceneController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/SystemSettingSceneController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/UserRegisterSceneController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/switchScene/FxmlLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/switchScene/SwitchMenuSceneController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/repository/dao/MethodDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/repository/dao/SystemParameterDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/repository/dao/SystemVariableDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/model/bean/Method.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/model/bean/SystemParameter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/model/bean/SystemVariable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/dashboardScene.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/essayScene.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/homeScene.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/loginScene.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/openScene.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/reportScene.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/supportScene.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/switchMenuScene.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/systemSettingScene.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/userRegisterScene.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mBioLabDB.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/MainSceneController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/repository/DBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/repository/DBConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/repository/dao/EssayDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/repository/dao/EssayDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/repository/dao/SetupDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/repository/dao/SetupDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/repository/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/repository/dao/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/mBioLabv2Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/mBioLabv2Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/model/bean/Essay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/model/bean/Essay.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/model/bean/Setup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/model/bean/Setup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/model/bean/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/model/bean/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/mainScene.fxml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,12 +61,39 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="FxmlFile" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;state&quot;: &quot;OPEN&quot;,
+      &quot;author&quot;: &quot;Biopdi&quot;
+    }
+  ],
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;author&quot;: &quot;Biopdi&quot;
+  }
+}</component>
+  <component name="GitToolBoxStore">
+    <option name="projectConfigVersion" value="5" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="79a3ab24-9ed2-4dec-ad9f-1ef6b2d3933a" />
+        <option name="url" value="git@github.com:Biopdi/mBioLabv2.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/model/bean/Essay.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -45,20 +118,33 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/java_libs/sqlite-jdbc-3.8.11.2.jar",
-    "project.structure.last.edited": "Libraries",
+    "last_directory_selection": "C:/Projetos_Biopdi/mBioLabv2/src/main/java/br/com/biopdi/mbiolabv2",
+    "last_opened_file_path": "C:/Projetos_Biopdi/mBioLabv2/src/main/java/br/com/biopdi/mbiolabv2",
+    "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.39195403",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices"
+    "settings.editor.selected.configurable": "editor.reader.mode"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration name="mBioLabv2Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="ReadonlyStatusHandler">
+    <option name="SHOW_DIALOG" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Projetos_Biopdi\mBioLabv2\src\main\java\br\com\biopdi\mbiolabv2" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Projetos_Biopdi\mBioLabv2\src\main\resources" />
+      <recent name="C:\Projetos_Biopdi\mBioLabv2\src\main\resources\br\com\biopdi\mbiolabv2" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.mBioLabv2Application">
+    <configuration name="mBioLabv2Application" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="br.com.biopdi.mbiolabv2.mBioLabv2Application" />
       <module name="mBioLabv2" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="br.com.biopdi.mbiolabv2.controller.SceneController.*" />
+          <option name="PATTERN" value="br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -66,9 +152,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="All in mBioLabv2" type="JUnit" factoryName="JUnit">
+      <module name="mBioLabv2" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.mBioLabv2Application" />
+      <item itemvalue="JUnit.All in mBioLabv2" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.mBioLabv2Application" />
+        <item itemvalue="JUnit.All in mBioLabv2" />
       </list>
     </recent_temporary>
   </component>
@@ -98,8 +198,23 @@
     <option name="localTasksCounter" value="3" />
     <servers />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Proj organization, User, UserDAO and DBConnection classes done" />
     <option name="LAST_COMMIT_MESSAGE" value="Proj organization, User, UserDAO and DBConnection classes done" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
