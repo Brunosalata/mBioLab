@@ -13,6 +13,29 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<!--
+  ~  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~  Licensed under the Biopdi® License, Version 1.0.
+  ~  You may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~       https://biopdi.com.br/
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<!--
+  *  @project mBioLabv2
+  *  @version 1.0
+  *
+  *  @author Bruno Salata Lima
+  *          github.com/Brunosalata
+  -->
+
 <AnchorPane fx:id="apUserRegister" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.UserRegisterSceneController">
    <children>
       <Label alignment="CENTER" layoutX="164.0" layoutY="528.0" prefHeight="17.0" prefWidth="473.0" text="Soluções em ensaios de materiais © Biopdi 2023" textFill="#e4e4e4" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />

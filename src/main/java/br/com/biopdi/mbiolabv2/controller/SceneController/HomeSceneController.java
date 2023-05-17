@@ -2,8 +2,6 @@ package br.com.biopdi.mbiolabv2.controller.SceneController;
 
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
-import br.com.biopdi.mbiolabv2.model.bean.Setup;
-import br.com.biopdi.mbiolabv2.model.bean.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,12 +12,17 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * @author Bruno Salata Lima - 16/05/2023
+ * github.com/Brunosalata
+ * @version 1.0
+ * @project mBioLabv2
+ */
 public class HomeSceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
     private final UserDAO userDAO = new UserDAO();
@@ -70,6 +73,22 @@ public class HomeSceneController implements Initializable {
     }
 
 }
+
+
+    /*
+ *  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *  Licensed under the Biopdi® License, Version 1.0.
+ *  You may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       https://biopdi.com.br/
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 
     // USER OK
