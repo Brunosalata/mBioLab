@@ -19,6 +19,12 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * @author Bruno Salata Lima - 16/05/2023
+ * github.com/Brunosalata
+ * @version 1.0
+ * @project mBioLabv2
+ */
 public class EssaySceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
     private Essay essayFinalyzed;
@@ -59,11 +65,14 @@ public class EssaySceneController implements Initializable {
 
     Date systemDate = new Date();
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    SimpleDateFormat brasilianDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-    String currentDate = brasilianDate.format(systemDate);
+    SimpleDateFormat brasilianDay = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat brasilianHour = new SimpleDateFormat("HH:mm");
+    String currentDay = brasilianDay.format(systemDate);
+    String currentHour = brasilianHour.format(systemDate);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         normList();
         essayTypeList();
         autoConnect();
@@ -202,12 +211,14 @@ public class EssaySceneController implements Initializable {
             redArea = 0D;
             mYoung = 0D;
 
+            Double count = 0D;
+
             List<Double> forceList = new ArrayList<>();
             List<Double> positionList = new ArrayList<>();
 
             try {
-//                while (count<30) {
-                while(currentPosition<50000){
+                while (count<30) {
+//                while(autoBreak()==false){
                     Thread.sleep(50);
 
                     // Armazenando Forca e Posicao (variaveis globais) em arrays
@@ -235,42 +246,47 @@ public class EssaySceneController implements Initializable {
                          }
                     });
                     //Identifica valor de Tensao Max MPa
+                    tMax = count;
                     Platform.runLater(() -> {
                         // Update UI.
                         // condição
-                        for (int i = 0; i < count; i++) {
+                        for (int i = 0; i < tMax; i++) {
                             lbTMax.setText(String.valueOf(i));
                         }
                     });
                     //Identifica valor de Tensao de escoamento MPa
+                   tEsc = count;
                     Platform.runLater(() -> {
                         // Update UI.
                         // condição
-                        for (int i = 0; i < count; i++) {
+                        for (int i = 0; i < tEsc; i++) {
                             lbTEsc.setText(String.valueOf(i));
                         }
                     });
                     //Identifica valor de Alongamento %
+                    along = count;
                     Platform.runLater(() -> {
                         // Update UI.
                         // condição
-                        for (int i = 0; i < count; i++) {
+                        for (int i = 0; i < along; i++) {
                             lbAlong.setText(String.valueOf(i));
                         }
                     });
                     //Identifica valor de Reducao de Area %
+                    redArea = count;
                     Platform.runLater(() -> {
                         // Update UI.
                         // condição
-                        for (int i = 0; i < count; i++) {
+                        for (int i = 0; i < redArea; i++) {
                             lbRedArea.setText(String.valueOf(i));
                         }
                     });
                     //Identifica valor de M. Young MPa
+                    mYoung = count;
                     Platform.runLater(() -> {
                         // Update UI.
                         // condição
-                        for (int i = 0; i < count; i++) {
+                        for (int i = 0; i < mYoung; i++) {
                             lbMYoung.setText(String.valueOf(i));
                         }
                     });
@@ -291,7 +307,7 @@ public class EssaySceneController implements Initializable {
                         chartString = currentForce + ";" + currentPosition;
                     }
                     System.out.println(chartString);
-//                    count++;
+                    count++;
                 }
                 stopMove();
                 System.out.println(forceList);
@@ -485,6 +501,8 @@ public class EssaySceneController implements Initializable {
     @FXML
     private synchronized void test() throws InterruptedException {
 
+
+
         // Construcao do grafico, da serie e inclusao de parametros do grafico
         chartEssayLine.getData().clear();
         series = new XYChart.Series<>();
@@ -580,42 +598,6 @@ public class EssaySceneController implements Initializable {
         finalPosition = currentPosition;
 
 
-        essayFinalyzed = new Essay();
-        essayFinalyzed.setUserId(sysVar.getUserId()); // Substituir por ID referente ao login
-        essayFinalyzed.setEssayIdentification(txtEssayIdentification.getText());
-        essayFinalyzed.setEssayNorm(cbNormList.getSelectionModel().getSelectedItem().toString());
-        essayFinalyzed.setEssayUsedMachine("mBio Portátil");
-        essayFinalyzed.setEssayChargeCell(Double.parseDouble(txtEssayChargeCell.getText()));
-        essayFinalyzed.setEssayInitialForce(initialForce);
-        essayFinalyzed.setEssayFinalForce(finalForce);
-        essayFinalyzed.setEssayInitialPosition(initialPosition);
-        essayFinalyzed.setEssayFinalPosition(finalPosition);
-        essayFinalyzed.setEssayDislocationVelocity(15000);
-        essayFinalyzed.setEssayTemperature(35.0);
-        essayFinalyzed.setEssayPreCharge(0.0);
-        essayFinalyzed.setEssayRelativeHumidity(40);
-        essayFinalyzed.setEssayChart(chartString);
-        essayFinalyzed.setEssayDate(currentDate);
-        System.out.println(essayFinalyzed);
-
-//        // Create essay to call essaySave method inserting this object essay as parameter
-//        essayFinalyzed = new Essay();
-//        essayFinalyzed.setUserId(1); // Substituir por ID referente ao login
-//        essayFinalyzed.setEssayIdentification(txtEssayIdentification.getText());
-//        essayFinalyzed.setEssayNorm(txtEssayNorm.getText());
-//        essayFinalyzed.setEssayUsedMachine(txtUsedMachine.getText());
-//        essayFinalyzed.setEssayChargeCell(Double.parseDouble(txtEssayChargeCell.getText()));
-//        essayFinalyzed.setEssayInitialForce(initialForce);
-//        essayFinalyzed.setEssayFinalForce(finalForce);
-//        essayFinalyzed.setEssayInitialPosition(initialPosition);
-//        essayFinalyzed.setEssayFinalPosition(finalPosition);
-//        essayFinalyzed.setEssayDislocationVelocity(Double.parseDouble(txtDislocationVelocity.getText()));
-//        essayFinalyzed.setEssayTemperature(Double.parseDouble(lbEssayTemperature.getText()));
-//        essayFinalyzed.setEssayPreCharge(Double.parseDouble(txtEssayPreCharge.getText()));
-//        essayFinalyzed.setEssayRelativeHumidity(Double.parseDouble(lbEssayRelativeHumidity.getText()));
-//        essayFinalyzed.setEssayChart(chartString);
-//        essayFinalyzed.setEssayDate(currentDate);
-//        System.out.println(essayFinalyzed);
     }
 
     /**
@@ -633,32 +615,34 @@ public class EssaySceneController implements Initializable {
     /**
      * Metodo de interrupção automatica do ensaio
      */
-    private boolean autoBreak() throws InterruptedException {
+    @FXML
+    private boolean autoBreak() {
         if(fMax>0 && pMax>0 ){
             if(rbForceDownBreak.isSelected()){
-                if(currentForce <= fMax - fMax*(Double.valueOf(String.valueOf(txtForcePercentageBreak)))/100){
-                    stopMove();
-                    return true;
-                };
+                while(currentForce >= fMax * (100 - Double.valueOf(String.valueOf(txtForcePercentageBreak)))/100) {
+                    return false;
+                }
+                return true;
+
             } else if(rbMaxForceBreak.isSelected()){
-                Double forceLimit = Double.valueOf(String.valueOf(txtMaxForceBreak));
-                if(currentForce >= forceLimit){
-                    stopMove();
-                    return true;
+                while(currentForce < Double.parseDouble(txtMaxForceBreak.getText())){
+                    return false;
                 }
+                return true;
+
             } else if(rbDislocationBreak.isSelected()){
-                Double maxPosition = Double.valueOf(String.valueOf(txtDislocationValueBreak));
-                if(currentPosition >= maxPosition){
-                    stopMove();
-                    return true;
+                while(currentPosition < Double.parseDouble(txtDislocationValueBreak.getText())){
+                    return false;
                 }
+                return true;
+
             } else if(rbDislocationPause.isSelected()){
-                Double maxPosition = Double.valueOf(String.valueOf(txtDislocationValueBreak));
-                if(currentPosition >= maxPosition){
-                    essayPause();
-                    return true;
+                while(currentPosition < Double.parseDouble(txtDislocationValuePause.getText())){
+                    return false;
                 }
+                return true;
             }
+            stopMove();
         }
         return false;
     }
@@ -697,10 +681,55 @@ public class EssaySceneController implements Initializable {
      */
     @FXML
     public void essaySave() {
+        essayFinalyzed = new Essay();
+        essayFinalyzed.setUserId(sysVar.getUserId()); // Substituir por ID referente ao login
+        essayFinalyzed.setEssayIdentification(txtEssayIdentification.getText());
+        essayFinalyzed.setEssayNorm(cbNormList.getSelectionModel().getSelectedItem().toString());
+        essayFinalyzed.setEssayUsedMachine(null);
+        essayFinalyzed.setEssayChargeCell(0.0);
+        essayFinalyzed.setEssayInitialForce(initialForce);
+        essayFinalyzed.setEssayFinalForce(finalForce);
+        essayFinalyzed.setEssayInitialPosition(initialPosition);
+        essayFinalyzed.setEssayFinalPosition(finalPosition);
+        essayFinalyzed.setEssayDislocationVelocity(Double.parseDouble(txtEssayVelocity.getText()));
+        essayFinalyzed.setEssayTemperature(0.0);
+        essayFinalyzed.setEssayPreCharge(0.0);
+        essayFinalyzed.setEssayRelativeHumidity(0.0);
+        essayFinalyzed.setEssayMaxForce(fMax);
+        essayFinalyzed.setEssayMaxPosition(pMax);
+        essayFinalyzed.setEssayMaxTension(tMax);
+        essayFinalyzed.setEssayEscapeTension(tEsc);
+        essayFinalyzed.setEssayAlong(along);
+        essayFinalyzed.setEssayAreaRed(redArea);
+        essayFinalyzed.setEssayMYoung(mYoung);
+        essayFinalyzed.setEssayChart(chartString);
+        essayFinalyzed.setEssayDay(currentDay);
+        essayFinalyzed.setEssayHour(currentHour);
+        System.out.println(essayFinalyzed);
+
+//        // Create essay to call essaySave method inserting this object essay as parameter
+//        essayFinalyzed = new Essay();
+//        essayFinalyzed.setUserId(1); // Substituir por ID referente ao login
+//        essayFinalyzed.setEssayIdentification(txtEssayIdentification.getText());
+//        essayFinalyzed.setEssayNorm(txtEssayNorm.getText());
+//        essayFinalyzed.setEssayUsedMachine(txtUsedMachine.getText());
+//        essayFinalyzed.setEssayChargeCell(Double.parseDouble(txtEssayChargeCell.getText()));
+//        essayFinalyzed.setEssayInitialForce(initialForce);
+//        essayFinalyzed.setEssayFinalForce(finalForce);
+//        essayFinalyzed.setEssayInitialPosition(initialPosition);
+//        essayFinalyzed.setEssayFinalPosition(finalPosition);
+//        essayFinalyzed.setEssayDislocationVelocity(Double.parseDouble(txtDislocationVelocity.getText()));
+//        essayFinalyzed.setEssayTemperature(Double.parseDouble(lbEssayTemperature.getText()));
+//        essayFinalyzed.setEssayPreCharge(Double.parseDouble(txtEssayPreCharge.getText()));
+//        essayFinalyzed.setEssayRelativeHumidity(Double.parseDouble(lbEssayRelativeHumidity.getText()));
+//        essayFinalyzed.setEssayChart(chartString);
+//        essayFinalyzed.setEssayDate(currentDate);
+//        System.out.println(essayFinalyzed);
+
         if(sysVar.getUserId()==3){
             essayFinalyzed.setEssayId(1);
             essayDAO.update(essayFinalyzed);
-        } else if(sysVar.getUserId()>3){
+        } else{
             essayDAO.create(essayFinalyzed);
         }
         System.out.println(essayFinalyzed);
@@ -717,6 +746,24 @@ public class EssaySceneController implements Initializable {
 
     // INICIO*********** Métodos de realização do Ensaio ***********
 }
+
+
+
+
+/*
+ *  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *  Licensed under the Biopdi® License, Version 1.0.
+ *  You may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       https://biopdi.com.br/
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 
 

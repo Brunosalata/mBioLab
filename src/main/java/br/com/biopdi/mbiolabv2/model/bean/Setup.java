@@ -1,8 +1,29 @@
 package br.com.biopdi.mbiolabv2.model.bean;
 
+/*
+ *  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *  Licensed under the Biopdi® License, Version 1.0.
+ *  You may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       https://biopdi.com.br/
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * @author Bruno Salata Lima - 16/05/2023
+ * github.com/Brunosalata
+ * @version 1.0
+ * @project mBioLabv2
+ */
 public class Setup {
     private Integer setupId, userId, MC1M1, MC2M1, MC3M1, MC4M1, MC5M1, MC6M1, MC7M1, MC8M1, MC9M1, MC10M1, MC11M1, MC12M1, MC13M1, MC14M1, MC15M1, MC16M1, MC17M1, MC18M1, MC19M1, MC20M1, MC21M1, MC22M1, MC23M1, MC24M1, MC25M1, MC26M1, MC27M1, MC28M1, MC29M1, MC30M1, channel1ext1, channel2ext1, channel3ext1, channel4ext1, channel1ext2, channel2ext2, channel3ext2, channel4ext2;
     private String setupName, setupAuthor;

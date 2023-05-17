@@ -1,5 +1,20 @@
 package br.com.biopdi.mbiolabv2.controller.repository.dao;
 
+/*
+ *  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *  Licensed under the Biopdi® License, Version 1.0.
+ *  You may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       https://biopdi.com.br/
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 import br.com.biopdi.mbiolabv2.controller.repository.DBConnection;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
 
@@ -7,6 +22,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Bruno Salata Lima - 16/05/2023
+ * github.com/Brunosalata
+ * @version 1.0
+ * @project mBioLabv2
+ */
 public class EssayDAO extends DBConnection {
 
     /**
@@ -31,8 +52,16 @@ public class EssayDAO extends DBConnection {
                     + "essayTemperature DOUBLE,"
                     + "essayPreCharge DOUBLE,"
                     + "essayRelativeHumidity DOUBLE,"
+                    + "essayMaxForce DOUBLE,"
+                    + "essayMaxPosition DOUBLE,"
+                    + "essayMaxTension DOUBLE,"
+                    + "essayEscapeTension DOUBLE,"
+                    + "essayAlong DOUBLE,"
+                    + "essayAreaRed DOUBLE,"
+                    + "essayMYoung DOUBLE,"
                     + "essayChart TEXT,"
-                    + "essayData DATE NOT NULL);");
+                    + "essayDay DATE,"
+                    + "essayHour DATE);");
             stm.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -54,7 +83,8 @@ public class EssayDAO extends DBConnection {
             PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_essay(essayId, essayUserId, essayIdentification, " +
                     "essayNorm, essayUsedMachine, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, " +
                     "essayFinalPosition, essaydislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, " +
-                    "essayChart, essayData) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+                    "essayMaxForce, essayMaxPosition, essayMaxTension, essayEscapeTension, essayAlong, essayAreaRed, " +
+                    "essayMYoung, essayChart, essayDay, essayHour) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
             stm.setInt(2, essay.getUserId());
             stm.setString(3, essay.getEssayIdentification());
             stm.setString(4, essay.getEssayNorm());
@@ -68,8 +98,16 @@ public class EssayDAO extends DBConnection {
             stm.setDouble(12, essay.getEssayTemperature());
             stm.setDouble(13, essay.getEssayPreCharge());
             stm.setDouble(14, essay.getEssayRelativeHumidity());
-            stm.setString(15, essay.getEssayChart());
-            stm.setString(16, String.valueOf((essay.getEssayDate())));
+            stm.setDouble(15,essay.getEssayMaxForce());
+            stm.setDouble(16,essay.getEssayMaxPosition());
+            stm.setDouble(17,essay.getEssayMaxTension());
+            stm.setDouble(18,essay.getEssayEscapeTension());
+            stm.setDouble(19,essay.getEssayAlong());
+            stm.setDouble(20,essay.getEssayAreaRed());
+            stm.setDouble(21,essay.getEssayMYoung());
+            stm.setString(22, essay.getEssayChart());
+            stm.setString(23, String.valueOf((essay.getEssayDay())));
+            stm.setString(24, String.valueOf((essay.getEssayHour())));
             stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -91,7 +129,8 @@ public class EssayDAO extends DBConnection {
             PreparedStatement stm = conn.prepareStatement("SELECT essayId, essayUserId, essayIdentification, essayNorm, " +
                     "essayUsedMachine, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, " +
                     "essayFinalPosition, essaydislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, " +
-                    "essayChart, essayData FROM tb_essay ORDER BY essayId ASC;");
+                    "essayMaxForce, essayMaxPosition, essayMaxTension, essayEscapeTension, essayAlong, essayAreaRed, " +
+                    "essayMYoung, essayChart, essayDay, essayHour FROM tb_essay ORDER BY essayId ASC;");
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Essay essay = new Essay(
@@ -109,8 +148,16 @@ public class EssayDAO extends DBConnection {
                         rs.getDouble("essayTemperature"),//essay Temperature
                         rs.getDouble("essayPreCharge"),//essay Pre Charge
                         rs.getDouble("essayRelativeHumidity"),//essay Relative Humidity
+                        rs.getDouble("essayMaxForce"),// essay Max Force
+                        rs.getDouble("essayMaxPosition"),// essay Max Position
+                        rs.getDouble("essayMaxTension"),// essay MAx Tension
+                        rs.getDouble("essayEscapeTension"),// essay Escape Tension
+                        rs.getDouble("essayAlong"),// essay Along
+                        rs.getDouble("essayAreaRed"),// essay Area Redution
+                        rs.getDouble("essayMYoung"),// essay MYoung
                         rs.getString("essayChart"),//essay Chart
-                        rs.getString("essayData"));//essay Data
+                        rs.getString("essayDay"),//essay Day
+                        rs.getString("essayHour"));//essay Hour
                 result.add(essay);
             }
         } catch (SQLException e) {
@@ -143,8 +190,16 @@ public class EssayDAO extends DBConnection {
                     + "essayTemperature = ?,"
                     + "essayPreCharge = ?,"
                     + "essayRelativeHumidity = ?,"
+                    + "essayMaxForce = ?,"
+                    + "essayMaxPosition = ?,"
+                    + "essayMaxTension = ?,"
+                    + "essayEscapeTension = ?,"
+                    + "essayAlong = ?,"
+                    + "essayAreaRed = ?,"
+                    + "essayMYoung = ?,"
                     + "essayChart = ?,"
-                    + "essayData = ? "
+                    + "essayDay = ? "
+                    + "essayHour = ? "
                     + "WHERE essayId = ?;");
             stm.setInt(1, essay.getUserId());
             stm.setString(2, essay.getEssayIdentification());
@@ -159,9 +214,17 @@ public class EssayDAO extends DBConnection {
             stm.setDouble(11, essay.getEssayPreCharge());
             stm.setDouble(12, essay.getEssayPreCharge());
             stm.setDouble(13, essay.getEssayRelativeHumidity());
-            stm.setString(14, essay.getEssayChart());
-            stm.setString(15, String.valueOf((essay.getEssayDate())));
-            stm.setInt(16, essay.getEssayId());
+            stm.setDouble(14,essay.getEssayMaxForce());
+            stm.setDouble(15,essay.getEssayMaxPosition());
+            stm.setDouble(16,essay.getEssayMaxTension());
+            stm.setDouble(17,essay.getEssayEscapeTension());
+            stm.setDouble(18,essay.getEssayAlong());
+            stm.setDouble(19,essay.getEssayAreaRed());
+            stm.setDouble(20,essay.getEssayMYoung());
+            stm.setString(21, essay.getEssayChart());
+            stm.setString(22, String.valueOf((essay.getEssayDay())));
+            stm.setString(23, String.valueOf((essay.getEssayHour())));
+            stm.setInt(24, essay.getEssayId());
             stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -201,7 +264,8 @@ public class EssayDAO extends DBConnection {
             PreparedStatement stm = conn.prepareStatement("SELECT essayId, essayUserId, essayIdentification, essayNorm, " +
                     "essayUsedMachine, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, " +
                     "essayFinalPosition, essaydislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, " +
-                    "essayChart, essayData FROM tb_essay WHERE essayId = ?;");
+                    "essayMaxForce, essayMaxPosition, essayMaxTension, essayEscapeTension, essayAlong, essayAreaRed, " +
+                    "essayMYoung, essayChart, essayDay, essayHour FROM tb_essay WHERE essayId = ?;");
             stm.setInt(1, pk);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
@@ -220,8 +284,16 @@ public class EssayDAO extends DBConnection {
                         rs.getDouble("essayTemperature"),//essay Temperature
                         rs.getDouble("essayPreCharge"),//essay Pre Charge
                         rs.getDouble("essayRelativeHumidity"),//essay Relative Humidity
+                        rs.getDouble("essayMaxForce"),// essay Max Force
+                        rs.getDouble("essayMaxPosition"),// essay Max Position
+                        rs.getDouble("essayMaxTension"),// essay MAx Tension
+                        rs.getDouble("essayEscapeTension"),// essay Escape Tension
+                        rs.getDouble("essayAlong"),// essay Along
+                        rs.getDouble("essayAreaRed"),// essay Area Redution
+                        rs.getDouble("essayMYoung"),// essay MYoung
                         rs.getString("essayChart"),//essay Chart
-                        rs.getString("essayData"));//essay Data
+                        rs.getString("essayDay"),//essay Day
+                        rs.getString("essayHour"));//essay Hour
                 result = essay;
             }
         } catch (SQLException e) {
@@ -245,7 +317,8 @@ public class EssayDAO extends DBConnection {
             PreparedStatement stm = conn.prepareStatement("SELECT essayId, essayUserId, essayIdentification, essayNorm, " +
                     "essayUsedMachine, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, " +
                     "essayFinalPosition, essaydislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, " +
-                    "essayChart, essayData FROM tb_essay WHERE essayUserId = ?;");
+                    "essayMaxForce, essayMaxPosition, essayMaxTension, essayEscapeTension, essayAlong, essayAreaRed, " +
+                    "essayMYoung, essayChart, essayDay, essayHour FROM tb_essay WHERE essayUserId = ?;");
             stm.setInt(1, userId);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
@@ -264,8 +337,16 @@ public class EssayDAO extends DBConnection {
                         rs.getDouble("essayTemperature"),//essay Temperature
                         rs.getDouble("essayPreCharge"),//essay Pre Charge
                         rs.getDouble("essayRelativeHumidity"),//essay Relative Humidity
+                        rs.getDouble("essayMaxForce"),// essay Max Force
+                        rs.getDouble("essayMaxPosition"),// essay Max Position
+                        rs.getDouble("essayMaxTension"),// essay MAx Tension
+                        rs.getDouble("essayEscapeTension"),// essay Escape Tension
+                        rs.getDouble("essayAlong"),// essay Along
+                        rs.getDouble("essayAreaRed"),// essay Area Redution
+                        rs.getDouble("essayMYoung"),// essay MYoung
                         rs.getString("essayChart"),//essay Chart
-                        rs.getString("essayData"));//essay Data
+                        rs.getString("essayDay"),//essay Day
+                        rs.getString("essayHour"));//essay Hour
                 result.add(essay);
             }
         } catch (SQLException e) {
@@ -289,7 +370,8 @@ public class EssayDAO extends DBConnection {
             PreparedStatement stm = conn.prepareStatement("SELECT essayId, essayUserId, essayIdentification, essayNorm, " +
                     "essayUsedMachine, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, " +
                     "essayFinalPosition, essaydislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, " +
-                    "essayChart, essayData FROM tb_essay WHERE essayData = ?;");
+                    "essayMaxForce, essayMaxPosition, essayMaxTension, essayEscapeTension, essayAlong, essayAreaRed, " +
+                    "essayMYoung, essayChart, essayDay, essayHour FROM tb_essay WHERE essayData = ?;");
             stm.setInt(1, Integer.parseInt(essayData));
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
@@ -308,8 +390,16 @@ public class EssayDAO extends DBConnection {
                         rs.getDouble("essayTemperature"),//essay Temperature
                         rs.getDouble("essayPreCharge"),//essay Pre Charge
                         rs.getDouble("essayRelativeHumidity"),//essay Relative Humidity
+                        rs.getDouble("essayMaxForce"),// essay Max Force
+                        rs.getDouble("essayMaxPosition"),// essay Max Position
+                        rs.getDouble("essayMaxTension"),// essay MAx Tension
+                        rs.getDouble("essayEscapeTension"),// essay Escape Tension
+                        rs.getDouble("essayAlong"),// essay Along
+                        rs.getDouble("essayAreaRed"),// essay Area Redution
+                        rs.getDouble("essayMYoung"),// essay MYoung
                         rs.getString("essayChart"),//essay Chart
-                        rs.getString("essayData"));//essay Data
+                        rs.getString("essayDay"),//essay Day
+                        rs.getString("essayHour"));//essay Hour
                 result.add(essay);
             }
         } catch (SQLException e) {
@@ -332,7 +422,8 @@ public class EssayDAO extends DBConnection {
             PreparedStatement stm = conn.prepareStatement("SELECT essayId, essayUserId, essayIdentification, essayNorm, " +
                     "essayUsedMachine, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, " +
                     "essayFinalPosition, essaydislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, " +
-                    "essayChart, essayData FROM tb_essay ORDER BY essayId DESC limit 1;");
+                    "essayMaxForce, essayMaxPosition, essayMaxTension, essayEscapeTension, essayAlong, essayAreaRed, " +
+                    "essayMYoung, essayChart, essayDay, essayHour FROM tb_essay ORDER BY essayId DESC limit 1;");
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Essay essay = new Essay(
@@ -350,8 +441,16 @@ public class EssayDAO extends DBConnection {
                         rs.getDouble("essayTemperature"),//essay Temperature
                         rs.getDouble("essayPreCharge"),//essay Pre Charge
                         rs.getDouble("essayRelativeHumidity"),//essay Relative Humidity
+                        rs.getDouble("essayMaxForce"),// essay Max Force
+                        rs.getDouble("essayMaxPosition"),// essay Max Position
+                        rs.getDouble("essayMaxTension"),// essay MAx Tension
+                        rs.getDouble("essayEscapeTension"),// essay Escape Tension
+                        rs.getDouble("essayAlong"),// essay Along
+                        rs.getDouble("essayAreaRed"),// essay Area Redution
+                        rs.getDouble("essayMYoung"),// essay MYoung
                         rs.getString("essayChart"),//essay Chart
-                        rs.getString("essayData"));//essay Data
+                        rs.getString("essayDay"),//essay Day
+                        rs.getString("essayHour"));//essay Hour
                 result = essay;
             }
         } catch (SQLException e) {
@@ -372,7 +471,8 @@ public class EssayDAO extends DBConnection {
             PreparedStatement stm = conn.prepareStatement("SELECT essayId, essayUserId, essayIdentification, essayNorm, " +
                     "essayUsedMachine, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, " +
                     "essayFinalPosition, essaydislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, " +
-                    "essayChart, essayData FROM tb_essay WHERE essayUserId = " + pk + " ORDER BY essayId DESC limit 1;");
+                    "essayMaxForce, essayMaxPosition, essayMaxTension, essayEscapeTension, essayAlong, essayAreaRed, " +
+                    "essayMYoung, essayChart, essayDay, essayHour FROM tb_essay WHERE essayUserId = " + pk + " ORDER BY essayId DESC limit 1;");
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Essay essay = new Essay(
@@ -390,8 +490,16 @@ public class EssayDAO extends DBConnection {
                         rs.getDouble("essayTemperature"),//essay Temperature
                         rs.getDouble("essayPreCharge"),//essay Pre Charge
                         rs.getDouble("essayRelativeHumidity"),//essay Relative Humidity
+                        rs.getDouble("essayMaxForce"),// essay Max Force
+                        rs.getDouble("essayMaxPosition"),// essay Max Position
+                        rs.getDouble("essayMaxTension"),// essay MAx Tension
+                        rs.getDouble("essayEscapeTension"),// essay Escape Tension
+                        rs.getDouble("essayAlong"),// essay Along
+                        rs.getDouble("essayAreaRed"),// essay Area Redution
+                        rs.getDouble("essayMYoung"),// essay MYoung
                         rs.getString("essayChart"),//essay Chart
-                        rs.getString("essayData"));//essay Data
+                        rs.getString("essayDay"),//essay Day
+                        rs.getString("essayHour"));//essay Hour
                 result = essay;
             }
         } catch (SQLException e) {
