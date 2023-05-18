@@ -26,7 +26,6 @@
   ~  See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
-
 <!--
   *  @project mBioLabv2
   *  @version 1.0
@@ -103,7 +102,7 @@
                         <Insets bottom="30.0" />
                      </VBox.margin>
                   </AnchorPane>
-                  <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="130.0" prefWidth="234.0">
+                  <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="167.0" prefWidth="234.0">
                      <children>
                         <VBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
@@ -149,6 +148,25 @@
                                        </padding>
                                     </Label>
                                  </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="btnClose" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeApp" prefHeight="35.0" prefWidth="35.0" styleClass="exit" stylesheets="@css/style.css" />
+                                    <Label text="Sair" textFill="WHITE">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets left="20.0" />
+                                 </padding>
                               </HBox>
                            </children>
                         </VBox>

@@ -164,14 +164,13 @@ public class ReportSceneController implements Initializable {
     private void essayInfo(Integer pk) {
         Essay essayInfo = essayDAO.findById(pk);
         //buscando informacoes do essayInfo
-        //Alterar para valores salvos nos ensaios
-        lbFmax.setText(String.valueOf(0.01));
-        lbPmax.setText(String.valueOf(0.02));
-        lbTmax.setText(String.valueOf(0.03));
-        lbTesc.setText(String.valueOf(0.04));
-        lbAlong.setText(String.valueOf(0.05));
-        lbRedArea.setText(String.valueOf(0.06));
-        lbMYoung.setText(String.valueOf(0.07));
+        lbFmax.setText(String.valueOf(essayInfo.getEssayMaxForce()));
+        lbPmax.setText(String.valueOf(essayInfo.getEssayMaxPosition()));
+        lbTmax.setText(String.valueOf(essayInfo.getEssayMaxTension()));
+        lbTesc.setText(String.valueOf(essayInfo.getEssayEscapeTension()));
+        lbAlong.setText(String.valueOf(essayInfo.getEssayAlong()));
+        lbRedArea.setText(String.valueOf(essayInfo.getEssayAreaRed()));
+        lbMYoung.setText(String.valueOf(essayInfo.getEssayMYoung()));
     }
 
     /**
