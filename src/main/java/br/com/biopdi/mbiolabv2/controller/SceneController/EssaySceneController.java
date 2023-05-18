@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.PrintWriter;
 import java.net.URL;
@@ -222,8 +223,13 @@ public class EssaySceneController implements Initializable {
                     Thread.sleep(50);
 
                     // Armazenando Forca e Posicao (variaveis globais) em arrays
-                    forceList.add(currentForce);
-                    positionList.add(currentPosition);
+                    if(essayTypeMove()==1){
+                        forceList.add(currentForce);
+                        positionList.add(currentPosition);
+                    } else if (essayTypeMove()==-1){
+                        forceList.add(currentForce);
+                        positionList.add(currentPosition);
+                    }
 
                     //Identifica valor de Forca Max N
                     Platform.runLater(() -> {
@@ -603,13 +609,16 @@ public class EssaySceneController implements Initializable {
     /**
      * Metodo que define direcao do movimento do eixo, baseado no tipo de ensaio
      */
-    private void essayTypeMove(){
+    private int essayTypeMove(){
         if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Tração"){
             moveUp();
+            return 1;
         } else if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Compressão" ||
                 cbEssayType.getSelectionModel().getSelectedItem().toString()=="Flexão"){
             moveDown();
+            return -1;
         }
+        return 0;
     }
 
     /**
@@ -707,25 +716,6 @@ public class EssaySceneController implements Initializable {
         essayFinalyzed.setEssayHour(currentHour);
         System.out.println(essayFinalyzed);
 
-//        // Create essay to call essaySave method inserting this object essay as parameter
-//        essayFinalyzed = new Essay();
-//        essayFinalyzed.setUserId(1); // Substituir por ID referente ao login
-//        essayFinalyzed.setEssayIdentification(txtEssayIdentification.getText());
-//        essayFinalyzed.setEssayNorm(txtEssayNorm.getText());
-//        essayFinalyzed.setEssayUsedMachine(txtUsedMachine.getText());
-//        essayFinalyzed.setEssayChargeCell(Double.parseDouble(txtEssayChargeCell.getText()));
-//        essayFinalyzed.setEssayInitialForce(initialForce);
-//        essayFinalyzed.setEssayFinalForce(finalForce);
-//        essayFinalyzed.setEssayInitialPosition(initialPosition);
-//        essayFinalyzed.setEssayFinalPosition(finalPosition);
-//        essayFinalyzed.setEssayDislocationVelocity(Double.parseDouble(txtDislocationVelocity.getText()));
-//        essayFinalyzed.setEssayTemperature(Double.parseDouble(lbEssayTemperature.getText()));
-//        essayFinalyzed.setEssayPreCharge(Double.parseDouble(txtEssayPreCharge.getText()));
-//        essayFinalyzed.setEssayRelativeHumidity(Double.parseDouble(lbEssayRelativeHumidity.getText()));
-//        essayFinalyzed.setEssayChart(chartString);
-//        essayFinalyzed.setEssayDate(currentDate);
-//        System.out.println(essayFinalyzed);
-
         if(sysVar.getUserId()==3){
             essayFinalyzed.setEssayId(1);
             essayDAO.update(essayFinalyzed);
@@ -746,26 +736,6 @@ public class EssaySceneController implements Initializable {
 
     // INICIO*********** Métodos de realização do Ensaio ***********
 }
-
-
-
-
-/*
- *  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- *  Licensed under the Biopdi® License, Version 1.0.
- *  You may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *       https://biopdi.com.br/
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
-
 
 
 //         Criando Thread >> Método contendo Thread, que chama método que contém Platform.runLater

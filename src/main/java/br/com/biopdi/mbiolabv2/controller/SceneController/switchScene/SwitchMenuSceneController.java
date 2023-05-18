@@ -214,4 +214,9 @@ public class SwitchMenuSceneController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
+    @FXML
+    private void closeApp(){
+        System.exit(0);
+    }
 }

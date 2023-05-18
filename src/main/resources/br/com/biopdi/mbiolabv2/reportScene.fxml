@@ -30,7 +30,6 @@
   ~  See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
-
 <!--
   *  @project mBioLabv2
   *  @version 1.0
@@ -274,7 +273,7 @@
                                           <Insets left="20.0" />
                                        </padding>
                                        <VBox.margin>
-                                          <Insets bottom="5.0" top="5.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </Label>
                                     <ListView fx:id="lvSavedEssay" minHeight="-Infinity" prefHeight="100.0" prefWidth="986.0" VBox.vgrow="ALWAYS">
