@@ -20,6 +20,7 @@ import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 import br.com.biopdi.mbiolabv2.mBioLabv2Application;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import br.com.biopdi.mbiolabv2.model.bean.User;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -66,6 +67,8 @@ public class SwitchMenuSceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        clockView();
+
         // Alteração do lbUserName e lbLogin dependendo do retorno do banco de dados (null indica que userId do banco é 0, logo, sem login)
         if(user.getUserId()==3){
             lbUserName.setText("Visitante");
@@ -79,21 +82,14 @@ public class SwitchMenuSceneController implements Initializable {
             System.out.println(user.getUserImagePath());
             // AJUSTAR para imagem do usuário (Não está puxando userImagePath do DB)
             if(user.getUserImagePath()==null){
-                ivUserImage.setImage(new Image(mBioLabv2Application.class.getResource("img/lightIcon/user96.png").toExternalForm()));
+                ivUserImage.setImage(new Image(mBioLabv2Application.class.getResource("img/lightIcon/user.png").toExternalForm()));
             } else{
                 ivUserImage.setImage(new Image(user.getUserImagePath()));
             }
         }
     }
 
-    /**
-     * Método de exibição do relógio no rodapé da janela
-     */
-    @FXML
-    private void clockView() {
 
-
-    }
 
     /**
      * Método que abre a Scene Home dentro da SwitchMenu
@@ -213,6 +209,42 @@ public class SwitchMenuSceneController implements Initializable {
         stage.setResizable(false);  // Impede redimensionamento da janela
         stage.setScene(scene);
         stage.show();
+    }
+
+    /**
+     * Classe que define o algorítmo da Thread que faz a leitura dinâmica do relógio
+     */
+    class clockReader implements Runnable {
+        // SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
+        @FXML
+        @Override
+        public synchronized void run() {
+            //Atualização da UI pela Thread
+            Platform.runLater(()->{
+                try{
+//                    while(true){
+//                        lbCurrentData.setText(currentDate);
+//                        try {
+//                            Thread.sleep(10000);
+//                        } catch (InterruptedException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    }
+                } catch (RuntimeException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+    }
+
+    /**
+     * Método de exibição do relógio no rodapé da janela
+     */
+    @FXML
+    private void clockView() {
+        // Thread to update the clock textLabel from GUI
+        Thread clock = new Thread(new clockReader());
+        clock.start();
     }
 
     @FXML

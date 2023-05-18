@@ -110,7 +110,7 @@
                                  <children>
                                     <ImageView fx:id="ivUserImage" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#editProfile" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@img/lightIcon/user96.png" />
+                                          <Image url="@img/lightIcon/user.png" />
                                        </image>
                                     </ImageView>
                                     <Label fx:id="lbUserName" lineSpacing="1.0" maxHeight="-Infinity" minHeight="-Infinity" onMouseClicked="#editProfile" prefHeight="60.0" text="Usuário" textAlignment="JUSTIFY" textFill="#d9d9d9" wrapText="true" HBox.hgrow="ALWAYS">

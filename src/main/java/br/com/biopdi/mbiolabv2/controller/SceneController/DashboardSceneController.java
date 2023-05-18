@@ -32,6 +32,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -53,11 +56,14 @@ public class DashboardSceneController implements Initializable {
     private final SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
 
     @FXML
+    private BorderPane bpDashboardReport;
+
+    @FXML
     private Label lbFMax, lbFMin, lbFMed, lbFDev, lbPMax, lbPMin, lbPMed, lbPDev, lbTMax, lbTMin, lbTMed, lbTDev,
             lbTEscMax, lbTEscMin, lbTEscMed, lbTEscDev, lbAlongMax, lbAlongMin, lbAlongMed, lbAlongDev,
             lbRedAreaMax, lbRedAreaMin, lbRedAreaMed, lbRedAreaDev, lbMYoungMax, lbMYoungMin, lbMYoungMed, lbMYoungDev;
     @FXML
-    private Button btnLed, btnChartClear;
+    private Button btnReport, btnChartClear;
     @FXML
     private TextField txtLed;
     @FXML
@@ -91,7 +97,6 @@ public class DashboardSceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         savedEssayList();
         infoReset();
         // Permite a alteração do cenário mediante seleção de um item na ListView
@@ -143,18 +148,6 @@ public class DashboardSceneController implements Initializable {
             }
         }
         chartMultiLine.getData().add(seriesMulti);
-    }
-
-    /**
-     * REQUER IMPLEMENTAÇÂO >> Método que calcula os índices para retornar na tela
-     *
-     * @param pk
-     */
-    @FXML
-    private void essayDataReturn(int pk) {
-
-        //Calculos here
-
     }
 
     /**
@@ -410,4 +403,16 @@ public class DashboardSceneController implements Initializable {
         savedEssayList();
     }
 
+    @FXML
+    private void showReport(){
+        if(bpDashboardReport.isVisible()){
+            bpDashboardReport.setVisible(false);
+            bpDashboardReport.setMinSize(0,0);
+            bpDashboardReport.setMaxSize(0,0);
+        } else{
+            bpDashboardReport.setMinSize(Region.USE_COMPUTED_SIZE,Region.USE_COMPUTED_SIZE);
+            bpDashboardReport.setMaxSize(Region.USE_COMPUTED_SIZE,Region.USE_COMPUTED_SIZE);
+            bpDashboardReport.setVisible(true);
+        }
+    }
 }

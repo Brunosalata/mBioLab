@@ -89,7 +89,7 @@
                         </Label>
                         <ImageView fx:id="ivUser" fitHeight="120.0" fitWidth="120.0" layoutX="413.0" layoutY="32.0" onMouseClicked="#imageSelect" pickOnBounds="true" AnchorPane.rightAnchor="67.0" AnchorPane.topAnchor="32.0">
                            <image>
-                              <Image url="@img/lightIcon/user96.png" />
+                              <Image url="@img/lightIcon/user.png" />
                            </image>
                         </ImageView>
                         <Label alignment="CENTER_RIGHT" layoutX="59.0" layoutY="121.0" prefHeight="38.0" prefWidth="79.0" text="Senha" textFill="#d9d9d9">

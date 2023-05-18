@@ -46,6 +46,33 @@
     -fx-scale-x: 0.9;
 }
 
+.button.exportCsv {
+    -fx-background-image: url("../img/lightIcon/csv.png");
+    -fx-background-position: center;
+    -fx-background-size: contain;
+    -fx-scale-z: 0.9;
+    -fx-scale-y: 0.9;
+    -fx-scale-x: 0.9;
+}
+
+.button.reportSave {
+    -fx-background-image: url("../img/lightIcon/save.png");
+    -fx-background-position: center;
+    -fx-background-size: contain;
+    -fx-scale-z: 0.9;
+    -fx-scale-y: 0.9;
+    -fx-scale-x: 0.9;
+}
+
+.button.print {
+    -fx-background-image: url("../img/lightIcon/print.png");
+    -fx-background-position: center;
+    -fx-background-size: contain;
+    -fx-scale-z: 0.8;
+    -fx-scale-y: 0.8;
+    -fx-scale-x: 0.8;
+}
+
 .button.emergency {
     -fx-background-color:  #BCAA06;
     -fx-font-coloer: BLACK;
