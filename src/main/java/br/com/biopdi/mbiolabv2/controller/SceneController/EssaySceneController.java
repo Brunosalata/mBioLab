@@ -13,7 +13,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import org.w3c.dom.ls.LSOutput;
 
 import java.io.PrintWriter;
 import java.net.URL;
@@ -227,8 +226,8 @@ public class EssaySceneController implements Initializable {
                         forceList.add(currentForce);
                         positionList.add(currentPosition);
                     } else if (essayTypeMove()==-1){
-                        forceList.add(currentForce);
-                        positionList.add(currentPosition);
+                        forceList.add(currentForce * -1);
+                        positionList.add(currentPosition * -1);
                     }
 
                     //Identifica valor de Forca Max N

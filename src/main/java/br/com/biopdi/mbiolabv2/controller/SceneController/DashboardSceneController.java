@@ -146,18 +146,6 @@ public class DashboardSceneController implements Initializable {
     }
 
     /**
-     * REQUER IMPLEMENTAÇÂO >> Método que calcula os índices para retornar na tela
-     *
-     * @param pk
-     */
-    @FXML
-    private void essayDataReturn(int pk) {
-
-        //Calculos here
-
-    }
-
-    /**
      * Método que retorna informações do essay ao lwEssayInfo, podendo ser adicionados mais de um ensaio
      *
      * @param pk
