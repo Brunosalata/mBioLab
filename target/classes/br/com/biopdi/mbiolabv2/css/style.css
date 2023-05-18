@@ -29,7 +29,16 @@
 }
 
 .button.moveUp {
-    -fx-background-image: url("../img/icons8-down-button-96.png");
+    -fx-background-image: url("../img/down.png");
+    -fx-background-position: center;
+    -fx-background-size: contain;
+    -fx-scale-z: 0.9;
+    -fx-scale-y: 0.9;
+    -fx-scale-x: 0.9;
+}
+
+.button.exit {
+    -fx-background-image: url("../img/turnOn.png");
     -fx-background-position: center;
     -fx-background-size: contain;
     -fx-scale-z: 0.9;
