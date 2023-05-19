@@ -40,68 +40,79 @@
          <left>
             <VBox prefHeight="693.0" prefWidth="234.0" style="-fx-background-color: #2C2C2C;" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane prefHeight="445.0" prefWidth="234.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <ImageView fitHeight="70.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="30.0">
+                        <ImageView fitHeight="70.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@img/lightLogo.png" />
                            </image>
                            <viewport>
                               <Rectangle2D />
                            </viewport>
+                           <VBox.margin>
+                              <Insets top="50.0" />
+                           </VBox.margin>
                         </ImageView>
-                        <Button fx:id="btnSwitchHome" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToHomeScene" prefHeight="40.0" prefWidth="180.0" text="Home" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="120.0">
+                        <Button fx:id="btnSwitchHome" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToHomeScene" prefHeight="40.0" prefWidth="180.0" text="Home">
                            <font>
                               <Font size="18.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
                         </Button>
-                        <Button fx:id="btnSwitchDashboard" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToDashboardScene" prefHeight="40.0" prefWidth="180.0" text="Dashboard" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="170.0">
+                        <Button fx:id="btnSwitchDashboard" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToDashboardScene" prefHeight="40.0" prefWidth="180.0" text="Dashboard">
                            <font>
                               <Font size="18.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
                         </Button>
-                        <Button fx:id="btnSwitchEssay" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToEssayScene" prefHeight="40.0" prefWidth="180.0" text="Ensaio" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="220.0">
+                        <Button fx:id="btnSwitchEssay" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToEssayScene" prefHeight="40.0" prefWidth="180.0" text="Ensaio">
                            <font>
                               <Font size="18.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
                         </Button>
-                        <Button fx:id="btnSwitchReport" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToReportScene" prefHeight="40.0" prefWidth="180.0" text="Relatório" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="270.0">
+                        <Button fx:id="btnSwitchReport" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToReportScene" prefHeight="40.0" prefWidth="180.0" text="Relatório">
                            <font>
                               <Font size="18.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
                         </Button>
                      </children>
-                  </AnchorPane>
-                  <AnchorPane prefHeight="329.0" prefWidth="234.0" VBox.vgrow="ALWAYS">
+                  </VBox>
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <Button fx:id="btnSwitchSupport" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSupportScene" prefHeight="40.0" prefWidth="180.0" text="Suporte">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets left="25.0" right="25.0" />
-                                 </padding>
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Button fx:id="btnSwitchSystemSetting" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSystemSettingScene" prefHeight="40.0" prefWidth="180.0" text="Configurações">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets left="25.0" right="25.0" />
-                                 </padding>
-                              </Button>
-                           </children>
-                        </VBox>
+                        <Button fx:id="btnSwitchSupport" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSupportScene" prefHeight="40.0" prefWidth="180.0" text="Suporte">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets bottom="15.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="btnSwitchSystemSetting" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSystemSettingScene" prefHeight="40.0" prefWidth="180.0" text="Configurações">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets left="25.0" right="25.0" />
+                           </padding>
+                        </Button>
                      </children>
-                     <VBox.margin>
+                     <padding>
                         <Insets bottom="30.0" />
-                     </VBox.margin>
-                  </AnchorPane>
+                     </padding>
+                  </VBox>
                   <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="167.0" prefWidth="234.0">
                      <children>
                         <VBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

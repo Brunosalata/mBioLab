@@ -42,14 +42,6 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <ImageView fitHeight="70.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@img/lightLogo.png" />
-                           </image>
-                           <viewport>
-                              <Rectangle2D />
-                           </viewport>
-                        </ImageView>
                         <Button fx:id="btnSwitchHome" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToHomeScene" prefHeight="40.0" prefWidth="180.0" text="Home">
                            <font>
                               <Font size="18.0" />
@@ -114,29 +106,6 @@
                      <children>
                         <VBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <HBox alignment="BOTTOM_CENTER" maxHeight="-Infinity" minHeight="-Infinity" minWidth="100.0" prefHeight="60.0" prefWidth="130.0">
-                                 <children>
-                                    <ImageView fx:id="ivUserImage" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#editProfile" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/lightIcon/user.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Label fx:id="lbUserName" lineSpacing="1.0" maxHeight="-Infinity" minHeight="-Infinity" onMouseClicked="#editProfile" prefHeight="60.0" text="Usuário" textAlignment="JUSTIFY" textFill="#d9d9d9" wrapText="true" HBox.hgrow="ALWAYS">
-                                       <font>
-                                          <Font size="20.0" />
-                                       </font>
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
-                                       <padding>
-                                          <Insets left="10.0" />
-                                       </padding>
-                                    </Label>
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" />
-                                 </VBox.margin>
-                              </HBox>
                               <HBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" prefWidth="200.0">
                                  <children>
                                     <ImageView fx:id="ivLogin" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#logout" pickOnBounds="true" preserveRatio="true">
@@ -157,7 +126,7 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="64.0" prefWidth="125.0">
                                  <children>
                                     <Button fx:id="btnClose" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeApp" prefHeight="35.0" prefWidth="35.0" styleClass="exit" stylesheets="@css/style.css" />
                                     <Label text="Sair" textFill="WHITE">
@@ -169,9 +138,6 @@
                                        </font>
                                     </Label>
                                  </children>
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" top="10.0" />
-                                 </VBox.margin>
                                  <padding>
                                     <Insets left="20.0" />
                                  </padding>
@@ -234,7 +200,42 @@
          <top>
             <HBox prefHeight="56.0" prefWidth="1280.0" style="-fx-background-color: #2C2C2C;" BorderPane.alignment="CENTER">
                <children>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0" />
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <ImageView fitHeight="70.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                           <image>
+                              <Image url="@img/lightLogo.png" />
+                           </image>
+                           <viewport>
+                              <Rectangle2D />
+                           </viewport>
+                        </ImageView>
+                     </center>
+                  </BorderPane>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <HBox alignment="BOTTOM_CENTER" maxHeight="-Infinity" minHeight="-Infinity" minWidth="100.0" prefHeight="60.0" prefWidth="227.0">
+                           <children>
+                              <Label fx:id="lbUserName" lineSpacing="1.0" maxHeight="-Infinity" minHeight="-Infinity" onMouseClicked="#editProfile" prefHeight="60.0" text="Usuário" textAlignment="JUSTIFY" textFill="#d9d9d9" wrapText="true" HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets right="10.0" />
+                                 </padding>
+                              </Label>
+                              <ImageView fx:id="ivUserImage" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#editProfile" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@img/lightIcon/user.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                     </children>
+                  </HBox>
                </children>
             </HBox>
          </top>

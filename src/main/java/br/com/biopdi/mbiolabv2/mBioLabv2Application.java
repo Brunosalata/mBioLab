@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -59,6 +60,7 @@ public class mBioLabv2Application extends Application {
         sysVar.setUserId(3);
         sysVarDAO.updateUser(sysVar);
     }
+
 
     /**
      * Método que carrega splash Scene

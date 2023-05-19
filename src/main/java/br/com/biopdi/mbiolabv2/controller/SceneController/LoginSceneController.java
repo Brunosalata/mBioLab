@@ -32,9 +32,11 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
@@ -178,7 +180,7 @@ public class LoginSceneController implements Initializable {
         Scene scene = new Scene(root);
         stage.setTitle("mBioLab");
         stage.getIcons().add(new Image(mBioLabv2Application.class.getResourceAsStream("img/iconBiopdi.png")));
-        stage.setResizable(false);  // Impede redimensionamento da janela
+        stage.setResizable(false); // Impede redimensionamento da janela
         stage.setScene(scene);
         stage.show();
 
@@ -200,9 +202,11 @@ public class LoginSceneController implements Initializable {
         stage.setTitle("mBioLab");
         stage.getIcons().add(new Image(mBioLabv2Application.class.getResourceAsStream("img/iconBiopdi.png")));
         stage.setResizable(false);  // Impede redimensionamento da janela
+        stage.setFullScreenExitHint("Pressione o botão 'Sair' para sair");
+        stage.setFullScreenExitKeyCombination(KeyCombination.valueOf("q"));
         stage.setScene(scene);
-        stage.show();
         stage.setFullScreen(true);
+        stage.show();
 
     }
 }

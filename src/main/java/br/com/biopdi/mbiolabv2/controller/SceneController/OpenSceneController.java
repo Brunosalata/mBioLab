@@ -44,6 +44,9 @@ public class OpenSceneController implements Initializable {
         splash();
     }
 
+    //https://stackoverflow.com/questions/74986151/how-can-i-call-a-method-in-a-javafx-applications-preloader-instance-from-the-ma
+
+
     private void splash(){
         new Thread() {
             public void run(){

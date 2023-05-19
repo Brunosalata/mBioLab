@@ -24,14 +24,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.layout.TilePane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -64,7 +64,7 @@ public class ReportSceneController implements Initializable {
     @FXML
     private Label lbCurrentData, lbEssayUserName, lbFmax, lbPmax, lbTmax, lbTesc, lbAlong, lbRedArea, lbMYoung;
     @FXML
-    private Button btnEssayByUserId;
+    private Button btnEssayByUserId, btnEssaySave;
     @FXML
     private ListView<Essay> lvSavedEssay;
     @FXML
@@ -80,6 +80,7 @@ public class ReportSceneController implements Initializable {
     private ObservableList<Essay> obsEssayList;
     private ObservableList<Essay> obsEssayByUserIdList;
     private Stage stage2 = new Stage();
+    private TilePane r = new TilePane();
 
     Date systemDate = new Date();
     SimpleDateFormat expDay = new SimpleDateFormat("dd-MM-yyyy");
@@ -110,6 +111,8 @@ public class ReportSceneController implements Initializable {
                 }
             }
         });
+
+
 
     }
 

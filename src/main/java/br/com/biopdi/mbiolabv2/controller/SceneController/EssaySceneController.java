@@ -1,19 +1,34 @@
 package br.com.biopdi.mbiolabv2.controller.SceneController;
 
 
+import br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.FxmlLoader;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
+import br.com.biopdi.mbiolabv2.mBioLabv2Application;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
 import br.com.biopdi.mbiolabv2.model.bean.Method;
 import br.com.biopdi.mbiolabv2.model.bean.SystemParameter;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import com.fazecast.jSerialComm.SerialPort;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -61,6 +76,8 @@ public class EssaySceneController implements Initializable {
     private String chartString = null;
     private Boolean moving = false;
     private int autoBreakCount;
+    @FXML
+    private AnchorPane apAlert;
 
 
     Date systemDate = new Date();
@@ -688,7 +705,7 @@ public class EssaySceneController implements Initializable {
      * Método que cria um essay e salva no DB
      */
     @FXML
-    public void essaySave() {
+    public void essaySave(ActionEvent event) throws IOException {
         essayFinalyzed = new Essay();
         essayFinalyzed.setUserId(sysVar.getUserId()); // Substituir por ID referente ao login
         essayFinalyzed.setEssayIdentification(txtEssayIdentification.getText());
@@ -713,7 +730,6 @@ public class EssaySceneController implements Initializable {
         essayFinalyzed.setEssayChart(chartString);
         essayFinalyzed.setEssayDay(currentDay);
         essayFinalyzed.setEssayHour(currentHour);
-        System.out.println(essayFinalyzed);
 
         if(sysVar.getUserId()==3){
             essayFinalyzed.setEssayId(1);
@@ -722,6 +738,17 @@ public class EssaySceneController implements Initializable {
             essayDAO.create(essayFinalyzed);
         }
         System.out.println(essayFinalyzed);
+
+        // Alerta de confirmação de registro de ensaio
+        Platform.runLater(()->{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Registro de Ensaio");
+            alert.setHeaderText("Ensaio salvo com sucesso!");
+            alert.initOwner(new Stage());
+            alert.show();
+        });
+
+
     }
 
     /**
