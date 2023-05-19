@@ -33,7 +33,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+import javafx.stage.DirectoryChooser;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +101,8 @@ public class DashboardSceneController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         savedEssayList();
         infoReset();
-        // Permite a alteração do cenário mediante seleção de um item na ListView
+
+        // Estrutura que permite implementar ações mediante seleção de um item na ListView
         lvSavedEssay.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Essay>() {
             @Override
             public void changed(ObservableValue<? extends Essay> observable, Essay oldValue, Essay newValue) {
@@ -149,7 +154,7 @@ public class DashboardSceneController implements Initializable {
     }
 
     /**
-     * Método que retorna informações do essay ao lwEssayInfo, podendo ser adicionados mais de um ensaio
+     * Método que realiza os calculos para as analises estatisticas do grupo amostral dos ensaios selecionados
      *
      * @param pk
      */
@@ -276,9 +281,14 @@ public class DashboardSceneController implements Initializable {
 
         }
         setUIValues();
-
     }
 
+    /**
+     * Metodo para o calculo do desvio padrao dos ensaios selecionados
+     * @param dValue
+     * @param media
+     * @return
+     */
     public Double getStandardDev(List<Double> dValue, Double media){
         Double stdDev = 0D;
         for(Double value : dValue){
@@ -288,6 +298,9 @@ public class DashboardSceneController implements Initializable {
         return Math.sqrt(stdDev / dValue.size());
     }
 
+    /**
+     * Metodo que atualiza as label dos calculos da UI
+     */
     private void setUIValues(){
         // Atualização das labels de Forca Maxima
         lbFMax.setText(String.valueOf(maxFMax));
@@ -332,6 +345,9 @@ public class DashboardSceneController implements Initializable {
         lbMYoungDev.setText(String.valueOf(devMYoung));
     }
 
+    /**
+     * Metodo que zera os parametros para os calculos dos ensaios
+     */
     public void infoReset(){
         // Zerar variaveis
         maxFMax = 0D;
@@ -401,6 +417,9 @@ public class DashboardSceneController implements Initializable {
         savedEssayList();
     }
 
+    /**
+     * Metodo que mostra ou esconde o relatório na Dashboard
+     */
     @FXML
     private void showReport(){
         if(bpDashboardReport.isVisible()){
@@ -412,5 +431,20 @@ public class DashboardSceneController implements Initializable {
             bpDashboardReport.setMaxSize(Region.USE_COMPUTED_SIZE,Region.USE_COMPUTED_SIZE);
             bpDashboardReport.setVisible(true);
         }
+    }
+
+    @FXML
+    private void reportSave(){
+
+    }
+
+    @FXML
+    private void reportPrint(){
+
+    }
+
+    @FXML
+    private void csvExport() {
+
     }
 }

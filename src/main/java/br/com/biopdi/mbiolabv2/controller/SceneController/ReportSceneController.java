@@ -32,8 +32,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.*;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,11 +79,13 @@ public class ReportSceneController implements Initializable {
     private ObservableList<User> obsUserList;
     private ObservableList<Essay> obsEssayList;
     private ObservableList<Essay> obsEssayByUserIdList;
+    private Stage stage2 = new Stage();
 
     Date systemDate = new Date();
-    SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    SimpleDateFormat brasilianDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-    String currentDate = brasilianDate.format(systemDate);
+    SimpleDateFormat expDay = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat expHour = new SimpleDateFormat("HH-mm-ss");
+    String currentDay = expDay.format(systemDate);
+    String currentHour = expHour.format(systemDate);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -194,6 +202,53 @@ public class ReportSceneController implements Initializable {
     private void dataReset() {
         chartSingleLine.getData().clear();
         lastEssay();
+    }
+
+    @FXML
+    private void reportSave(){
+
+    }
+
+    @FXML
+    private void reportPrint(){
+
+    }
+
+    @FXML
+    private void csvExport() throws IOException {
+
+        File csvFile = new File("src/main/resources/br/com/biopdi/mbiolabv2/export/report/export_" + currentDay + "_" + currentHour + ".csv");
+        OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(csvFile), StandardCharsets.ISO_8859_1);
+        System.out.println(csvFile);
+        try{
+            // definição do header da planilha
+            fileWriter.append("Força");
+            fileWriter.append(';');
+            fileWriter.append("Posição");
+            fileWriter.append('\n');
+            Essay essay = essayDAO.findById(currentEssay.getEssayId());
+            // 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
+
+            String strArraySplit[] = essay.getEssayChart().split(",");
+            for (String str : strArraySplit) {
+                String dot[] = str.split(";");
+                for (int i = 0; i < dot.length; i += 2) {
+                    System.out.println(dot[i] + " " + dot[i + 1]);
+                    fileWriter.append(dot[i]);
+                    fileWriter.append(';');
+                    fileWriter.append(dot[i+1]);
+                    fileWriter.append('\n');
+                }
+            }
+            System.out.println(csvFile);
+            System.out.println("csv criado");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            fileWriter.flush();
+            fileWriter.close();
+        }
+        System.out.println("Sucesso");
     }
 
 }

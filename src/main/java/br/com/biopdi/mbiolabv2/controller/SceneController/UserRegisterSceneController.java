@@ -116,9 +116,9 @@ public class UserRegisterSceneController implements Initializable {
     @FXML
     private void imageSelect() {
         // seleciona imagem para cadastro
-        FileChooser f = new FileChooser();
-        f.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imagens","*.jpg","*.jpeg","*.png","*.bitmap"));
-        imageFile = f.showOpenDialog(new Stage());
+        FileChooser file = new FileChooser();
+        file.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imagens","*.jpg","*.jpeg","*.png","*.bitmap"));
+        imageFile = file.showOpenDialog(new Stage());
         if(imageFile!=null){
             ivUser.setImage(new Image(imageFile.getPath()));
             imageFilePath = imageFile.getPath();

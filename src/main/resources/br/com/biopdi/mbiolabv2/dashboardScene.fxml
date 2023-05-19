@@ -46,7 +46,7 @@
                      <children>
                         <VBox prefHeight="484.0" prefWidth="919.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <AnchorPane minHeight="-Infinity" prefHeight="25.0" prefWidth="200.0">
+                              <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
                                  <children>
                                     <Label prefHeight="25.0" prefWidth="684.0" style="-fx-background-color: #063F78;" text="Gráfico de análise dos ensaios" textFill="#d9d9d9" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <padding>
@@ -79,7 +79,7 @@
                               <Insets right="10.0" />
                            </HBox.margin>
                            <children>
-                              <AnchorPane minHeight="-Infinity" prefHeight="25.0" prefWidth="200.0">
+                              <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
                                  <children>
                                     <Label prefHeight="25.0" prefWidth="458.0" style="-fx-background-color: #063F78;" text="Valores dos ensaios" textFill="#d9d9d9" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <padding>
@@ -738,9 +738,9 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" prefHeight="794.0" prefWidth="637.0">
+                        <VBox alignment="TOP_CENTER" prefHeight="794.0" prefWidth="637.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <AnchorPane minHeight="-Infinity" prefHeight="25.0" prefWidth="200.0">
+                              <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
                                  <children>
                                     <Label prefHeight="25.0" prefWidth="458.0" style="-fx-background-color: #063F78;" text="Pré visualização do relatório" textFill="#d9d9d9" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <padding>
@@ -766,19 +766,19 @@
                                              <center>
                                                 <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                                                    <children>
-                                                      <HBox alignment="CENTER_RIGHT" prefHeight="61.0" prefWidth="516.0">
+                                                      <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="516.0" VBox.vgrow="SOMETIMES">
                                                          <children>
-                                                            <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: #474747;" styleClass="reportSave" stylesheets="@css/style.css">
+                                                            <Button fx:id="btnReportSave" mnemonicParsing="false" onAction="#reportSave" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: #474747;" styleClass="reportSave" stylesheets="@css/style.css">
                                                                <HBox.margin>
                                                                   <Insets right="10.0" />
                                                                </HBox.margin>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: #474747;" styleClass="print" stylesheets="@css/style.css">
+                                                            <Button fx:id="btnReportPrint" mnemonicParsing="false" onAction="#reportPrint" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: #474747;" styleClass="print" stylesheets="@css/style.css">
                                                                <HBox.margin>
                                                                   <Insets right="10.0" />
                                                                </HBox.margin>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: #474747;" styleClass="exportCsv" stylesheets="@css/style.css">
+                                                            <Button fx:id="btnCsvExport" mnemonicParsing="false" onAction="#csvExport" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: #474747;" styleClass="exportCsv" stylesheets="@css/style.css">
                                                                <HBox.margin>
                                                                   <Insets right="10.0" />
                                                                </HBox.margin>
