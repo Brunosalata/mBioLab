@@ -35,13 +35,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.stage.DirectoryChooser;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author Bruno Salata Lima - 16/05/2023
@@ -88,7 +86,7 @@ public class DashboardSceneController implements Initializable {
     private List<Double> stanDevAlong = new ArrayList<>();
     private List<Double> stanDevRedArea = new ArrayList<>();
     private List<Double> stanDevMYoung = new ArrayList<>();
-    private final List<Essay> essayByUserIdList = new ArrayList<>();
+    private final List<Essay> csvEssayList = new ArrayList<>();
     private ObservableList<Setup> obsSetupList;
     private ObservableList<User> obsUserList;
     private ObservableList<Essay> obsEssayList;
@@ -97,10 +95,17 @@ public class DashboardSceneController implements Initializable {
             minTEsc, minAlong, minRedArea, minMYoung, medFMax, medPMax, medTMax, medTEsc, medAlong, medRedArea,
             medMYoung, devFMax, devPMax, devTMax, devTEsc, devAlong, devRedArea, devMYoung;
 
+    Date systemDate = new Date();
+    SimpleDateFormat expDay = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat expHour = new SimpleDateFormat("HH-mm-ss");
+    String currentDay = expDay.format(systemDate);
+    String currentHour = expHour.format(systemDate);
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         savedEssayList();
         infoReset();
+
 
         // Estrutura que permite implementar ações mediante seleção de um item na ListView
         lvSavedEssay.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Essay>() {
@@ -118,6 +123,7 @@ public class DashboardSceneController implements Initializable {
                         addEssayChart(currentEssay.getEssayId());
                         selectedEssayList.add(currentEssay);
                         essayInfo(currentEssay.getEssayId());
+
                     } else {
                         System.out.println("Problemas ao carregar ensaio. Ensaio = null.");
                     }
@@ -387,6 +393,7 @@ public class DashboardSceneController implements Initializable {
         stanDevAlong.clear();
         stanDevRedArea.clear();
         stanDevMYoung.clear();
+
     }
 
     /**
@@ -444,7 +451,162 @@ public class DashboardSceneController implements Initializable {
     }
 
     @FXML
-    private void csvExport() {
+    private void csvExport() throws IOException {
+
+        File csvFile = new File("src/main/resources/br/com/biopdi/mbiolabv2/export/dashboard/export_" + currentDay + "_" + currentHour + ".csv");
+        OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(csvFile), StandardCharsets.ISO_8859_1);
+        System.out.println(csvFile);
+        try{
+            for(Essay essay : selectedEssayList){
+                // definição do header da planilha
+                fileWriter.append("Força - " + essay.getEssayIdentification());
+                fileWriter.append(';');
+                fileWriter.append("Posição - " + essay.getEssayIdentification());
+
+                if(selectedEssayList.get(selectedEssayList.size() - 1) != essay){
+                    fileWriter.append(';'+""+';');
+                } else {
+                    fileWriter.append('\n');
+                }
+            }
+
+            int count = 0;
+            for(Essay essaySize : selectedEssayList) {
+                String strArraySplitSize[] = essaySize.getEssayChart().split(",");
+                if (count < strArraySplitSize.length) {
+                    count = strArraySplitSize.length;
+                }
+                System.out.println(count);
+            }
+
+            for(int i = 0; i < count; i++){
+
+                for(Essay essayDot : selectedEssayList){    // varre os ensaios listados
+                    String strArraySplitDot[] = new String[count];
+                    String strArraySplitDotAux[] = essayDot.getEssayChart().split(",");    // quebra string em pontos
+                    strArraySplitDot = Arrays.copyOf(strArraySplitDotAux,strArraySplitDot.length);
+                    System.out.println(strArraySplitDotAux.length);
+                    System.out.println(strArraySplitDot.length);
+
+                    System.out.println("i = " + i);
+                    if(strArraySplitDot[i] != null){
+                        String dot[] = strArraySplitDot[i].split(";");  // quebra em forca e posicao
+                        System.out.println(dot[0] + " " + dot[1]);
+                        fileWriter.append(dot[0] + ';' + dot[1]);
+                        fileWriter.append(';'+""+';');
+                    } else{
+                        fileWriter.append("" + ';' + "");
+                        fileWriter.append(';'+""+';');
+                    }
+                }
+                fileWriter.append('\n');
+            }
+            System.out.println(csvFile);
+            System.out.println("csv criado");
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            fileWriter.flush();
+            fileWriter.close();
+        }
+        System.out.println("Sucesso");
+
+////  METODO 2
+//        File csvFile = new File("src/main/resources/br/com/biopdi/mbiolabv2/export/dashboard/export_" + currentDay + "_" + currentHour + ".csv");
+//        OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(csvFile), StandardCharsets.ISO_8859_1);
+//        System.out.println(csvFile);
+//        try{
+//            fileWriter.append('\n');
+//            for(Essay essay : selectedEssayList){
+//
+//                fileWriter.append("Força - " + essay.getEssayIdentification());
+//                fileWriter.append('\n');
+//
+//                String strArraySplit[] = essay.getEssayChart().split(",");
+//                for (String force : strArraySplit) {
+//                    String dotF[] = force.split(";");
+//                    // Incluindo valores de forca
+//                    for (int i = 0; i < dotF.length; i += 2) {
+//                        fileWriter.append(dotF[i]);
+//                        if (i < dotF.length - 1) {
+//                            fileWriter.append(';');
+//                        }
+//                        fileWriter.append('\n');
+//                    }
+//                }
+//                fileWriter.append("Posição - " + essay.getEssayIdentification());
+//                fileWriter.append('\n');
+//
+//                for (String position : strArraySplit) {
+//                    String dotP[] = position.split(";");
+//                    // Incluindo valores de posicao
+//                    for (int i = 0; i < dotP.length; i += 2) {
+//                        fileWriter.append(dotP[i+1]);
+//                        if(i < dotP.length - 1){
+//                            fileWriter.append(';');
+//                        }
+//                        fileWriter.append('\n');
+//                    }
+//
+//                }
+//
+//            }
+//
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        } finally {
+//            fileWriter.flush();
+//            fileWriter.close();
+//        }
+//        System.out.println("Sucesso");
+
+////  METODO 1
+//        File csvFile = new File("src/main/resources/br/com/biopdi/mbiolabv2/export/dashboard/export_" + currentDay + "_" + currentHour + ".csv");
+//        OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(csvFile), StandardCharsets.ISO_8859_1);
+//        System.out.println(csvFile);
+//        try{
+//            for(Essay essay : selectedEssayList){
+//                // definição do header da planilha
+//                fileWriter.append("Força - " + essay.getEssayIdentification());
+//                fileWriter.append(';');
+//                fileWriter.append("Posição - " + essay.getEssayIdentification());
+//
+//                if(selectedEssayList.get(selectedEssayList.size() - 1) != essay){
+//                    fileWriter.append(';');
+//                } else {
+//                    fileWriter.append('\n');
+//                }
+//            }
+//
+//            for(Essay essay : selectedEssayList){
+//
+//                String strArraySplit[] = essay.getEssayChart().split(",");
+//                for (String str : strArraySplit) {
+//                    String dot[] = str.split(";");
+//                    for (int i = 0; i < dot.length; i += 2) {
+//                        System.out.println(dot[i] + " " + dot[i + 1]);
+//                        fileWriter.append(dot[i]);
+//                        fileWriter.append(';');
+//                        fileWriter.append(dot[i+1]);
+//                        fileWriter.append('\n');
+//                    }
+//                }
+//            }
+//            System.out.println(csvFile);
+//            System.out.println("csv criado");
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        } finally {
+//            fileWriter.flush();
+//            fileWriter.close();
+//        }
+//        System.out.println("Sucesso");
 
     }
+
+    private void convertCsv(){
+
+    }
+
 }
