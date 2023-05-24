@@ -4,6 +4,7 @@ module br.com.biopdi.mbiolabv2 {
     requires com.fazecast.jSerialComm;
     requires java.sql;
     requires org.xerial.sqlitejdbc;
+    requires jasperreports;
 
 
     opens br.com.biopdi.mbiolabv2 to javafx.fxml;

@@ -20,31 +20,31 @@ import br.com.biopdi.mbiolabv2.model.bean.Essay;
 import br.com.biopdi.mbiolabv2.model.bean.Setup;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import br.com.biopdi.mbiolabv2.model.bean.User;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.TilePane;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * @author Bruno Salata Lima - 16/05/2023
@@ -106,6 +106,9 @@ public class ReportSceneController implements Initializable {
                     }
                     essayChart(currentEssay.getEssayId());
                     essayInfo(currentEssay.getEssayId());
+
+
+
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());
                 }
@@ -208,7 +211,46 @@ public class ReportSceneController implements Initializable {
     }
 
     @FXML
-    private void reportSave(){
+    private void reportSave() throws IOException, JRException {
+
+        Platform.runLater(() ->{
+
+        try {
+            // Especifica diretorio e extensao do relatorio
+            String outputFile = "src/main/resources/br/com/biopdi/mbiolabv2/export/report/essayReport_" + currentDay + "_" + currentHour + ".pdf";
+
+            // selecao do objeto a ser inserido (ou lista de objetos)
+            List<Essay> currentEssayList = new ArrayList<Essay>();
+
+            // Criar objetos, se necessario
+            currentEssayList.add(currentEssay);
+
+            // Converte lista para JRBeanCollectionDataSource
+            JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(currentEssayList);
+
+            //Map para Armazenar os parametros do relatorio Jasper
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put("getJasperParameter", itemsJRBean);
+
+            // Leitura do arquivo jrxml e criacao do objeto jasperdesign
+            InputStream input = new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jrxml"));
+
+            JasperDesign jasperDesign = JRXmlLoader.load(input);
+
+            // Compilando jrxml com a classe JasperReport
+            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+
+            // Gerar pdf a partir do objeto jasperReport
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+
+            // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        });
 
     }
 
@@ -254,4 +296,30 @@ public class ReportSceneController implements Initializable {
         System.out.println("Sucesso");
     }
 
+    public class getJasperParameter{
+        public String getIdentification(){
+            return currentEssay.getEssayIdentification();
+        }
+        public Double getMaxForce(){
+            return currentEssay.getEssayMaxForce();
+        }
+        public Double getMaxPosition(){
+            return currentEssay.getEssayMaxPosition();
+        }
+        public Double getMaxTension(){
+            return currentEssay.getEssayMaxTension();
+        }
+        public Double getEscapeTension(){
+            return currentEssay.getEssayEscapeTension();
+        }
+        public Double getAlong(){
+            return currentEssay.getEssayMaxForce();
+        }
+        public Double getAreaRed(){
+            return currentEssay.getEssayAreaRed();
+        }
+        public Double getMYoung(){
+            return currentEssay.getEssayMYoung();
+        }
+    }
 }

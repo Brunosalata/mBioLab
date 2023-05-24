@@ -34,6 +34,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.stage.DirectoryChooser;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 import java.io.*;
 import java.net.URL;
@@ -441,7 +446,36 @@ public class DashboardSceneController implements Initializable {
     }
 
     @FXML
-    private void reportSave(){
+    private void reportSave() throws FileNotFoundException, JRException {
+
+        // Especifica diretorio e extensao do relatorio
+        String outputFile = "src/main/resources/br/com/biopdi/mbiolabv2/export/report/essayReport_" + currentDay + "_" + currentHour + ".pdf";
+
+        // selecao do objeto a ser inserido (ou lista de objetos)
+        List<Essay> essayList = selectedEssayList;
+
+        // Criar objetos, se necessario
+
+        // Converte lista para JRBeanCollectionDataSource
+        JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(essayList);
+
+        //Map para Armazenar os parametros do relatorio Jasper
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("CollectionBeanParam", itemsJRBean);
+
+        // Leitura do arquivo jrxml e criacao do objeto jasperdesign
+        InputStream input = new FileInputStream(new File("src\\main\\resources\\br\\com\\biopdi\\mbiolabv2\\jrxml\\dashboardReport.jrxml"));
+
+        JasperDesign jasperDesign = JRXmlLoader.load(input);
+
+        // Compilando jrxml com a classe JasperReport
+        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+
+        // Gerar pdf a partir do objeto jasperReport
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+
+        // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
+        JasperViewer.viewReport(jasperPrint, false);
 
     }
 
@@ -453,16 +487,17 @@ public class DashboardSceneController implements Initializable {
     @FXML
     private void csvExport() throws IOException {
 
+        // Criacao do arquivo a ser preenchido com os dados
         File csvFile = new File("src/main/resources/br/com/biopdi/mbiolabv2/export/dashboard/export_" + currentDay + "_" + currentHour + ".csv");
         OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(csvFile), StandardCharsets.ISO_8859_1);
-        System.out.println(csvFile);
         try{
+            // Criacao do header, inserindo coluna Forca e Posicao com o nome de cada ensaio
             for(Essay essay : selectedEssayList){
                 // definição do header da planilha
                 fileWriter.append("Força - " + essay.getEssayIdentification());
                 fileWriter.append(';');
                 fileWriter.append("Posição - " + essay.getEssayIdentification());
-
+                // inclui coluna vazia entre dois ensaios, ou quebra linha se for o ultimo ensaio
                 if(selectedEssayList.get(selectedEssayList.size() - 1) != essay){
                     fileWriter.append(';'+""+';');
                 } else {
@@ -470,28 +505,31 @@ public class DashboardSceneController implements Initializable {
                 }
             }
 
+            // definicao do tamanho do vetor base, considerando o ensaio com mair numero de pontos
             int count = 0;
             for(Essay essaySize : selectedEssayList) {
                 String strArraySplitSize[] = essaySize.getEssayChart().split(",");
                 if (count < strArraySplitSize.length) {
                     count = strArraySplitSize.length;
                 }
-                System.out.println(count);
             }
 
+            // Arquivo csv é preenchido linha por linha, entao, o preenchimento precisa ser feito de forma fragmentada,
+            // ou seja, posicao 1 do ensaio 1 (forca e posicao), posicao 1 do ensaio 2 (forca e posicao), ate o
+            // ultimo ensaio listado. Entao, ocorre quebra de linha e inicia o preenchimento da posicao 2 de cada
+            // ensaio, considerando uma coluna vazia entre cada um (para facilitar compreencao do usuario)
+            // Para a insercao de cada valor, para cada ensaio da lista é criado um vetor com numero de posicoes
+            // igual ao numero de pontos do ensaio com maior numero de pontos. Esse vetor recebe o numero de cada
+            // posicao dos ensaios. Quando o numero de pontos termina antes de acabar as posicoes do vetor, essa posicao
+            // recebe "" (vazio)
             for(int i = 0; i < count; i++){
-
                 for(Essay essayDot : selectedEssayList){    // varre os ensaios listados
                     String strArraySplitDot[] = new String[count];
                     String strArraySplitDotAux[] = essayDot.getEssayChart().split(",");    // quebra string em pontos
                     strArraySplitDot = Arrays.copyOf(strArraySplitDotAux,strArraySplitDot.length);
-                    System.out.println(strArraySplitDotAux.length);
-                    System.out.println(strArraySplitDot.length);
 
-                    System.out.println("i = " + i);
                     if(strArraySplitDot[i] != null){
                         String dot[] = strArraySplitDot[i].split(";");  // quebra em forca e posicao
-                        System.out.println(dot[0] + " " + dot[1]);
                         fileWriter.append(dot[0] + ';' + dot[1]);
                         fileWriter.append(';'+""+';');
                     } else{
@@ -501,8 +539,6 @@ public class DashboardSceneController implements Initializable {
                 }
                 fileWriter.append('\n');
             }
-            System.out.println(csvFile);
-            System.out.println("csv criado");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -512,7 +548,7 @@ public class DashboardSceneController implements Initializable {
         }
         System.out.println("Sucesso");
 
-////  METODO 2
+////  METODO 2 - Alinhamento vertical (Colua unica)
 //        File csvFile = new File("src/main/resources/br/com/biopdi/mbiolabv2/export/dashboard/export_" + currentDay + "_" + currentHour + ".csv");
 //        OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(csvFile), StandardCharsets.ISO_8859_1);
 //        System.out.println(csvFile);
@@ -561,7 +597,7 @@ public class DashboardSceneController implements Initializable {
 //        }
 //        System.out.println("Sucesso");
 
-////  METODO 1
+////  METODO 1 - Header horizontal ok, dados vertical na coluna 1 apenas)
 //        File csvFile = new File("src/main/resources/br/com/biopdi/mbiolabv2/export/dashboard/export_" + currentDay + "_" + currentHour + ".csv");
 //        OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(csvFile), StandardCharsets.ISO_8859_1);
 //        System.out.println(csvFile);
