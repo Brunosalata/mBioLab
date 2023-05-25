@@ -89,6 +89,7 @@
                   </VBox>
                   <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                      <children>
+                        <Button fx:id="button" mnemonicParsing="false" onAction="#closeApp" text="Button" />
                         <Button fx:id="btnSwitchSupport" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSupportScene" prefHeight="40.0" prefWidth="180.0" text="Suporte">
                            <font>
                               <Font size="18.0" />
@@ -162,7 +163,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Button fx:id="btnClose" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeApp" prefHeight="35.0" prefWidth="35.0" styleClass="exit" stylesheets="@css/style.css" />
+                                    <Button fx:id="btnClose" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" styleClass="exit" stylesheets="@css/style.css" />
                                     <Label text="Sair" textFill="WHITE">
                                        <HBox.margin>
                                           <Insets left="10.0" />

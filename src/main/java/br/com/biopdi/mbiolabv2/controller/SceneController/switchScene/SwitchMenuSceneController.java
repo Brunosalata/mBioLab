@@ -26,6 +26,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -52,6 +53,8 @@ public class SwitchMenuSceneController implements Initializable {
     private final UserDAO userDAO = new UserDAO();
     private User user = userDAO.findById(sysVar.getUserId());
     @FXML
+    private Button button;
+    @FXML
     private Label lbCurrentData, lbUserName, lbLogin;
     @FXML
     private AnchorPane apSwitchMenu;
@@ -59,6 +62,7 @@ public class SwitchMenuSceneController implements Initializable {
     private BorderPane mainPane;
     @FXML
     private ImageView ivLogin, ivUserImage;
+
 
     Date systemDate = new Date();
     SimpleDateFormat dateComplete = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -87,8 +91,8 @@ public class SwitchMenuSceneController implements Initializable {
                 ivUserImage.setImage(new Image(user.getUserImagePath()));
             }
         }
-
     }
+
 
     /**
      * Método que abre a Scene Home dentro da SwitchMenu
@@ -254,3 +258,4 @@ public class SwitchMenuSceneController implements Initializable {
         System.exit(0);
     }
 }
+

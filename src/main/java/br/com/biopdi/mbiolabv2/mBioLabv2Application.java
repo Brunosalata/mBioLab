@@ -18,8 +18,8 @@ package br.com.biopdi.mbiolabv2;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.SystemVariableDAO;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -36,21 +36,18 @@ import java.io.IOException;
 public class mBioLabv2Application extends Application {
     private SystemVariableDAO sysVarDAO = new SystemVariableDAO();
     private SystemVariable sysVar = sysVarDAO.find();
-    @FXML
-    public Stage loginStage;
+
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage primaryStage) throws IOException {
 
         initialSetup();
-
-        Parent login = FXMLLoader.load(getClass().getResource("loginScene.fxml"));
-        Scene scene = new Scene(login);
-        loginStage = new Stage();
-        loginStage.setTitle("mBioLab");
-        loginStage.getIcons().add(new Image(getClass().getResourceAsStream("img/iconBiopdi.png")));
-        loginStage.setResizable(false);  // Impede redimensionamento da janela
-        loginStage.setScene(scene);
-        loginStage.show();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("loginScene.fxml"));
+        Parent login = loader.load();
+        primaryStage.setTitle("mBioLab");
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("img/iconBiopdi.png")));
+        primaryStage.setResizable(false);  // Impede redimensionamento da janela
+        primaryStage.setScene(new Scene(login));
+        primaryStage.show();
     }
 
     /**
@@ -65,14 +62,9 @@ public class mBioLabv2Application extends Application {
     /**
      * Método que carrega splash Scene
      */
-//    public void splashSceneCall() throws IOException {
-//
-//        Parent pane = FXMLLoader.load(getClass().getResource("openScene.fxml"));
-//        Scene open = new Scene(pane);
-//        openStage.setScene(open);
-//        openStage.initStyle(StageStyle.UNDECORATED);
-//        openStage.show();
-//    }
+    public void splashSceneCall(Initializable event) throws IOException {
+
+    }
 
     public static void main(String[] args) {
         launch();

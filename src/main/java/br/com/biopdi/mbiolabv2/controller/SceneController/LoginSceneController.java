@@ -36,7 +36,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
@@ -67,6 +66,14 @@ public class LoginSceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+    }
+
+    /**
+     * Metodo que permite o acesso ao stage a partir da classe LoginSceneController
+     * @param stage
+     */
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     /**
@@ -209,4 +216,6 @@ public class LoginSceneController implements Initializable {
         stage.show();
 
     }
+
+
 }

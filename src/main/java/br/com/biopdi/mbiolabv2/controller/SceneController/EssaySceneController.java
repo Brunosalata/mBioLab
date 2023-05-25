@@ -1,34 +1,21 @@
 package br.com.biopdi.mbiolabv2.controller.SceneController;
 
 
-import br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.FxmlLoader;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
-import br.com.biopdi.mbiolabv2.mBioLabv2Application;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
 import br.com.biopdi.mbiolabv2.model.bean.Method;
 import br.com.biopdi.mbiolabv2.model.bean.SystemParameter;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import com.fazecast.jSerialComm.SerialPort;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -66,7 +53,8 @@ public class EssaySceneController implements Initializable {
             txtFinalForce, txtInitialPosition, txtFinalPosition, txtDislocationVelocity, txtEssayPreCharge,
             txtMaxForceBreak, txtDislocationValueBreak, txtDislocationValuePause, txtForcePercentageBreak;
     @FXML
-    private Button btnAdjustVelocity, btnPositionUp, btnPositionDown, btnStart, btnPause, btnStop, btnChargeMethod, btnEssayByUserId, btnEssaySave;
+    private Button btnAdjustVelocity, btnPositionUp, btnPositionDown, btnStart, btnPause, btnStop, btnChargeMethod,
+            btnEssayByUserId, btnEssaySave, btnEssayDiscart, btnForceZero;
     @FXML
     private RadioButton rbForceXPosition, rbStrainXDeform, rbForceDownBreak, rbMaxForceBreak, rbDislocationBreak, rbDislocationPause;
     private SerialPort port;
@@ -96,6 +84,7 @@ public class EssaySceneController implements Initializable {
         savedMethodList();
 
     }
+
 
     /**
      * Classe que define o algorítmo da Thread que faz a leitura dinâmica da Força e da Posição
@@ -524,6 +513,18 @@ public class EssaySceneController implements Initializable {
     private synchronized void test() throws InterruptedException {
 
 
+        try{
+            // Alerta de inicio de ensaio
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Iniciando ensaio");
+            alert.setHeaderText("O ensaio está começando! Libere a área de movimentação do eixo.");
+            Stage stage = (Stage) btnForceZero.getScene().getWindow();
+            alert.initOwner(stage);
+            alert.showAndWait();
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         // Construcao do grafico, da serie e inclusao de parametros do grafico
         chartEssayLine.getData().clear();
@@ -556,6 +557,7 @@ public class EssaySceneController implements Initializable {
     @FXML
     private synchronized void testRecover() throws InterruptedException {
 
+
         // Thread que atualiza os valores no grafico
         Thread chartThread = new Thread(new RTChartCreate());
         Platform.runLater(() -> {
@@ -581,7 +583,15 @@ public class EssaySceneController implements Initializable {
     @FXML
     private synchronized void essayStart() throws InterruptedException {
 
-        //Aquisicao dos parametros inseridos pelo usuario
+        // Alerta de inicio de ensaio
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Registro de ensaio");
+        alert.setHeaderText("Ensaio salvo com sucesso! Ele está disponível em Relatório");
+        Stage stage = (Stage) btnEssaySave.getScene().getWindow();
+        alert.initOwner(stage);
+        alert.showAndWait();
+
+        // Aquisicao dos parametros inseridos pelo usuario
         try{
             essayVelocity();
             Thread.sleep(15);
@@ -705,49 +715,65 @@ public class EssaySceneController implements Initializable {
      * Método que cria um essay e salva no DB
      */
     @FXML
-    public void essaySave(ActionEvent event) throws IOException {
-        essayFinalyzed = new Essay();
-        essayFinalyzed.setUserId(sysVar.getUserId()); // Substituir por ID referente ao login
-        essayFinalyzed.setEssayIdentification(txtEssayIdentification.getText());
-        essayFinalyzed.setEssayNorm(cbNormList.getSelectionModel().getSelectedItem().toString());
-        essayFinalyzed.setEssayUsedMachine(null);
-        essayFinalyzed.setEssayChargeCell(0.0);
-        essayFinalyzed.setEssayInitialForce(initialForce);
-        essayFinalyzed.setEssayFinalForce(finalForce);
-        essayFinalyzed.setEssayInitialPosition(initialPosition);
-        essayFinalyzed.setEssayFinalPosition(finalPosition);
-        essayFinalyzed.setEssayDislocationVelocity(Double.parseDouble(txtEssayVelocity.getText()));
-        essayFinalyzed.setEssayTemperature(0.0);
-        essayFinalyzed.setEssayPreCharge(0.0);
-        essayFinalyzed.setEssayRelativeHumidity(0.0);
-        essayFinalyzed.setEssayMaxForce(fMax);
-        essayFinalyzed.setEssayMaxPosition(pMax);
-        essayFinalyzed.setEssayMaxTension(tMax);
-        essayFinalyzed.setEssayEscapeTension(tEsc);
-        essayFinalyzed.setEssayAlong(along);
-        essayFinalyzed.setEssayAreaRed(redArea);
-        essayFinalyzed.setEssayMYoung(mYoung);
-        essayFinalyzed.setEssayChart(chartString);
-        essayFinalyzed.setEssayDay(currentDay);
-        essayFinalyzed.setEssayHour(currentHour);
+    public void essaySave() {
+        if(chartString!=null && txtEssayIdentification.getText()!=""){
+            essayFinalyzed = new Essay();
+            essayFinalyzed.setUserId(sysVar.getUserId()); // Substituir por ID referente ao login
+            essayFinalyzed.setEssayIdentification(txtEssayIdentification.getText());
+            essayFinalyzed.setEssayNorm(cbNormList.getSelectionModel().getSelectedItem().toString());
+            essayFinalyzed.setEssayUsedMachine(null);
+            essayFinalyzed.setEssayChargeCell(0.0);
+            essayFinalyzed.setEssayInitialForce(initialForce);
+            essayFinalyzed.setEssayFinalForce(finalForce);
+            essayFinalyzed.setEssayInitialPosition(initialPosition);
+            essayFinalyzed.setEssayFinalPosition(finalPosition);
+            essayFinalyzed.setEssayDislocationVelocity(Double.parseDouble(txtEssayVelocity.getText()));
+            essayFinalyzed.setEssayTemperature(0.0);
+            essayFinalyzed.setEssayPreCharge(0.0);
+            essayFinalyzed.setEssayRelativeHumidity(0.0);
+            essayFinalyzed.setEssayMaxForce(fMax);
+            essayFinalyzed.setEssayMaxPosition(pMax);
+            essayFinalyzed.setEssayMaxTension(tMax);
+            essayFinalyzed.setEssayEscapeTension(tEsc);
+            essayFinalyzed.setEssayAlong(along);
+            essayFinalyzed.setEssayAreaRed(redArea);
+            essayFinalyzed.setEssayMYoung(mYoung);
+            essayFinalyzed.setEssayChart(chartString);
+            essayFinalyzed.setEssayDay(currentDay);
+            essayFinalyzed.setEssayHour(currentHour);
 
-        if(sysVar.getUserId()==3){
-            essayFinalyzed.setEssayId(1);
-            essayDAO.update(essayFinalyzed);
-        } else{
-            essayDAO.create(essayFinalyzed);
-        }
-        System.out.println(essayFinalyzed);
+            if(sysVar.getUserId()==3){
+                essayFinalyzed.setEssayId(1);
+                essayDAO.update(essayFinalyzed);
+            } else{
+                essayDAO.create(essayFinalyzed);
+            }
+            System.out.println(essayFinalyzed);
 
-        // Alerta de confirmação de registro de ensaio
-        Platform.runLater(()->{
+            // Alerta de confirmação de registro de ensaio
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Registro de Ensaio");
-            alert.setHeaderText("Ensaio salvo com sucesso!");
-            alert.initOwner(new Stage());
+            alert.setTitle("Registro de ensaio");
+            alert.setHeaderText("Ensaio salvo com sucesso! Ele está disponível em Relatório");
+            Stage stage = (Stage) btnEssaySave.getScene().getWindow();
+            alert.initOwner(stage);
             alert.show();
-        });
-
+        } else if(chartString==null){
+            // Alerta de realização incorreta do ensaio
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Registro de ensaio");
+            alert.setHeaderText("Finalize o ensaio para gerar os dados!");
+            Stage stage = (Stage) btnEssaySave.getScene().getWindow();
+            alert.initOwner(stage);
+            alert.show();
+        } else if(txtEssayIdentification.getText()==""){
+            // Alerta de ausencia de nome para o ensaio
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Registro de ensaio");
+            alert.setHeaderText("Preencha o nome do ensaio!");
+            Stage stage = (Stage) btnEssaySave.getScene().getWindow();
+            alert.initOwner(stage);
+            alert.show();
+        }
 
     }
 
@@ -758,6 +784,13 @@ public class EssaySceneController implements Initializable {
     public void essayDiscart() {
         essayFinalyzed = null;
         System.out.println(essayFinalyzed);
+        // Popup informativo
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Descarte de ensaio");
+        alert.setHeaderText("As informações do esaio foram descartadas.");
+        Stage stage = (Stage) btnEssayDiscart.getScene().getWindow();
+        alert.initOwner(stage);
+        alert.show();
     }
 
     // INICIO*********** Métodos de realização do Ensaio ***********
