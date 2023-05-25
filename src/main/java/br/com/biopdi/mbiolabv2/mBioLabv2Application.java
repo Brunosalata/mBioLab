@@ -22,7 +22,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -43,6 +42,7 @@ public class mBioLabv2Application extends Application {
     public void start(Stage stage) throws IOException {
 
         initialSetup();
+
         Parent login = FXMLLoader.load(getClass().getResource("loginScene.fxml"));
         Scene scene = new Scene(login);
         loginStage = new Stage();

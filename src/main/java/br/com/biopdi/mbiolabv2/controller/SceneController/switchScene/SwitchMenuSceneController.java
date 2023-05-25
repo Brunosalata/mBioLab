@@ -87,9 +87,8 @@ public class SwitchMenuSceneController implements Initializable {
                 ivUserImage.setImage(new Image(user.getUserImagePath()));
             }
         }
+
     }
-
-
 
     /**
      * Método que abre a Scene Home dentro da SwitchMenu
@@ -247,6 +246,9 @@ public class SwitchMenuSceneController implements Initializable {
         clock.start();
     }
 
+    /**
+     * Metodo que encerra a aplicacao
+     */
     @FXML
     private void closeApp(){
         System.exit(0);

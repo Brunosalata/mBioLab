@@ -5,21 +5,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02b74ee7-7c41-4de8-9b11-7638723b4e97" name="Changes" comment="Proj organization, User, UserDAO and DBConnection classes done">
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/report/Report.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/report/ReportFX.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/mBioLabDB.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/mBioLabDB.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/switchScene/SwitchMenuSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/switchScene/SwitchMenuSceneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/mBioLabv2Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/mBioLabv2Application.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/jrxml/dashboardReport.jrxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/jrxml/dashboardReport.jrxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jrxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jrxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/reportScene.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/reportScene.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/switchScene/SwitchMenuSceneController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/switchScene/SwitchMenuSceneController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/mBioLabv2Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/mBioLabv2Application.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/reportScene.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/reportScene.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/module-info.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/module-info.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="ExportToHTMLSettings">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../mBioLabv2\exportToHTML" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -82,8 +99,8 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "last_directory_selection": "C:/Projetos_Biopdi/mBioLabv2/src/main/java/br/com/biopdi/mbiolabv2",
-    "last_opened_file_path": "C:/java_libs/jasperreports-6.20.0.jar",
-    "project.structure.last.edited": "Modules",
+    "last_opened_file_path": "C:/java_libs/jrviewer-fx-0.1.1.jar",
+    "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.39195403",
     "settings.editor.selected.configurable": "preferences.pluginManager"
@@ -102,9 +119,14 @@
       <recent name="C:\Projetos_Biopdi\mBioLabv2\src\main\resources" />
       <recent name="C:\Projetos_Biopdi\mBioLabv2\src\main\resources\br\com\biopdi\mbiolabv2" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="br.com.biopdi.mbiolabv2.controller.report" />
+    </key>
   </component>
   <component name="RunManager" selected="Application.mBioLabv2Application">
     <configuration name="mBioLabv2Application" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="azul-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="br.com.biopdi.mbiolabv2.mBioLabv2Application" />
       <module name="mBioLabv2" />
       <extension name="coverage">

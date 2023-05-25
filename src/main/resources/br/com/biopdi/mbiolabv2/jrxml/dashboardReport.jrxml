@@ -169,13 +169,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
-							<jr:detailCell style="Table_TD" height="30">
-								<textField>
-									<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="110" height="30" uuid="47e4ccba-5216-4c76-b2be-e8cdcb8d7672"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{essayIdentification}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
+							<jr:detailCell style="Table_TD" height="30"/>
 						</jr:column>
 						<jr:column width="51" uuid="2c1d2af3-1500-4d32-9d94-52dc3c4e0199">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
@@ -192,13 +186,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
-							<jr:detailCell style="Table_TD" height="30">
-								<textField>
-									<reportElement x="0" y="0" width="51" height="30" uuid="5c214f27-4588-491c-8b8b-d63b53ac7ebe"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<textFieldExpression><![CDATA[$F{fMax}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
+							<jr:detailCell style="Table_TD" height="30"/>
 						</jr:column>
 						<jr:column width="52" uuid="0cd8a5a3-12c3-48a3-9f03-6e554a471b0a">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>

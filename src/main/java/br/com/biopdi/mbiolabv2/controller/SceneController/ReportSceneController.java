@@ -38,9 +38,12 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.view.JasperViewer;
+import win.zqxu.jrviewer.JRViewerFX;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -65,6 +68,8 @@ public class ReportSceneController implements Initializable {
     private Label lbCurrentData, lbEssayUserName, lbFmax, lbPmax, lbTmax, lbTesc, lbAlong, lbRedArea, lbMYoung;
     @FXML
     private Button btnEssayByUserId, btnEssaySave;
+    @FXML
+    private JRViewerFX jvReport;
     @FXML
     private ListView<Essay> lvSavedEssay;
     @FXML
@@ -106,8 +111,7 @@ public class ReportSceneController implements Initializable {
                     }
                     essayChart(currentEssay.getEssayId());
                     essayInfo(currentEssay.getEssayId());
-
-
+//                    reportSave();
 
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());
@@ -211,51 +215,49 @@ public class ReportSceneController implements Initializable {
     }
 
     @FXML
-    private void reportSave() throws IOException, JRException {
+    private void reportSave() {
 
         Platform.runLater(() ->{
 
-        try {
-            // Especifica diretorio e extensao do relatorio
-            String outputFile = "src/main/resources/br/com/biopdi/mbiolabv2/export/report/essayReport_" + currentDay + "_" + currentHour + ".pdf";
+            try {
+//                // selecao do objeto a ser inserido (ou lista de objetos)
+//                List<Essay> currentEssayList = new ArrayList<Essay>();
+//                currentEssayList.add(currentEssay);
+//                // Leitura do arquivo jrxml e criacao do objeto jasperdesign
+//                InputStream input = new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jasper"));
+//                // Instancia classe de emissao de relatorio
+//                ReportFX report = new ReportFX();
+//
+//                Platform.runLater(()->{
+//                    JasperPrint jasperPrint = report.reportCreator(Collections.singletonList(currentEssayList), input);
+//                    jvReport.setReport(jasperPrint);
+//                    jvReport.print();
+//                });
 
-            // selecao do objeto a ser inserido (ou lista de objetos)
-            List<Essay> currentEssayList = new ArrayList<Essay>();
+                // Converte lista para JRBeanCollectionDataSource
+                JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(essayList);
 
-            // Criar objetos, se necessario
-            currentEssayList.add(currentEssay);
+                //Map para Armazenar os parametros do relatorio Jasper
+                Map<String, Object> parameters = new HashMap<String, Object>();
+                parameters.put("CollectionBeanParam", itemsJRBean);
+                JasperDesign jasperDesign = JRXmlLoader.load("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jasper");
+                // Compilando jrxml com a classe JasperReport
+                JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+                JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 
-            // Converte lista para JRBeanCollectionDataSource
-            JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(currentEssayList);
 
-            //Map para Armazenar os parametros do relatorio Jasper
-            Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put("getJasperParameter", itemsJRBean);
+                jvReport.setReport(jasperPrint);
+                jvReport.print();
 
-            // Leitura do arquivo jrxml e criacao do objeto jasperdesign
-            InputStream input = new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jrxml"));
-
-            JasperDesign jasperDesign = JRXmlLoader.load(input);
-
-            // Compilando jrxml com a classe JasperReport
-            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-
-            // Gerar pdf a partir do objeto jasperReport
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
-
-            // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
-            JasperViewer.viewReport(jasperPrint, false);
-        } catch (JRException e) {
-            throw new RuntimeException(e);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+            } catch (JRException e) {
+                throw new RuntimeException(e);
+            }
         });
 
     }
 
     @FXML
-    private void reportPrint(){
+    private void reportPrint(){;
 
     }
 

@@ -77,6 +77,13 @@
             <artifactId>barbecue</artifactId>
             <version>1.5-beta1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/win.zqxu/jrviewer-fx -->
+        <dependency>
+            <groupId>win.zqxu</groupId>
+            <artifactId>jrviewer-fx</artifactId>
+            <version>0.1.1</version>
+        </dependency>
+
         <!-- Report creator-->
         <!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
         <dependency>
