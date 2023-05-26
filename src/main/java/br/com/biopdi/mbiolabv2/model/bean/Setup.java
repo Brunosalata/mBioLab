@@ -15,7 +15,6 @@ package br.com.biopdi.mbiolabv2.model.bean;
  *  limitations under the License.
  */
 
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -25,59 +24,19 @@ import java.util.Objects;
  * @project mBioLabv2
  */
 public class Setup {
-    private Integer setupId, userId, MC1M1, MC2M1, MC3M1, MC4M1, MC5M1, MC6M1, MC7M1, MC8M1, MC9M1, MC10M1, MC11M1, MC12M1, MC13M1, MC14M1, MC15M1, MC16M1, MC17M1, MC18M1, MC19M1, MC20M1, MC21M1, MC22M1, MC23M1, MC24M1, MC25M1, MC26M1, MC27M1, MC28M1, MC29M1, MC30M1, channel1ext1, channel2ext1, channel3ext1, channel4ext1, channel1ext2, channel2ext2, channel3ext2, channel4ext2;
-    private String setupName, setupAuthor;
-    private String setupDate;
+    private Integer setupId, MC1M1, MC2M1, MC3M1, MC4M1, MC5M1, MC6M1, MC7M1, MC8M1, MC9M1, MC10M1, MC11M1,
+            MC12M1, MC13M1, MC14M1, MC15M1, MC16M1, MC17M1, MC18M1, MC19M1, MC20M1, MC21M1, MC22M1, MC23M1, MC24M1,
+            MC25M1, MC26M1, MC27M1, MC28M1, MC29M1, MC30M1;
 
     public Setup() {
     }
-    public Setup(Integer userId, Integer MC1M1, Integer MC2M1, Integer MC3M1, Integer MC4M1, Integer MC5M1, Integer MC6M1, Integer MC7M1, Integer MC8M1, Integer MC9M1, Integer MC10M1, Integer MC11M1, Integer MC12M1, Integer MC13M1, Integer MC14M1, Integer MC15M1, Integer MC16M1, Integer MC17M1, Integer MC18M1, Integer MC19M1, Integer MC20M1, Integer MC21M1, Integer MC22M1, Integer MC23M1, Integer MC24M1, Integer MC25M1, Integer MC26M1, Integer MC27M1, Integer MC28M1, Integer MC29M1, Integer MC30M1, Integer channel1ext1, Integer channel2ext1, Integer channel3ext1, Integer channel4ext1, Integer channel1ext2, Integer channel2ext2, Integer channel3ext2, Integer channel4ext2, String setupName, String setupAuthor, String setupDate) {
-        this.userId = userId;
-        this.MC1M1 = MC1M1;
-        this.MC2M1 = MC2M1;
-        this.MC3M1 = MC3M1;
-        this.MC4M1 = MC4M1;
-        this.MC5M1 = MC5M1;
-        this.MC6M1 = MC6M1;
-        this.MC7M1 = MC7M1;
-        this.MC8M1 = MC8M1;
-        this.MC9M1 = MC9M1;
-        this.MC10M1 = MC10M1;
-        this.MC11M1 = MC11M1;
-        this.MC12M1 = MC12M1;
-        this.MC13M1 = MC13M1;
-        this.MC14M1 = MC14M1;
-        this.MC15M1 = MC15M1;
-        this.MC16M1 = MC16M1;
-        this.MC17M1 = MC17M1;
-        this.MC18M1 = MC18M1;
-        this.MC19M1 = MC19M1;
-        this.MC20M1 = MC20M1;
-        this.MC21M1 = MC21M1;
-        this.MC22M1 = MC22M1;
-        this.MC23M1 = MC23M1;
-        this.MC24M1 = MC24M1;
-        this.MC25M1 = MC25M1;
-        this.MC26M1 = MC26M1;
-        this.MC27M1 = MC27M1;
-        this.MC28M1 = MC28M1;
-        this.MC29M1 = MC29M1;
-        this.MC30M1 = MC30M1;
-        this.channel1ext1 = channel1ext1;
-        this.channel2ext1 = channel2ext1;
-        this.channel3ext1 = channel3ext1;
-        this.channel4ext1 = channel4ext1;
-        this.channel1ext2 = channel1ext2;
-        this.channel2ext2 = channel2ext2;
-        this.channel3ext2 = channel3ext2;
-        this.channel4ext2 = channel4ext2;
-        this.setupName = setupName;
-        this.setupAuthor = setupAuthor;
-        this.setupDate = setupDate;
-    }
-    public Setup(Integer setupId, Integer userId, Integer MC1M1, Integer MC2M1, Integer MC3M1, Integer MC4M1, Integer MC5M1, Integer MC6M1, Integer MC7M1, Integer MC8M1, Integer MC9M1, Integer MC10M1, Integer MC11M1, Integer MC12M1, Integer MC13M1, Integer MC14M1, Integer MC15M1, Integer MC16M1, Integer MC17M1, Integer MC18M1, Integer MC19M1, Integer MC20M1, Integer MC21M1, Integer MC22M1, Integer MC23M1, Integer MC24M1, Integer MC25M1, Integer MC26M1, Integer MC27M1, Integer MC28M1, Integer MC29M1, Integer MC30M1, Integer channel1ext1, Integer channel2ext1, Integer channel3ext1, Integer channel4ext1, Integer channel1ext2, Integer channel2ext2, Integer channel3ext2, Integer channel4ext2, String setupName, String setupAuthor, String setupDate) {
+    public Setup(Integer setupId, Integer MC1M1, Integer MC2M1, Integer MC3M1, Integer MC4M1,
+                 Integer MC5M1, Integer MC6M1, Integer MC7M1, Integer MC8M1, Integer MC9M1, Integer MC10M1,
+                 Integer MC11M1, Integer MC12M1, Integer MC13M1, Integer MC14M1, Integer MC15M1, Integer MC16M1,
+                 Integer MC17M1, Integer MC18M1, Integer MC19M1, Integer MC20M1, Integer MC21M1, Integer MC22M1,
+                 Integer MC23M1, Integer MC24M1, Integer MC25M1, Integer MC26M1, Integer MC27M1, Integer MC28M1,
+                 Integer MC29M1, Integer MC30M1) {
         this.setupId = setupId;
-        this.userId = userId;
         this.MC1M1 = MC1M1;
         this.MC2M1 = MC2M1;
         this.MC3M1 = MC3M1;
@@ -108,31 +67,48 @@ public class Setup {
         this.MC28M1 = MC28M1;
         this.MC29M1 = MC29M1;
         this.MC30M1 = MC30M1;
-        this.channel1ext1 = channel1ext1;
-        this.channel2ext1 = channel2ext1;
-        this.channel3ext1 = channel3ext1;
-        this.channel4ext1 = channel4ext1;
-        this.channel1ext2 = channel1ext2;
-        this.channel2ext2 = channel2ext2;
-        this.channel3ext2 = channel3ext2;
-        this.channel4ext2 = channel4ext2;
-        this.setupName = setupName;
-        this.setupAuthor = setupAuthor;
-        this.setupDate = setupDate;
+    }
+    public Setup(Integer MC1M1, Integer MC2M1, Integer MC3M1, Integer MC4M1, Integer MC5M1,
+                 Integer MC6M1, Integer MC7M1, Integer MC8M1, Integer MC9M1, Integer MC10M1, Integer MC11M1,
+                 Integer MC12M1, Integer MC13M1, Integer MC14M1, Integer MC15M1, Integer MC16M1, Integer MC17M1,
+                 Integer MC18M1, Integer MC19M1, Integer MC20M1, Integer MC21M1, Integer MC22M1, Integer MC23M1,
+                 Integer MC24M1, Integer MC25M1, Integer MC26M1, Integer MC27M1, Integer MC28M1, Integer MC29M1,
+                 Integer MC30M1) {
+        this.MC1M1 = MC1M1;
+        this.MC2M1 = MC2M1;
+        this.MC3M1 = MC3M1;
+        this.MC4M1 = MC4M1;
+        this.MC5M1 = MC5M1;
+        this.MC6M1 = MC6M1;
+        this.MC7M1 = MC7M1;
+        this.MC8M1 = MC8M1;
+        this.MC9M1 = MC9M1;
+        this.MC10M1 = MC10M1;
+        this.MC11M1 = MC11M1;
+        this.MC12M1 = MC12M1;
+        this.MC13M1 = MC13M1;
+        this.MC14M1 = MC14M1;
+        this.MC15M1 = MC15M1;
+        this.MC16M1 = MC16M1;
+        this.MC17M1 = MC17M1;
+        this.MC18M1 = MC18M1;
+        this.MC19M1 = MC19M1;
+        this.MC20M1 = MC20M1;
+        this.MC21M1 = MC21M1;
+        this.MC22M1 = MC22M1;
+        this.MC23M1 = MC23M1;
+        this.MC24M1 = MC24M1;
+        this.MC25M1 = MC25M1;
+        this.MC26M1 = MC26M1;
+        this.MC27M1 = MC27M1;
+        this.MC28M1 = MC28M1;
+        this.MC29M1 = MC29M1;
+        this.MC30M1 = MC30M1;
     }
 
     public Integer getSetupId() {
         return setupId;
     }
-//    public void setSetupId(Integer setupId) {
-//        this.setupId = setupId;
-//    }
-    public Integer getUserId() {
-        return userId;
-    }
-//    public void setUserId(Integer userId) {
-//        this.userId = userId;
-//    }
     public Integer getMC1M1() {
         return MC1M1;
     }
@@ -313,72 +289,6 @@ public class Setup {
     public void setMC30M1(Integer MC30M1) {
         this.MC30M1 = MC30M1;
     }
-    public Integer getChannel1ext1() {
-        return channel1ext1;
-    }
-    public void setChannel1ext1(Integer channel1ext1) {
-        this.channel1ext1 = channel1ext1;
-    }
-    public Integer getChannel2ext1() {
-        return channel2ext1;
-    }
-    public void setChannel2ext1(Integer channel2ext1) {
-        this.channel2ext1 = channel2ext1;
-    }
-    public Integer getChannel3ext1() {
-        return channel3ext1;
-    }
-    public void setChannel3ext1(Integer channel3ext1) {
-        this.channel3ext1 = channel3ext1;
-    }
-    public Integer getChannel4ext1() {
-        return channel4ext1;
-    }
-    public void setChannel4ext1(Integer channel4ext1) {
-        this.channel4ext1 = channel4ext1;
-    }
-    public Integer getChannel1ext2() {
-        return channel1ext2;
-    }
-    public void setChannel1ext2(Integer channel1ext2) {
-        this.channel1ext2 = channel1ext2;
-    }
-    public Integer getChannel2ext2() {
-        return channel2ext2;
-    }
-    public void setChannel2ext2(Integer channel2ext2) {
-        this.channel2ext2 = channel2ext2;
-    }
-    public Integer getChannel3ext2() {
-        return channel3ext2;
-    }
-    public void setChannel3ext2(Integer channel3ext2) {
-        this.channel3ext2 = channel3ext2;
-    }
-    public Integer getChannel4ext2() {
-        return channel4ext2;
-    }
-    public void setChannel4ext2(Integer channel4ext2) {
-        this.channel4ext2 = channel4ext2;
-    }
-    public String getSetupName() {
-        return setupName;
-    }
-    public void setSetupName(String setupName) {
-        this.setupName = setupName;
-    }
-    public String getSetupAuthor() {
-        return setupAuthor;
-    }
-    public void setSetupAuthor(String setupAuthor) {
-        this.setupAuthor = setupAuthor;
-    }
-    public String getSetupDate() {
-        return setupDate;
-    }
-    public void setSetupData(String setupData) {
-        this.setupDate = setupData;
-    }
 
     /**
      * Método equals e hashCode, para permitir a comparação entre elementos
@@ -390,18 +300,18 @@ public class Setup {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Setup setup = (Setup) o;
-        return setupId.equals(setup.setupId) && Objects.equals(userId, setup.userId) && Objects.equals(setupName, setup.setupName) && Objects.equals(setupAuthor, setup.setupAuthor);
+        return Objects.equals(setupId, setup.setupId) && Objects.equals(MC1M1, setup.MC1M1) && Objects.equals(MC2M1, setup.MC2M1) && Objects.equals(MC3M1, setup.MC3M1) && Objects.equals(MC4M1, setup.MC4M1) && Objects.equals(MC5M1, setup.MC5M1) && Objects.equals(MC6M1, setup.MC6M1) && Objects.equals(MC7M1, setup.MC7M1) && Objects.equals(MC8M1, setup.MC8M1) && Objects.equals(MC9M1, setup.MC9M1) && Objects.equals(MC10M1, setup.MC10M1) && Objects.equals(MC11M1, setup.MC11M1) && Objects.equals(MC12M1, setup.MC12M1) && Objects.equals(MC13M1, setup.MC13M1) && Objects.equals(MC14M1, setup.MC14M1) && Objects.equals(MC15M1, setup.MC15M1) && Objects.equals(MC16M1, setup.MC16M1) && Objects.equals(MC17M1, setup.MC17M1) && Objects.equals(MC18M1, setup.MC18M1) && Objects.equals(MC19M1, setup.MC19M1) && Objects.equals(MC20M1, setup.MC20M1) && Objects.equals(MC21M1, setup.MC21M1) && Objects.equals(MC22M1, setup.MC22M1) && Objects.equals(MC23M1, setup.MC23M1) && Objects.equals(MC24M1, setup.MC24M1) && Objects.equals(MC25M1, setup.MC25M1) && Objects.equals(MC26M1, setup.MC26M1) && Objects.equals(MC27M1, setup.MC27M1) && Objects.equals(MC28M1, setup.MC28M1) && Objects.equals(MC29M1, setup.MC29M1) && Objects.equals(MC30M1, setup.MC30M1);
     }
+
     @Override
     public int hashCode() {
-        return Objects.hash(setupId, userId, setupName, setupAuthor);
+        return Objects.hash(setupId, MC1M1, MC2M1, MC3M1, MC4M1, MC5M1, MC6M1, MC7M1, MC8M1, MC9M1, MC10M1, MC11M1, MC12M1, MC13M1, MC14M1, MC15M1, MC16M1, MC17M1, MC18M1, MC19M1, MC20M1, MC21M1, MC22M1, MC23M1, MC24M1, MC25M1, MC26M1, MC27M1, MC28M1, MC29M1, MC30M1);
     }
 
     @Override
     public String toString() {
         return "Setup{" +
                 "setupId=" + setupId +
-                ", userId=" + userId +
                 ", MC1M1=" + MC1M1 +
                 ", MC2M1=" + MC2M1 +
                 ", MC3M1=" + MC3M1 +
@@ -432,17 +342,6 @@ public class Setup {
                 ", MC28M1=" + MC28M1 +
                 ", MC29M1=" + MC29M1 +
                 ", MC30M1=" + MC30M1 +
-                ", channel1ext1=" + channel1ext1 +
-                ", channel2ext1=" + channel2ext1 +
-                ", channel3ext1=" + channel3ext1 +
-                ", channel4ext1=" + channel4ext1 +
-                ", channel1ext2=" + channel1ext2 +
-                ", channel2ext2=" + channel2ext2 +
-                ", channel3ext2=" + channel3ext2 +
-                ", channel4ext2=" + channel4ext2 +
-                ", setupName='" + setupName + '\'' +
-                ", setupAuthor='" + setupAuthor + '\'' +
-                ", setupDate='" + setupDate + '\'' +
                 '}';
     }
 }

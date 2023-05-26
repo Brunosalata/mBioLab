@@ -32,6 +32,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -126,9 +127,9 @@ public class LoginSceneController implements Initializable {
         // apresenta mensagem de suporte
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("Suporte");
+        alert.setGraphic(new ImageView(mBioLabv2Application.class.getResource("img/darkIcon/icons8-suporte-on-line-96.png").toString()));
         alert.setHeaderText("Precisa de ajuda?");
         alert.setContentText("Entre em contato com nossa equipe de atendimento pelo telefone (16) 3416-7080.");
-//        alert.setGraphic(new ImageView(String.valueOf(getClass().getResource("br/com/biopdi/mbiolabv2/img/iconBiopdi.png"))));
         alert.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         alert.showAndWait();
     }
