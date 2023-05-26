@@ -25,6 +25,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -53,7 +54,7 @@ public class SwitchMenuSceneController implements Initializable {
     private final UserDAO userDAO = new UserDAO();
     private User user = userDAO.findById(sysVar.getUserId());
     @FXML
-    private Button button;
+    private Button btnLogin;
     @FXML
     private Label lbCurrentData, lbUserName, lbLogin;
     @FXML
@@ -61,7 +62,7 @@ public class SwitchMenuSceneController implements Initializable {
     @FXML
     private BorderPane mainPane;
     @FXML
-    private ImageView ivLogin, ivUserImage;
+    private ImageView ivUserImage;
 
 
     Date systemDate = new Date();
@@ -73,16 +74,18 @@ public class SwitchMenuSceneController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         clockView();
 
-        // Alteração do lbUserName e lbLogin dependendo do retorno do banco de dados (null indica que userId do banco é 0, logo, sem login)
+        // Alteração do lbUserName e lbLogin dependendo do retorno do banco de dados (quando userId = 3 -> sem login)
         if(user.getUserId()==3){
             lbUserName.setText("Visitante");
             lbLogin.setText("Login");
-            ivLogin.setImage(new Image(mBioLabv2Application.class.getResource("img/lightIcon/login.png").toExternalForm()));
+            btnLogin.getStyleClass().add(1,"login");
         } else{
             System.out.println(user);
             lbUserName.setText(user.getUserName());
             lbLogin.setText("Logout");
-            ivLogin.setImage(new Image(mBioLabv2Application.class.getResource("img/lightIcon/logout.png").toExternalForm()));
+            btnLogin.getStyleClass().add(1,"logout");
+//
+
             System.out.println(user.getUserImagePath());
             // AJUSTAR para imagem do usuário (Não está puxando userImagePath do DB)
             if(user.getUserImagePath()==null){
@@ -173,17 +176,19 @@ public class SwitchMenuSceneController implements Initializable {
     }
 
     /**
-     * Método que abre a Scene Login dentro da SwitchMenu
-     *
-     * @param event
+     * REQUER CORRECAO: Método que abre a Scene Login dentro da SwitchMenu
      */
     @FXML
-    private void logout(ActionEvent event) throws IOException {
-        SystemVariable sysVar = sysVarDAO.find();
-        sysVar.setUserId(3);
-        sysVarDAO.updateUser(sysVar);
-        apSwitchMenu.getScene().getWindow().hide();
-        openNewScene("loginScene.fxml");
+    private void logout() throws IOException {
+        if(btnLogin.getStyle()=="button.logout"){
+            SystemVariable sysVar = sysVarDAO.find();
+            sysVar.setUserId(3);
+            sysVarDAO.updateUser(sysVar);
+            apSwitchMenu.getScene().getWindow().hide();
+            openNewScene("loginScene.fxml");
+        } else if(btnLogin.getStyle()=="button.login"){
+            openNewWindow("loginScene.fxml");
+        }
     }
 
     /**
@@ -197,7 +202,35 @@ public class SwitchMenuSceneController implements Initializable {
     }
 
     /**
-     * Método genbérico para abertura de nova janela
+     * REQUER CORRECAO: Método genérico para abertura de nova janela em frente a atual
+     * @param fxmlFile
+     * @throws IOException
+     */
+    @FXML
+    private void openNewWindow(String fxmlFile) throws IOException {
+        FXMLLoader loader = new FXMLLoader(mBioLabv2Application.class.getResource("userRegisterScene.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = (Stage) btnLogin.getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setTitle("mBioLab");
+        stage.getIcons().add(new Image(mBioLabv2Application.class.getResourceAsStream("img/iconBiopdi.png")));
+        stage.setResizable(false); // Impede redimensionamento da janela
+        stage.setScene(scene);
+        stage.show();
+
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+//        Parent login = loader.load();
+//        Stage stage = (Stage) btnLogin.getScene().getWindow();
+//        stage.setTitle("mBioLab");
+//        stage.getIcons().add(new Image(getClass().getResourceAsStream("img/iconBiopdi.png")));
+//        stage.setResizable(false);  // Impede redimensionamento da janela
+//        stage.setScene(new Scene(login));
+//        stage.show();
+    }
+
+    /**
+     * Método generico para abertura de cenario dentro da SwitchMenuScene
      * @param fxmlFile
      * @throws IOException
      */

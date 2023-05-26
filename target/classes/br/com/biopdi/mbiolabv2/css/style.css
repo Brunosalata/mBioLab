@@ -37,6 +37,24 @@
     -fx-scale-x: 0.9;
 }
 
+.button.login {
+    -fx-background-image: url("../img/lightIcon/login.png");
+    -fx-background-position: center;
+    -fx-background-size: contain;
+    -fx-scale-z: 1.0;
+    -fx-scale-y: 1.0;
+    -fx-scale-x: 1.0;
+}
+
+.button.logout {
+    -fx-background-image: url("../img/lightIcon/logout.png");
+    -fx-background-position: center;
+    -fx-background-size: contain;
+    -fx-scale-y: 1.0;
+    -fx-scale-x: 1.0;
+    -fx-scale-z: 1.0;
+}
+
 .button.exit {
     -fx-background-image: url("../img/turnOn.png");
     -fx-background-position: center;

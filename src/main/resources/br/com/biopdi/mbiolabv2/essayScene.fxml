@@ -1611,7 +1611,7 @@
                            <content>
                               <BorderPane prefHeight="200.0" prefWidth="200.0">
                                  <center>
-                                    <VBox prefWidth="100.0" style="-fx-background-color: #A1A1A1;" BorderPane.alignment="CENTER">
+                                    <VBox fx:id="vBoxEssayStart" prefWidth="100.0" style="-fx-background-color: #A1A1A1;" BorderPane.alignment="CENTER">
                                        <children>
                                           <VBox prefHeight="242.0" prefWidth="1313.0" VBox.vgrow="ALWAYS">
                                              <children>

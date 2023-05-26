@@ -14,6 +14,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.PrintWriter;
@@ -66,6 +67,8 @@ public class EssaySceneController implements Initializable {
     private int autoBreakCount;
     @FXML
     private AnchorPane apAlert;
+    @FXML
+    private VBox vBoxEssayStart;
 
 
     Date systemDate = new Date();
@@ -514,6 +517,8 @@ public class EssaySceneController implements Initializable {
 
 
         try{
+            // Mudando background do ensaio para amarelo (preparando)
+            vBoxEssayStart.setStyle("-fx-background-color: #BCAA06");
             // Alerta de inicio de ensaio
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Iniciando ensaio");
@@ -526,16 +531,21 @@ public class EssaySceneController implements Initializable {
             throw new RuntimeException(e);
         }
 
-        // Construcao do grafico, da serie e inclusao de parametros do grafico
-        chartEssayLine.getData().clear();
-        series = new XYChart.Series<>();
-        series.setName("Leitura");
-        chartEssayLine.getData().add(series);
+        try{
+            // Mudando background do ensaio para vermelho (iniciado)
+            vBoxEssayStart.setStyle("-fx-background-color: #ed0202");
+            // Construcao do grafico, da serie e inclusao de parametros do grafico
+            chartEssayLine.getData().clear();
+            series = new XYChart.Series<>();
+            series.setName("Leitura");
+            chartEssayLine.getData().add(series);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         // Aquisicao de valores iniciais de Forca e Posicao
         initialForce = currentForce;
         initialPosition = currentPosition;
-
 
         //indica que eixo está em movimento
         moving = true;
@@ -552,6 +562,8 @@ public class EssaySceneController implements Initializable {
         finalForce = currentForce;
         finalPosition = currentPosition;
 
+        // Mudando background do ensaio de volta ao padrao
+        vBoxEssayStart.setStyle("-fx-background-color: #A1A1A1");
     }
 
     @FXML
