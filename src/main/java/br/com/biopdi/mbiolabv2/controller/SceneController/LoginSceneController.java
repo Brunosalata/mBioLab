@@ -20,6 +20,7 @@ import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 import br.com.biopdi.mbiolabv2.mBioLabv2Application;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import br.com.biopdi.mbiolabv2.model.bean.User;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -61,20 +62,11 @@ public class LoginSceneController implements Initializable {
     private PasswordField txtPassword;
     @FXML
     private VBox vbRegister;
-    private Stage stage;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-    }
-
-    /**
-     * Metodo que permite o acesso ao stage a partir da classe LoginSceneController
-     * @param stage
-     */
-    public void setStage(Stage stage) {
-        this.stage = stage;
     }
 
     /**
@@ -169,7 +161,7 @@ public class LoginSceneController implements Initializable {
         alert.setContentText("Deseja mesmo fechar o programa?");
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get() == ButtonType.OK){
-            System.exit(0);
+            Platform.exit();
         }
     }
 

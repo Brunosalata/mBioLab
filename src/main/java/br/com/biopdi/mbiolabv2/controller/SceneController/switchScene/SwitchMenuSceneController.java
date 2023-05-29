@@ -288,7 +288,7 @@ public class SwitchMenuSceneController implements Initializable {
      */
     @FXML
     private void closeApp(){
-        System.exit(0);
+        Platform.exit();
     }
 }
 

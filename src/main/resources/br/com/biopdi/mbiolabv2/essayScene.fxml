@@ -135,6 +135,11 @@
                                     <Font size="20.0" />
                                  </font>
                               </TextField>
+                              <Button fx:id="btnForceTare" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#forceTare" prefHeight="30.0" prefWidth="180.0" text="Tarar Força">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </Button>
                            </children>
                            <HBox.margin>
                               <Insets right="10.0" top="10.0" />
@@ -142,14 +147,26 @@
                         </VBox>
                         <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="180.0">
                            <children>
-                              <Label alignment="CENTER" prefHeight="45.0" prefWidth="127.0" text="Posição">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
+                              <HBox alignment="CENTER" prefHeight="45.0" prefWidth="64.0">
+                                 <children>
+                                    <Label prefHeight="35.0" prefWidth="127.0" text="Posição">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <ComboBox fx:id="cbPositionUnitSelection" maxWidth="63.0" minWidth="63.0" prefWidth="63.0" promptText="N">
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </ComboBox>
+                                 </children>
                                  <VBox.margin>
-                                    <Insets bottom="10.0" />
+                                    <Insets bottom="10.0" top="10.0" />
                                  </VBox.margin>
-                              </Label>
+                              </HBox>
                               <TextField fx:id="txtPositionView" alignment="CENTER" editable="false" prefHeight="45.0" prefWidth="64.0" text="0.000">
                                  <font>
                                     <Font size="20.0" />
@@ -167,14 +184,26 @@
                         </VBox>
                         <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="180.0">
                            <children>
-                              <Label alignment="CENTER" prefHeight="45.0" prefWidth="120.0" text="Força">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
+                              <HBox alignment="CENTER" prefHeight="45.0" prefWidth="64.0">
+                                 <children>
+                                    <Label prefHeight="35.0" prefWidth="120.0" text="Força">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <ComboBox fx:id="cbForceUnitSelection" maxWidth="63.0" minWidth="63.0" prefWidth="63.0" promptText="mm">
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </ComboBox>
+                                 </children>
                                  <VBox.margin>
-                                    <Insets bottom="10.0" />
+                                    <Insets bottom="10.0" top="10.0" />
                                  </VBox.margin>
-                              </Label>
+                              </HBox>
                               <TextField fx:id="txtForceView" alignment="CENTER" editable="false" prefHeight="45.0" prefWidth="64.0" text="0.000">
                                  <font>
                                     <Font size="20.0" />
@@ -195,7 +224,7 @@
                         <Insets left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <TabPane prefHeight="200.0" prefWidth="1313.0" tabClosingPolicy="UNAVAILABLE" tabMinHeight="25.0" tabMinWidth="150.0" VBox.vgrow="ALWAYS">
+                  <TabPane fx:id="tpEssayFlow" prefHeight="200.0" prefWidth="1313.0" tabClosingPolicy="UNAVAILABLE" tabMinHeight="25.0" tabMinWidth="150.0" VBox.vgrow="ALWAYS">
                     <tabs>
                       <Tab style="-fx-background-color: #DADADA;" text="Método">
                            <content>
@@ -283,7 +312,7 @@
                                                                               </VBox>
                                                                               <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                                                                  <children>
-                                                                                    <TextField fx:id="txtMethodName" maxWidth="115.0" minWidth="75.0" prefWidth="100.0" promptText="Digite nome" VBox.vgrow="ALWAYS">
+                                                                                    <TextField fx:id="txtEssayIdentification" maxWidth="115.0" minWidth="75.0" prefWidth="100.0" promptText="Digite nome" VBox.vgrow="ALWAYS">
                                                                                        <VBox.margin>
                                                                                           <Insets bottom="5.0" />
                                                                                        </VBox.margin>
@@ -1183,9 +1212,9 @@
                                                 <Insets />
                                              </VBox.margin>
                                              <children>
-                                                <VBox prefHeight="200.0" prefWidth="63.0" HBox.hgrow="ALWAYS">
+                                                <VBox prefHeight="365.0" prefWidth="316.0" HBox.hgrow="ALWAYS">
                                                    <children>
-                                                      <VBox prefHeight="242.0" prefWidth="1313.0">
+                                                      <VBox prefHeight="242.0" prefWidth="1313.0" VBox.vgrow="ALWAYS">
                                                          <children>
                                                             <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" style="-fx-background-color: #005897;" VBox.vgrow="ALWAYS">
                                                                <children>
@@ -1348,7 +1377,7 @@
                                                                                           <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                                                                                           <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                                                                              <children>
-                                                                                                <TextField fx:id="txtEssayValocity2" alignment="CENTER" minWidth="100.0" prefWidth="100.0" promptText="0.000">
+                                                                                                <TextField fx:id="txtEssayValocity2" alignment="CENTER" minWidth="75.0" prefWidth="75.0" promptText="0.000">
                                                                                                    <HBox.margin>
                                                                                                       <Insets />
                                                                                                    </HBox.margin>
@@ -1387,7 +1416,7 @@
                                                                                           <Pane prefHeight="200.0" prefWidth="200.0" />
                                                                                           <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                                                                              <children>
-                                                                                                <TextField fx:id="txtEssayValocity21" alignment="CENTER" minWidth="100.0" prefWidth="100.0" promptText="0.000">
+                                                                                                <TextField fx:id="txtEssayValocity21" alignment="CENTER" minWidth="75.0" prefWidth="75.0" promptText="0.000">
                                                                                                    <HBox.margin>
                                                                                                       <Insets />
                                                                                                    </HBox.margin>
@@ -1417,7 +1446,7 @@
                                                       </VBox>
                                                    </children>
                                                 </VBox>
-                                                <VBox prefHeight="382.0" prefWidth="843.0">
+                                                <VBox prefHeight="365.0" prefWidth="299.0" HBox.hgrow="ALWAYS">
                                                    <children>
                                                       <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" style="-fx-background-color: #005897;" VBox.vgrow="ALWAYS">
                                                          <children>
@@ -1426,6 +1455,106 @@
                                                                   <AnchorPane prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: WHITE;">
                                                                      <children>
                                                                         <Label prefHeight="35.0" prefWidth="134.0" text="Etapa 7" textFill="#333333" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                           <padding>
+                                                                              <Insets left="20.0" />
+                                                                           </padding>
+                                                                           <font>
+                                                                              <Font name="System Bold" size="20.0" />
+                                                                           </font>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                                  <AnchorPane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                                                     <children>
+                                                                        <Label layoutX="-935.0" prefHeight="35.0" prefWidth="1188.0" text="Método" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                           <padding>
+                                                                              <Insets left="20.0" />
+                                                                           </padding>
+                                                                           <font>
+                                                                              <Font size="20.0" />
+                                                                           </font>
+                                                                        </Label>
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                               </children>
+                                                            </HBox>
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" left="10.0" top="10.0" />
+                                                         </VBox.margin>
+                                                      </AnchorPane>
+                                                      <HBox prefHeight="195.0" prefWidth="1313.0" VBox.vgrow="ALWAYS">
+                                                         <children>
+                                                            <AnchorPane prefHeight="107.0" prefWidth="909.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                     <children>
+                                                                        <AnchorPane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                                                           <children>
+                                                                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="208.0" style="-fx-background-color: #A1A1A1;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                 <children>
+                                                                                    <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="398.0" style="-fx-background-color: #333333;" VBox.vgrow="ALWAYS">
+                                                                                       <children>
+                                                                                          <Label layoutX="14.0" layoutY="6.0" prefHeight="30.0" text="Extensômetro 1" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                             <padding>
+                                                                                                <Insets left="20.0" />
+                                                                                             </padding>
+                                                                                          </Label>
+                                                                                       </children>
+                                                                                       <VBox.margin>
+                                                                                          <Insets left="10.0" right="10.0" top="10.0" />
+                                                                                       </VBox.margin>
+                                                                                    </AnchorPane>
+                                                                                    <BorderPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                                                       <VBox.margin>
+                                                                                          <Insets left="10.0" right="10.0" />
+                                                                                       </VBox.margin>
+                                                                                       <center>
+                                                                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                                                                                             <children>
+                                                                                                <Label text="Salvar Método?">
+                                                                                                   <font>
+                                                                                                      <Font size="17.0" />
+                                                                                                   </font>
+                                                                                                   <VBox.margin>
+                                                                                                      <Insets bottom="10.0" />
+                                                                                                   </VBox.margin>
+                                                                                                </Label>
+                                                                                                <TextField fx:id="txtMethodName" maxWidth="115.0" minWidth="75.0" prefWidth="100.0" promptText="Digite um nome">
+                                                                                                   <VBox.margin>
+                                                                                                      <Insets bottom="10.0" />
+                                                                                                   </VBox.margin>
+                                                                                                </TextField>
+                                                                                                <Button fx:id="btnMethodSave" mnemonicParsing="false" text="Salvar método">
+                                                                                                   <VBox.margin>
+                                                                                                      <Insets bottom="10.0" />
+                                                                                                   </VBox.margin>
+                                                                                                </Button>
+                                                                                             </children>
+                                                                                          </VBox>
+                                                                                       </center>
+                                                                                    </BorderPane>
+                                                                                 </children>
+                                                                              </VBox>
+                                                                           </children>
+                                                                        </AnchorPane>
+                                                                     </children>
+                                                                  </HBox>
+                                                               </children>
+                                                            </AnchorPane>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                                <VBox prefHeight="365.0" prefWidth="629.0">
+                                                   <children>
+                                                      <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" style="-fx-background-color: #005897;" VBox.vgrow="ALWAYS">
+                                                         <children>
+                                                            <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <children>
+                                                                  <AnchorPane prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: WHITE;">
+                                                                     <children>
+                                                                        <Label prefHeight="35.0" prefWidth="134.0" text="Etapa 8" textFill="#333333" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                            <padding>
                                                                               <Insets left="20.0" />
                                                                            </padding>
@@ -1621,7 +1750,7 @@
                                                          <children>
                                                             <AnchorPane prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: WHITE;">
                                                                <children>
-                                                                  <Label prefHeight="35.0" prefWidth="134.0" text="Etapa 8" textFill="#333333" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                  <Label prefHeight="35.0" prefWidth="134.0" text="Etapa 9" textFill="#333333" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                      <padding>
                                                                         <Insets left="20.0" />
                                                                      </padding>
@@ -2102,11 +2231,6 @@
                                                       <Insets bottom="10.0" top="10.0" />
                                                    </HBox.margin>
                                                 </BorderPane>
-                                                <TextField fx:id="txtEssayIdentification" promptText="Digite o nome do ensaio">
-                                                   <HBox.margin>
-                                                      <Insets left="10.0" />
-                                                   </HBox.margin>
-                                                </TextField>
                                                 <Button fx:id="btnEssaySave" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="35.0" minWidth="120.0" mnemonicParsing="false" onAction="#essaySave" prefHeight="35.0" prefWidth="90.0" text="Salvar Ensaio" HBox.hgrow="ALWAYS">
                                                    <HBox.margin>
                                                       <Insets left="10.0" right="10.0" />

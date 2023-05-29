@@ -8,12 +8,14 @@ import br.com.biopdi.mbiolabv2.model.bean.SystemParameter;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import com.fazecast.jSerialComm.SerialPort;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -42,9 +44,13 @@ public class EssaySceneController implements Initializable {
 
     // Puxar dados do DB systemVariable salvas na Thread de leitura FPReadingThread()
     @FXML
-    private ComboBox cbMethodList, cbNormList, cbEssayType;
+    private ComboBox cbMethodList, cbNormList, cbEssayType, cbForceUnitSelection, cbPositionUnitSelection;
     @FXML
     private LineChart<Number, Number> chartEssayLine;
+    @FXML
+    private NumberAxis xAxis = new NumberAxis();
+    @FXML
+    private NumberAxis yAxis = new NumberAxis();
     private XYChart.Series<Number, Number> series;
     @FXML
     private Label lbFMax, lbPMax, lbTMax, lbTEsc, lbAlong, lbRedArea, lbMYoung, lbEssayTemperature, lbEssayRelativeHumidity;
@@ -58,15 +64,17 @@ public class EssaySceneController implements Initializable {
             btnEssayByUserId, btnEssaySave, btnEssayDiscart, btnForceZero;
     @FXML
     private RadioButton rbForceXPosition, rbStrainXDeform, rbForceDownBreak, rbMaxForceBreak, rbDislocationBreak, rbDislocationPause;
+    @FXML
+    private TabPane tpEssayFlow;
     private SerialPort port;
 
-    private Double currentForce = 0D, currentPosition = 0D, initialForce, finalForce, initialPosition, finalPosition, fMax, pMax,
-            tMax, tEsc, along, redArea, mYoung;
-    private String chartString = null;
+    private Double currentBaseForce = 0D, taredCurrentForce = 0D, currentNewtonForce = 0D, currentKgForce = 0D,
+            forceTare = 0D, currentBasePosition = 0D, currentMmPosition = 0D, currentPolPosition = 0D,
+            referencePosition = 0D, initialForce, finalForce, initialPosition, finalPosition, fMax, pMax, tMax, tEsc,
+            along, redArea, mYoung;
+    private String chartString = null, currentForceUnit = "N", currentPositionUnit = "mm";
     private Boolean moving = false;
     private int autoBreakCount;
-    @FXML
-    private AnchorPane apAlert;
     @FXML
     private VBox vBoxEssayStart;
 
@@ -80,11 +88,41 @@ public class EssaySceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         normList();
         essayTypeList();
-        autoConnect();
+        cbEssayType.getSelectionModel().select(0);
         savedMethodList();
+        forceUnitSelection();
+        cbForceUnitSelection.getSelectionModel().select(0);
+        positionUnitSelection();
+        cbPositionUnitSelection.getSelectionModel().select(0);
+        xyAxisAdjust();
+        autoConnect();
+
+        cbForceUnitSelection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                try{
+                    currentForceUnit = cbForceUnitSelection.getSelectionModel().getSelectedItem().toString();
+                    xyAxisAdjust();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        cbPositionUnitSelection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                try{
+                    currentPositionUnit = cbPositionUnitSelection.getSelectionModel().getSelectedItem().toString();
+                    xyAxisAdjust();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
 
     }
 
@@ -103,10 +141,15 @@ public class EssaySceneController implements Initializable {
                 while (true) {
                     outputInjection("1");  // Requerimento do valor da força
                     Thread.sleep(0);
-                    currentForce = Double.valueOf(inputValue());
+                    currentBaseForce = Double.valueOf(inputValue());
+                    taredCurrentForce = currentBaseForce - forceTare;
+                    currentNewtonForce = taredCurrentForce * 1;
+                    currentKgForce = taredCurrentForce * 0.05;
                     outputInjection("2");  // requerimento do valor da posição
                     Thread.sleep(0);
-                    currentPosition = Double.valueOf(inputValue());
+                    currentBasePosition = Double.valueOf(inputValue());
+                    currentMmPosition = currentBasePosition * 1;
+                    currentPolPosition = currentBasePosition * 0.05;
 
                     // Salvando dados no banco de dados - dados persistentes como variável global
 //                    SystemVariable sysVar = new SystemVariable(1, currentForce, currentPosition);
@@ -114,10 +157,10 @@ public class EssaySceneController implements Initializable {
 
                     //Atualização da UI pela Thread a partir das variáveis globais
                     Platform.runLater(() -> {
-                        txtForceView.setText(String.format("%.2f", currentForce));
+                        txtForceView.setText(String.format("%.2f", selectedUnitForceValue()));
                     });
                     Platform.runLater(() -> {
-                        txtPositionView.setText(String.format("%.2f", currentPosition));
+                        txtPositionView.setText(String.format("%.2f", selectedUnitPositionValue()));
                     });
                 }
 
@@ -138,11 +181,13 @@ public class EssaySceneController implements Initializable {
         // portName receives portName from systemParameterDAO
         port = SerialPort.getCommPort(sysPar.getPortName());
         System.out.println("Conectado à porta: " + sysPar.getPortName() + " - " + port);
-        if (port.openPort()) {
+        port.openPort();
+        System.out.println("Opening port");
+        if (port.isOpen()) {
             txtConnected.setText("Conectado");
             txtConnected.setStyle("-fx-background-color: #06BC0E");
             port.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-            port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 50, 50);
+            port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 10, 10);
             port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
 
             // Thread to update the Força and Posição textLabel from GUI
@@ -153,7 +198,6 @@ public class EssaySceneController implements Initializable {
             port.closePort();
             txtConnected.setText("Desconectado");
             txtConnected.setStyle("-fx-background-color: #BCAA06");
-
         }
     }
 
@@ -194,13 +238,49 @@ public class EssaySceneController implements Initializable {
      * Método de listagem de idiomas dentro do ComboBox (cbLanguage)
      */
     private void essayTypeList() {
-        String[] essayTypes = new String[]{"Compressão", "Fadiga", "Flexão", "Tração"};
+        String[] essayTypes = new String[]{"Tração", "Compressão", "Flexão"};
         for (String type : essayTypes) {
             cbEssayType.getItems().add(type);
         }
     }
 
+    /**
+     * Método de listagem de unidades de Forca dentro do ComboBox (cbForceSelection)
+     */
+    private void forceUnitSelection() {
+        String[] forceUnitList = new String[]{"N", "Kg"};
+        for (String unit : forceUnitList) {
+            cbForceUnitSelection.getItems().add(unit);
+        }
+    }
+
+    /**
+     * Método de listagem de unidade de Posicao dentro do ComboBox (cbPositionSelection)
+     */
+    private void positionUnitSelection() {
+        String[] positionUnitList = new String[]{"mm", "in"};
+        for (String unit : positionUnitList) {
+            cbPositionUnitSelection.getItems().add(unit);
+        }
+    }
+
 //    ************* Chart Construction *****************
+
+    @FXML
+    private void xyAxisAdjust(){
+        // Rotulando eixos X e Y
+        if(currentForceUnit == "Kg"){
+            yAxis.setLabel("Força (Kg)");
+        } else {
+            yAxis.setLabel("Força (N)");
+        }
+        if(currentPositionUnit == "in"){
+            xAxis.setLabel("Deslocamento (in)");
+        } else{
+            xAxis.setLabel("Deslocamento (mm)");
+        }
+        chartEssayLine.setTitle("Gráfico " + currentForceUnit + " x " + currentPositionUnit);
+    }
 
     /**
      * MODIFICAR CÓDIGO (TROCAR COUNT POR CONTIÇÔES) >> Método que cria, em tempo real, o gráfico do ensaio.
@@ -228,16 +308,12 @@ public class EssaySceneController implements Initializable {
             try {
                 while (count<30) {
 //                while(autoBreak()==false){
-                    Thread.sleep(50);
+                    Thread.sleep(10);
 
-                    // Armazenando Forca e Posicao (variaveis globais) em arrays
-                    if(essayTypeMove()==1){
-                        forceList.add(currentForce);
-                        positionList.add(currentPosition);
-                    } else if (essayTypeMove()==-1){
-                        forceList.add(currentForce * -1);
-                        positionList.add(currentPosition * -1);
-                    }
+                    // Aquisicao dos valores ja convertidos para a unidade selecionada
+                    forceList.add(selectedUnitForceValue());
+                    positionList.add(selectedUnitPositionValue());
+
 
                     //Identifica valor de Forca Max N
                     Platform.runLater(() -> {
@@ -304,21 +380,29 @@ public class EssaySceneController implements Initializable {
                             lbMYoung.setText(String.valueOf(i));
                         }
                     });
+                    // Setting final values
+                    Platform.runLater(() -> {
+                        // Update UI.
+                        finalForce = selectedUnitForceValue();
+                        finalPosition = selectedUnitPositionValue();
+                    });
 
-                    System.out.println(currentForce + " " + currentPosition);
+
+
+                    System.out.println(selectedUnitPositionValue() + " " + selectedUnitForceValue());
                     // Exposicao dos valores no grafico em funcao da escolha do usuario MPa x % ou N x mm
                     // INCLUIR FORMULA DE CONVERSAO DOS VALORES
                     Platform.runLater(() -> {
                         // Update UI.
-                        series.getData().add(new XYChart.Data<>(currentPosition, currentForce));
+                        series.getData().add(new XYChart.Data<>(selectedUnitPositionValue(), selectedUnitForceValue()));
                     });
 
                     // Adding dot values in a global String chartString
                     // essayChart String type: 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
                     if (chartString != null) {
-                        chartString += "," + currentForce + ";" + currentPosition;
+                        chartString += "," + String.format("%.4f", selectedUnitForceValue()) + ";" + String.format("%.4f", selectedUnitPositionValue());
                     } else {
-                        chartString = currentForce + ";" + currentPosition;
+                        chartString = String.format("%.4f", selectedUnitForceValue()) + ";" + String.format("%.4f", selectedUnitPositionValue());
                     }
                     System.out.println(chartString);
                     count++;
@@ -506,6 +590,13 @@ public class EssaySceneController implements Initializable {
         }
     }
 
+    /**
+     *  Metodo que injeto o atual valor analogico a variavel forceTare
+     */
+    @FXML
+    private void forceTare(){
+        forceTare = currentBaseForce;
+    }
     // FIM*********** Métodos Ajuste de Velocidade ***********
 
     // INICIO*********** Métodos de realização do Ensaio ***********
@@ -536,16 +627,18 @@ public class EssaySceneController implements Initializable {
             vBoxEssayStart.setStyle("-fx-background-color: #ed0202");
             // Construcao do grafico, da serie e inclusao de parametros do grafico
             chartEssayLine.getData().clear();
+            // Criacao da serie a qual serao incluidos os valores
             series = new XYChart.Series<>();
             series.setName("Leitura");
+            // Plotagem dos pontos da serie no grafico
             chartEssayLine.getData().add(series);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         // Aquisicao de valores iniciais de Forca e Posicao
-        initialForce = currentForce;
-        initialPosition = currentPosition;
+        initialForce = selectedUnitForceValue();
+        initialPosition = selectedUnitPositionValue();
 
         //indica que eixo está em movimento
         moving = true;
@@ -559,8 +652,8 @@ public class EssaySceneController implements Initializable {
         });
 
         // Setting final values
-        finalForce = currentForce;
-        finalPosition = currentPosition;
+        finalForce = selectedUnitForceValue();
+        finalPosition = selectedUnitPositionValue();
 
         // Mudando background do ensaio de volta ao padrao
         vBoxEssayStart.setStyle("-fx-background-color: #A1A1A1");
@@ -581,8 +674,8 @@ public class EssaySceneController implements Initializable {
         });
 
         // Setting final values
-        finalForce = currentForce;
-        finalPosition = currentPosition;
+        finalForce = selectedUnitForceValue();
+        finalPosition = selectedUnitPositionValue();
 
     }
 ///////////////////////////////////
@@ -624,12 +717,14 @@ public class EssaySceneController implements Initializable {
         // Construcao do grafico, da serie e inclusao de parametros do grafico
         chartEssayLine.getData().clear();
         series = new XYChart.Series<>();
-        series.setName("Leitura");
+        if(txtEssayIdentification.getText()!=""){
+            series.setName(txtEssayIdentification.getText());
+        }
         chartEssayLine.getData().add(series);
 
         // Aquisicao de valores iniciais de Forca e Posicao
-        initialForce = currentForce;
-        initialPosition = currentPosition;
+        initialForce = selectedUnitForceValue();
+        initialPosition = selectedUnitPositionValue();
 
         // Thread que atualiza os valores no grafico
         Thread chartThread = new Thread(new RTChartCreate());
@@ -637,26 +732,73 @@ public class EssaySceneController implements Initializable {
         chartThread.join();
 
 
-        // Setting final values
-        finalForce = currentForce;
-        finalPosition = currentPosition;
+    }
 
+    /**
+     * Metodo que retorna valor de Forca dependendo da unidade de medida selecionada (Newton - N, quilograma - Kg)
+     */
+    @FXML
+    private Double selectedUnitForceValue(){
+        if(cbForceUnitSelection.getSelectionModel().getSelectedItem().toString() == "N"){
+            currentForceUnit = "N";
+            if(essayType()==2){
+                currentNewtonForce *= -1;
+            }
+            return currentNewtonForce;
+        } else if(cbForceUnitSelection.getSelectionModel().getSelectedItem().toString() == "Kg"){
+            currentForceUnit = "Kg";
+            if(essayType()==2){
+                currentKgForce *= -1;
+            }
+            return currentKgForce;
+        }
+        return null;
+    }
 
+    /**
+     * Metodo que retorna valor Posicao dependendo da unidade de medida selecionada (milimetros - mm, polegadas - in)
+     */
+    @FXML
+    private Double selectedUnitPositionValue(){
+        if(cbPositionUnitSelection.getSelectionModel().getSelectedItem().toString() == "mm"){
+            currentPositionUnit = "mm";
+            if(essayType()==2){
+                currentMmPosition *= -1;
+            }
+            return currentMmPosition;
+        } else if(cbPositionUnitSelection.getSelectionModel().getSelectedItem().toString() == "in"){
+            currentPositionUnit = "in";
+            if(essayType()==2){
+                currentPolPosition *= -1;
+            }
+            return currentPolPosition;
+        }
+        return null;
     }
 
     /**
      * Metodo que define direcao do movimento do eixo, baseado no tipo de ensaio
      */
-    private int essayTypeMove(){
+    private void essayTypeMove(){
         if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Tração"){
             moveUp();
-            return 1;
         } else if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Compressão" ||
                 cbEssayType.getSelectionModel().getSelectedItem().toString()=="Flexão"){
             moveDown();
-            return -1;
         }
-        return 0;
+    }
+
+    /**
+     * Metodo que define direcao do movimento do eixo, baseado no tipo de ensaio
+     */
+    private int essayType(){
+        if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Tração"){
+            return 1;
+        } else if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Compressão" ||
+                cbEssayType.getSelectionModel().getSelectedItem().toString()=="Flexão"){
+            return 2;
+        }
+        return 1;
     }
 
     /**
@@ -666,25 +808,25 @@ public class EssaySceneController implements Initializable {
     private boolean autoBreak() {
         if(fMax>0 && pMax>0 ){
             if(rbForceDownBreak.isSelected()){
-                while(currentForce >= fMax * (100 - Double.valueOf(String.valueOf(txtForcePercentageBreak)))/100) {
+                while(selectedUnitForceValue() >= fMax * (100 - Double.valueOf(String.valueOf(txtForcePercentageBreak)))/100) {
                     return false;
                 }
                 return true;
 
             } else if(rbMaxForceBreak.isSelected()){
-                while(currentForce < Double.parseDouble(txtMaxForceBreak.getText())){
+                while(selectedUnitForceValue() < Double.parseDouble(txtMaxForceBreak.getText())){
                     return false;
                 }
                 return true;
 
             } else if(rbDislocationBreak.isSelected()){
-                while(currentPosition < Double.parseDouble(txtDislocationValueBreak.getText())){
+                while(selectedUnitPositionValue() < Double.parseDouble(txtDislocationValueBreak.getText())){
                     return false;
                 }
                 return true;
 
             } else if(rbDislocationPause.isSelected()){
-                while(currentPosition < Double.parseDouble(txtDislocationValuePause.getText())){
+                while(selectedUnitPositionValue() < Double.parseDouble(txtDislocationValuePause.getText())){
                     return false;
                 }
                 return true;
@@ -727,7 +869,7 @@ public class EssaySceneController implements Initializable {
      * Método que cria um essay e salva no DB
      */
     @FXML
-    public void essaySave() {
+    private void essaySave() {
         if(chartString!=null && txtEssayIdentification.getText()!=""){
             essayFinalyzed = new Essay();
             essayFinalyzed.setUserId(sysVar.getUserId()); // Substituir por ID referente ao login
@@ -768,7 +910,8 @@ public class EssaySceneController implements Initializable {
             alert.setHeaderText("Ensaio salvo com sucesso! Ele está disponível em Relatório");
             Stage stage = (Stage) btnEssaySave.getScene().getWindow();
             alert.initOwner(stage);
-            alert.show();
+            alert.showAndWait();
+            tpEssayFlow.getSelectionModel().select(0);
         } else if(chartString==null){
             // Alerta de realização incorreta do ensaio
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -793,7 +936,7 @@ public class EssaySceneController implements Initializable {
      * Método que descarta as infomrações coletadas no ensaio realizado
      */
     @FXML
-    public void essayDiscart() {
+    private void essayDiscart() {
         essayFinalyzed = null;
         System.out.println(essayFinalyzed);
         // Popup informativo
@@ -802,7 +945,8 @@ public class EssaySceneController implements Initializable {
         alert.setHeaderText("As informações do esaio foram descartadas.");
         Stage stage = (Stage) btnEssayDiscart.getScene().getWindow();
         alert.initOwner(stage);
-        alert.show();
+        alert.showAndWait();
+        tpEssayFlow.getSelectionModel().select(0);
     }
 
     // INICIO*********** Métodos de realização do Ensaio ***********
