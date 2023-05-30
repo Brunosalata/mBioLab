@@ -311,7 +311,7 @@ public class EssaySceneController implements Initializable {
      * Nele, podemos implementar switch (para alteração dos parâmetros N/mm ou MPa/%)
      */
     class RTChartCreate implements Runnable {
-//        SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
+
         int count = 0;
 
         @Override
@@ -340,7 +340,7 @@ public class EssaySceneController implements Initializable {
             List<Double> positionList = new ArrayList<>();
 
             try {
-                while (count<30) {
+                while (count<60) {
 //                while(autoBreak()==false){
                     Thread.sleep(10);
 
@@ -448,6 +448,25 @@ public class EssaySceneController implements Initializable {
                     count++;
                 }
                 stopMove();
+                try{
+                    Platform.runLater(()->{
+                        // Mudando background do ensaio de volta ao padrao
+                        vBoxEssayStart.setStyle("-fx-background-color: #A1A1A1");
+                        // Alerta de confirmação de finalização de ensaio
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Ensaio finalizado");
+                        alert.setHeaderText("Ensaio finalizado com sucesso! Verifique os dados e salve o ensaio. Dados não salvos serão descartados.");
+                        Stage stage = (Stage) btnEssaySave.getScene().getWindow();
+                        alert.initOwner(stage);
+                        alert.showAndWait();
+                        // Retornando fator multiplicador dos valores Force e Position para 1 (padrao)
+                        forceAdjustInversionView=1;
+                        positionAdjustInversionView=1;
+                    });
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 System.out.println(forceList);
                 System.out.println(positionList);
 
@@ -655,14 +674,21 @@ public class EssaySceneController implements Initializable {
             Stage stage = (Stage) btnForceZero.getScene().getWindow();
             alert.initOwner(stage);
             alert.showAndWait();
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+
+        // Alterando fator multiplicador dos valores Force e Position para -1 (caso o ensaio seja negativo)
+        if(forceAdjustInversion==-1){
+            forceAdjustInversionView=-1;
+            positionAdjustInversionView=-1;
         }
 
         try{
             // Mudando background do ensaio para vermelho (iniciado)
             vBoxEssayStart.setStyle("-fx-background-color: #ed0202");
+            Thread.sleep(1000);
             // Construcao do grafico, da serie e inclusao de parametros do grafico
             chartEssayLine.getData().clear();
             // Criacao da serie a qual serao incluidos os valores
@@ -688,13 +714,18 @@ public class EssaySceneController implements Initializable {
             essayTypeMove();
             chartThread.start();
         });
+    }
 
-        // Setting final values
-        finalForce = selectedUnitForceValue();
-        finalPosition = selectedUnitPositionValue();
-
-        // Mudando background do ensaio de volta ao padrao
-        vBoxEssayStart.setStyle("-fx-background-color: #A1A1A1");
+    @FXML
+    private boolean chartConstructor(){
+        // Thread que atualiza os valores no grafico
+        Thread chartThread = new Thread(new RTChartCreate());
+        Platform.runLater(() -> {
+            // Inicia o movimento
+            essayTypeMove();
+            chartThread.start();
+        });
+        return true;
     }
 
     /**
@@ -813,10 +844,12 @@ public class EssaySceneController implements Initializable {
      */
     private void essayTypeMove(){
         if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Tração"){
-            moveUpEssay();
+//            moveUpEssay();
+            moveUp();
         } else if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Compressão" ||
                 cbEssayType.getSelectionModel().getSelectedItem().toString()=="Flexão"){
-            moveDownEssay();
+//            moveDownEssay();
+            moveDown();
         }
     }
 
