@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -65,6 +66,9 @@
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="DEFAULT" />
+                                       </cursor>
                                     </TextField>
                                  </children>
                                  <VBox.margin>
@@ -78,6 +82,9 @@
                                  <font>
                                     <Font size="20.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
                               </TextField>
                               <Button fx:id="btnEmergency" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#stopMove" prefHeight="30.0" prefWidth="290.0" styleClass="emergency" stylesheets="@css/style.css" text="Parada de Emergência">
                                  <VBox.margin>
@@ -106,6 +113,9 @@
                                  <VBox.margin>
                                     <Insets />
                                  </VBox.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
                               </TextField>
                               <TextField alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="180.0">
                                  <font>
@@ -114,6 +124,9 @@
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
                               </TextField>
                            </children>
                            <HBox.margin>
@@ -126,6 +139,9 @@
                                  <font>
                                     <Font size="20.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
                               </TextField>
                               <TextField fx:id="txtInfLimit" alignment="CENTER" editable="false" prefHeight="45.0" prefWidth="180.0" text="Limite inferior">
                                  <VBox.margin>
@@ -134,6 +150,9 @@
                                  <font>
                                     <Font size="20.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
                               </TextField>
                               <Button fx:id="btnForceTare" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#forceTare" prefHeight="30.0" prefWidth="180.0" text="Tarar Força">
                                  <VBox.margin>
@@ -171,6 +190,9 @@
                                  <font>
                                     <Font size="20.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
                               </TextField>
                               <Button fx:id="btnPositionZero" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#resetPosition" prefHeight="30.0" prefWidth="180.0" text="Zerar Posição">
                                  <VBox.margin>
@@ -208,6 +230,9 @@
                                  <font>
                                     <Font size="20.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
                               </TextField>
                               <Button fx:id="btnForceZero" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#test" prefHeight="30.0" prefWidth="180.0" text="teste ensaio">
                                  <VBox.margin>

@@ -74,7 +74,8 @@ public class EssaySceneController implements Initializable {
             along, redArea, mYoung;
     private String chartString = null, currentForceUnit = "N", currentPositionUnit = "mm";
     private Boolean moving = false;
-    private int autoBreakCount;
+    private int forceAdjustInversion = 1, positionAdjustInversion = 1, forceAdjustInversionView = 1,
+            positionAdjustInversionView = 1;
     @FXML
     private VBox vBoxEssayStart;
 
@@ -99,6 +100,7 @@ public class EssaySceneController implements Initializable {
         xyAxisAdjust();
         autoConnect();
 
+        // Altera opcao de unidade de forca e os rotulos do grafico do ensaio
         cbForceUnitSelection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
@@ -110,7 +112,7 @@ public class EssaySceneController implements Initializable {
                 }
             }
         });
-
+        // Altera opcao de unidade de deslocamento e os rotulos do grafico do ensaio
         cbPositionUnitSelection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
@@ -122,7 +124,13 @@ public class EssaySceneController implements Initializable {
                 }
             }
         });
-
+        // Altera valores de referencia (adjustInvestion) se o ensaio for para cima ou para baixo
+        cbEssayType.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                essayType();
+            }
+        });
 
     }
 
@@ -157,10 +165,10 @@ public class EssaySceneController implements Initializable {
 
                     //Atualização da UI pela Thread a partir das variáveis globais
                     Platform.runLater(() -> {
-                        txtForceView.setText(String.format("%.2f", selectedUnitForceValue()));
+                        txtForceView.setText(String.format("%.2f", selectedUnitForceValue() * forceAdjustInversionView));
                     });
                     Platform.runLater(() -> {
-                        txtPositionView.setText(String.format("%.2f", selectedUnitPositionValue()));
+                        txtPositionView.setText(String.format("%.2f", selectedUnitPositionValue() * positionAdjustInversionView));
                     });
                 }
 
@@ -266,6 +274,9 @@ public class EssaySceneController implements Initializable {
 
 //    ************* Chart Construction *****************
 
+    /**
+     * Metodo que atualiza os rotulos do eixo x e y do grafico em funcao das unidades selecionadas nos paineis
+     */
     @FXML
     private void xyAxisAdjust(){
         // Rotulando eixos X e Y
@@ -301,6 +312,16 @@ public class EssaySceneController implements Initializable {
             mYoung = 0D;
 
             Double count = 0D;
+            Double adjustedForce;
+            Double adjustedPosition;
+
+            if(forceAdjustInversion==-1){
+                forceAdjustInversionView=-1;
+                positionAdjustInversionView=-1;
+            } else{
+                forceAdjustInversionView=1;
+                positionAdjustInversionView=1;
+            }
 
             List<Double> forceList = new ArrayList<>();
             List<Double> positionList = new ArrayList<>();
@@ -310,9 +331,13 @@ public class EssaySceneController implements Initializable {
 //                while(autoBreak()==false){
                     Thread.sleep(10);
 
-                    // Aquisicao dos valores ja convertidos para a unidade selecionada
-                    forceList.add(selectedUnitForceValue());
-                    positionList.add(selectedUnitPositionValue());
+                    // Aquisicao dos valores ja convertidos para a unidade selecionada e ajustados para ensaio para
+                    // cima ou para baixo
+                    adjustedForce = selectedUnitForceValue() * forceAdjustInversion;
+                    adjustedPosition = selectedUnitPositionValue() * positionAdjustInversion;
+
+                    forceList.add(adjustedForce);
+                    positionList.add(adjustedPosition);
 
 
                     //Identifica valor de Forca Max N
@@ -381,28 +406,30 @@ public class EssaySceneController implements Initializable {
                         }
                     });
                     // Setting final values
+                    Double finalAdjustedForce = adjustedForce;
+                    Double finalAdjustedPosition = adjustedPosition;
                     Platform.runLater(() -> {
                         // Update UI.
-                        finalForce = selectedUnitForceValue();
-                        finalPosition = selectedUnitPositionValue();
+                        finalForce = finalAdjustedForce;
+                        finalPosition = finalAdjustedPosition;
                     });
 
 
 
-                    System.out.println(selectedUnitPositionValue() + " " + selectedUnitForceValue());
+                    System.out.println(adjustedForce + " " + adjustedPosition);
                     // Exposicao dos valores no grafico em funcao da escolha do usuario MPa x % ou N x mm
                     // INCLUIR FORMULA DE CONVERSAO DOS VALORES
                     Platform.runLater(() -> {
                         // Update UI.
-                        series.getData().add(new XYChart.Data<>(selectedUnitPositionValue(), selectedUnitForceValue()));
+                        series.getData().add(new XYChart.Data<>(finalAdjustedPosition, finalAdjustedForce));
                     });
 
                     // Adding dot values in a global String chartString
                     // essayChart String type: 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
                     if (chartString != null) {
-                        chartString += "," + String.format("%.4f", selectedUnitForceValue()) + ";" + String.format("%.4f", selectedUnitPositionValue());
+                        chartString += "," + String.format("%.4f", adjustedForce) + ";" + String.format("%.4f", adjustedPosition);
                     } else {
-                        chartString = String.format("%.4f", selectedUnitForceValue()) + ";" + String.format("%.4f", selectedUnitPositionValue());
+                        chartString = String.format("%.4f", adjustedForce) + ";" + String.format("%.4f", adjustedPosition);
                     }
                     System.out.println(chartString);
                     count++;
@@ -597,6 +624,7 @@ public class EssaySceneController implements Initializable {
     private void forceTare(){
         forceTare = currentBaseForce;
     }
+
     // FIM*********** Métodos Ajuste de Velocidade ***********
 
     // INICIO*********** Métodos de realização do Ensaio ***********
@@ -659,8 +687,12 @@ public class EssaySceneController implements Initializable {
         vBoxEssayStart.setStyle("-fx-background-color: #A1A1A1");
     }
 
+    /**
+     * Metodo que retoma a leitura dos pontos para retomar o ensaio pausado
+     * @throws InterruptedException
+     */
     @FXML
-    private synchronized void testRecover() throws InterruptedException {
+    private synchronized void essayReturn() throws InterruptedException {
 
 
         // Thread que atualiza os valores no grafico
@@ -719,6 +751,8 @@ public class EssaySceneController implements Initializable {
         series = new XYChart.Series<>();
         if(txtEssayIdentification.getText()!=""){
             series.setName(txtEssayIdentification.getText());
+        } else{
+            series.setName("Leitura");
         }
         chartEssayLine.getData().add(series);
 
@@ -741,15 +775,9 @@ public class EssaySceneController implements Initializable {
     private Double selectedUnitForceValue(){
         if(cbForceUnitSelection.getSelectionModel().getSelectedItem().toString() == "N"){
             currentForceUnit = "N";
-            if(essayType()==2){
-                currentNewtonForce *= -1;
-            }
             return currentNewtonForce;
         } else if(cbForceUnitSelection.getSelectionModel().getSelectedItem().toString() == "Kg"){
             currentForceUnit = "Kg";
-            if(essayType()==2){
-                currentKgForce *= -1;
-            }
             return currentKgForce;
         }
         return null;
@@ -762,15 +790,9 @@ public class EssaySceneController implements Initializable {
     private Double selectedUnitPositionValue(){
         if(cbPositionUnitSelection.getSelectionModel().getSelectedItem().toString() == "mm"){
             currentPositionUnit = "mm";
-            if(essayType()==2){
-                currentMmPosition *= -1;
-            }
             return currentMmPosition;
         } else if(cbPositionUnitSelection.getSelectionModel().getSelectedItem().toString() == "in"){
             currentPositionUnit = "in";
-            if(essayType()==2){
-                currentPolPosition *= -1;
-            }
             return currentPolPosition;
         }
         return null;
@@ -791,14 +813,17 @@ public class EssaySceneController implements Initializable {
     /**
      * Metodo que define direcao do movimento do eixo, baseado no tipo de ensaio
      */
-    private int essayType(){
+    private void essayType(){
         if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Tração"){
-            return 1;
+            forceAdjustInversion = 1;
+            positionAdjustInversion = 1;
+            System.out.println(forceAdjustInversion + " e " + positionAdjustInversion);
         } else if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Compressão" ||
                 cbEssayType.getSelectionModel().getSelectedItem().toString()=="Flexão"){
-            return 2;
+            forceAdjustInversion = -1;
+            positionAdjustInversion = -1;
+            System.out.println(forceAdjustInversion + " e " + positionAdjustInversion);
         }
-        return 1;
     }
 
     /**
@@ -808,25 +833,25 @@ public class EssaySceneController implements Initializable {
     private boolean autoBreak() {
         if(fMax>0 && pMax>0 ){
             if(rbForceDownBreak.isSelected()){
-                while(selectedUnitForceValue() >= fMax * (100 - Double.valueOf(String.valueOf(txtForcePercentageBreak)))/100) {
+                if(selectedUnitForceValue() >= fMax * (100 - Double.valueOf(String.valueOf(txtForcePercentageBreak)))/100) {
                     return false;
                 }
                 return true;
 
             } else if(rbMaxForceBreak.isSelected()){
-                while(selectedUnitForceValue() < Double.parseDouble(txtMaxForceBreak.getText())){
+                if(selectedUnitForceValue() < Double.parseDouble(txtMaxForceBreak.getText())){
                     return false;
                 }
                 return true;
 
             } else if(rbDislocationBreak.isSelected()){
-                while(selectedUnitPositionValue() < Double.parseDouble(txtDislocationValueBreak.getText())){
+                if(selectedUnitPositionValue() < Double.parseDouble(txtDislocationValueBreak.getText())){
                     return false;
                 }
                 return true;
 
             } else if(rbDislocationPause.isSelected()){
-                while(selectedUnitPositionValue() < Double.parseDouble(txtDislocationValuePause.getText())){
+                if(selectedUnitPositionValue() < Double.parseDouble(txtDislocationValuePause.getText())){
                     return false;
                 }
                 return true;
@@ -848,7 +873,7 @@ public class EssaySceneController implements Initializable {
         } else {
             moving = true;
             btnPause.setText("Pause");
-            testRecover();
+            essayReturn();
         }
     }
 
@@ -911,6 +936,7 @@ public class EssaySceneController implements Initializable {
             Stage stage = (Stage) btnEssaySave.getScene().getWindow();
             alert.initOwner(stage);
             alert.showAndWait();
+            newEssay();
             tpEssayFlow.getSelectionModel().select(0);
         } else if(chartString==null){
             // Alerta de realização incorreta do ensaio
@@ -946,7 +972,72 @@ public class EssaySceneController implements Initializable {
         Stage stage = (Stage) btnEssayDiscart.getScene().getWindow();
         alert.initOwner(stage);
         alert.showAndWait();
+        newEssay();
         tpEssayFlow.getSelectionModel().select(0);
+    }
+
+    /**
+     * Metodo que reseta todos os parametros para um novo ensaio
+     */
+    @FXML
+    private void newEssay(){
+        forceAdjustInversionView=1;
+        positionAdjustInversionView=1;
+
+        cbMethodList.getSelectionModel().clearSelection();
+        cbNormList.getSelectionModel().clearSelection();
+        cbEssayType.getSelectionModel().select(0);
+        cbForceUnitSelection.getSelectionModel().select(0);
+        cbPositionUnitSelection.getSelectionModel().select(0);
+        lbFMax.setText("0.000");
+        lbPMax.setText("0.000");
+        lbTMax.setText("0.000");
+        lbTEsc.setText("0.000");
+        lbAlong.setText("0.000");
+        lbRedArea.setText("0.000");
+        lbMYoung.setText("0.000");
+        lbEssayTemperature.setText("0.00");
+        lbEssayRelativeHumidity.setText("0.00");
+        txtEssayVelocity.setText("15000");
+        txtAdjustVelocity.setText("1");
+        txtEssayIdentification.setText("");
+        txtEssayNorm.setText("");
+        txtUsedMachine.setText("");
+        txtEssayChargeCell.setText("");
+        txtInitialForce.setText("0.000");
+        txtFinalForce.setText("0.000");
+        txtInitialPosition.setText("0.000");
+        txtFinalPosition.setText("0.000");
+        txtDislocationVelocity.setText("15000");
+        txtEssayPreCharge.setText("");
+        txtForcePercentageBreak.setText("20");
+        txtMaxForceBreak.setText("0.00");
+        txtDislocationValueBreak.setText("0.00");
+        txtDislocationValuePause.setText("0.00");
+        rbForceXPosition.isSelected();
+        rbForceDownBreak.isSelected();
+        tpEssayFlow.getSelectionModel().select(0);
+        forceTare = currentBaseForce;
+        initialForce = 0D;
+        finalForce = 0D;
+        initialPosition = 0D;
+        finalPosition = 0D;
+        fMax = 0D;
+        pMax = 0D;
+        tMax = 0D;
+        tEsc = 0D;
+        along = 0D;
+        redArea = 0D;
+        mYoung = 0D;
+        chartString = null;
+        currentForceUnit = "N";
+        currentPositionUnit = "mm";
+        moving = false;
+        forceAdjustInversion = 1;
+        positionAdjustInversion = 1;
+        forceAdjustInversionView = 1;
+        positionAdjustInversionView = 1;
+
     }
 
     // INICIO*********** Métodos de realização do Ensaio ***********
