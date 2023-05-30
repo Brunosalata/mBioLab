@@ -104,7 +104,7 @@
                               <VBox prefHeight="100.0" prefWidth="0.0" VBox.vgrow="ALWAYS" />
                            </children>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0">
+                        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="180.0">
                            <children>
                               <TextField fx:id="txtChargeCell1" alignment="CENTER" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="180.0" text="Célula de carga">
                                  <font>
@@ -128,9 +128,17 @@
                                     <Cursor fx:constant="DEFAULT" />
                                  </cursor>
                               </TextField>
+                              <Label fx:id="lbEssayTemperature" alignment="CENTER" prefHeight="30.0" prefWidth="180.0" text="25.0 °C">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
                            </children>
                            <HBox.margin>
-                              <Insets top="10.0" />
+                              <Insets right="10.0" top="10.0" />
                            </HBox.margin>
                         </VBox>
                         <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="180.0">
@@ -158,6 +166,9 @@
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
                               </Button>
                            </children>
                            <HBox.margin>
@@ -198,6 +209,9 @@
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
                               </Button>
                            </children>
                            <HBox.margin>
@@ -238,6 +252,9 @@
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
                               </Button>
                            </children>
                            <HBox.margin>
@@ -1714,26 +1731,21 @@
                                                                                           </Label>
                                                                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="184.0" VBox.vgrow="ALWAYS">
                                                                                              <children>
-                                                                                                <Slider fx:id="shAdjustVelocity" majorTickUnit="45000.0" max="45000.0" min="10000.0" minorTickCount="10000" onMouseReleased="#adjustVelocity" showTickLabels="true" value="15000.0">
+                                                                                                <Slider fx:id="shAdjustVelocity" majorTickUnit="45000.0" max="45000.0" min="10000.0" minorTickCount="10000" showTickLabels="true" value="15000.0">
                                                                                                    <HBox.margin>
                                                                                                       <Insets left="10.0" right="10.0" />
                                                                                                    </HBox.margin>
                                                                                                 </Slider>
-                                                                                                <TextField fx:id="txtAdjustVelocity" alignment="CENTER" prefHeight="25.0" prefWidth="93.0" text="15000">
+                                                                                                <TextField fx:id="txtAdjustVelocity" alignment="CENTER" prefHeight="25.0" prefWidth="65.0" text="15000">
                                                                                                    <HBox.margin>
                                                                                                       <Insets />
                                                                                                    </HBox.margin>
                                                                                                 </TextField>
-                                                                                                <Label text="mm/min" HBox.hgrow="ALWAYS">
+                                                                                                <Label text="mm/min">
                                                                                                    <HBox.margin>
-                                                                                                      <Insets left="5.0" />
+                                                                                                      <Insets left="5.0" right="10.0" />
                                                                                                    </HBox.margin>
                                                                                                 </Label>
-                                                                                                <Button fx:id="btnAdjustVelocity" mnemonicParsing="false" onAction="#adjustVelocity" text="Button">
-                                                                                                   <HBox.margin>
-                                                                                                      <Insets left="10.0" right="10.0" />
-                                                                                                   </HBox.margin>
-                                                                                                </Button>
                                                                                              </children>
                                                                                              <VBox.margin>
                                                                                                 <Insets />

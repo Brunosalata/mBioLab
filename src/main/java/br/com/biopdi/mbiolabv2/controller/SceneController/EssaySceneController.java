@@ -60,10 +60,12 @@ public class EssaySceneController implements Initializable {
             txtFinalForce, txtInitialPosition, txtFinalPosition, txtDislocationVelocity, txtEssayPreCharge,
             txtMaxForceBreak, txtDislocationValueBreak, txtDislocationValuePause, txtForcePercentageBreak;
     @FXML
-    private Button btnAdjustVelocity, btnPositionUp, btnPositionDown, btnStart, btnPause, btnStop, btnChargeMethod,
+    private Button btnPositionUp, btnPositionDown, btnStart, btnPause, btnStop, btnChargeMethod,
             btnEssayByUserId, btnEssaySave, btnEssayDiscart, btnForceZero;
     @FXML
     private RadioButton rbForceXPosition, rbStrainXDeform, rbForceDownBreak, rbMaxForceBreak, rbDislocationBreak, rbDislocationPause;
+    @FXML
+    private Slider shAdjustVelocity;
     @FXML
     private TabPane tpEssayFlow;
     private SerialPort port;
@@ -91,14 +93,12 @@ public class EssaySceneController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         normList();
         essayTypeList();
-        cbEssayType.getSelectionModel().select(0);
         savedMethodList();
         forceUnitSelection();
-        cbForceUnitSelection.getSelectionModel().select(0);
         positionUnitSelection();
-        cbPositionUnitSelection.getSelectionModel().select(0);
-        xyAxisAdjust();
         autoConnect();
+        xyAxisAdjust();
+        newEssay();
 
         // Altera opcao de unidade de forca e os rotulos do grafico do ensaio
         cbForceUnitSelection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -131,6 +131,19 @@ public class EssaySceneController implements Initializable {
                 essayType();
             }
         });
+        // Atualizacao do valor no txtField de adjustVelocity em funcao da mudanca no slider
+        shAdjustVelocity.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                txtAdjustVelocity.setText(String.format("%.0f",shAdjustVelocity.getValue()));
+            }
+        });
+        // Evento que chama medoto que define velocidade de ajuste assim o usuario solta o slider
+        shAdjustVelocity.setOnMouseReleased(event -> {
+            Platform.runLater(()->{
+                adjustVelocity(Integer.valueOf(txtAdjustVelocity.getText()));
+            });
+        });
 
     }
 
@@ -147,13 +160,13 @@ public class EssaySceneController implements Initializable {
             try {
                 Thread.sleep(1000);
                 while (true) {
-                    outputInjection("1");  // Requerimento do valor da força
+                    forceRequest();  // Requerimento do valor da força
                     Thread.sleep(0);
                     currentBaseForce = Double.valueOf(inputValue());
                     taredCurrentForce = currentBaseForce - forceTare;
                     currentNewtonForce = taredCurrentForce * 1;
                     currentKgForce = taredCurrentForce * 0.05;
-                    outputInjection("2");  // requerimento do valor da posição
+                    positionRequest();  // requerimento do valor da posição
                     Thread.sleep(0);
                     currentBasePosition = Double.valueOf(inputValue());
                     currentMmPosition = currentBasePosition * 1;
@@ -537,7 +550,6 @@ public class EssaySceneController implements Initializable {
     @FXML
     private synchronized void moveUp() {
         outputInjection("4");
-        System.out.println("Moveu CIMA");
     }
 
     /**
@@ -546,14 +558,13 @@ public class EssaySceneController implements Initializable {
     @FXML
     private synchronized void moveDown() {
         outputInjection("5");
-        System.out.println("Moveu BAIXO");
     }
 
     /**
      * Método que solicita movimento de ensaio para cima (injeção de '6')
      */
     @FXML
-    private synchronized void moveUpAssay() {
+    private synchronized void moveUpEssay() {
         outputInjection("6");
     }
 
@@ -561,7 +572,7 @@ public class EssaySceneController implements Initializable {
      * Método que solicita movimento de ensaio para baixo (injeção de '7')
      */
     @FXML
-    private synchronized void moveDownAssay() {
+    private synchronized void moveDownEssay() {
         outputInjection("7");
     }
 
@@ -573,16 +584,16 @@ public class EssaySceneController implements Initializable {
      * Método que define a velocidade de ajuste (injeção de '8')
      */
     @FXML
-    private synchronized void adjustVelocity() {
-        int value = Integer.parseInt(txtAdjustVelocity.getText());
+    private synchronized void adjustVelocity(Integer value) {
+
+        value = Integer.parseInt(txtAdjustVelocity.getText());
         //Incluir range minimo, maximo e null (IF ou SWITCH)
-        if (txtAdjustVelocity.getText() != null) {
+        if (value != null) {
             if(value >= 40000){
                 txtAdjustVelocity.setText("40000");
                 outputInjection("840000");
             } else if(value >= 15000){
-                String adjust = 8 + txtAdjustVelocity.getText();
-                outputInjection(adjust);
+                outputInjection(String.valueOf(8 + value));
             } else {
                 txtAdjustVelocity.setText("15000");
                 outputInjection("815000");
@@ -597,16 +608,15 @@ public class EssaySceneController implements Initializable {
      * Método que define a velocidade de ensaio (injeção de '9')
      */
     @FXML
-    private synchronized void essayVelocity() {
-        int value = Integer.parseInt(txtEssayVelocity.getText());
+    private synchronized void essayVelocity(Integer value) {
+        value = Integer.parseInt(txtEssayVelocity.getText());
         //Incluir range minimo, maximo e null (IF ou SWITCH)
-        if (txtEssayVelocity.getText() != null) {
+        if (value != null) {
             if(value >= 40000){
                 txtEssayVelocity.setText("40000");
                 outputInjection("940000");
             } else if(value >= 15000){
-                String adjust = 9 + txtEssayVelocity.getText();
-                outputInjection(adjust);
+                outputInjection(String.valueOf(9 + value));
             } else {
                 txtEssayVelocity.setText("15000");
                 outputInjection("915000");
@@ -730,7 +740,7 @@ public class EssaySceneController implements Initializable {
 
         // Aquisicao dos parametros inseridos pelo usuario
         try{
-            essayVelocity();
+            essayVelocity(Integer.valueOf(txtEssayVelocity.getText()));
             Thread.sleep(15);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -803,10 +813,10 @@ public class EssaySceneController implements Initializable {
      */
     private void essayTypeMove(){
         if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Tração"){
-            moveUp();
+            moveUpEssay();
         } else if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Compressão" ||
                 cbEssayType.getSelectionModel().getSelectedItem().toString()=="Flexão"){
-            moveDown();
+            moveDownEssay();
         }
     }
 
@@ -973,6 +983,7 @@ public class EssaySceneController implements Initializable {
         alert.initOwner(stage);
         alert.showAndWait();
         newEssay();
+        newChart();
         tpEssayFlow.getSelectionModel().select(0);
     }
 
@@ -981,9 +992,6 @@ public class EssaySceneController implements Initializable {
      */
     @FXML
     private void newEssay(){
-        forceAdjustInversionView=1;
-        positionAdjustInversionView=1;
-
         cbMethodList.getSelectionModel().clearSelection();
         cbNormList.getSelectionModel().clearSelection();
         cbEssayType.getSelectionModel().select(0);
@@ -996,20 +1004,11 @@ public class EssaySceneController implements Initializable {
         lbAlong.setText("0.000");
         lbRedArea.setText("0.000");
         lbMYoung.setText("0.000");
-        lbEssayTemperature.setText("0.00");
-        lbEssayRelativeHumidity.setText("0.00");
         txtEssayVelocity.setText("15000");
-        txtAdjustVelocity.setText("1");
+//        essayVelocity(15000);
+        txtAdjustVelocity.setText("15000");
+//        adjustVelocity();
         txtEssayIdentification.setText("");
-        txtEssayNorm.setText("");
-        txtUsedMachine.setText("");
-        txtEssayChargeCell.setText("");
-        txtInitialForce.setText("0.000");
-        txtFinalForce.setText("0.000");
-        txtInitialPosition.setText("0.000");
-        txtFinalPosition.setText("0.000");
-        txtDislocationVelocity.setText("15000");
-        txtEssayPreCharge.setText("");
         txtForcePercentageBreak.setText("20");
         txtMaxForceBreak.setText("0.00");
         txtDislocationValueBreak.setText("0.00");
@@ -1017,7 +1016,7 @@ public class EssaySceneController implements Initializable {
         rbForceXPosition.isSelected();
         rbForceDownBreak.isSelected();
         tpEssayFlow.getSelectionModel().select(0);
-        forceTare = currentBaseForce;
+        forceTare();
         initialForce = 0D;
         finalForce = 0D;
         initialPosition = 0D;
@@ -1029,7 +1028,6 @@ public class EssaySceneController implements Initializable {
         along = 0D;
         redArea = 0D;
         mYoung = 0D;
-        chartString = null;
         currentForceUnit = "N";
         currentPositionUnit = "mm";
         moving = false;
@@ -1037,7 +1035,13 @@ public class EssaySceneController implements Initializable {
         positionAdjustInversion = 1;
         forceAdjustInversionView = 1;
         positionAdjustInversionView = 1;
+    }
 
+    @FXML
+    private void newChart(){
+        chartString = null;
+        chartEssayLine.getData().clear();
+        series.getData().clear();
     }
 
     // INICIO*********** Métodos de realização do Ensaio ***********
