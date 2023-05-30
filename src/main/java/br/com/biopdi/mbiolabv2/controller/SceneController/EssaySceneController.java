@@ -2,11 +2,10 @@ package br.com.biopdi.mbiolabv2.controller.SceneController;
 
 
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
+import br.com.biopdi.mbiolabv2.controller.serial.SerialConnection;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
 import br.com.biopdi.mbiolabv2.model.bean.Method;
-import br.com.biopdi.mbiolabv2.model.bean.SystemParameter;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
-import com.fazecast.jSerialComm.SerialPort;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -19,10 +18,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.PrintWriter;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * @author Bruno Salata Lima - 16/05/2023
@@ -32,7 +33,6 @@ import java.util.*;
  */
 public class EssaySceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
-    private Essay essayFinalyzed;
     private final UserDAO userDAO = new UserDAO();
     private final EssayDAO essayDAO = new EssayDAO();
     private final SetupDAO setupDAO = new SetupDAO();
@@ -40,6 +40,8 @@ public class EssaySceneController implements Initializable {
     private final SystemParameterDAO systemParameterDAO = new SystemParameterDAO();
     private final SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
     private SystemVariable sysVar = systemVariableDAO.find();
+    private SerialConnection serialConn = new SerialConnection();
+    private Essay essayFinalyzed;
 
 
     // Puxar dados do DB systemVariable salvas na Thread de leitura FPReadingThread()
@@ -68,7 +70,6 @@ public class EssaySceneController implements Initializable {
     private Slider shAdjustVelocity;
     @FXML
     private TabPane tpEssayFlow;
-    private SerialPort port;
 
     private Double currentBaseForce = 0D, taredCurrentForce = 0D, currentNewtonForce = 0D, currentKgForce = 0D,
             forceTare = 0D, currentBasePosition = 0D, currentMmPosition = 0D, currentPolPosition = 0D,
@@ -152,7 +153,7 @@ public class EssaySceneController implements Initializable {
      * Classe que define o algorítmo da Thread que faz a leitura dinâmica da Força e da Posição
      */
     class ForcePositionReader implements Runnable {
-//        SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
+
         @FXML
         @Override
         public synchronized void run() {
@@ -160,15 +161,15 @@ public class EssaySceneController implements Initializable {
             try {
                 Thread.sleep(1000);
                 while (true) {
-                    forceRequest();  // Requerimento do valor da força
+                    serialConn.forceRequest();  // Requerimento do valor da força
                     Thread.sleep(0);
-                    currentBaseForce = Double.valueOf(inputValue());
+                    currentBaseForce = Double.valueOf(serialConn.inputValue());
                     taredCurrentForce = currentBaseForce - forceTare;
                     currentNewtonForce = taredCurrentForce * 1;
                     currentKgForce = taredCurrentForce * 0.05;
-                    positionRequest();  // requerimento do valor da posição
+                    serialConn.positionRequest();  // requerimento do valor da posição
                     Thread.sleep(0);
-                    currentBasePosition = Double.valueOf(inputValue());
+                    currentBasePosition = Double.valueOf(serialConn.inputValue());
                     currentMmPosition = currentBasePosition * 1;
                     currentPolPosition = currentBasePosition * 0.05;
 
@@ -197,26 +198,27 @@ public class EssaySceneController implements Initializable {
     @FXML
     private synchronized void autoConnect() {
 
-        // Instance to get an object SystemParameter from tb_systemParameter (single line)
-        SystemParameter sysPar = systemParameterDAO.find();
-        // portName receives portName from systemParameterDAO
-        port = SerialPort.getCommPort(sysPar.getPortName());
-        System.out.println("Conectado à porta: " + sysPar.getPortName() + " - " + port);
-        port.openPort();
-        System.out.println("Opening port");
-        if (port.isOpen()) {
+//        // Instance to get an object SystemParameter from tb_systemParameter (single line)
+//        SystemParameter sysPar = systemParameterDAO.find();
+//        // portName receives portName from systemParameterDAO
+//        port = SerialPort.getCommPort(sysPar.getPortName());
+//        System.out.println("Conectado à porta: " + sysPar.getPortName() + " - " + port);
+//        port.openPort();
+//        System.out.println("Opening port");
+        serialConn.openPort();
+        if (serialConn.isOpen()) {
             txtConnected.setText("Conectado");
             txtConnected.setStyle("-fx-background-color: #06BC0E");
-            port.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-            port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 10, 10);
-            port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+//            port.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+//            port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 10, 10);
+//            port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
 
             // Thread to update the Força and Posição textLabel from GUI
             Thread FPReader = new Thread(new ForcePositionReader());
             FPReader.start();
 
         } else {
-            port.closePort();
+            serialConn.closePort();
             txtConnected.setText("Desconectado");
             txtConnected.setStyle("-fx-background-color: #BCAA06");
         }
@@ -331,9 +333,6 @@ public class EssaySceneController implements Initializable {
             if(forceAdjustInversion==-1){
                 forceAdjustInversionView=-1;
                 positionAdjustInversionView=-1;
-            } else{
-                forceAdjustInversionView=1;
-                positionAdjustInversionView=1;
             }
 
             List<Double> forceList = new ArrayList<>();
@@ -447,7 +446,7 @@ public class EssaySceneController implements Initializable {
                     System.out.println(chartString);
                     count++;
                 }
-                stopMove();
+                serialConn.stopMove();
                 try{
                     Platform.runLater(()->{
                         // Mudando background do ensaio de volta ao padrao
@@ -504,146 +503,171 @@ public class EssaySceneController implements Initializable {
         chartEssayLine.getData().add(seriesSingle);
     }
 
+//    /**
+//     * Método genérico para injeção do output, aplicável para os diferentes processos port.OutputStream() que requeiram uma 'string'
+//     *
+//     * @param stg
+//     */
+//    private synchronized void outputInjection(String stg) {
+//        PrintWriter output = new PrintWriter(port.getOutputStream(), true);
+//        output.print(stg);
+//        output.flush();
+//    }
+//
+//    /**
+//     * Método que recebe o valor real do input
+//     *
+//     * @return String
+//     */
+//    private synchronized String inputValue() {
+//        Scanner s = new Scanner(port.getInputStream());
+//        return s.nextLine();
+//    }
+//
+//    // INICIO*********** Métodos pré ensaio ***********
+//
+//    /**
+//     * Método que zera a posição (injeção de '0')
+//     */
+//    @FXML
+//    private synchronized void resetPosition() {
+//        outputInjection("0");
+//    }
+//
+//    /**
+//     * Método que solicita o valor da força (injeção de '1')
+//     */
+//    @FXML
+//    private synchronized void forceRequest() throws InterruptedException {
+//        outputInjection("1");
+//    }
+//
+//    /**
+//     * Método que solicita o valor da posição (injeção de '2')
+//     */
+//    @FXML
+//    private synchronized void positionRequest() throws InterruptedException {
+//        outputInjection("2");
+//    }
+//
+//    // FIM*********** Métodos pré ensaio ***********
+//
+//    // INICIO*********** Métodos de Movimento ***********
+//
+//    /**
+//     * Método que solicita interrupção do movimento (injeção de '3')
+//     */
+//    @FXML
+//    private synchronized void stopMove() {
+//        outputInjection("3");
+//    }
+//
+//    /**
+//     * Método que solicita movimento de ajuste para cima (injeção de '4')
+//     */
+//    @FXML
+//    private synchronized void moveUp() {
+//        outputInjection("4");
+//    }
+//
+//    /**
+//     * Método que solicita movimento de ajuste para baixo (injeção de '5')
+//     */
+//    @FXML
+//    private synchronized void moveDown() {
+//        outputInjection("5");
+//    }
+//
+//    /**
+//     * Método que solicita movimento de ensaio para cima (injeção de '6')
+//     */
+//    @FXML
+//    private synchronized void moveUpEssay() {
+//        outputInjection("6");
+//    }
+//
+//    /**
+//     * Método que solicita movimento de ensaio para baixo (injeção de '7')
+//     */
+//    @FXML
+//    private synchronized void moveDownEssay() {
+//        outputInjection("7");
+//    }
+//
+//    // FIM*********** Métodos de Movimento ***********
+//
+//    // INICIO*********** Métodos Ajuste de Velocidade ***********
+//
     /**
-     * Método genérico para injeção do output, aplicável para os diferentes processos port.OutputStream() que requeiram uma 'string'
-     *
-     * @param stg
-     */
-    private synchronized void outputInjection(String stg) {
-        PrintWriter output = new PrintWriter(port.getOutputStream(), true);
-        output.print(stg);
-        output.flush();
-    }
-
-    /**
-     * Método que recebe o valor real do input
-     *
-     * @return String
-     */
-    private synchronized String inputValue() {
-        Scanner s = new Scanner(port.getInputStream());
-        return s.nextLine();
-    }
-
-    // INICIO*********** Métodos pré ensaio ***********
-
-    /**
-     * Método que zera a posição (injeção de '0')
+     * Método que define a velocidade de ajuste
      */
     @FXML
-    private synchronized void resetPosition() {
-        outputInjection("0");
+    private synchronized void adjustVelocity(Integer value) {
+
+        //Incluir range minimo, maximo e null (IF ou SWITCH)
+        if (value != null) {
+            if(value >= 40000){
+                txtAdjustVelocity.setText("40000");
+                serialConn.adjustVelocity(40000);
+            } else if(value >= 15000){
+                serialConn.adjustVelocity(value);
+            } else {
+                txtAdjustVelocity.setText("15000");
+                serialConn.adjustVelocity(15000);
+            }
+        } else {
+            txtAdjustVelocity.setText("15000");
+            serialConn.adjustVelocity(15000);
+        }
     }
 
     /**
-     * Método que solicita o valor da força (injeção de '1')
+     * Método que define a velocidade de ensaio
      */
     @FXML
-    private synchronized void forceRequest() throws InterruptedException {
-        outputInjection("1");
-    }
+    private synchronized void essayVelocity(Integer value) {
 
-    /**
-     * Método que solicita o valor da posição (injeção de '2')
-     */
-    @FXML
-    private synchronized void positionRequest() throws InterruptedException {
-        outputInjection("2");
-    }
-
-    // FIM*********** Métodos pré ensaio ***********
-
-    // INICIO*********** Métodos de Movimento ***********
-
-    /**
-     * Método que solicita interrupção do movimento (injeção de '3')
-     */
-    @FXML
-    private synchronized void stopMove() {
-        outputInjection("3");
+        //Incluir range minimo, maximo e null (IF ou SWITCH)
+        if (value != null) {
+            if(value >= 40000){
+                txtEssayVelocity.setText("40000");
+                serialConn.essayVelocity(40000);
+            } else if(value >= 15000){
+                serialConn.essayVelocity(value);
+            } else {
+                txtEssayVelocity.setText("15000");
+                serialConn.essayVelocity(15000);
+            }
+        } else {
+            txtEssayVelocity.setText("15000");
+            serialConn.essayVelocity(15000);
+        }
     }
 
     /**
      * Método que solicita movimento de ajuste para cima (injeção de '4')
      */
     @FXML
-    private synchronized void moveUp() {
-        outputInjection("4");
+    public synchronized void moveUpAdjust() {
+        serialConn.moveUpAdjust();
+        System.out.println("Moveu CIMA 4");
     }
 
     /**
-     * Método que solicita movimento de ajuste para baixo (injeção de '5')
+     * Método que solicita movimento de ajuste para baixo para a classe SerialConnection
      */
     @FXML
-    private synchronized void moveDown() {
-        outputInjection("5");
+    public synchronized void moveDownAdjust() {
+        serialConn.moveDownAdjust();
+        System.out.println("Moveu BAIXO 5");
     }
 
     /**
-     * Método que solicita movimento de ensaio para cima (injeção de '6')
+     * Método solicita a posição para a classe SerialConnection
      */
     @FXML
-    private synchronized void moveUpEssay() {
-        outputInjection("6");
-    }
-
-    /**
-     * Método que solicita movimento de ensaio para baixo (injeção de '7')
-     */
-    @FXML
-    private synchronized void moveDownEssay() {
-        outputInjection("7");
-    }
-
-    // FIM*********** Métodos de Movimento ***********
-
-    // INICIO*********** Métodos Ajuste de Velocidade ***********
-
-    /**
-     * Método que define a velocidade de ajuste (injeção de '8')
-     */
-    @FXML
-    private synchronized void adjustVelocity(Integer value) {
-
-        value = Integer.parseInt(txtAdjustVelocity.getText());
-        //Incluir range minimo, maximo e null (IF ou SWITCH)
-        if (value != null) {
-            if(value >= 40000){
-                txtAdjustVelocity.setText("40000");
-                outputInjection("840000");
-            } else if(value >= 15000){
-                outputInjection(String.valueOf(8 + value));
-            } else {
-                txtAdjustVelocity.setText("15000");
-                outputInjection("815000");
-            }
-        } else {
-            txtAdjustVelocity.setText("15000");
-            outputInjection("815000");
-        }
-    }
-
-    /**
-     * Método que define a velocidade de ensaio (injeção de '9')
-     */
-    @FXML
-    private synchronized void essayVelocity(Integer value) {
-        value = Integer.parseInt(txtEssayVelocity.getText());
-        //Incluir range minimo, maximo e null (IF ou SWITCH)
-        if (value != null) {
-            if(value >= 40000){
-                txtEssayVelocity.setText("40000");
-                outputInjection("940000");
-            } else if(value >= 15000){
-                outputInjection(String.valueOf(9 + value));
-            } else {
-                txtEssayVelocity.setText("15000");
-                outputInjection("915000");
-            }
-        } else {
-            txtEssayVelocity.setText("15000");
-            outputInjection("915000");
-        }
+    public synchronized void resetPosition() {
+        serialConn.resetPosition();
     }
 
     /**
@@ -679,11 +703,11 @@ public class EssaySceneController implements Initializable {
             throw new RuntimeException(e);
         }
 
-        // Alterando fator multiplicador dos valores Force e Position para -1 (caso o ensaio seja negativo)
-        if(forceAdjustInversion==-1){
-            forceAdjustInversionView=-1;
-            positionAdjustInversionView=-1;
-        }
+//        // Alterando fator multiplicador dos valores Force e Position para -1 (caso o ensaio seja negativo)
+//        if(forceAdjustInversion==-1){
+//            forceAdjustInversionView=-1;
+//            positionAdjustInversionView=-1;
+//        }
 
         try{
             // Mudando background do ensaio para vermelho (iniciado)
@@ -806,7 +830,6 @@ public class EssaySceneController implements Initializable {
         chartThread.start();
         chartThread.join();
 
-
     }
 
     /**
@@ -844,12 +867,12 @@ public class EssaySceneController implements Initializable {
      */
     private void essayTypeMove(){
         if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Tração"){
-//            moveUpEssay();
-            moveUp();
+//            serialConn.moveUpEssay();
+            serialConn.moveUpAdjust();
         } else if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Compressão" ||
                 cbEssayType.getSelectionModel().getSelectedItem().toString()=="Flexão"){
-//            moveDownEssay();
-            moveDown();
+//            serialConn.moveDownEssay();
+            serialConn.moveDownAdjust();
         }
     }
 
@@ -899,7 +922,7 @@ public class EssaySceneController implements Initializable {
                 }
                 return true;
             }
-            stopMove();
+            serialConn.stopMove();
         }
         return false;
     }
@@ -910,7 +933,7 @@ public class EssaySceneController implements Initializable {
     @FXML
     private void essayPause() throws InterruptedException {
         if (moving == true) {
-            stopMove();
+            serialConn.stopMove();
             moving = false;
             btnPause.setText("Retomar");
         } else {
@@ -926,11 +949,19 @@ public class EssaySceneController implements Initializable {
     @FXML
     private void essayStop() {
         if (moving == true) {
-            stopMove();
+            serialConn.stopMove();
             moving = false;
         } else {
             System.out.println("O ensaio não foi iniciado!");
         }
+    }
+
+    /**
+     * Método que solicita interrupção do movimento para a classe SerialConnection
+     */
+    @FXML
+    public synchronized void stopMove() {
+        serialConn.stopMove();
     }
 
     /**

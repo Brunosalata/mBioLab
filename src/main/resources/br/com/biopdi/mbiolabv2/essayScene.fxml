@@ -1704,7 +1704,7 @@
                                                                                     </AnchorPane>
                                                                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                                                                        <children>
-                                                                                          <Button fx:id="btnPositionUp" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" mnemonicParsing="false" onMousePressed="#moveUp" onMouseReleased="#stopMove" prefHeight="70.0" prefWidth="70.0" style="-fx-rotate: 180;" styleClass="moveUp" stylesheets="@css/style.css" />
+                                                                                          <Button fx:id="btnPositionUp" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" mnemonicParsing="false" onMousePressed="#moveUpAdjust" onMouseReleased="#stopMove" prefHeight="70.0" prefWidth="70.0" style="-fx-rotate: 180;" styleClass="moveUp" stylesheets="@css/style.css" />
                                                                                           <Label minWidth="50.0" prefWidth="50.0" text="UP" HBox.hgrow="ALWAYS">
                                                                                              <HBox.margin>
                                                                                                 <Insets left="30.0" />
@@ -1714,7 +1714,7 @@
                                                                                     </HBox>
                                                                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                                                                        <children>
-                                                                                          <Button fx:id="btnPositionDown" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" mnemonicParsing="false" onMousePressed="#moveDown" onMouseReleased="#stopMove" prefHeight="70.0" prefWidth="70.0" styleClass="moveUp" stylesheets="@css/style.css" HBox.hgrow="ALWAYS" />
+                                                                                          <Button fx:id="btnPositionDown" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" mnemonicParsing="false" onMousePressed="#moveDownAdjust" onMouseReleased="#stopMove" prefHeight="70.0" prefWidth="70.0" styleClass="moveUp" stylesheets="@css/style.css" HBox.hgrow="ALWAYS" />
                                                                                           <Label minWidth="50.0" prefWidth="50.0" text="DOWN" HBox.hgrow="ALWAYS">
                                                                                              <HBox.margin>
                                                                                                 <Insets left="30.0" />

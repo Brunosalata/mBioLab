@@ -41,10 +41,16 @@ public class SerialConnection {
         port.openPort();
         // Configuracao da porta serial
         port.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-        port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 50, 50);
+        port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 10, 10);
         port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
     }
 
+    public boolean isOpen(){
+        if(port.isOpen()){
+            return true;
+        };
+        return false;
+    }
     public void closePort(){
         port.closePort();
     }
@@ -112,18 +118,16 @@ public class SerialConnection {
      * Método que solicita movimento de ajuste para cima (injeção de '4')
      */
     @FXML
-    public synchronized void moveUp() {
+    public synchronized void moveUpAdjust() {
         outputInjection("4");
-        System.out.println("Moveu CIMA");
     }
 
     /**
      * Método que solicita movimento de ajuste para baixo (injeção de '5')
      */
     @FXML
-    public synchronized void moveDown() {
+    public synchronized void moveDownAdjust() {
         outputInjection("5");
-        System.out.println("Moveu BAIXO");
     }
 
     /**
@@ -132,6 +136,7 @@ public class SerialConnection {
     @FXML
     public synchronized void moveUpAssay() {
         outputInjection("6");
+        System.out.println("Moveu CIMA 6");
     }
 
     /**
@@ -140,6 +145,7 @@ public class SerialConnection {
     @FXML
     public synchronized void moveDownAssay() {
         outputInjection("7");
+        System.out.println("Moveu BAIXO 7");
     }
 
     // FIM*********** Métodos de Movimento ***********
@@ -150,42 +156,16 @@ public class SerialConnection {
      * Método que define a velocidade de ajuste (injeção de '8')
      */
     @FXML
-    public synchronized void adjustVelocity(String adjustVel) {
-        int value = Integer.parseInt(adjustVel);
-        //Incluir range minimo, maximo e null (IF ou SWITCH)
-        if (adjustVel != null) {
-            if(value >= 40000){
-                outputInjection("840000");
-            } else if(value >= 15000){
-                String adjust = 8 + adjustVel;
-                outputInjection(adjust);
-            } else {
-                outputInjection("815000");
-            }
-        } else {
-            outputInjection("815000");
-        }
+    public synchronized void adjustVelocity(Integer adjustVel) {
+        outputInjection(String.valueOf(8 + adjustVel));
     }
 
     /**
      * Método que define a velocidade de ensaio (injeção de '9')
      */
     @FXML
-    public synchronized void essayVelocity(String essayVel) {
-        int value = Integer.parseInt(essayVel);
-        //Incluir range minimo, maximo e null (IF ou SWITCH)
-        if (essayVel != null) {
-            if(value >= 40000){
-                outputInjection("940000");
-            } else if(value >= 15000){
-                String adjust = 9 + essayVel;
-                outputInjection(adjust);
-            } else {
-                outputInjection("915000");
-            }
-        } else {
-            outputInjection("915000");
-        }
+    public synchronized void essayVelocity(Integer essayVel) {
+        outputInjection(String.valueOf(9 + essayVel));
     }
 
     // FIM*********** Métodos Ajuste de Velocidade ***********
