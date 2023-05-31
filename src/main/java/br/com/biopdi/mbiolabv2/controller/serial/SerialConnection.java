@@ -17,7 +17,6 @@ package br.com.biopdi.mbiolabv2.controller.serial;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.SystemParameterDAO;
 import br.com.biopdi.mbiolabv2.model.bean.SystemParameter;
 import com.fazecast.jSerialComm.SerialPort;
-import javafx.fxml.FXML;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -79,25 +78,43 @@ public class SerialConnection {
     // INICIO*********** Métodos pré ensaio ***********
 
     /**
-     * Método que zera a posição (injeção de '0')
+     * Metodo que solicita qual celula de carga esta conectada (injeção de '=')
      */
-    @FXML
+    public synchronized void chargeCellRequest() {
+        outputInjection("=");
+    }
+
+    /**
+     * Metodo que le sinla de erro emitido via serial (injeção de '>')
+     */
+    public synchronized void errorRead() {
+        outputInjection(">");
+    }
+
+    /**
+     * Metodo que solicita retorno '1' (injeção de '?')
+     */
+    public synchronized void serialConnVerification() {
+        outputInjection("?");
+    }
+
+    /**
+     * Metodo que zera a posição (injeção de '0')
+     */
     public synchronized void resetPosition() {
         outputInjection("0");
     }
 
     /**
-     * Método que solicita o valor da força (injeção de '1')
+     * Metodo que solicita o valor da força (injeção de '1')
      */
-    @FXML
     public synchronized void forceRequest() {
         outputInjection("1");
     }
 
     /**
-     * Método que solicita o valor da posição (injeção de '2')
+     * Metodo que solicita o valor da posição (injeção de '2')
      */
-    @FXML
     public synchronized void positionRequest() {
         outputInjection("2");
     }
@@ -107,42 +124,37 @@ public class SerialConnection {
     // INICIO*********** Métodos de Movimento ***********
 
     /**
-     * Método que solicita interrupção do movimento (injeção de '3')
+     * Metodo que solicita interrupção do movimento (injeção de '3')
      */
-    @FXML
     public synchronized void stopMove() {
         outputInjection("3");
     }
 
     /**
-     * Método que solicita movimento de ajuste para cima (injeção de '4')
+     * Metodo que solicita movimento de ajuste para cima (injeção de '4')
      */
-    @FXML
     public synchronized void moveUpAdjust() {
         outputInjection("4");
     }
 
     /**
-     * Método que solicita movimento de ajuste para baixo (injeção de '5')
+     * Metodo que solicita movimento de ajuste para baixo (injeção de '5')
      */
-    @FXML
     public synchronized void moveDownAdjust() {
         outputInjection("5");
     }
 
     /**
-     * Método que solicita movimento de ensaio para cima (injeção de '6')
+     * Metodo que solicita movimento de ensaio para cima (injeção de '6')
      */
-    @FXML
     public synchronized void moveUpAssay() {
         outputInjection("6");
         System.out.println("Moveu CIMA 6");
     }
 
     /**
-     * Método que solicita movimento de ensaio para baixo (injeção de '7')
+     * Metodo que solicita movimento de ensaio para baixo (injeção de '7')
      */
-    @FXML
     public synchronized void moveDownAssay() {
         outputInjection("7");
         System.out.println("Moveu BAIXO 7");
@@ -153,17 +165,15 @@ public class SerialConnection {
     // INICIO*********** Métodos Ajuste de Velocidade ***********
 
     /**
-     * Método que define a velocidade de ajuste (injeção de '8')
+     * Metodo que define a velocidade de ajuste (injeção de '8')
      */
-    @FXML
     public synchronized void adjustVelocity(Integer adjustVel) {
         outputInjection(String.valueOf(8 + adjustVel));
     }
 
     /**
-     * Método que define a velocidade de ensaio (injeção de '9')
+     * Metodo que define a velocidade de ensaio (injeção de '9')
      */
-    @FXML
     public synchronized void essayVelocity(Integer essayVel) {
         outputInjection(String.valueOf(9 + essayVel));
     }

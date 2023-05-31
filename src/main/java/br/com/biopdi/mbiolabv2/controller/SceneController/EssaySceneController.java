@@ -20,10 +20,7 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * @author Bruno Salata Lima - 16/05/2023
@@ -81,11 +78,13 @@ public class EssaySceneController implements Initializable {
     private Double currentBaseForce = 0D, taredCurrentForce = 0D, currentNewtonForce = 0D, currentKgForce = 0D,
             forceTare = 0D, currentBasePosition = 0D, currentMmPosition = 0D, currentPolPosition = 0D,
             referencePosition = 0D, initialForce, finalForce, initialPosition, finalPosition, fMax, pMax, tMax, tEsc,
-            along, redArea, mYoung;
+            along, redArea, mYoung, nForceConversionFactor = 1D, kgForceConversionFactor = 1D,
+            mmPositionConversionFactor = 1D, inPositionConversionFactor = 1D;
     private String chartString = null, currentForceUnit = "N", currentPositionUnit = "mm";
-    private Boolean moving = false;
-    private int forceAdjustInversion = 1, positionAdjustInversion = 1, forceAdjustInversionView = 1,
-            positionAdjustInversionView = 1;
+    private Boolean moving = false, errorEmergencyButton = false, errorInfLimit = false, errorSupLimit = false,
+            errorChargeCellLimit = false, errorChargeCellDisconnected = false;
+    private Integer forceAdjustInversion = 1, positionAdjustInversion = 1, forceAdjustInversionView = 1,
+            positionAdjustInversionView = 1, currentChargeCell = 0, errorDecValue = 0;
     @FXML
     private VBox vBoxEssayStart, vbRectangleSpecimen, vbCylinderSpecimen, vbTubularSpecimen;
 
@@ -160,7 +159,7 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
-                    txtSpecimenCrossSectionCalcule.setText("0.00");
+                    txtSpecimenCrossSectionCalcule.setText("0.0000");
                     if(Double.parseDouble(txtSpecimenAValueRectangle.getText())!=0 &&
                             Double.parseDouble(txtSpecimenBValueRectangle.getText())!=0){
                         txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Double.parseDouble(txtSpecimenAValueRectangle.getText()) *
@@ -173,7 +172,7 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
-                    txtSpecimenCrossSectionCalcule.setText("0.00");
+                    txtSpecimenCrossSectionCalcule.setText("0.0000");
                     if(Double.parseDouble(txtSpecimenAValueRectangle.getText())!=0 &&
                             Double.parseDouble(txtSpecimenBValueRectangle.getText())!=0){
                         txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Double.parseDouble(txtSpecimenAValueRectangle.getText()) *
@@ -188,7 +187,7 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
-                    txtSpecimenCrossSectionCalcule.setText("0.00");
+                    txtSpecimenCrossSectionCalcule.setText("0.0000");
                     if(Double.parseDouble(txtSpecimenAValueCylinder.getText())!=0 &&
                             Double.parseDouble(txtSpecimenBValueCylinder.getText())!=0){
                         txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Double.parseDouble(txtSpecimenAValueCylinder.getText()) *
@@ -201,7 +200,7 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
-                    txtSpecimenCrossSectionCalcule.setText("0.00");
+                    txtSpecimenCrossSectionCalcule.setText("0.0000");
                     if(Double.parseDouble(txtSpecimenAValueCylinder.getText())!=0 &&
                             Double.parseDouble(txtSpecimenBValueCylinder.getText())!=0){
                         txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Double.parseDouble(txtSpecimenAValueCylinder.getText()) *
@@ -216,7 +215,7 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
-                        txtSpecimenCrossSectionCalcule.setText("0.00");
+                        txtSpecimenCrossSectionCalcule.setText("0.0000");
                     if(Double.parseDouble(txtSpecimenAValueCylinder.getText())==0){
                         txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Math.pow(Double.parseDouble(txtSpecimenValueTubular.getText()),2)));
                     }
@@ -238,8 +237,8 @@ public class EssaySceneController implements Initializable {
         rbRectangle.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                    txtSpecimenAValueRectangle.setText("0.00");
-                    txtSpecimenBValueRectangle.setText("0.00");
+                    txtSpecimenAValueRectangle.setText("0.0000");
+                    txtSpecimenBValueRectangle.setText("0.0000");
                 if(rbRectangle.isSelected()){
                     txtSpecimenAValueRectangle.setDisable(false);
                     txtSpecimenBValueRectangle.setDisable(false);
@@ -253,8 +252,8 @@ public class EssaySceneController implements Initializable {
         rbCylinder.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                    txtSpecimenAValueCylinder.setText("0.00");
-                    txtSpecimenBValueCylinder.setText("0.00");
+                    txtSpecimenAValueCylinder.setText("0.0000");
+                    txtSpecimenBValueCylinder.setText("0.0000");
                 if(rbCylinder.isSelected()){
                     txtSpecimenAValueCylinder.setDisable(false);
                     txtSpecimenBValueCylinder.setDisable(false);
@@ -268,7 +267,7 @@ public class EssaySceneController implements Initializable {
         rbTubular.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                    txtSpecimenValueTubular.setText("0.00");
+                    txtSpecimenValueTubular.setText("0.0000");
                 if(rbTubular.isSelected()){
                     txtSpecimenValueTubular.setDisable(false);
                 } else{
@@ -331,6 +330,7 @@ public class EssaySceneController implements Initializable {
                 }
             }
         });
+
     }
 
 
@@ -346,27 +346,40 @@ public class EssaySceneController implements Initializable {
             try {
                 Thread.sleep(1000);
                 while (true) {
+                    // Obtendo valor analogico da forca
                     serialConn.forceRequest();  // Requerimento do valor da força
                     Thread.sleep(0);
                     currentBaseForce = Double.valueOf(serialConn.inputValue());
                     taredCurrentForce = currentBaseForce - forceTare;
-                    currentNewtonForce = taredCurrentForce * 1;
-                    currentKgForce = taredCurrentForce * 0.05;
+                    currentNewtonForce = taredCurrentForce * nForceConversionFactor;
+                    currentKgForce = taredCurrentForce * kgForceConversionFactor;
+                    // Obtendo valor analogico da posicao
                     serialConn.positionRequest();  // requerimento do valor da posição
                     Thread.sleep(0);
                     currentBasePosition = Double.valueOf(serialConn.inputValue());
-                    currentMmPosition = currentBasePosition * 1;
-                    currentPolPosition = currentBasePosition * 0.05;
+                    currentMmPosition = currentBasePosition * mmPositionConversionFactor;
+                    currentPolPosition = currentBasePosition * inPositionConversionFactor;
+                    // Obtendo informacao sobre qual celula de carga esta conectada (reflete no indice multiplicador
+                    // de conversao de unidade de forca)
+                    serialConn.chargeCellRequest();
+                    Thread.sleep(0);
+                    currentChargeCell = Integer.valueOf(serialConn.inputValue());
+                    // Leitura do sinal de erro
+                    serialConn.errorRead();
+                    Thread.sleep(0);
+                    errorDecValue = Integer.valueOf(serialConn.inputValue());
 
-                    // Salvando dados no banco de dados - dados persistentes como variável global
-//                    SystemVariable sysVar = new SystemVariable(1, currentForce, currentPosition);
-//                    systemVariableDAO.updateEssay(sysVar);
+                    // Definicao do fator multiplicativo para conversao de unidade de forca em funcao da celula de carga
+                    unitConvertion(currentChargeCell);
 
-                    //Atualização da UI pela Thread a partir das variáveis globais
+                    // Monitoramento do erro em tempo real e resposta imediata na interface
+                    Platform.runLater(()->{
+                        errorIdentification();
+                    });
+
+                    // Atualização da UI pela Thread a partir das variáveis globais
                     Platform.runLater(() -> {
                         txtForceView.setText(String.format("%.2f", selectedUnitForceValue() * forceAdjustInversionView));
-                    });
-                    Platform.runLater(() -> {
                         txtPositionView.setText(String.format("%.2f", selectedUnitPositionValue() * positionAdjustInversionView));
                     });
                 }
@@ -375,6 +388,108 @@ public class EssaySceneController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    /**
+     * Metodo que recebe valor de celula de carga e define fator multiplicativo para conversor de unidade
+     */
+    private void unitConvertion(Integer chargeCell){
+        switch(chargeCell){
+
+            //nForceConversionFactor
+            //kgForceConversionFactor
+            //mmPositionConversionFactor
+            //inPositionConversionFactor
+
+            case 0: ;
+            case 1: ;
+            case 2: ;
+            case 3: ;
+            case 4: ;
+            case 5: ;
+            case 6: ;
+            case 7: ;
+            case 8: ;
+            case 9: ;
+            case 10: ;
+            case 11: ;
+            case 12: ;
+            case 13: ;
+            case 14: ;
+            case 15: ;
+        }
+    }
+
+    /**
+     * Metodo para conversao de decimal em binario e interpretacao do sinal de erro em tempo de execucao
+     */
+    private void errorIdentification(){
+        String binary = Integer.toBinaryString(errorDecValue);
+        Character[] splitBin = new Character[5];
+        for(int i =0; i < splitBin.length; i++){
+            splitBin[i] = binary.charAt(i);
+        }
+        // Erro - Botaode emergencia
+        if(splitBin[0]==1){
+            errorEmergencyButton = true;
+            Platform.runLater(()->{
+
+            });
+        } else if(splitBin[0]==0){
+            errorEmergencyButton = false;
+            Platform.runLater(()->{
+
+            });
+        }
+        // Erro - Fim do curso inferior
+        if(splitBin[1]==1){
+            errorInfLimit = true;
+            Platform.runLater(()->{
+
+            });
+        } else if(splitBin[1]==0){
+            errorInfLimit = false;
+            Platform.runLater(()->{
+
+            });
+        }
+        // Erro - Fim do curso superior
+        if(splitBin[2]==1){
+            errorSupLimit = true;
+            Platform.runLater(()->{
+
+            });
+        } else if(splitBin[2]==0){
+            errorSupLimit = false;
+            Platform.runLater(()->{
+
+            });
+        }
+        // Erro - Limite de celula de carga
+        if(splitBin[3]==1){
+            errorChargeCellLimit = true;
+            Platform.runLater(()->{
+
+            });
+        } else if(splitBin[3]==0){
+            errorChargeCellLimit = false;
+            Platform.runLater(()->{
+
+            });
+        }
+        // Erro - Celula de carga desconectada
+        if(splitBin[4]==1){
+            errorChargeCellDisconnected = true;
+            Platform.runLater(()->{
+
+            });
+        } else if(splitBin[4]==0){
+            errorChargeCellDisconnected = false;
+            Platform.runLater(()->{
+
+            });
+        }
+
     }
 
     /**
@@ -413,8 +528,8 @@ public class EssaySceneController implements Initializable {
      * Metodo que configura fator multiplicados para calculo da forca e posicao na respectiva unidade
      */
     private void convertionDefinition(){
-//        manda info pra maquina
-//                dependendo do retorno ele multiplica um valor
+
+
     }
 
     /**
