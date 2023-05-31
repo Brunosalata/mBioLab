@@ -46,7 +46,8 @@ public class EssaySceneController implements Initializable {
 
     // Puxar dados do DB systemVariable salvas na Thread de leitura FPReadingThread()
     @FXML
-    private ComboBox cbMethodList, cbNormList, cbEssayType, cbForceUnitSelection, cbPositionUnitSelection;
+    private ComboBox cbMethodList, cbNormList, cbEssayType, cbForceUnitSelection, cbPositionUnitSelection,
+            cbExtensometer1, cbExtensometer2;
     @FXML
     private LineChart<Number, Number> chartEssayLine;
     @FXML
@@ -55,17 +56,23 @@ public class EssaySceneController implements Initializable {
     private NumberAxis yAxis = new NumberAxis();
     private XYChart.Series<Number, Number> series;
     @FXML
-    private Label lbFMax, lbPMax, lbTMax, lbTEsc, lbAlong, lbRedArea, lbMYoung, lbEssayTemperature, lbEssayRelativeHumidity;
+    private Label lbFMax, lbPMax, lbTMax, lbTEsc, lbAlong, lbRedArea, lbMYoung, lbEssayTemperature,
+            lbEssayRelativeHumidity;
     @FXML
     private TextField txtConnected, txtForceView, txtPositionView, txtEssayVelocity, txtAdjustVelocity,
             txtEssayIdentification, txtEssayNorm, txtUsedMachine, txtEssayChargeCell, txtInitialForce,
             txtFinalForce, txtInitialPosition, txtFinalPosition, txtDislocationVelocity, txtEssayPreCharge,
-            txtMaxForceBreak, txtDislocationValueBreak, txtDislocationValuePause, txtForcePercentageBreak;
+            txtMaxForceBreak, txtDislocationValueBreak, txtDislocationValuePause, txtForcePercentageBreak,
+            txtMethodName, txtOffsetIntersectionLine, txtGainIntersectionLine, txtSpecimenCrossSectionCalcule,
+            txtSpecimenCrossSectionArea, txtSpecimenCrossSectionLength, txtSpecimenAValueRectangle,
+            txtSpecimenBValueRectangle, txtSpecimenAValueCylinder, txtSpecimenBValueCylinder, txtSpecimenValueTubular,
+            txtPercentObtainedForce, txtObtainedForce;
     @FXML
     private Button btnPositionUp, btnPositionDown, btnStart, btnPause, btnStop, btnChargeMethod,
-            btnEssayByUserId, btnEssaySave, btnEssayDiscart, btnForceZero;
+            btnEssayByUserId, btnEssaySave, btnEssayDiscart, btnForceZero, btnSaveMethod;
     @FXML
-    private RadioButton rbForceXPosition, rbStrainXDeform, rbForceDownBreak, rbMaxForceBreak, rbDislocationBreak, rbDislocationPause;
+    private RadioButton rbForceXPosition, rbStrainXDeform, rbForceDownBreak, rbMaxForceBreak, rbDislocationBreak,
+            rbDislocationPause, rbRectangle, rbCylinder, rbTubular;
     @FXML
     private Slider shAdjustVelocity;
     @FXML
@@ -80,7 +87,7 @@ public class EssaySceneController implements Initializable {
     private int forceAdjustInversion = 1, positionAdjustInversion = 1, forceAdjustInversionView = 1,
             positionAdjustInversionView = 1;
     @FXML
-    private VBox vBoxEssayStart;
+    private VBox vBoxEssayStart, vbRectangleSpecimen, vbCylinderSpecimen, vbTubularSpecimen;
 
 
     Date systemDate = new Date();
@@ -95,6 +102,8 @@ public class EssaySceneController implements Initializable {
         normList();
         essayTypeList();
         savedMethodList();
+        extensometer1List();
+        extensometer2List();
         forceUnitSelection();
         positionUnitSelection();
         autoConnect();
@@ -146,6 +155,182 @@ public class EssaySceneController implements Initializable {
             });
         });
 
+        // Atualiza valor de area calculada para o corpo de amostra retangular
+        txtSpecimenAValueRectangle.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                Platform.runLater(()->{
+                    txtSpecimenCrossSectionCalcule.setText("0.00");
+                    if(Double.parseDouble(txtSpecimenAValueRectangle.getText())!=0 &&
+                            Double.parseDouble(txtSpecimenBValueRectangle.getText())!=0){
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Double.parseDouble(txtSpecimenAValueRectangle.getText()) *
+                                Double.parseDouble(txtSpecimenBValueRectangle.getText())));
+                    }
+                });
+            }
+        });
+        txtSpecimenBValueRectangle.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                Platform.runLater(()->{
+                    txtSpecimenCrossSectionCalcule.setText("0.00");
+                    if(Double.parseDouble(txtSpecimenAValueRectangle.getText())!=0 &&
+                            Double.parseDouble(txtSpecimenBValueRectangle.getText())!=0){
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Double.parseDouble(txtSpecimenAValueRectangle.getText()) *
+                                Double.parseDouble(txtSpecimenBValueRectangle.getText())));
+                    }
+                });
+            }
+        });
+
+        // Atualiza valor de area calculada para o corpo de amostra cilindrica
+        txtSpecimenAValueCylinder.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                Platform.runLater(()->{
+                    txtSpecimenCrossSectionCalcule.setText("0.00");
+                    if(Double.parseDouble(txtSpecimenAValueCylinder.getText())!=0 &&
+                            Double.parseDouble(txtSpecimenBValueCylinder.getText())!=0){
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Double.parseDouble(txtSpecimenAValueCylinder.getText()) *
+                                Double.parseDouble(txtSpecimenBValueCylinder.getText())));
+                    }
+                });
+            }
+        });
+        txtSpecimenBValueCylinder.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                Platform.runLater(()->{
+                    txtSpecimenCrossSectionCalcule.setText("0.00");
+                    if(Double.parseDouble(txtSpecimenAValueCylinder.getText())!=0 &&
+                            Double.parseDouble(txtSpecimenBValueCylinder.getText())!=0){
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Double.parseDouble(txtSpecimenAValueCylinder.getText()) *
+                                Double.parseDouble(txtSpecimenBValueCylinder.getText())));
+                    }
+                });
+            }
+        });
+
+        // Atualiza valor de area calculada para o corpo de amostra tubular
+        txtSpecimenValueTubular.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                Platform.runLater(()->{
+                        txtSpecimenCrossSectionCalcule.setText("0.00");
+                    if(Double.parseDouble(txtSpecimenAValueCylinder.getText())==0){
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Math.pow(Double.parseDouble(txtSpecimenValueTubular.getText()),2)));
+                    }
+                });
+            }
+        });
+
+        // Atualiza valor da textField Area da amostra (central), espelhada do calculo da area, mas que permite edicao
+        txtSpecimenCrossSectionCalcule.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                Platform.runLater(()->{
+                    txtSpecimenCrossSectionArea.setText(txtSpecimenCrossSectionCalcule.getText());
+                });
+            }
+        });
+
+        // Desabilitar campos de edicao em amostras retangulares se a opcao não estiver selecionada
+        rbRectangle.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                    txtSpecimenAValueRectangle.setText("0.00");
+                    txtSpecimenBValueRectangle.setText("0.00");
+                if(rbRectangle.isSelected()){
+                    txtSpecimenAValueRectangle.setDisable(false);
+                    txtSpecimenBValueRectangle.setDisable(false);
+                } else{
+                    txtSpecimenAValueRectangle.setDisable(true);
+                    txtSpecimenBValueRectangle.setDisable(true);
+                }
+            }
+        });
+        // Desabilitar campos de edicao em amostras cilindricas se a opcao não estiver selecionada
+        rbCylinder.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                    txtSpecimenAValueCylinder.setText("0.00");
+                    txtSpecimenBValueCylinder.setText("0.00");
+                if(rbCylinder.isSelected()){
+                    txtSpecimenAValueCylinder.setDisable(false);
+                    txtSpecimenBValueCylinder.setDisable(false);
+                } else{
+                    txtSpecimenAValueCylinder.setDisable(true);
+                    txtSpecimenBValueCylinder.setDisable(true);
+                }
+            }
+        });
+        // Desabilitar campos de edicao em amostras cilindricas se a opcao não estiver selecionada
+        rbTubular.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                    txtSpecimenValueTubular.setText("0.00");
+                if(rbTubular.isSelected()){
+                    txtSpecimenValueTubular.setDisable(false);
+                } else{
+                    txtSpecimenValueTubular.setDisable(true);
+                }
+            }
+        });
+
+        // Desabilitar campos de edicao para parada por queda de forca se a opcao não estiver selecionada
+        rbForceDownBreak.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                    txtForcePercentageBreak.setText("20");
+                    txtPercentObtainedForce.setText("0.00");
+                    txtObtainedForce.setText("0.00");
+                if(rbForceDownBreak.isSelected()){
+                    txtForcePercentageBreak.setDisable(false);
+                    txtPercentObtainedForce.setDisable(false);
+                    txtObtainedForce.setDisable(false);
+                } else{                                             // AJUSTAR E FAZER OS DEMAIS E DESABILITAR NO SCENE BUILDER
+                    txtForcePercentageBreak.setDisable(true);
+                    txtPercentObtainedForce.setDisable(true);
+                    txtObtainedForce.setDisable(true);
+                }
+            }
+        });
+        // Desabilitar campos de edicao para parada por forca maxima se a opcao não estiver selecionada
+        rbMaxForceBreak.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                txtMaxForceBreak.setText("0.00");
+                if(rbMaxForceBreak.isSelected()){
+                    txtMaxForceBreak.setDisable(false);
+                } else{                                             // AJUSTAR E FAZER OS DEMAIS E DESABILITAR NO SCENE BUILDER
+                    txtMaxForceBreak.setDisable(true);
+                }
+            }
+        });
+        // Desabilitar campos de edicao para parada por deslocamento maximo se a opcao não estiver selecionada
+        rbDislocationBreak.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                txtDislocationValueBreak.setText("0.00");
+                if(rbDislocationBreak.isSelected()){
+                    txtDislocationValueBreak.setDisable(false);
+                } else{                                             // AJUSTAR E FAZER OS DEMAIS E DESABILITAR NO SCENE BUILDER
+                    txtDislocationValueBreak.setDisable(true);
+                }
+            }
+        });
+        // Desabilitar campos de edicao para pause por deslocamento se a opcao não estiver selecionada
+        rbDislocationPause.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                txtDislocationValuePause.setText("0.00");
+                if(rbDislocationPause.isSelected()){
+                    txtDislocationValuePause.setDisable(false);
+                } else{                                             // AJUSTAR E FAZER OS DEMAIS E DESABILITAR NO SCENE BUILDER
+                    txtDislocationValuePause.setDisable(true);
+                }
+            }
+        });
     }
 
 
@@ -225,6 +410,14 @@ public class EssaySceneController implements Initializable {
     }
 
     /**
+     * Metodo que configura fator multiplicados para calculo da forca e posicao na respectiva unidade
+     */
+    private void convertionDefinition(){
+//        manda info pra maquina
+//                dependendo do retorno ele multiplica um valor
+    }
+
+    /**
      * Método que lista todos os methodName salvos na tb_method do banco de dados
      */
     @FXML
@@ -244,7 +437,66 @@ public class EssaySceneController implements Initializable {
     private void chargeMethod() {
         Method method = new MethodDAO().findByMethod(cbMethodList.getSelectionModel().getSelectedItem().toString());
         System.out.println(method);
-        //SETTAR VALORES NAS TEXTFIELD
+        // Settar valores nos TextFields de configuracao
+        // Settar opcao de parada automatica
+        switch(method.getAutoBreakIndex()){
+            case 0: rbForceDownBreak.isSelected();
+            case 1: rbMaxForceBreak.isSelected();
+            case 2: rbDislocationBreak.isSelected();
+            case 3: rbDislocationPause.isSelected();
+        }
+        // Settar tipo de amostra
+        switch(method.getSpecimenTypeIndex()){
+            case 0:
+                rbRectangle.isSelected();
+                txtSpecimenAValueRectangle.setText(String.valueOf(method.getSpecimenAValue()));
+                txtSpecimenBValueRectangle.setText(String.valueOf(method.getSpecimenBValue()));
+            case 1:
+                rbCylinder.isSelected();
+                txtSpecimenAValueCylinder.setText(String.valueOf(method.getSpecimenAValue()));
+                txtSpecimenBValueCylinder.setText(String.valueOf(method.getSpecimenBValue()));
+            case 2:
+                rbTubular.isSelected();
+                txtSpecimenValueTubular.setText(String.valueOf(method.getSpecimenAValue()));
+        }
+        // Settar cbNormIndex
+        switch(method.getNormIndex()){
+            case 0: cbNormList.getSelectionModel().select(0);
+            case 1: cbNormList.getSelectionModel().select(1);
+            case 2: cbNormList.getSelectionModel().select(2);
+        }
+        // Settar cbEssayType
+        switch(method.getEssayTypeIndex()){
+            case 0: cbEssayType.getSelectionModel().select(0);
+            case 1: cbEssayType.getSelectionModel().select(1);
+            case 2: cbEssayType.getSelectionModel().select(2);
+            case 3: cbEssayType.getSelectionModel().select(3);
+        }
+        // Settar cbExtensometer1
+        switch(method.getExtensometer1Index()){
+            case 0: cbExtensometer1.getSelectionModel().select(0);
+            case 1: cbExtensometer1.getSelectionModel().select(1);
+            case 2: cbExtensometer1.getSelectionModel().select(2);
+        }
+        // Settar cbExtensometer2
+        switch(method.getExtensometer2Index()){
+            case 0: cbExtensometer2.getSelectionModel().select(0);
+            case 1: cbExtensometer2.getSelectionModel().select(1);
+            case 2: cbExtensometer2.getSelectionModel().select(2);
+        }
+        // Settar chartView
+        switch(method.getChartViewIndex()){
+            case 0: rbForceXPosition.isSelected();
+            case 1: rbStrainXDeform.isSelected();
+        }
+        // Settar demais valores
+        txtMethodName.setText(method.getMethodName());
+        txtEssayVelocity.setText(String.valueOf(method.getEssayVelocity()));
+        txtSpecimenCrossSectionArea.setText(String.valueOf(method.getSpecimenCrossSectionArea()));
+        txtSpecimenCrossSectionLength.setText(String.valueOf(method.getSpecimenCrossSectionLength()));
+        txtOffsetIntersectionLine.setText(String.valueOf(method.getOffsetIntersectionLine()));
+        txtGainIntersectionLine.setText(String.valueOf(method.getGainIntersectionLine()));
+
     }
 
     /**
@@ -264,6 +516,26 @@ public class EssaySceneController implements Initializable {
         String[] essayTypes = new String[]{"Tração", "Compressão", "Flexão"};
         for (String type : essayTypes) {
             cbEssayType.getItems().add(type);
+        }
+    }
+
+    /**
+     * Método de listagem de Extensometro 1 dentro do ComboBox (cbExtensometer1)
+     */
+    private void extensometer1List() {
+        String[] extList = new String[]{"Desconectado", "50", "250", "500"};
+        for (String ext : extList) {
+            cbExtensometer1.getItems().add(ext);
+        }
+    }
+
+    /**
+     * Método de listagem de Extensometro 2 dentro do ComboBox (cbExtensometer2)
+     */
+    private void extensometer2List() {
+        String[] extList = new String[]{"Desconectado", "50", "250", "500"};
+        for (String ext : extList) {
+            cbExtensometer2.getItems().add(ext);
         }
     }
 
@@ -309,7 +581,7 @@ public class EssaySceneController implements Initializable {
     }
 
     /**
-     * MODIFICAR CÓDIGO (TROCAR COUNT POR CONTIÇÔES) >> Método que cria, em tempo real, o gráfico do ensaio.
+     * MODIFICAR CÓDIGO (TROCAR COUNT POR CONDICOES) >> Método que cria, em tempo real, o gráfico do ensaio.
      * Nele, podemos implementar switch (para alteração dos parâmetros N/mm ou MPa/%)
      */
     class RTChartCreate implements Runnable {
@@ -599,7 +871,7 @@ public class EssaySceneController implements Initializable {
 //    // INICIO*********** Métodos Ajuste de Velocidade ***********
 //
     /**
-     * Método que define a velocidade de ajuste
+     * REQUER IMPLEMENTACAO CORRETA: Método que define a velocidade de ajuste
      */
     @FXML
     private synchronized void adjustVelocity(Integer value) {
@@ -622,7 +894,7 @@ public class EssaySceneController implements Initializable {
     }
 
     /**
-     * Método que define a velocidade de ensaio
+     * REQUER IMPLEMENTACAO CORRETA: Método que define a velocidade de ensaio
      */
     @FXML
     private synchronized void essayVelocity(Integer value) {
@@ -753,7 +1025,7 @@ public class EssaySceneController implements Initializable {
     }
 
     /**
-     * Metodo que retoma a leitura dos pontos para retomar o ensaio pausado
+     * REQUER IMPLEMENTACAO CORRETA: Metodo que retoma a leitura dos pontos para retomar o ensaio pausado
      * @throws InterruptedException
      */
     @FXML
@@ -778,7 +1050,7 @@ public class EssaySceneController implements Initializable {
 ///////////////////////////////////
 
     /**
-     * Método que inicia o ensaio
+     * REQUER IMPLEMENTACAO CORRETA: Método que inicia o ensaio
      *
      * @throws InterruptedException
      */
@@ -965,6 +1237,124 @@ public class EssaySceneController implements Initializable {
     }
 
     /**
+     * Método que armazena no DB as configuracoes de ensaio definidas pelo usuario
+     */
+    @FXML
+    private void saveMethod() {
+        if(sysVar.getUserId()!=3){
+            if(txtMethodName.getText()!=""){
+                Method validation = methodDAO.findByMethod(txtMethodName.getText());
+                if(validation==null){
+                    Method method = new Method();
+                    // Settar index de interrupcao automatica
+                    if(rbForceDownBreak.isSelected()){
+                        method.setAutoBreakIndex(0);
+                    } else if(rbMaxForceBreak.isSelected()){
+                        method.setAutoBreakIndex(1);
+                    } else if(rbDislocationBreak.isSelected()){
+                        method.setAutoBreakIndex(2);
+                    } else if(rbDislocationPause.isSelected()){
+                        method.setAutoBreakIndex(3);
+                    }
+                    // Settar index de tipo de corpo de amostra
+                    if(rbRectangle.isSelected()){
+                        method.setSpecimenTypeIndex(0);
+                        // Settar dimensoes amostra retangular
+                        method.setSpecimenAValue(Double.valueOf(txtSpecimenAValueRectangle.getText()));
+                        method.setSpecimenBValue(Double.valueOf(txtSpecimenBValueRectangle.getText()));
+                    } else if(rbCylinder.isSelected()){
+                        method.setSpecimenTypeIndex(1);
+                        // Settar dimensoes amostra cilindrica
+                        method.setSpecimenAValue(Double.valueOf(txtSpecimenAValueCylinder.getText()));
+                        method.setSpecimenBValue(Double.valueOf(txtSpecimenAValueCylinder.getText()));
+                    } else if(rbTubular.isSelected()){
+                        method.setSpecimenTypeIndex(2);
+                        // Settar dimensoes amostra tubular
+                        method.setSpecimenAValue(Double.valueOf(txtSpecimenValueTubular.getText()));
+                        method.setSpecimenBValue(null);
+                    }
+                    // Settar index da norma
+                    switch(cbNormList.getSelectionModel().getSelectedItem().toString()){
+                        case "ISO 6892-1": method.setNormIndex(0);
+                        case "NBR13384": method.setNormIndex(1);
+                        case "NBR5739": method.setNormIndex(2);
+                    }
+                    // Settar index do tipo de ensaio
+                    switch(cbEssayType.getSelectionModel().getSelectedItem().toString()){
+                        case "Tração": method.setEssayTypeIndex(0);
+                        case "Compressão": method.setEssayTypeIndex(1);
+                        case "Flexão": method.setEssayTypeIndex(2);
+                    }
+                    // Settar index do extensometro 1
+                    switch(cbExtensometer1.getSelectionModel().getSelectedItem().toString()){
+                        case "Desconectado": method.setExtensometer1Index(0);
+                        case "50": method.setExtensometer1Index(1);
+                        case "250": method.setExtensometer1Index(2);
+                        case "500": method.setExtensometer1Index(3);
+                    }
+                    // Settar index do extensometro 2
+                    switch(cbExtensometer2.getSelectionModel().getSelectedItem().toString()){
+                        case "Desconectado": method.setExtensometer2Index(0);
+                        case "50": method.setExtensometer2Index(1);
+                        case "250": method.setExtensometer2Index(2);
+                        case "500": method.setExtensometer2Index(3);
+                    }
+                    // Settar index do chartView
+                    if(rbForceXPosition.isSelected()){
+                        method.setChartViewIndex(0);
+                    } else if(rbStrainXDeform.isSelected()){
+                        method.setChartViewIndex(1);
+                    }
+                    method.setMethodName(txtMethodName.getText());
+                    method.setMethodDate(currentDay + " - " + currentHour);
+                    method.setEssayVelocity(Double.valueOf(txtEssayVelocity.getText()));
+                    method.setSpecimenCrossSectionArea(Double.valueOf(txtSpecimenCrossSectionArea.getText()));
+                    method.setSpecimenCrossSectionLength(Double.valueOf(txtSpecimenCrossSectionLength.getText()));
+                    method.setOffsetIntersectionLine(Double.valueOf(txtOffsetIntersectionLine.getText()));
+                    method.setGainIntersectionLine(Double.valueOf(txtGainIntersectionLine.getText()));
+                    methodDAO.create(method);
+
+                    // Alerta de confirmação de registro do metodo
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Configurações de ensaio");
+                    alert.setHeaderText("Configurações salvas com sucesso!");
+                    Stage stage = (Stage) btnSaveMethod.getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.showAndWait();
+
+                } else{
+                    // Alerta de nome de metodo ja existente
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Configurações de ensaio");
+                    alert.setHeaderText("O nome do método já existe! Escolha outro e tente novamente.");
+                    Stage stage = (Stage) btnSaveMethod.getScene().getWindow();
+                    alert.initOwner(stage);
+                    alert.show();
+                }
+
+            } else{
+                // Alerta de ausencia de nome para o ensaio
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Configurações de ensaio");
+                alert.setHeaderText("O campo Nome do Ensaio deve estar preenchido!");
+                Stage stage = (Stage) btnSaveMethod.getScene().getWindow();
+                alert.initOwner(stage);
+                alert.show();
+            }
+
+        } else {
+            // Alerta de ausencia de nome para o ensaio
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Configurações de ensaio");
+            alert.setHeaderText("Faça o login para habilitar essa função.");
+            Stage stage = (Stage) btnSaveMethod.getScene().getWindow();
+            alert.initOwner(stage);
+            alert.show();
+        }
+
+    }
+
+    /**
      * Método que cria um essay e salva no DB
      */
     @FXML
@@ -1101,6 +1491,9 @@ public class EssaySceneController implements Initializable {
         positionAdjustInversionView = 1;
     }
 
+    /**
+     * Metodo que limpa toda a area do grafico do ensaio
+     */
     @FXML
     private void newChart(){
         chartString = null;

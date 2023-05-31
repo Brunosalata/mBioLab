@@ -42,12 +42,12 @@ public class MethodDAO extends DBConnection {
                     + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + "autoBreakIndex INTEGER,"
                     + "specimenTypeIndex INTEGER,"
+                    + "normIndex INTEGER,"
+                    + "essayTypeIndex INTEGER,"
+                    + "extensometer1Index INTEGER,"
+                    + "extensometer2Index INTEGER,"
+                    + "chartViewIndex INTEGER,"
                     + "methodName TEXT,"
-                    + "norm TEXT,"
-                    + "essayType TEXT,"
-                    + "normDescription TEXT,"
-                    + "extensometer1 TEXT,"
-                    + "extensometer2 TEXT,"
                     + "methodDate DATE,"
                     + "essayVelocity REAL,"
                     + "specimenAValue REAL,"
@@ -73,18 +73,19 @@ public class MethodDAO extends DBConnection {
     public void create(Method method) {
         openConnection();
         try {
-            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_method(id, autoBreakIndex, specimenTypeIndex, " +
-                    "methodName, norm, essayType, normDescription, extensometer1, extensometer2, methodDate, essayVelocity, " +
-                    "specimenAValue, specimenBValue, specimenCrossSectionArea, specimenCrossSectionLength, offsetIntersectionLine, " +
-                    "gainIntersectionLine) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+            PreparedStatement stm = conn.prepareStatement("INSERT INTO tb_method(id, autoBreakIndex, " +
+                    "specimenTypeIndex, normIndex, essayTypeIndex, extensometer1Index, extensometer2Index, chartViewIndex, " +
+                    "methodName, methodDate, essayVelocity, specimenAValue, specimenBValue, specimenCrossSectionArea, " +
+                    "specimenCrossSectionLength, offsetIntersectionLine, gainIntersectionLine) " +
+                    "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
             stm.setInt(2, method.getAutoBreakIndex());
             stm.setInt(3, method.getSpecimenTypeIndex());
-            stm.setString(4, method.getMethodName());
-            stm.setString(5, method.getNorm());
-            stm.setString(6, method.getEssayType());
-            stm.setString(7, method.getNormDescription());
-            stm.setString(8, method.getExtensometer1());
-            stm.setString(9, method.getExtensometer2());
+            stm.setInt(4, method.getNormIndex());
+            stm.setInt(5, method.getEssayTypeIndex());
+            stm.setInt(6, method.getExtensometer1Index());
+            stm.setInt(7, method.getExtensometer2Index());
+            stm.setInt(8, method.getChartViewIndex());
+            stm.setString(9, method.getMethodName());
             stm.setString(10, String.valueOf(method.getMethodDate()));
             stm.setDouble(11, method.getEssayVelocity());
             stm.setDouble(12, method.getSpecimenAValue());
@@ -112,29 +113,29 @@ public class MethodDAO extends DBConnection {
         openConnection();
         try {
             PreparedStatement stm = conn.prepareStatement("SELECT id, autoBreakIndex, specimenTypeIndex, " +
-                    "methodName, norm, essayType, normDescription, extensometer1, extensometer2, methodDate, essayVelocity, " +
-                    "specimenAValue, specimenBValue, specimenCrossSectionArea, specimenCrossSectionLength, offsetIntersectionLine, " +
-                    "gainIntersectionLine FROM tb_method ORDER BY id ASC;");
+                    "normIndex, essayTypeIndex, extensometer1Index, extensometer2Index, chartViewIndex, " +
+                    "methodName, methodDate, essayVelocity, specimenAValue, specimenBValue, specimenCrossSectionArea, " +
+                    "specimenCrossSectionLength, offsetIntersectionLine, gainIntersectionLine FROM tb_method ORDER BY id ASC;");
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Method method = new Method(
-                        rs.getInt("id"),//method id
-                        rs.getInt("autoBreakIndex"),//method autoBreakIndex
-                        rs.getInt("specimenTypeIndex"),//method specimenTypeIndex
-                        rs.getString("methodName"),//methodName
-                        rs.getString("norm"),//norm
-                        rs.getString("essayType"),//essayType
-                        rs.getString("normDescription"),//normDescription
-                        rs.getString("extensometer1"),//extensometer1
-                        rs.getString("extensometer2"),//extensometer2
-                        rs.getString("methodDate"),//method date
-                        rs.getDouble("essayVelocity"),//essayVelocity
-                        rs.getDouble("specimenAValue"),//specimenAValue
-                        rs.getDouble("specimenBValue"),//specimenBValue
-                        rs.getDouble("specimenCrossSectionArea"),//specimenCrossSectionArea
-                        rs.getDouble("specimenCrossSectionLength"),//specimenCrossSectionLength
-                        rs.getDouble("offsetIntersectionLine"),//offsetIntersectionLine
-                        rs.getDouble("gainIntersectionLine"));//gain Intersection line
+                    rs.getInt("id"),//method id
+                    rs.getInt("autoBreakIndex"),//method autoBreak index
+                    rs.getInt("specimenTypeIndex"),//method specimenType index
+                    rs.getInt("normIndex"),//norm index
+                    rs.getInt("essayTypeIndex"),//essayType index
+                    rs.getInt("extensometer1Index"),//extensometer1 index
+                    rs.getInt("extensometer2Index"),//extensometer2 index
+                    rs.getInt("chartViewIndex"),//chartView index
+                    rs.getString("methodName"),//methodName
+                    rs.getString("methodDate"),//method date
+                    rs.getDouble("essayVelocity"),//essayVelocity
+                    rs.getDouble("specimenAValue"),//specimenAValue
+                    rs.getDouble("specimenBValue"),//specimenBValue
+                    rs.getDouble("specimenCrossSectionArea"),//specimenCrossSectionArea
+                    rs.getDouble("specimenCrossSectionLength"),//specimenCrossSectionLength
+                    rs.getDouble("offsetIntersectionLine"),//offsetIntersectionLine
+                    rs.getDouble("gainIntersectionLine"));//gain Intersection line
                 result.add(method);
             }
         } catch (SQLException e) {
@@ -156,12 +157,12 @@ public class MethodDAO extends DBConnection {
             PreparedStatement stm = conn.prepareStatement("UPDATE tb_method SET "
                     + "autoBreakIndex INTEGER,"
                     + "specimenTypeIndex INTEGER,"
+                    + "normIndex INTEGER,"
+                    + "essayTypeIndex INTEGER,"
+                    + "extensometer1Index INTEGER,"
+                    + "extensometer2Index INTEGER,"
+                    + "chartViewIndex INTEGER,"
                     + "methodName TEXT,"
-                    + "norm TEXT,"
-                    + "essayType TEXT,"
-                    + "normDescription TEXT,"
-                    + "extensometer1 TEXT,"
-                    + "extensometer2 TEXT,"
                     + "methodDate DATE,"
                     + "essayVelocity REAL,"
                     + "specimenAValue REAL,"
@@ -171,23 +172,22 @@ public class MethodDAO extends DBConnection {
                     + "offsetIntersectionLine REAL,"
                     + "gainIntersectionLine REAL) "
                     + "WHERE id = ?;");
-            stm.setInt(1, method.getId());
             stm.setInt(2, method.getAutoBreakIndex());
             stm.setInt(3, method.getSpecimenTypeIndex());
-            stm.setString(4, method.getMethodName());
-            stm.setString(5, method.getNorm());
-            stm.setString(6, method.getEssayType());
-            stm.setString(7, method.getNormDescription());
-            stm.setString(8, method.getExtensometer1());
-            stm.setString(9, method.getExtensometer2());
-            stm.setString(9, String.valueOf(method.getMethodDate()));
-            stm.setDouble(10, method.getEssayVelocity());
-            stm.setDouble(11, method.getSpecimenAValue());
-            stm.setDouble(12, method.getSpecimenBValue());
-            stm.setDouble(13, method.getSpecimenCrossSectionArea());
-            stm.setDouble(14, method.getSpecimenCrossSectionLength());
-            stm.setDouble(15, method.getOffsetIntersectionLine());
-            stm.setDouble(16, method.getGainIntersectionLine());
+            stm.setInt(4, method.getNormIndex());
+            stm.setInt(5, method.getEssayTypeIndex());
+            stm.setInt(6, method.getExtensometer1Index());
+            stm.setInt(7, method.getExtensometer2Index());
+            stm.setInt(8, method.getChartViewIndex());
+            stm.setString(9, method.getMethodName());
+            stm.setString(10, String.valueOf(method.getMethodDate()));
+            stm.setDouble(11, method.getEssayVelocity());
+            stm.setDouble(12, method.getSpecimenAValue());
+            stm.setDouble(13, method.getSpecimenBValue());
+            stm.setDouble(14, method.getSpecimenCrossSectionArea());
+            stm.setDouble(15, method.getSpecimenCrossSectionLength());
+            stm.setDouble(16, method.getOffsetIntersectionLine());
+            stm.setDouble(17, method.getGainIntersectionLine());
             stm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -225,30 +225,30 @@ public class MethodDAO extends DBConnection {
         openConnection();
         try {
             PreparedStatement stm = conn.prepareStatement("SELECT id, autoBreakIndex, specimenTypeIndex, " +
-                    "methodName, norm, essayType, normDescription, extensometer1, extensometer2, methodDate, essayVelocity, " +
-                    "specimenAValue, specimenBValue, specimenCrossSectionArea, specimenCrossSectionLength, offsetIntersectionLine, " +
-                    "gainIntersectionLine FROM tb_method WHERE id = ?;");
+                    "normIndex, essayTypeIndex, extensometer1Index, extensometer2Index, chartViewIndex, " +
+                    "methodName, methodDate, essayVelocity, specimenAValue, specimenBValue, specimenCrossSectionArea, " +
+                    "specimenCrossSectionLength, offsetIntersectionLine, gainIntersectionLine FROM tb_method WHERE id = ?;");
             stm.setInt(1, pk);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Method method = new Method(
-                        rs.getInt("id"),//method id
-                        rs.getInt("autoBreakIndex"),//method autoBreakIndex
-                        rs.getInt("specimenTypeIndex"),//method specimenTypeIndex
-                        rs.getString("methodName"),//methodName
-                        rs.getString("norm"),//norm
-                        rs.getString("essayType"),//essayType
-                        rs.getString("normDescription"),//normDescription
-                        rs.getString("extensometer1"),//extensometer1
-                        rs.getString("extensometer2"),//extensometer2
-                        rs.getString("methodDate"),//method date
-                        rs.getDouble("essayVelocity"),//essayVelocity
-                        rs.getDouble("specimenAValue"),//specimenAValue
-                        rs.getDouble("specimenBValue"),//specimenBValue
-                        rs.getDouble("specimenCrossSectionArea"),//specimenCrossSectionArea
-                        rs.getDouble("specimenCrossSectionLength"),//specimenCrossSectionLength
-                        rs.getDouble("offsetIntersectionLine"),//offsetIntersectionLine
-                        rs.getDouble("gainIntersectionLine"));//gain Intersection line
+                    rs.getInt("id"),//method id
+                    rs.getInt("autoBreakIndex"),//method autoBreak index
+                    rs.getInt("specimenTypeIndex"),//method specimenType index
+                    rs.getInt("normIndex"),//norm index
+                    rs.getInt("essayTypeIndex"),//essayType index
+                    rs.getInt("extensometer1Index"),//extensometer1 index
+                    rs.getInt("extensometer2Index"),//extensometer2 index
+                    rs.getInt("chartViewIndex"),//chartView index
+                    rs.getString("methodName"),//methodName
+                    rs.getString("methodDate"),//method date
+                    rs.getDouble("essayVelocity"),//essayVelocity
+                    rs.getDouble("specimenAValue"),//specimenAValue
+                    rs.getDouble("specimenBValue"),//specimenBValue
+                    rs.getDouble("specimenCrossSectionArea"),//specimenCrossSectionArea
+                    rs.getDouble("specimenCrossSectionLength"),//specimenCrossSectionLength
+                    rs.getDouble("offsetIntersectionLine"),//offsetIntersectionLine
+                    rs.getDouble("gainIntersectionLine"));//gain Intersection line
                 result = method;
             }
         } catch (SQLException e) {
@@ -270,22 +270,22 @@ public class MethodDAO extends DBConnection {
         openConnection();
         try {
             PreparedStatement stm = conn.prepareStatement("SELECT id, autoBreakIndex, specimenTypeIndex, " +
-                    "methodName, norm, essayType, normDescription, extensometer1, extensometer2, methodDate, essayVelocity, " +
-                    "specimenAValue, specimenBValue, specimenCrossSectionArea, specimenCrossSectionLength, offsetIntersectionLine, " +
-                    "gainIntersectionLine FROM tb_method WHERE methodName = ?;");
+                    "normIndex, essayTypeIndex, extensometer1Index, extensometer2Index, chartViewIndex, " +
+                    "methodName, methodDate, essayVelocity, specimenAValue, specimenBValue, specimenCrossSectionArea, " +
+                    "specimenCrossSectionLength, offsetIntersectionLine, gainIntersectionLine FROM tb_method WHERE methodName = ?;");
             stm.setString(1, methodName);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Method method = new Method(
                         rs.getInt("id"),//method id
-                        rs.getInt("autoBreakIndex"),//method autoBreakIndex
-                        rs.getInt("specimenTypeIndex"),//method specimenTypeIndex
+                        rs.getInt("autoBreakIndex"),//method autoBreak index
+                        rs.getInt("specimenTypeIndex"),//method specimenType index
+                        rs.getInt("normIndex"),//norm index
+                        rs.getInt("essayTypeIndex"),//essayType index
+                        rs.getInt("extensometer1Index"),//extensometer1 index
+                        rs.getInt("extensometer2Index"),//extensometer2 index
+                        rs.getInt("chartViewIndex"),//chartView index
                         rs.getString("methodName"),//methodName
-                        rs.getString("norm"),//norm
-                        rs.getString("essayType"),//essayType
-                        rs.getString("normDescription"),//normDescription
-                        rs.getString("extensometer1"),//extensometer1
-                        rs.getString("extensometer2"),//extensometer2
                         rs.getString("methodDate"),//method date
                         rs.getDouble("essayVelocity"),//essayVelocity
                         rs.getDouble("specimenAValue"),//specimenAValue

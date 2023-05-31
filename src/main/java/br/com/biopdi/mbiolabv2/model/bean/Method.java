@@ -23,22 +23,29 @@ package br.com.biopdi.mbiolabv2.model.bean;
  */
 public class Method {
 
-    private Integer id, autoBreakIndex, specimenTypeIndex;
-    private String methodName, norm, essayType, normDescription, extensometer1, extensometer2, methodDate;
-    private Double essayVelocity, specimenAValue, specimenBValue, specimenCrossSectionArea, specimenCrossSectionLength, offsetIntersectionLine, gainIntersectionLine;
+    private Integer id, autoBreakIndex, specimenTypeIndex, normIndex, essayTypeIndex, extensometer1Index,
+            extensometer2Index, chartViewIndex;
+    private String methodName, methodDate;
+    private Double essayVelocity, specimenAValue, specimenBValue, specimenCrossSectionArea, specimenCrossSectionLength,
+            offsetIntersectionLine, gainIntersectionLine;
 
     public Method() {
     }
-    public Method(Integer id, Integer autoBreakIndex, Integer specimenTypeIndex, String methodName, String norm, String essayType, String normDescription, String extensometer1, String extensometer2, String methodDate, Double essayVelocity, Double specimenAValue, Double specimenBValue, Double specimenCrossSectionArea, Double specimenCrossSectionLength, Double offsetIntersectionLine, Double gainIntersectionLine) {
+
+    public Method(Integer id, Integer autoBreakIndex, Integer specimenTypeIndex, Integer normIndex,
+                  Integer essayTypeIndex, Integer extensometer1Index, Integer extensometer2Index,
+                  Integer chartViewIndex, String methodName, String methodDate, Double essayVelocity,
+                  Double specimenAValue, Double specimenBValue, Double specimenCrossSectionArea,
+                  Double specimenCrossSectionLength, Double offsetIntersectionLine, Double gainIntersectionLine) {
         this.id = id;
         this.autoBreakIndex = autoBreakIndex;
         this.specimenTypeIndex = specimenTypeIndex;
+        this.normIndex = normIndex;
+        this.essayTypeIndex = essayTypeIndex;
+        this.extensometer1Index = extensometer1Index;
+        this.extensometer2Index = extensometer2Index;
+        this.chartViewIndex = chartViewIndex;
         this.methodName = methodName;
-        this.norm = norm;
-        this.essayType = essayType;
-        this.normDescription = normDescription;
-        this.extensometer1 = extensometer1;
-        this.extensometer2 = extensometer2;
         this.methodDate = methodDate;
         this.essayVelocity = essayVelocity;
         this.specimenAValue = specimenAValue;
@@ -48,15 +55,20 @@ public class Method {
         this.offsetIntersectionLine = offsetIntersectionLine;
         this.gainIntersectionLine = gainIntersectionLine;
     }
-    public Method(Integer autoBreakIndex, Integer specimenTypeIndex, String methodName, String norm, String essayType, String normDescription, String extensometer1, String extensometer2, String methodDate, Double essayVelocity, Double specimenAValue, Double specimenBValue, Double specimenCrossSectionArea, Double specimenCrossSectionLength, Double offsetIntersectionLine, Double gainIntersectionLine) {
+
+    public Method(Integer autoBreakIndex, Integer specimenTypeIndex, Integer normIndex, Integer essayTypeIndex,
+                  Integer extensometer1Index, Integer extensometer2Index, Integer chartViewIndex, String methodName,
+                  String methodDate, Double essayVelocity, Double specimenAValue, Double specimenBValue,
+                  Double specimenCrossSectionArea, Double specimenCrossSectionLength, Double offsetIntersectionLine,
+                  Double gainIntersectionLine) {
         this.autoBreakIndex = autoBreakIndex;
         this.specimenTypeIndex = specimenTypeIndex;
+        this.normIndex = normIndex;
+        this.essayTypeIndex = essayTypeIndex;
+        this.extensometer1Index = extensometer1Index;
+        this.extensometer2Index = extensometer2Index;
+        this.chartViewIndex = chartViewIndex;
         this.methodName = methodName;
-        this.norm = norm;
-        this.essayType = essayType;
-        this.normDescription = normDescription;
-        this.extensometer1 = extensometer1;
-        this.extensometer2 = extensometer2;
         this.methodDate = methodDate;
         this.essayVelocity = essayVelocity;
         this.specimenAValue = specimenAValue;
@@ -70,9 +82,6 @@ public class Method {
     public Integer getId() {
         return id;
     }
-    public void setId(Integer id) {
-        this.id = id;
-    }
     public Integer getAutoBreakIndex() {
         return autoBreakIndex;
     }
@@ -85,41 +94,41 @@ public class Method {
     public void setSpecimenTypeIndex(Integer specimenTypeIndex) {
         this.specimenTypeIndex = specimenTypeIndex;
     }
+    public Integer getNormIndex() {
+        return normIndex;
+    }
+    public void setNormIndex(Integer normIndex) {
+        this.normIndex = normIndex;
+    }
+    public Integer getEssayTypeIndex() {
+        return essayTypeIndex;
+    }
+    public void setEssayTypeIndex(Integer essayTypeIndex) {
+        this.essayTypeIndex = essayTypeIndex;
+    }
+    public Integer getExtensometer1Index() {
+        return extensometer1Index;
+    }
+    public void setExtensometer1Index(Integer extensometer1Index) {
+        this.extensometer1Index = extensometer1Index;
+    }
+    public Integer getExtensometer2Index() {
+        return extensometer2Index;
+    }
+    public void setExtensometer2Index(Integer extensometer2Index) {
+        this.extensometer2Index = extensometer2Index;
+    }
+    public Integer getChartViewIndex() {
+        return chartViewIndex;
+    }
+    public void setChartViewIndex(Integer chartViewIndex) {
+        this.chartViewIndex = chartViewIndex;
+    }
     public String getMethodName() {
         return methodName;
     }
     public void setMethodName(String methodName) {
         this.methodName = methodName;
-    }
-    public String getNorm() {
-        return norm;
-    }
-    public void setNorm(String norm) {
-        this.norm = norm;
-    }
-    public String getEssayType() {
-        return essayType;
-    }
-    public void setEssayType(String essayType) {
-        this.essayType = essayType;
-    }
-    public String getNormDescription() {
-        return normDescription;
-    }
-    public void setNormDescription(String normDescription) {
-        this.normDescription = normDescription;
-    }
-    public String getExtensometer1() {
-        return extensometer1;
-    }
-    public void setExtensometer1(String extensometer1) {
-        this.extensometer1 = extensometer1;
-    }
-    public String getExtensometer2() {
-        return extensometer2;
-    }
-    public void setExtensometer2(String extensometer2) {
-        this.extensometer2 = extensometer2;
     }
     public String getMethodDate() {
         return methodDate;
@@ -176,12 +185,12 @@ public class Method {
                 "id=" + id +
                 ", autoBreakIndex=" + autoBreakIndex +
                 ", specimenTypeIndex=" + specimenTypeIndex +
+                ", normIndex=" + normIndex +
+                ", essayTypeIndex=" + essayTypeIndex +
+                ", extensometer1Index=" + extensometer1Index +
+                ", extensometer2Index=" + extensometer2Index +
+                ", chartViewIndex=" + chartViewIndex +
                 ", methodName='" + methodName + '\'' +
-                ", norm='" + norm + '\'' +
-                ", essayType='" + essayType + '\'' +
-                ", normDescription='" + normDescription + '\'' +
-                ", extensometer1='" + extensometer1 + '\'' +
-                ", extensometer2='" + extensometer2 + '\'' +
                 ", methodDate='" + methodDate + '\'' +
                 ", essayVelocity=" + essayVelocity +
                 ", specimenAValue=" + specimenAValue +
