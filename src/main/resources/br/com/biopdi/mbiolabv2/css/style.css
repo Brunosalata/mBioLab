@@ -3,7 +3,6 @@
 }
 
 .button {
-    -fx-background-color: white;
     -fx-background-radius: 100;
     -fx-text-fill: #002151;
     -fx-border-width: 5;
@@ -92,11 +91,11 @@
 }
 
 .button.emergency {
-    -fx-background-color:  #BCAA06;
-    -fx-font-coloer: BLACK;
+    -fx-background-color:  RED;
+    -fx-font-color: WHITE;
 }
 
 .button.emergency:pressed {
-    -fx-background-color: RED;
-    -fx-font-coloer: WHITE;
+    -fx-background-color: #BCAA06;
+    -fx-font-color: BLACK;
 }

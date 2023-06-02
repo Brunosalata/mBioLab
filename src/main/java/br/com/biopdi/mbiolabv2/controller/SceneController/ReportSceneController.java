@@ -261,6 +261,10 @@ public class ReportSceneController implements Initializable {
 
     }
 
+    /**
+     * Metodo que exporta um csv do ensaio selecionado para a pasta /report na raiz do programa
+     * @throws IOException
+     */
     @FXML
     private void csvExport() throws IOException {
 
@@ -297,6 +301,11 @@ public class ReportSceneController implements Initializable {
         }
         System.out.println("Sucesso");
     }
+
+
+
+
+
 
     public class getJasperParameter{
         public String getIdentification(){
