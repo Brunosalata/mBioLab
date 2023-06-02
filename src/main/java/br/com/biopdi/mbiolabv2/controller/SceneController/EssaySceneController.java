@@ -759,7 +759,6 @@ public class EssaySceneController implements Initializable {
             List<Double> escTensionChartList = new ArrayList<>();
             List<Double> escDeformChartList = new ArrayList<>();
 
-
             try {
                 while (count<60) {
 //                while(autoBreak()==false){

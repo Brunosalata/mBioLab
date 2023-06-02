@@ -518,7 +518,7 @@
                                                                               </Label>
                                                                               <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                                                                  <children>
-                                                                                    <TextField fx:id="txtEssayVelocity" alignment="CENTER" text="1">
+                                                                                    <TextField fx:id="txtEssayVelocity" alignment="CENTER" text="15000">
                                                                                        <HBox.margin>
                                                                                           <Insets />
                                                                                        </HBox.margin>
@@ -1731,12 +1731,12 @@
                                                                                           </Label>
                                                                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="184.0" VBox.vgrow="ALWAYS">
                                                                                              <children>
-                                                                                                <Slider fx:id="shAdjustVelocity" blockIncrement="1.0" majorTickUnit="600.0" max="600.0" min="1.0" minorTickCount="1" showTickLabels="true" value="1.0">
+                                                                                                <Slider fx:id="shAdjustVelocity" majorTickUnit="45000.0" max="45000.0" min="10000.0" minorTickCount="10000" showTickLabels="true" value="15000.0">
                                                                                                    <HBox.margin>
                                                                                                       <Insets left="10.0" right="10.0" />
                                                                                                    </HBox.margin>
                                                                                                 </Slider>
-                                                                                                <TextField fx:id="txtAdjustVelocity" alignment="CENTER" prefHeight="25.0" prefWidth="65.0" text="1">
+                                                                                                <TextField fx:id="txtAdjustVelocity" alignment="CENTER" prefHeight="25.0" prefWidth="65.0" text="15000">
                                                                                                    <HBox.margin>
                                                                                                       <Insets />
                                                                                                    </HBox.margin>
@@ -1873,7 +1873,7 @@
                                                                                              <children>
                                                                                                 <HBox alignment="CENTER" prefHeight="32.0" prefWidth="109.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                                                    <children>
-                                                                                                      <ImageView fx:id="ivEssayUser" fitHeight="33.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                      <ImageView fx:id="ivEssayUser1" fitHeight="33.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                                                                                                          <image>
                                                                                                             <Image url="@img/darkIcon/icons8-profile-96.png" />
                                                                                                          </image>
@@ -1881,7 +1881,7 @@
                                                                                                             <Insets right="5.0" />
                                                                                                          </HBox.margin>
                                                                                                       </ImageView>
-                                                                                                      <Label fx:id="lbEssayUserName" prefHeight="17.0" text="Usuário" HBox.hgrow="ALWAYS" />
+                                                                                                      <Label fx:id="lbEssayUserName1" prefHeight="17.0" prefWidth="86.0" text="Usuário" HBox.hgrow="ALWAYS" />
                                                                                                    </children>
                                                                                                 </HBox>
                                                                                              </children>
@@ -1901,7 +1901,7 @@
                                                                                                 <Insets bottom="3.0" />
                                                                                              </VBox.margin>
                                                                                           </Label>
-                                                                                          <Label fx:id="lbFmax" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="73.0" text="0.000">
+                                                                                          <Label fx:id="lbFmax1" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="73.0" text="0.000">
                                                                                              <VBox.margin>
                                                                                                 <Insets />
                                                                                              </VBox.margin>
@@ -1921,7 +1921,7 @@
                                                                                                 <Insets bottom="3.0" />
                                                                                              </VBox.margin>
                                                                                           </Label>
-                                                                                          <Label fx:id="lbPmax" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="81.0" text="0.000">
+                                                                                          <Label fx:id="lbPmax1" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="81.0" text="0.000">
                                                                                              <VBox.margin>
                                                                                                 <Insets />
                                                                                              </VBox.margin>
@@ -1941,7 +1941,7 @@
                                                                                                 <Insets bottom="3.0" />
                                                                                              </VBox.margin>
                                                                                           </Label>
-                                                                                          <Label fx:id="lbTmax" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="74.0" text="0.000">
+                                                                                          <Label fx:id="lbTmax1" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="74.0" text="0.000">
                                                                                              <VBox.margin>
                                                                                                 <Insets />
                                                                                              </VBox.margin>
@@ -1961,7 +1961,7 @@
                                                                                                 <Insets bottom="3.0" />
                                                                                              </VBox.margin>
                                                                                           </Label>
-                                                                                          <Label fx:id="lbTesc" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="80.0" text="0.000">
+                                                                                          <Label fx:id="lbTesc1" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="80.0" text="0.000">
                                                                                              <VBox.margin>
                                                                                                 <Insets />
                                                                                              </VBox.margin>
@@ -1981,7 +1981,7 @@
                                                                                                 <Insets bottom="3.0" />
                                                                                              </VBox.margin>
                                                                                           </Label>
-                                                                                          <Label fx:id="lbAlong" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="89.0" text="0.000">
+                                                                                          <Label fx:id="lbAlong1" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="89.0" text="0.000">
                                                                                              <VBox.margin>
                                                                                                 <Insets />
                                                                                              </VBox.margin>
@@ -2001,17 +2001,20 @@
                                                                                                 <Insets bottom="3.0" />
                                                                                              </VBox.margin>
                                                                                           </Label>
-                                                                                          <Label fx:id="lbRedArea" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="90.0" text="0.000">
+                                                                                          <Label fx:id="lbRedArea1" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="90.0" text="0.000">
                                                                                              <VBox.margin>
-                                                                                                <Insets />
+                                                                                                <Insets bottom="3.0" />
                                                                                              </VBox.margin>
                                                                                           </Label>
                                                                                           <Label alignment="CENTER" contentDisplay="CENTER" text="Área final (mm²)" textAlignment="CENTER">
                                                                                              <font>
                                                                                                 <Font name="System Bold" size="12.0" />
                                                                                              </font>
+                                                                                             <VBox.margin>
+                                                                                                <Insets bottom="3.0" />
+                                                                                             </VBox.margin>
                                                                                           </Label>
-                                                                                          <TextField fx:id="txtSpecimenReducedArea" alignment="CENTER" text="1.000" />
+                                                                                          <TextField fx:id="txtSpecimenReducedArea" alignment="CENTER" text="0.000" />
                                                                                        </children>
                                                                                        <FlowPane.margin>
                                                                                           <Insets right="10.0" top="10.0" />
@@ -2027,7 +2030,7 @@
                                                                                                 <Insets bottom="3.0" />
                                                                                              </VBox.margin>
                                                                                           </Label>
-                                                                                          <Label fx:id="lbMYoung" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="90.0" text="0.000">
+                                                                                          <Label fx:id="lbMYoung1" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="90.0" text="0.000">
                                                                                              <VBox.margin>
                                                                                                 <Insets />
                                                                                              </VBox.margin>
@@ -2113,7 +2116,7 @@
                                                                      <children>
                                                                         <HBox alignment="CENTER" prefHeight="32.0" prefWidth="109.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                            <children>
-                                                                              <ImageView fx:id="ivEssayUser2" fitHeight="33.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                                                              <ImageView fx:id="ivEssayUser" fitHeight="33.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                                                                                  <image>
                                                                                     <Image url="@img/darkIcon/icons8-profile-96.png" />
                                                                                  </image>
@@ -2121,7 +2124,7 @@
                                                                                     <Insets right="5.0" />
                                                                                  </HBox.margin>
                                                                               </ImageView>
-                                                                              <Label fx:id="lbEssayUserName2" prefHeight="17.0" prefWidth="86.0" text="Usuário" />
+                                                                              <Label fx:id="lbEssayUserName" prefHeight="17.0" prefWidth="86.0" text="Usuário" />
                                                                            </children>
                                                                         </HBox>
                                                                      </children>
@@ -2141,7 +2144,7 @@
                                                                         <Insets bottom="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
-                                                                  <Label fx:id="lbFMax2" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="73.0" text="0.000">
+                                                                  <Label fx:id="lbFMax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="73.0" text="0.000">
                                                                      <VBox.margin>
                                                                         <Insets />
                                                                      </VBox.margin>
@@ -2158,7 +2161,7 @@
                                                                         <Insets bottom="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
-                                                                  <Label fx:id="lbPMax2" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="81.0" text="0.000">
+                                                                  <Label fx:id="lbPMax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="81.0" text="0.000">
                                                                      <VBox.margin>
                                                                         <Insets />
                                                                      </VBox.margin>
@@ -2175,7 +2178,7 @@
                                                                         <Insets bottom="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
-                                                                  <Label fx:id="lbTMax2" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="74.0" text="0.000">
+                                                                  <Label fx:id="lbTMax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="74.0" text="0.000">
                                                                      <VBox.margin>
                                                                         <Insets />
                                                                      </VBox.margin>
@@ -2192,7 +2195,7 @@
                                                                         <Insets bottom="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
-                                                                  <Label fx:id="lbTEsc2" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="80.0" text="0.000">
+                                                                  <Label fx:id="lbTEsc" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="80.0" text="0.000">
                                                                      <VBox.margin>
                                                                         <Insets />
                                                                      </VBox.margin>
@@ -2209,7 +2212,7 @@
                                                                         <Insets bottom="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
-                                                                  <Label fx:id="lbAlong2" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="89.0" text="0.000">
+                                                                  <Label fx:id="lbAlong" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="89.0" text="0.000">
                                                                      <VBox.margin>
                                                                         <Insets />
                                                                      </VBox.margin>
@@ -2226,7 +2229,7 @@
                                                                         <Insets bottom="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
-                                                                  <Label fx:id="lbRedArea2" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="90.0" text="0.000">
+                                                                  <Label fx:id="lbRedArea" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="90.0" text="0.000">
                                                                      <VBox.margin>
                                                                         <Insets />
                                                                      </VBox.margin>
@@ -2243,7 +2246,7 @@
                                                                         <Insets bottom="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
-                                                                  <Label fx:id="lbMYoung2" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="90.0" text="0.000">
+                                                                  <Label fx:id="lbMYoung" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="90.0" text="0.000">
                                                                      <VBox.margin>
                                                                         <Insets />
                                                                      </VBox.margin>

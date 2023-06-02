@@ -518,7 +518,7 @@
                                                                               </Label>
                                                                               <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                                                                  <children>
-                                                                                    <TextField fx:id="txtEssayVelocity" alignment="CENTER" text="1">
+                                                                                    <TextField fx:id="txtEssayVelocity" alignment="CENTER" text="15000">
                                                                                        <HBox.margin>
                                                                                           <Insets />
                                                                                        </HBox.margin>
@@ -1731,12 +1731,12 @@
                                                                                           </Label>
                                                                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="184.0" VBox.vgrow="ALWAYS">
                                                                                              <children>
-                                                                                                <Slider fx:id="shAdjustVelocity" blockIncrement="1.0" majorTickUnit="600.0" max="600.0" min="1.0" minorTickCount="1" showTickLabels="true" value="1.0">
+                                                                                                <Slider fx:id="shAdjustVelocity" majorTickUnit="45000.0" max="45000.0" min="10000.0" minorTickCount="10000" showTickLabels="true" value="15000.0">
                                                                                                    <HBox.margin>
                                                                                                       <Insets left="10.0" right="10.0" />
                                                                                                    </HBox.margin>
                                                                                                 </Slider>
-                                                                                                <TextField fx:id="txtAdjustVelocity" alignment="CENTER" prefHeight="25.0" prefWidth="65.0" text="1">
+                                                                                                <TextField fx:id="txtAdjustVelocity" alignment="CENTER" prefHeight="25.0" prefWidth="65.0" text="15000">
                                                                                                    <HBox.margin>
                                                                                                       <Insets />
                                                                                                    </HBox.margin>
@@ -2003,9 +2003,18 @@
                                                                                           </Label>
                                                                                           <Label fx:id="lbRedArea1" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="90.0" text="0.000">
                                                                                              <VBox.margin>
-                                                                                                <Insets />
+                                                                                                <Insets bottom="3.0" />
                                                                                              </VBox.margin>
                                                                                           </Label>
+                                                                                          <Label alignment="CENTER" contentDisplay="CENTER" text="Área final (mm²)" textAlignment="CENTER">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="12.0" />
+                                                                                             </font>
+                                                                                             <VBox.margin>
+                                                                                                <Insets bottom="3.0" />
+                                                                                             </VBox.margin>
+                                                                                          </Label>
+                                                                                          <TextField fx:id="txtSpecimenReducedArea" alignment="CENTER" text="0.000" />
                                                                                        </children>
                                                                                        <FlowPane.margin>
                                                                                           <Insets right="10.0" top="10.0" />
