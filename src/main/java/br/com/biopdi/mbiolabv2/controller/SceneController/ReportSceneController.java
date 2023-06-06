@@ -29,9 +29,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import net.sf.jasperreports.engine.*;
@@ -68,6 +66,10 @@ public class ReportSceneController implements Initializable {
     private Label lbCurrentData, lbEssayUserName, lbFmax, lbPmax, lbTmax, lbTesc, lbAlong, lbRedArea, lbMYoung;
     @FXML
     private Button btnEssayByUserId, btnEssaySave;
+    @FXML
+    private ComboBox cbUserFilter, cbEssayTypeFilter, cbNormFilter;
+    @FXML
+    private DatePicker datePicker;
     @FXML
     private JRViewerFX jvReport;
     @FXML
@@ -118,7 +120,24 @@ public class ReportSceneController implements Initializable {
                 }
             }
         });
-
+        cbUserFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                savedEssayByUserView(cbUserFilter.getSelectionModel().getSelectedItem().toString());
+            }
+        });
+        cbNormFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                savedEssayByNormView((cbNormFilter.getSelectionModel().getSelectedItem().toString()));
+            }
+        });
+        cbEssayTypeFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                savedEssayByTypeView((cbEssayTypeFilter.getSelectionModel().getSelectedItem().toString()));
+            }
+        });
 
 
     }
@@ -164,13 +183,52 @@ public class ReportSceneController implements Initializable {
         // Construcao do grafico a partir das informacoes essayChart do DB do respectivo ensaio
         essayChart(currentEssay.getEssayId());
         //buscando informacoes do currentEssay
-        lbFmax.setText(String.valueOf(0.001));
-        lbPmax.setText(String.valueOf(0.002));
-        lbTmax.setText(String.valueOf(0.003));
-        lbTesc.setText(String.valueOf(0.004));
-        lbAlong.setText(String.valueOf(0.005));
-        lbRedArea.setText(String.valueOf(0.006));
-        lbMYoung.setText(String.valueOf(0.007));
+        lbFmax.setText(String.valueOf(currentEssay.getEssayMaxForce()));
+        lbPmax.setText(String.valueOf(currentEssay.getEssayMaxPosition()));
+        lbTmax.setText(String.valueOf(currentEssay.getEssayMaxTension()));
+        lbTesc.setText(String.valueOf(currentEssay.getEssayEscapeTension()));
+        lbAlong.setText(String.valueOf(currentEssay.getEssayAlong()));
+        lbRedArea.setText(String.valueOf(currentEssay.getEssayAreaRed()));
+        lbMYoung.setText(String.valueOf(currentEssay.getEssayMYoung()));
+    }
+
+    @FXML
+    private void savedEssayByDateView(Date date){
+        User user = new UserDAO().findByLogin(cbUserFilter.getSelectionModel().getSelectedItem().toString());
+        if(sysVar.getUserId()<=2){
+            essayList.addAll(essayDAO.findByUser(user.getUserId()));
+        } else{
+            essayList.addAll(null);
+        }
+        essayList.addAll(essayDAO.findByDate(String.valueOf(date)));
+        obsEssayList = FXCollections.observableList(essayList);
+        lvSavedEssay.setItems(obsEssayList);
+    }
+
+    @FXML
+    private void savedEssayByUserView(String login){
+        User user = new UserDAO().findByLogin(cbUserFilter.getSelectionModel().getSelectedItem().toString());
+        if(sysVar.getUserId()<=2){
+            essayList.addAll(essayDAO.findByUser(user.getUserId()));
+        } else{
+            essayList.addAll(null);
+        }
+        obsEssayList = FXCollections.observableList(essayList);
+        lvSavedEssay.setItems(obsEssayList);
+    }
+
+    @FXML
+    private void savedEssayByNormView(String norm){
+        //essayList.addAll((Collection<? extends Essay>) userDAO.findByNorm(norm));
+        obsEssayList = FXCollections.observableList(essayList);
+        lvSavedEssay.setItems(obsEssayList);
+    }
+
+    @FXML
+    private void savedEssayByTypeView(String type){
+        //essayList.addAll((Collection<? extends Essay>) userDAO.findByType(type));
+        obsEssayList = FXCollections.observableList(essayList);
+        lvSavedEssay.setItems(obsEssayList);
     }
 
     /**

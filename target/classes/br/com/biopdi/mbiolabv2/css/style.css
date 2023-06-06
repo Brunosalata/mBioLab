@@ -27,6 +27,29 @@
     -fx-scale-x: 0.9;
 }
 
+.menuBarButton {
+    -fx-background-color: #2C2C2C;
+    -fx-background-radius: 0;
+    -fx-text-fill:  #E5E5E5;
+    -fx-border-width: 5;
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+}
+
+.menuBarButton:hover {
+    -fx-background-radius: 0;
+    -fx-background-color: #005897;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.menuBarButton:pressed {
+    -fx-font-scale-x: 0.9;
+    -fx-font-scale-y: 0.9;
+    -fx-font-scale-z: 0.9;
+}
+
 .button.moveUp {
     -fx-background-image: url("../img/down.png");
     -fx-background-position: center;

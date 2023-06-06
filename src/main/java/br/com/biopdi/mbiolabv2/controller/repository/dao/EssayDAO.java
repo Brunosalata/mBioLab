@@ -509,6 +509,5 @@ public class EssayDAO extends DBConnection {
         }
         return result;
     }
-
 }
 

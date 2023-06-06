@@ -172,7 +172,7 @@ public class SystemSettingSceneController implements Initializable {
             if(sysVar.getUserId()==1 && login.getUserId()>1){
                 cbLoginList.getItems().add(login.getUserLogin());
             } else if(sysVar.getUserId()==2){
-                if(login.getUserId()==2 || login.getUserId()>3){
+                if(login.getUserId()==2 && login.getUserId()>3){
                     cbLoginList.getItems().add(login.getUserLogin());
                 }
             }
@@ -242,13 +242,17 @@ public class SystemSettingSceneController implements Initializable {
             }
             userDAO.delete(user);
             lbUserUpdate.setVisible(true);
-            lbUserUpdate.setText("Usuário excluído");
-            lbUserUpdate.setStyle("-fx-background-color: GREEN -fx-");
+            lbUserUpdate.setText("Usuário excluído!");
+            lbUserUpdate.setStyle("-fx-background-color: GREEN; -fx-text-fill:  #E5E5E5;-fx-background-radius: 10;");
             cancelDelete();
-        } else{
+        } else if(user.getUserId()==2){
             lbUserUpdate.setVisible(true);
-            lbUserUpdate.setText("Perfil Admin não pode ser excluído");
-            lbUserUpdate.setStyle("-fx-background-color: WHITE");
+            lbUserUpdate.setText("Perfil Admin não pode ser excluído!");
+            lbUserUpdate.setStyle("-fx-background-color: RED; -fx-text-fill:  #E5E5E5;-fx-background-radius: 10;");
+        }   else if(user.getUserId()==3){
+            lbUserUpdate.setVisible(true);
+            lbUserUpdate.setText("Perfil Visitante não pode ser excluído!");
+            lbUserUpdate.setStyle("-fx-background-color: RED; -fx-text-fill:  #E5E5E5;-fx-background-radius: 10;");
         }
     }
 

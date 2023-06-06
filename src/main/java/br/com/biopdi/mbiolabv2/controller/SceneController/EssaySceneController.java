@@ -56,7 +56,7 @@ public class EssaySceneController implements Initializable {
     private NumberAxis xAxis = new NumberAxis();
     @FXML
     private NumberAxis yAxis = new NumberAxis();
-    private XYChart.Series<Number, Number> series;
+    private XYChart.Series<Number, Number> series, seriesTxD;
     @FXML
     private Label lbFMax, lbPMax, lbTMax, lbTEsc, lbAlong, lbRedArea, lbMYoung, lbEssayTemperature,
             lbEssayRelativeHumidity;
@@ -85,7 +85,7 @@ public class EssaySceneController implements Initializable {
             referencePosition = 0D, currentTension = 1D, currentDeformation = 0D, initialForce, finalForce, initialPosition,
             finalPosition, fMax, pMax, tMax, tEsc, along, redArea, mYoung, nForceConversionFactor = 1D,
             kgForceConversionFactor = 1D, mmPositionConversionFactor = 1D, inPositionConversionFactor = 1D;
-    private String chartString = null, currentForceUnit = "N", currentPositionUnit = "mm";
+    private String chartString = null, chartStringTensionXDeform = null, currentForceUnit = "N", currentPositionUnit = "mm";
     private Boolean moving = false, errorEmergencyButton = false, errorInfLimit = false, errorSupLimit = false,
             errorChargeCellLimit = false, errorChargeCellDisconnected = false;
     private Integer forceAdjustInversion = 1, positionAdjustInversion = 1, forceAdjustInversionView = 1,
@@ -768,7 +768,7 @@ public class EssaySceneController implements Initializable {
                     // cima ou para baixo
                     adjustedForce = selectedUnitForceValue() * forceAdjustInversion;
                     adjustedPosition = selectedUnitPositionValue() * positionAdjustInversion;
-                    Double deform = adjustedPosition;
+                    Double currentDeform = (adjustedPosition - initialPosition) / initialPosition;
                     // Calculo da tensao
                     currentTension = kgForceConversionFactor / specimenArea;
 
@@ -868,7 +868,7 @@ public class EssaySceneController implements Initializable {
                         Double currentProp;
                         if(tEsc==0){
                             escTensionChartList.add(currentTension); // Incluir currentDeformation
-                            escDeformChartList.add(deform);
+                            escDeformChartList.add(currentDeform);
                         }
                         if(forceList.size()>30){
                                 currentProp = mYoungList[mYoungList.length - 1][0]/mYoungList[mYoungList.length - 1][1];
@@ -911,14 +911,16 @@ public class EssaySceneController implements Initializable {
                         finalPosition = finalAdjustedPosition;
                     });
 
-
-
                     System.out.println(adjustedForce + " " + adjustedPosition);
                     // Exposicao dos valores no grafico em funcao da escolha do usuario MPa x % ou N x mm
                     // INCLUIR FORMULA DE CONVERSAO DOS VALORES
                     Platform.runLater(() -> {
                         // Update UI.
-                        series.getData().add(new XYChart.Data<>(finalAdjustedPosition, finalAdjustedForce));
+                        if(rbForceXPosition.isSelected()){
+                            series.getData().add(new XYChart.Data<>(finalAdjustedPosition, finalAdjustedForce));
+                        } else if(rbStrainXDeform.isSelected()) {
+                            series.getData().add(new XYChart.Data<>(currentDeform, currentTension));
+                        }
                     });
 
                     // Adding dot values in a global String chartString
@@ -928,7 +930,15 @@ public class EssaySceneController implements Initializable {
                     } else {
                         chartString = String.format("%.4f", adjustedForce) + ";" + String.format("%.4f", adjustedPosition);
                     }
+
+                    // Adicionando pontos ao chartString global para tensao por deformacao
+                    if (chartStringTensionXDeform != null) {
+                        chartStringTensionXDeform += "," + String.format("%.4f", currentTension) + ";" + String.format("%.4f", currentDeform);
+                    } else {
+                        chartStringTensionXDeform = String.format("%.4f", currentTension) + ";" + String.format("%.4f", currentDeform);
+                    }
                     System.out.println(chartString);
+                    System.out.println(chartStringTensionXDeform);
                     count++;
                 }
                 serialConn.stopMove();
@@ -1710,6 +1720,7 @@ public class EssaySceneController implements Initializable {
     @FXML
     private void newChart(){
         chartString = null;
+        chartStringTensionXDeform = null;
         chartEssayLine.getData().clear();
         series.getData().clear();
     }

@@ -27,7 +27,6 @@
   ~  See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
-
 <!--
   *  @project mBioLabv2
   *  @version 1.0
@@ -169,7 +168,7 @@
                         <Insets bottom="10.0" top="20.0" />
                      </VBox.margin>
                   </Label>
-                  <AnchorPane fx:id="apUserUpdate" prefHeight="314.0" prefWidth="310.0" style="-fx-background-color: #d2d2d2;">
+                  <AnchorPane fx:id="apUserUpdate" prefHeight="314.0" prefWidth="290.0" style="-fx-background-color: #d2d2d2;">
                      <children>
                         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                            <children>
@@ -260,12 +259,12 @@
                                           <Font size="10.0" />
                                        </font>
                                     </RadioButton>
-                                    <Label fx:id="lbUserUpdate" alignment="CENTER" prefHeight="30.0" prefWidth="190.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="95.0">
+                                    <Label fx:id="lbUserUpdate" alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="210.0" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="95.0">
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>
                                        <font>
-                                          <Font size="15.0" />
+                                          <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
                                  </children>

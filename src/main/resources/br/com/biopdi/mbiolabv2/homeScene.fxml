@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import jfxtras.scene.control.CalendarPicker?>
 
 <!--
   ~  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -28,7 +29,6 @@
   ~  See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
-
 <!--
   *  @project mBioLabv2
   *  @version 1.0
@@ -215,9 +215,9 @@
                         </FlowPane>
                      </children>
                   </VBox>
-                  <VBox prefHeight="880.0" prefWidth="384.0" style="-fx-background-color: #2C2C2C;" HBox.hgrow="ALWAYS">
+                  <VBox alignment="TOP_CENTER" prefHeight="880.0" prefWidth="384.0" style="-fx-background-color: #2C2C2C;" HBox.hgrow="ALWAYS">
                      <children>
-                        <BorderPane prefHeight="328.0" prefWidth="384.0">
+                        <BorderPane prefHeight="282.0" prefWidth="384.0">
                            <center>
                               <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #005897;" BorderPane.alignment="CENTER">
                                  <children>
@@ -226,7 +226,15 @@
                                           <Font size="25.0" />
                                        </font>
                                     </Label>
-                                    <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: WHITE;" VBox.vgrow="ALWAYS" />
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: WHITE;" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <CalendarPicker fx:id="cpCalendar" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="188.0" prefWidth="334.0" showTime="true" style="-fx-background-color: WHITE;" VBox.vgrow="ALWAYS">
+                                             <VBox.margin>
+                                                <Insets left="10.0" right="10.0" top="20.0" />
+                                             </VBox.margin>
+                                          </CalendarPicker>
+                                       </children>
+                                    </VBox>
                                  </children>
                                  <BorderPane.margin>
                                     <Insets left="15.0" right="15.0" top="15.0" />
@@ -251,30 +259,23 @@
                               <Insets bottom="10.0" top="30.0" />
                            </VBox.margin>
                         </HBox>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="308.0" prefWidth="354.0" style="-fx-background-color: WHITE;" VBox.vgrow="SOMETIMES">
                            <children>
-                              <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: WHITE;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <Label text="Usuário">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets bottom="2.0" left="20.0" top="5.0" />
-                                       </VBox.margin>
-                                    </Label>
-                                    <ListView fx:id="lvEssayByDate" minHeight="-Infinity" minWidth="-Infinity" prefHeight="276.0" prefWidth="354.0">
-                                       <padding>
-                                          <Insets bottom="20.0" left="20.0" right="20.0" top="5.0" />
-                                       </padding>
-                                    </ListView>
-                                 </children>
-                              </VBox>
+                              <Label text="Usuário">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="2.0" left="20.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <ListView fx:id="lvEssayByDate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="218.0" prefWidth="354.0" VBox.vgrow="ALWAYS">
+                                 <padding>
+                                    <Insets bottom="20.0" left="20.0" right="20.0" top="5.0" />
+                                 </padding>
+                              </ListView>
                            </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </AnchorPane>
+                        </VBox>
                      </children>
                   </VBox>
                </children>

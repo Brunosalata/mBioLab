@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!--
+  ~  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~  Licensed under the Biopdi® License, Version 1.0.
+  ~  You may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~       https://biopdi.com.br/
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+<!--
+  *  @project mBioLabv2
+  *  @version 1.0
+  *
+  *  @author Bruno Salata Lima
+  *          github.com/Brunosalata
+  -->
+
+<AnchorPane fx:id="apSwitchMenu" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.switchScene.SwitchMenuSceneController">
+   <children>
+      <BorderPane fx:id="mainPane" layoutX="200.0" layoutY="100.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #005897;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <ImageView fitHeight="250.0" fitWidth="934.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@img/lightLogo.png" />
+               </image>
+               <BorderPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </BorderPane.margin>
+            </ImageView>
+         </center>
+         <bottom>
+            <HBox id="HBox" alignment="CENTER" prefHeight="27.0" spacing="5.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox alignment="CENTER_LEFT" fillWidth="false" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0">
+                     <children>
+                        <Label maxWidth="-1.0" prefHeight="21.0" text="LABEL" textFill="#e4e4e4" VBox.vgrow="ALWAYS">
+                           <font>
+                              <Font size="11.0" fx:id="x3" />
+                           </font>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" text="Soluções em ensaios de materiais © Biopdi 2023" textFill="#e4e4e4" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER_RIGHT" fillWidth="false" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0">
+                     <children>
+                        <Label fx:id="lbCurrentData" alignment="CENTER_RIGHT" graphicTextGap="5.0" maxHeight="1.7976931348623157E308" maxWidth="-1.0" minHeight="-Infinity" prefHeight="21.0" text="DATA : HORA" textFill="#e4e4e4" VBox.vgrow="ALWAYS">
+                           <font>
+                              <Font size="11.0" fx:id="x4" />
+                           </font>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+               </padding>
+            </HBox>
+         </bottom>
+         <top>
+            <AnchorPane prefHeight="79.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane layoutX="322.0" layoutY="10.0" prefHeight="25.0" prefWidth="1280.0" style="-fx-background-color: #2C2C2C;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <HBox alignment="CENTER_LEFT" layoutX="233.0" layoutY="66.0" prefHeight="65.0" prefWidth="1047.0" style="-fx-background-color: #E5E5E5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+                     <children>
+                        <ImageView fitHeight="50.0" fitWidth="178.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/darkLogo.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </top>
+         <left>
+            <HBox fx:id="hbMenuBar" rotate="180.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox fx:id="vbMenuBar" minWidth="-Infinity" prefHeight="688.0" prefWidth="168.0" rotate="180.0" style="-fx-background-color: #2C2C2C;">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                              <Button fx:id="btnMenuSliderComplement" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" styleClass="menuBarButton" stylesheets="@css/style.css">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnSwitchHome" alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToHomeScene" prefHeight="50.0" prefWidth="180.0" styleClass="menuBarButton" stylesheets="@css/style.css" text="Home">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="30.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnSwitchEssay" alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToEssayScene" prefHeight="50.0" prefWidth="180.0" styleClass="menuBarButton" stylesheets="@css/style.css" text="Ensaio">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnSwitchReport" alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToReportScene" prefHeight="50.0" prefWidth="180.0" styleClass="menuBarButton" stylesheets="@css/style.css" text="Relatório">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnSwitchDashboard" alignment="BOTTOM_LEFT" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToDashboardScene" prefHeight="50.0" prefWidth="180.0" styleClass="menuBarButton" stylesheets="@css/style.css" text="Dashboard">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                        </VBox>
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="197.0" prefWidth="180.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Button fx:id="btnSwitchSupport" alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToSupportScene" prefHeight="50.0" prefWidth="180.0" styleClass="menuBarButton" stylesheets="@css/style.css" text="Suporte">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnSwitchSystemSetting" alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToSystemSettingScene" prefHeight="50.0" prefWidth="180.0" styleClass="menuBarButton" stylesheets="@css/style.css" text="Configurações">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="20.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Separator prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                        <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="207.0" prefWidth="180.0" VBox.vgrow="SOMETIMES">
+                           <children>
+                              <VBox alignment="BOTTOM_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="163.0" prefWidth="180.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="100.0" prefHeight="50.0" prefWidth="130.0" VBox.vgrow="SOMETIMES">
+                                       <children>
+                                          <Label fx:id="lbUserName" lineSpacing="1.0" maxHeight="-Infinity" minHeight="-Infinity" onMouseClicked="#editProfile" prefHeight="60.0" text="Usuário" textAlignment="JUSTIFY" textFill="#d9d9d9" wrapText="true" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                             <padding>
+                                                <Insets left="15.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="30.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
+                                       <children>
+                                          <Label fx:id="lbLogin" maxHeight="-Infinity" minHeight="-Infinity" onMouseClicked="#logout" prefHeight="30.0" text="Logout" textFill="#d9d9d9" wrapText="true">
+                                             <font>
+                                                <Font size="17.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                             <padding>
+                                                <Insets left="15.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="38.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <HBox alignment="BOTTOM_LEFT" fillHeight="false" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
+                                       <children>
+                                          <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" text="Sair" textFill="WHITE">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font name="System Bold" size="20.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="15.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="vbMenuBarIcon" alignment="TOP_CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="694.0" prefWidth="70.0" rotate="180.0" style="-fx-background-color: #2C2C2C;">
+                     <children>
+                        <VBox minWidth="-Infinity" prefHeight="200.0" prefWidth="70.0">
+                           <children>
+                              <Button fx:id="btnMenuSlider" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="70.0" styleClass="menuBarButton" stylesheets="@css/style.css">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/lightIcon/hamburguer.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="btnSwitchHomeIcon" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToHomeScene" prefHeight="50.0" styleClass="menuBarButton" stylesheets="@css/style.css">
+                                 <VBox.margin>
+                                    <Insets top="30.0" />
+                                 </VBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/lightIcon/home.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="btnSwitchEssayIcon" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToEssayScene" prefHeight="50.0" styleClass="menuBarButton" stylesheets="@css/style.css">
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/lightIcon/essay.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="btnSwitchReportIcon" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToReportScene" prefHeight="50.0" styleClass="menuBarButton" stylesheets="@css/style.css">
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/lightIcon/report.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="btnSwitchDashboardIcon" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToDashboardScene" prefHeight="50.0" styleClass="menuBarButton" stylesheets="@css/style.css">
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/lightIcon/dashboard.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
+                        <VBox alignment="BOTTOM_CENTER" maxWidth="1.7976931348623157E308" prefHeight="111.0" prefWidth="70.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Button fx:id="btnSwitchSupportIcon" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToSupportScene" prefHeight="50.0" styleClass="menuBarButton" stylesheets="@css/style.css">
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/lightIcon/support.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="btnSwitchSystemSettingIcon" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToSystemSettingScene" prefHeight="50.0" styleClass="menuBarButton" stylesheets="@css/style.css">
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/lightIcon/setting.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <VBox.margin>
+                                    <Insets bottom="20.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Separator maxHeight="1.7976931348623157E308">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Separator>
+                           </children>
+                        </VBox>
+                        <VBox alignment="BOTTOM_CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="207.0" prefWidth="50.0">
+                           <children>
+                              <ImageView fx:id="ivUserImage" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#editProfile" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@img/lightIcon/user.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                              <Button fx:id="btnLogin" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#logout" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #2C2C2C;" stylesheets="@css/style.css">
+                                 <VBox.margin>
+                                    <Insets bottom="38.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnClose" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeApp" prefHeight="35.0" prefWidth="35.0" styleClass="exit" stylesheets="@css/style.css">
+                                 <VBox.margin>
+                                    <Insets bottom="20.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </left>
+      </BorderPane>
+   </children>
+</AnchorPane>

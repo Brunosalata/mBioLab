@@ -1,7 +1,24 @@
 package br.com.biopdi.mbiolabv2.controller.SceneController;
 
+/*
+ *  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *  Licensed under the Biopdi® License, Version 1.0.
+ *  You may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       https://biopdi.com.br/
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,12 +27,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import jfxtras.scene.control.CalendarPicker;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * @author Bruno Salata Lima - 16/05/2023
@@ -31,6 +47,8 @@ public class HomeSceneController implements Initializable {
     private final SystemParameterDAO systemParameterDAO = new SystemParameterDAO();
     private final SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
 
+    @FXML
+    private CalendarPicker cpCalendar;
     @FXML
     private TextField txtEssayUserId;
     @FXML
@@ -54,7 +72,23 @@ public class HomeSceneController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         essayByDate();
 
+        // Monitoramento de alterações do calendario
+        cpCalendar.calendarProperty().addListener(new ChangeListener<Calendar>() {
+            @Override
+            public void changed(ObservableValue<? extends Calendar> observableValue, Calendar calendar, Calendar t1) {
+                Date date = cpCalendar.getCalendar().getTime();
+                System.out.println(date.getDay());
+                System.out.println(date.getHours() + date.getMinutes());
+            }
+        });
 
+    }
+
+    /**
+     * Metodo para agentamento de ensaio, recebendo date e armazenando no DB
+     */
+    private void schedulingSave(Date date){
+        // CRIAR ENTIDADE AGENDAMENTO (USERID, TIPO DE ENSAIO, ANO, MES, DIA, HORA, MINUTO)
     }
 
     /**
@@ -75,20 +109,7 @@ public class HomeSceneController implements Initializable {
 }
 
 
-    /*
- *  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- *  Licensed under the Biopdi® License, Version 1.0.
- *  You may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *       https://biopdi.com.br/
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
+
 
 
     // USER OK

@@ -20,6 +20,7 @@ import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 import br.com.biopdi.mbiolabv2.mBioLabv2Application;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import br.com.biopdi.mbiolabv2.model.bean.User;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,10 +32,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -54,7 +54,9 @@ public class SwitchMenuSceneController implements Initializable {
     private final UserDAO userDAO = new UserDAO();
     private User user = userDAO.findById(sysVar.getUserId());
     @FXML
-    private Button btnLogin;
+    private Button btnLogin, btnMenuSlider, btnMenuSliderComplement, btnSwitchHome, btnSwitchHomeIcon, btnSwitchDashboard,
+            btnSwitchDashboardIcon, btnSwitchEssay, btnSwitchEssayIcon, btnSwitchReport, btnSwitchReportIcon,
+            btnSwitchSupport, btnSwitchSupportIcon, btnSwitchSystemSetting, btnSwitchSystemSettingIcon;
     @FXML
     private Label lbCurrentData, lbUserName, lbLogin;
     @FXML
@@ -63,6 +65,11 @@ public class SwitchMenuSceneController implements Initializable {
     private BorderPane mainPane;
     @FXML
     private ImageView ivUserImage;
+    @FXML
+    private VBox vbMenuBar, vbMenuBarIcon;
+    @FXML
+    private HBox hbMenuBar;
+    private boolean menuSliderIn = false;
 
 
     Date systemDate = new Date();
@@ -84,7 +91,6 @@ public class SwitchMenuSceneController implements Initializable {
             lbUserName.setText(user.getUserName());
             lbLogin.setText("Logout");
             btnLogin.getStyleClass().add(1,"logout");
-//
 
             System.out.println(user.getUserImagePath());
             // AJUSTAR para imagem do usuário (Não está puxando userImagePath do DB)
@@ -94,6 +100,28 @@ public class SwitchMenuSceneController implements Initializable {
                 ivUserImage.setImage(new Image(user.getUserImagePath()));
             }
         }
+        // Ocultar e expor menu lateral
+        btnMenuSlider.setOnMouseClicked(event -> {
+            TranslateTransition slide = new TranslateTransition();
+            slide.setDuration(Duration.seconds(0.4));
+            slide.setNode(vbMenuBar);
+
+            if(menuSliderIn == false){
+                slide.setToX(0);
+                slide.play();
+                vbMenuBar.setVisible(false);
+                vbMenuBar.setTranslateX(vbMenuBar.getWidth());
+                menuSliderIn=true;
+            } else{
+                slide.setToX(vbMenuBar.getWidth());
+                slide.play();
+                vbMenuBar.setTranslateX(0);
+                vbMenuBar.setVisible(false);
+                menuSliderIn=false;
+            }
+        });
+
+
     }
 
 

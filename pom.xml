@@ -83,6 +83,13 @@
             <artifactId>jrviewer-fx</artifactId>
             <version>0.1.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jfxtras/jfxtras-icalendaragenda -->
+        <dependency>
+            <groupId>org.jfxtras</groupId>
+            <artifactId>jfxtras-icalendaragenda</artifactId>
+            <version>17-r1</version>
+        </dependency>
+
 
         <!-- Report creator-->
         <!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->

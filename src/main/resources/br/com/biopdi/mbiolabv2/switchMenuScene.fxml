@@ -4,6 +4,7 @@
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -53,7 +54,7 @@
                               <Insets top="50.0" />
                            </VBox.margin>
                         </ImageView>
-                        <Button fx:id="btnSwitchHome" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToHomeScene" prefHeight="40.0" prefWidth="180.0" text="Home">
+                        <Button fx:id="btnSwitchHome" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToHomeScene" prefHeight="50.0" prefWidth="180.0" styleClass="menuBarButton" stylesheets="@css/style.css" text="Home" VBox.vgrow="ALWAYS">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -61,56 +62,54 @@
                               <Insets top="30.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnSwitchDashboard" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToDashboardScene" prefHeight="40.0" prefWidth="180.0" text="Dashboard">
+                        <Button fx:id="btnSwitchDashboard" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToDashboardScene" prefHeight="50.0" prefWidth="180.0" styleClass="menuBarButton" stylesheets="@css/style.css" text="Dashboard" VBox.vgrow="ALWAYS">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="15.0" />
+                              <Insets />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnSwitchEssay" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToEssayScene" prefHeight="40.0" prefWidth="180.0" text="Ensaio">
+                        <Button fx:id="btnSwitchEssay" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToEssayScene" prefHeight="50.0" prefWidth="180.0" styleClass="menuBarButton" stylesheets="@css/style.css" text="Ensaio" VBox.vgrow="ALWAYS">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="15.0" />
+                              <Insets />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnSwitchReport" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToReportScene" prefHeight="40.0" prefWidth="180.0" text="Relatório">
+                        <Button fx:id="btnSwitchReport" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToReportScene" prefHeight="50.0" prefWidth="180.0" styleClass="menuBarButton" stylesheets="@css/style.css" text="Relatório" VBox.vgrow="ALWAYS">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="15.0" />
+                              <Insets />
                            </VBox.margin>
                         </Button>
                      </children>
                   </VBox>
                   <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Button fx:id="btnSwitchSupport" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSupportScene" prefHeight="40.0" prefWidth="180.0" text="Suporte">
+                        <Button fx:id="btnSwitchSupport" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToSupportScene" prefHeight="50.0" styleClass="menuBarButton" stylesheets="@css/style.css" text="Suporte">
                            <font>
                               <Font size="18.0" />
                            </font>
-                           <padding>
-                              <Insets left="25.0" right="25.0" />
-                           </padding>
                            <VBox.margin>
-                              <Insets bottom="15.0" />
+                              <Insets />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnSwitchSystemSetting" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToSystemSettingScene" prefHeight="40.0" prefWidth="180.0" text="Configurações">
+                        <Button fx:id="btnSwitchSystemSetting" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#switchToSystemSettingScene" prefHeight="50.0" styleClass="menuBarButton" stylesheets="@css/style.css" text="Configurações">
                            <font>
                               <Font size="18.0" />
                            </font>
-                           <padding>
-                              <Insets left="25.0" right="25.0" />
-                           </padding>
+                           <VBox.margin>
+                              <Insets bottom="20.0" />
+                           </VBox.margin>
                         </Button>
+                        <Separator prefWidth="200.0" VBox.vgrow="ALWAYS" />
                      </children>
                      <padding>
-                        <Insets bottom="30.0" />
+                        <Insets bottom="20.0" />
                      </padding>
                   </VBox>
                   <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="167.0" prefWidth="234.0">

@@ -6,6 +6,7 @@ module br.com.biopdi.mbiolabv2 {
     requires org.xerial.sqlitejdbc;
     requires jasperreports;
     requires jrviewer.fx;
+    requires jfxtras.icalendaragenda;
 
 
     opens br.com.biopdi.mbiolabv2 to javafx.fxml;

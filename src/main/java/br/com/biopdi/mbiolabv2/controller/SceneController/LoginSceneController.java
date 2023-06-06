@@ -194,7 +194,7 @@ public class LoginSceneController implements Initializable {
     @FXML
     private void openSwitchMenuFullScene(ActionEvent event) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(mBioLabv2Application.class.getResource("switchMenuScene.fxml"));
+        FXMLLoader loader = new FXMLLoader(mBioLabv2Application.class.getResource("switchMenuScene3.fxml"));
         Parent root = loader.load();
 
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
