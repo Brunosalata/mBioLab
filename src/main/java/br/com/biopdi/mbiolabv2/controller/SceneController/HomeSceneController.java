@@ -16,17 +16,16 @@ package br.com.biopdi.mbiolabv2.controller.SceneController;
  */
 
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
-import br.com.biopdi.mbiolabv2.model.bean.Essay;
+import br.com.biopdi.mbiolabv2.model.bean.Schedule;
+import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 import jfxtras.scene.control.CalendarPicker;
 
 import java.net.URL;
@@ -43,9 +42,11 @@ public class HomeSceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
     private final UserDAO userDAO = new UserDAO();
     private final EssayDAO essayDAO = new EssayDAO();
+    private final ScheduleDAO scheduleDAO = new ScheduleDAO();
     private final SetupDAO setupDAO = new SetupDAO();
     private final SystemParameterDAO systemParameterDAO = new SystemParameterDAO();
-    private final SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
+    private final SystemVariableDAO sysVarDAO = new SystemVariableDAO();
+    private final SystemVariable sysVar = sysVarDAO.find();
 
     @FXML
     private CalendarPicker cpCalendar;
@@ -54,14 +55,17 @@ public class HomeSceneController implements Initializable {
     @FXML
     private Label lbUserId, lbUserName, lbUserLogin, lbUserPassword;
     @FXML
-    private Button btnEssayByUserId, btnDataPull;
+    private Button btnScheduleDelete, btnScheduleCreate;
     @FXML
-    private ListView<Essay> lvEssayByDate;
-    private final List<Essay> essayByDateList = new ArrayList<>();
-    private ObservableList<Essay> obsEssayByDateList;
+    private ListView<Schedule> lvSchedule;
+    private final List<Schedule> scheduleList = new ArrayList<>();
+    private ObservableList<Schedule> obsSchedule;
+    private Date date;
+    private Schedule currentSchedule;
 
     java.util.Date systemDate = new java.util.Date();
-    SimpleDateFormat dateComplete = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat scheduleDate = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    SimpleDateFormat reducedScheduleDate = new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat brasilianDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     String currentDate = brasilianDate.format(systemDate);
 
@@ -70,39 +74,76 @@ public class HomeSceneController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        essayByDate();
 
         // Monitoramento de alterações do calendario
         cpCalendar.calendarProperty().addListener(new ChangeListener<Calendar>() {
             @Override
             public void changed(ObservableValue<? extends Calendar> observableValue, Calendar calendar, Calendar t1) {
-                Date date = cpCalendar.getCalendar().getTime();
-                System.out.println(date.getDay());
-                System.out.println(date.getHours() + date.getMinutes());
+                date = cpCalendar.getCalendar().getTime();
+                scheduleListRefresh();
             }
         });
+        lvSchedule.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Schedule>() {
+            @Override
+            public void changed(ObservableValue<? extends Schedule> observableValue, Schedule schedule, Schedule t1) {
+                try {
+                    // currentSchedule recebe o objeto selecionado na lvSchedule
+                    currentSchedule = lvSchedule.getSelectionModel().getSelectedItem();
+                } catch (Exception e) {
+                    throw new RuntimeException(e.getMessage());
+                }
+            }
+        });
+
+        cpCalendar.setCalendar(Calendar.getInstance());
+        scheduleListRefresh();
 
     }
 
     /**
      * Metodo para agentamento de ensaio, recebendo date e armazenando no DB
      */
-    private void schedulingSave(Date date){
+    @FXML
+    private void scheduleSave(){
         // CRIAR ENTIDADE AGENDAMENTO (USERID, TIPO DE ENSAIO, ANO, MES, DIA, HORA, MINUTO)
+        Schedule schedule = new Schedule(sysVar.getUserId(), scheduleDate.format(date));
+        scheduleDAO.create(schedule);
+        System.out.println(schedule);
+        scheduleListRefresh();
     }
 
     /**
-     * Método que busca e apresenta listagem de ensaios em função do essayId
+     * Metedo para exclusão de agendamento de horario
      */
     @FXML
-    private void essayByDate(){
+    private void scheduleDelete(){
+        if(sysVar.getUserId() == currentSchedule.getUserId()){
+            scheduleDAO.delete(currentSchedule);
+            scheduleListRefresh();
+            System.out.println("Deletou");
+        } else{
+            // Alerta de usuario agendado e logado divergentes
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Usuário divergente");
+            alert.setHeaderText("Esse agendamento foi feito por outro usuário e não pode ser excluído por você.");
+            Stage stage = (Stage) btnScheduleCreate.getScene().getWindow();
+            alert.initOwner(stage);
+            alert.show();
+        }
+    }
+
+    /**
+     * Metodo que listagem de ensaios agendados na lvSchedule
+     */
+    @FXML
+    private void scheduleListRefresh(){
         try{
-            lvEssayByDate.getItems().clear();
-            lvEssayByDate.getItems().addAll(essayDAO.findByDate(currentDate));
-            obsEssayByDateList = FXCollections.observableList(essayByDateList);
-            lvEssayByDate.setItems(obsEssayByDateList);
-        } catch (Exception e){
-        System.out.println("Error: " + e.getMessage());
+            lvSchedule.getItems().clear();
+            lvSchedule.getItems().addAll(scheduleDAO.findAllByDay(reducedScheduleDate.format(date)));
+            obsSchedule = FXCollections.observableList(scheduleList);
+            lvSchedule.setItems(obsSchedule);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 

@@ -37,13 +37,13 @@
   *          github.com/Brunosalata
   -->
 
-<AnchorPane prefHeight="890.0" prefWidth="1363.0" style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.HomeSceneController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="890.0" prefWidth="1363.0" style="-fx-background-color: #005897;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.biopdi.mbiolabv2.controller.SceneController.HomeSceneController">
    <children>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: E5E5E5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #005897;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <center>
             <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="880.0" prefWidth="959.0" HBox.hgrow="ALWAYS">
+                  <VBox alignment="TOP_CENTER" prefHeight="880.0" prefWidth="959.0" style="-fx-background-color: #E5E5E5;" HBox.hgrow="ALWAYS">
                      <children>
                         <ImageView blendMode="DARKEN" fitHeight="168.0" fitWidth="460.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                            <image>
@@ -214,8 +214,11 @@
                            </VBox.margin>
                         </FlowPane>
                      </children>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
                   </VBox>
-                  <VBox alignment="TOP_CENTER" prefHeight="880.0" prefWidth="384.0" style="-fx-background-color: #2C2C2C;" HBox.hgrow="ALWAYS">
+                  <VBox alignment="TOP_CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="880.0" prefWidth="289.0" style="-fx-background-color: #2C2C2C;" HBox.hgrow="SOMETIMES">
                      <children>
                         <BorderPane prefHeight="282.0" prefWidth="384.0">
                            <center>
@@ -228,9 +231,9 @@
                                     </Label>
                                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: WHITE;" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <CalendarPicker fx:id="cpCalendar" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="188.0" prefWidth="334.0" showTime="true" style="-fx-background-color: WHITE;" VBox.vgrow="ALWAYS">
+                                          <CalendarPicker fx:id="cpCalendar" prefWidth="277.0" showTime="true" style="-fx-background-color: WHITE;">
                                              <VBox.margin>
-                                                <Insets left="10.0" right="10.0" top="20.0" />
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </VBox.margin>
                                           </CalendarPicker>
                                        </children>
@@ -244,12 +247,12 @@
                         </BorderPane>
                         <HBox alignment="CENTER" prefHeight="12.0" prefWidth="384.0">
                            <children>
-                              <Button alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="205.0" text="Agendar ensaio" HBox.hgrow="ALWAYS">
+                              <Button fx:id="btnScheduleCreate" alignment="CENTER" mnemonicParsing="false" onAction="#scheduleSave" prefHeight="25.0" prefWidth="205.0" text="Agendar ensaio" HBox.hgrow="ALWAYS">
                                  <HBox.margin>
                                     <Insets left="15.0" right="15.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="86.0" text="Excluir">
+                              <Button fx:id="btnScheduleDelete" alignment="CENTER" mnemonicParsing="false" onAction="#scheduleDelete" prefHeight="25.0" prefWidth="86.0" text="Excluir">
                                  <HBox.margin>
                                     <Insets right="15.0" />
                                  </HBox.margin>
@@ -259,7 +262,7 @@
                               <Insets bottom="10.0" top="30.0" />
                            </VBox.margin>
                         </HBox>
-                        <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="308.0" prefWidth="354.0" style="-fx-background-color: WHITE;" VBox.vgrow="SOMETIMES">
+                        <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="274.0" prefWidth="269.0" style="-fx-background-color: WHITE;" VBox.vgrow="SOMETIMES">
                            <children>
                               <Label text="Usuário">
                                  <font>
@@ -269,12 +272,15 @@
                                     <Insets bottom="2.0" left="20.0" top="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <ListView fx:id="lvEssayByDate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="218.0" prefWidth="354.0" VBox.vgrow="ALWAYS">
+                              <ListView fx:id="lvSchedule" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="218.0" prefWidth="354.0" VBox.vgrow="ALWAYS">
                                  <padding>
                                     <Insets bottom="20.0" left="20.0" right="20.0" top="5.0" />
                                  </padding>
                               </ListView>
                            </children>
+                           <VBox.margin>
+                              <Insets left="10.0" right="10.0" />
+                           </VBox.margin>
                         </VBox>
                      </children>
                   </VBox>

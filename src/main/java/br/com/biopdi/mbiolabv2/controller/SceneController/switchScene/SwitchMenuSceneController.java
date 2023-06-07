@@ -100,6 +100,7 @@ public class SwitchMenuSceneController implements Initializable {
                 ivUserImage.setImage(new Image(user.getUserImagePath()));
             }
         }
+        switchToHomeScene(new ActionEvent());
         // Ocultar e expor menu lateral
         btnMenuSlider.setOnMouseClicked(event -> {
             TranslateTransition slide = new TranslateTransition();
@@ -109,14 +110,12 @@ public class SwitchMenuSceneController implements Initializable {
             if(menuSliderIn == false){
                 slide.setToX(0);
                 slide.play();
-                vbMenuBar.setVisible(false);
                 vbMenuBar.setTranslateX(vbMenuBar.getWidth());
                 menuSliderIn=true;
             } else{
                 slide.setToX(vbMenuBar.getWidth());
                 slide.play();
                 vbMenuBar.setTranslateX(0);
-                vbMenuBar.setVisible(false);
                 menuSliderIn=false;
             }
         });

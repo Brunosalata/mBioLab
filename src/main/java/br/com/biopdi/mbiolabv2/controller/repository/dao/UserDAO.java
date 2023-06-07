@@ -91,8 +91,8 @@ public class UserDAO extends DBConnection {
                     rs.getInt("userId"),//user id
                     rs.getString("userName"),//username
                     rs.getString("userLogin"),//user login
-                    rs.getString("userPassword"));//user password
-                    rs.getString("userImagePath");//user image
+                    rs.getString("userPassword"),//user password
+                    rs.getString("userImagePath"));//user image
                 result.add(user);
             }
         } catch (SQLException e) {
