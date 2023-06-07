@@ -105,7 +105,7 @@
                                        <children>
                                           <HBox alignment="CENTER" prefHeight="32.0" prefWidth="109.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <children>
-                                                <ImageView fx:id="ivEssayUser1" fitHeight="33.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fx:id="ivEssayUser" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                                                    <image>
                                                       <Image url="@img/darkIcon/icons8-profile-96.png" />
                                                    </image>
@@ -113,7 +113,7 @@
                                                       <Insets right="5.0" />
                                                    </HBox.margin>
                                                 </ImageView>
-                                                <Label fx:id="lbEssayUserName1" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" text="Usuário" HBox.hgrow="ALWAYS" />
+                                                <Label fx:id="lbEssayUserName" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" text="Usuário" HBox.hgrow="ALWAYS" />
                                              </children>
                                           </HBox>
                                        </children>

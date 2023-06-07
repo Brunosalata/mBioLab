@@ -3,10 +3,8 @@ package br.com.biopdi.mbiolabv2.controller.SceneController;
 
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
 import br.com.biopdi.mbiolabv2.controller.serial.SerialConnection;
-import br.com.biopdi.mbiolabv2.model.bean.Essay;
-import br.com.biopdi.mbiolabv2.model.bean.Method;
-import br.com.biopdi.mbiolabv2.model.bean.Setup;
-import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
+import br.com.biopdi.mbiolabv2.mBioLabv2Application;
+import br.com.biopdi.mbiolabv2.model.bean.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,6 +14,8 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -38,9 +38,9 @@ public class EssaySceneController implements Initializable {
     private final EssayDAO essayDAO = new EssayDAO();
     private final SetupDAO setupDAO = new SetupDAO();
     private final MethodDAO methodDAO = new MethodDAO();
-    private final SystemParameterDAO systemParameterDAO = new SystemParameterDAO();
-    private final SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
-    private SystemVariable sysVar = systemVariableDAO.find();
+    private final SystemVariableDAO sysVarDAO = new SystemVariableDAO();
+    private SystemVariable sysVar = sysVarDAO.find();
+    private User user = userDAO.findById(sysVar.getUserId());
     private Setup setup = setupDAO.find();
     private SerialConnection serialConn = new SerialConnection();
     private Essay essayFinalyzed;
@@ -75,6 +75,8 @@ public class EssaySceneController implements Initializable {
     @FXML
     private RadioButton rbForceXPosition, rbStrainXDeform, rbForceDownBreak, rbMaxForceBreak, rbDislocationBreak,
             rbDislocationPause, rbRectangle, rbCylinder, rbTubular;
+    @FXML
+    private ImageView ivEssayUser;
     @FXML
     private Slider shAdjustVelocity;
     @FXML
@@ -1712,6 +1714,12 @@ public class EssaySceneController implements Initializable {
         positionAdjustInversion = 1;
         forceAdjustInversionView = 1;
         positionAdjustInversionView = 1;
+        // Personalizacao da imagem do usuario
+        if(user.getUserImagePath()!=null){
+            ivEssayUser.setImage(new Image(user.getUserImagePath()));
+        } else{
+            ivEssayUser.setImage(new Image(mBioLabv2Application.class.getResource("img/lightIcon/user.png").toExternalForm()));
+        }
     }
 
     /**

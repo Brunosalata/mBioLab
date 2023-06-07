@@ -101,7 +101,7 @@
                                        <children>
                                           <VBox prefHeight="46.0" prefWidth="120.0">
                                              <children>
-                                                <Label prefHeight="17.0" prefWidth="165.0" text="Usuário" VBox.vgrow="ALWAYS">
+                                                <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="165.0" text="Usuário" VBox.vgrow="ALWAYS">
                                                    <font>
                                                       <Font name="System Bold" size="12.0" />
                                                    </font>
@@ -111,9 +111,9 @@
                                                 </Label>
                                                 <AnchorPane prefHeight="31.0" prefWidth="109.0" VBox.vgrow="ALWAYS">
                                                    <children>
-                                                      <HBox alignment="CENTER" prefHeight="32.0" prefWidth="109.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                      <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="109.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <children>
-                                                            <ImageView fx:id="ivEssayUser" fitHeight="33.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="ivEssayUser" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                                                <image>
                                                                   <Image url="@img/darkIcon/icons8-profile-96.png" />
                                                                </image>
@@ -133,7 +133,7 @@
                                           </VBox>
                                           <VBox alignment="TOP_CENTER" prefHeight="51.0" prefWidth="93.0" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <Label alignment="CENTER" contentDisplay="CENTER" text="Fmáx (N)" textAlignment="CENTER">
+                                                <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" text="Fmáx (N)" textAlignment="CENTER">
                                                    <font>
                                                       <Font name="System Bold" size="12.0" />
                                                    </font>
@@ -141,7 +141,7 @@
                                                       <Insets bottom="3.0" />
                                                    </VBox.margin>
                                                 </Label>
-                                                <Label fx:id="lbFmax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="73.0" text="0.000">
+                                                <Label fx:id="lbFmax" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="73.0" text="0.000">
                                                    <VBox.margin>
                                                       <Insets />
                                                    </VBox.margin>
@@ -150,7 +150,7 @@
                                           </VBox>
                                           <VBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="97.0" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <Label alignment="CENTER" contentDisplay="CENTER" text="Pmáx (mm)" textAlignment="CENTER">
+                                                <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" text="Pmáx (mm)" textAlignment="CENTER">
                                                    <font>
                                                       <Font name="System Bold" size="12.0" />
                                                    </font>
@@ -158,7 +158,7 @@
                                                       <Insets bottom="3.0" />
                                                    </VBox.margin>
                                                 </Label>
-                                                <Label fx:id="lbPmax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="81.0" text="0.000">
+                                                <Label fx:id="lbPmax" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="81.0" text="0.000">
                                                    <VBox.margin>
                                                       <Insets />
                                                    </VBox.margin>
@@ -167,7 +167,7 @@
                                           </VBox>
                                           <VBox alignment="TOP_CENTER" prefHeight="44.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <Label alignment="CENTER" contentDisplay="CENTER" text="Tmáx (MPa)" textAlignment="CENTER">
+                                                <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" text="Tmáx (MPa)" textAlignment="CENTER">
                                                    <font>
                                                       <Font name="System Bold" size="12.0" />
                                                    </font>
@@ -175,7 +175,7 @@
                                                       <Insets bottom="3.0" />
                                                    </VBox.margin>
                                                 </Label>
-                                                <Label fx:id="lbTmax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="74.0" text="0.000">
+                                                <Label fx:id="lbTmax" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="74.0" text="0.000">
                                                    <VBox.margin>
                                                       <Insets />
                                                    </VBox.margin>
@@ -184,7 +184,7 @@
                                           </VBox>
                                           <VBox alignment="TOP_CENTER" prefHeight="39.0" prefWidth="103.0" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <Label alignment="CENTER" contentDisplay="CENTER" text="Tesc (MPa)" textAlignment="CENTER">
+                                                <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" text="Tesc (MPa)" textAlignment="CENTER">
                                                    <font>
                                                       <Font name="System Bold" size="12.0" />
                                                    </font>
@@ -192,7 +192,7 @@
                                                       <Insets bottom="3.0" />
                                                    </VBox.margin>
                                                 </Label>
-                                                <Label fx:id="lbTesc" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="80.0" text="0.000">
+                                                <Label fx:id="lbTesc" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="80.0" text="0.000">
                                                    <VBox.margin>
                                                       <Insets />
                                                    </VBox.margin>
@@ -201,7 +201,7 @@
                                           </VBox>
                                           <VBox alignment="TOP_CENTER" prefHeight="38.0" prefWidth="106.0" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <Label alignment="CENTER" contentDisplay="CENTER" text="Along (%)" textAlignment="CENTER">
+                                                <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" text="Along (%)" textAlignment="CENTER">
                                                    <font>
                                                       <Font name="System Bold" size="12.0" />
                                                    </font>
@@ -209,7 +209,7 @@
                                                       <Insets bottom="3.0" />
                                                    </VBox.margin>
                                                 </Label>
-                                                <Label fx:id="lbAlong" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="89.0" text="0.000">
+                                                <Label fx:id="lbAlong" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="89.0" text="0.000">
                                                    <VBox.margin>
                                                       <Insets />
                                                    </VBox.margin>
@@ -218,7 +218,7 @@
                                           </VBox>
                                           <VBox alignment="TOP_CENTER" prefHeight="43.0" prefWidth="108.0" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <Label alignment="CENTER" contentDisplay="CENTER" text="Red. área (%)" textAlignment="CENTER">
+                                                <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" text="Red. área (%)" textAlignment="CENTER">
                                                    <font>
                                                       <Font name="System Bold" size="12.0" />
                                                    </font>
@@ -226,7 +226,7 @@
                                                       <Insets bottom="3.0" />
                                                    </VBox.margin>
                                                 </Label>
-                                                <Label fx:id="lbRedArea" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="90.0" text="0.000">
+                                                <Label fx:id="lbRedArea" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="90.0" text="0.000">
                                                    <VBox.margin>
                                                       <Insets />
                                                    </VBox.margin>
@@ -235,7 +235,7 @@
                                           </VBox>
                                           <VBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="110.0" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <Label alignment="CENTER" contentDisplay="CENTER" text="M. Young (MPa)" textAlignment="CENTER">
+                                                <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" text="M. Young (MPa)" textAlignment="CENTER">
                                                    <font>
                                                       <Font name="System Bold" size="12.0" />
                                                    </font>
@@ -243,7 +243,7 @@
                                                       <Insets bottom="3.0" />
                                                    </VBox.margin>
                                                 </Label>
-                                                <Label fx:id="lbMYoung" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="90.0" text="0.000">
+                                                <Label fx:id="lbMYoung" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="90.0" text="0.000">
                                                    <VBox.margin>
                                                       <Insets />
                                                    </VBox.margin>

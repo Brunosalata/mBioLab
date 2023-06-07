@@ -33,6 +33,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -79,6 +80,7 @@ public class SwitchMenuSceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ivUserImage.setClip(new Circle(25,25,25));
         clockView();
 
         // Alteração do lbUserName e lbLogin dependendo do retorno do banco de dados (quando userId = 3 -> sem login)
@@ -97,7 +99,8 @@ public class SwitchMenuSceneController implements Initializable {
             if(user.getUserImagePath()==null){
                 ivUserImage.setImage(new Image(mBioLabv2Application.class.getResource("img/lightIcon/user.png").toExternalForm()));
             } else{
-                ivUserImage.setImage(new Image(user.getUserImagePath()));
+                ivUserImage.setImage(new Image("file:\\" + user.getUserImagePath()));
+                System.out.println(user.getUserImagePath());
             }
         }
         switchToHomeScene(new ActionEvent());

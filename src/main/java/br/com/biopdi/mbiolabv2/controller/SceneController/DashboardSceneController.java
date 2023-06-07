@@ -17,8 +17,10 @@ package br.com.biopdi.mbiolabv2.controller.SceneController;
 
 import br.com.biopdi.mbiolabv2.controller.report.Report;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
+import br.com.biopdi.mbiolabv2.mBioLabv2Application;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
 import br.com.biopdi.mbiolabv2.model.bean.Setup;
+import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import br.com.biopdi.mbiolabv2.model.bean.User;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -33,8 +35,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+import javafx.scene.shape.Circle;
 
 import java.io.*;
 import java.net.URL;
@@ -54,19 +59,23 @@ public class DashboardSceneController implements Initializable {
     private final EssayDAO essayDAO = new EssayDAO();
     private final SetupDAO setupDAO = new SetupDAO();
     private final SystemParameterDAO systemParameterDAO = new SystemParameterDAO();
-    private final SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
+    private final SystemVariableDAO sysVarDAO = new SystemVariableDAO();
+    private SystemVariable sysVar = sysVarDAO.find();
+    private User user = userDAO.findById(sysVar.getUserId());
 
     @FXML
     private BorderPane bpDashboardReport;
 
     @FXML
     private Label lbFMax, lbFMin, lbFMed, lbFDev, lbPMax, lbPMin, lbPMed, lbPDev, lbTMax, lbTMin, lbTMed, lbTDev,
-            lbTEscMax, lbTEscMin, lbTEscMed, lbTEscDev, lbAlongMax, lbAlongMin, lbAlongMed, lbAlongDev,
-            lbRedAreaMax, lbRedAreaMin, lbRedAreaMed, lbRedAreaDev, lbMYoungMax, lbMYoungMin, lbMYoungMed, lbMYoungDev;
+            lbTEscMax, lbTEscMin, lbTEscMed, lbTEscDev, lbAlongMax, lbAlongMin, lbAlongMed, lbAlongDev, lbRedAreaMax,
+            lbRedAreaMin, lbRedAreaMed, lbRedAreaDev, lbMYoungMax, lbMYoungMin, lbMYoungMed, lbMYoungDev, lbEssayUserName;
     @FXML
     private Button btnReport, btnChartClear;
     @FXML
     private TextField txtLed;
+    @FXML
+    private ImageView ivEssayUser;
     @FXML
     private LineChart<Number, Number> chartMultiLine;
     private XYChart.Series seriesMulti;
@@ -104,6 +113,9 @@ public class DashboardSceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ivEssayUser.setClip(new Circle(20,20,20));
+        lbEssayUserName.setText(user.getUserName());
+
         savedEssayList();
         infoReset();
 
@@ -394,6 +406,14 @@ public class DashboardSceneController implements Initializable {
         stanDevAlong.clear();
         stanDevRedArea.clear();
         stanDevMYoung.clear();
+
+        User user = userDAO.findById(sysVar.getUserId());
+        // Definição da imagem do usuario
+        if(user.getUserImagePath()!=null){
+            ivEssayUser.setImage(new Image("file:\\" + user.getUserImagePath()));
+        } else{
+            ivEssayUser.setImage(new Image(mBioLabv2Application.class.getResource("img/darkIcon/icons8-profile-96.png").toExternalForm()));
+        }
 
     }
 

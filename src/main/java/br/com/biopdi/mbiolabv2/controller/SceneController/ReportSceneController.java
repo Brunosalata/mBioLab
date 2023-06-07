@@ -16,6 +16,7 @@ package br.com.biopdi.mbiolabv2.controller.SceneController;
  */
 
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
+import br.com.biopdi.mbiolabv2.mBioLabv2Application;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
 import br.com.biopdi.mbiolabv2.model.bean.Setup;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
@@ -30,7 +31,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -60,7 +64,7 @@ public class ReportSceneController implements Initializable {
     private final SetupDAO setupDAO = new SetupDAO();
     private final SystemParameterDAO sysParDAO = new SystemParameterDAO();
     private final SystemVariableDAO sysVarDAO = new SystemVariableDAO();
-    private final SystemVariable sysVar = sysVarDAO.find();
+    private SystemVariable sysVar = sysVarDAO.find();
 
     @FXML
     private Label lbCurrentData, lbEssayUserName, lbFmax, lbPmax, lbTmax, lbTesc, lbAlong, lbRedArea, lbMYoung;
@@ -68,6 +72,8 @@ public class ReportSceneController implements Initializable {
     private Button btnEssayByUserId, btnEssaySave;
     @FXML
     private ComboBox cbUserFilter, cbEssayTypeFilter, cbNormFilter;
+    @FXML
+    private ImageView ivEssayUser;
     @FXML
     private DatePicker datePicker;
     @FXML
@@ -89,6 +95,7 @@ public class ReportSceneController implements Initializable {
     private Stage stage2 = new Stage();
     private TilePane r = new TilePane();
 
+
     Date systemDate = new Date();
     SimpleDateFormat expDay = new SimpleDateFormat("dd-MM-yyyy");
     SimpleDateFormat expHour = new SimpleDateFormat("HH-mm-ss");
@@ -97,6 +104,7 @@ public class ReportSceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ivEssayUser.setClip(new Circle(15,15,15));
         lastEssay();
         savedEssayView(sysVar.getUserId());
 
@@ -190,6 +198,13 @@ public class ReportSceneController implements Initializable {
         lbAlong.setText(String.valueOf(currentEssay.getEssayAlong()));
         lbRedArea.setText(String.valueOf(currentEssay.getEssayAreaRed()));
         lbMYoung.setText(String.valueOf(currentEssay.getEssayMYoung()));
+
+        User user = userDAO.findById(sysVar.getUserId());
+        if(user.getUserImagePath()!=null){
+            ivEssayUser.setImage(new Image(user.getUserImagePath()));
+        } else{
+            ivEssayUser.setImage(new Image(mBioLabv2Application.class.getResource("img\\darkIcon\\icons8-profile-96.png").toExternalForm()));
+        }
     }
 
     @FXML
@@ -239,6 +254,7 @@ public class ReportSceneController implements Initializable {
     @FXML
     private void essayInfo(Integer pk) {
         Essay essayInfo = essayDAO.findById(pk);
+        User user = userDAO.findById(essayInfo.getUserId());
         //buscando informacoes do essayInfo
         lbFmax.setText(String.valueOf(essayInfo.getEssayMaxForce()));
         lbPmax.setText(String.valueOf(essayInfo.getEssayMaxPosition()));
@@ -247,6 +263,11 @@ public class ReportSceneController implements Initializable {
         lbAlong.setText(String.valueOf(essayInfo.getEssayAlong()));
         lbRedArea.setText(String.valueOf(essayInfo.getEssayAreaRed()));
         lbMYoung.setText(String.valueOf(essayInfo.getEssayMYoung()));
+        if(user.getUserImagePath()!=null){
+            ivEssayUser.setImage(new Image("file:\\" + user.getUserImagePath()));
+        } else{
+            ivEssayUser.setImage(new Image(mBioLabv2Application.class.getResource("img\\darkIcon\\icons8-profile-96.png").toExternalForm()));
+        }
     }
 
     /**
