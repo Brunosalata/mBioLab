@@ -49,6 +49,8 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -71,11 +73,11 @@ public class ReportSceneController implements Initializable {
     @FXML
     private Button btnEssayByUserId, btnEssaySave;
     @FXML
-    private ComboBox cbUserFilter, cbEssayTypeFilter, cbNormFilter;
+    private ComboBox cbUserFilter, cbEssayUsedMachineFilter, cbNormFilter;
     @FXML
     private ImageView ivEssayUser;
     @FXML
-    private DatePicker datePicker;
+    private DatePicker dpEssayByDate;
     @FXML
     private JRViewerFX jvReport;
     @FXML
@@ -105,6 +107,9 @@ public class ReportSceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ivEssayUser.setClip(new Circle(15,15,15));
+        userListCB();
+        normListCB();
+        machineListCB();
         lastEssay();
         savedEssayView(sysVar.getUserId());
 
@@ -115,7 +120,7 @@ public class ReportSceneController implements Initializable {
 
                 try {
                     // currentEssay recebe o objeto selecionado na lvSavedEssay
-                    currentEssay = lvSavedEssay.getSelectionModel().getSelectedItem();
+                    currentEssay = newValue;
                     if (currentEssay.getEssayChart() == null) {
                         System.out.println("Problema ao carregar os dados do gráfico! Verifique no banco de dados.");
                     }
@@ -128,26 +133,128 @@ public class ReportSceneController implements Initializable {
                 }
             }
         });
+        dpEssayByDate.valueProperty().addListener(new ChangeListener<LocalDate>() {
+            @Override
+            public void changed(ObservableValue<? extends LocalDate> observableValue, LocalDate localDate, LocalDate t1) {
+                savedEssayByDateView(t1.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            }
+        });
         cbUserFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
-                savedEssayByUserView(cbUserFilter.getSelectionModel().getSelectedItem().toString());
+                savedEssayByUserView(t1.toString());
             }
         });
         cbNormFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
-                savedEssayByNormView((cbNormFilter.getSelectionModel().getSelectedItem().toString()));
+                savedEssayByNormView(t1.toString());
             }
         });
-        cbEssayTypeFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+        cbEssayUsedMachineFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
-                savedEssayByTypeView((cbEssayTypeFilter.getSelectionModel().getSelectedItem().toString()));
+                savedEssayByMachineView(t1.toString());
             }
         });
 
+    }
 
+    /**
+     * Método que lista todos os usuarioes da tb_user do banco de dados
+     */
+    @FXML
+    private void userListCB() {
+        List<User> userList = userDAO.findAll();
+        for (User user : userList) {
+            cbUserFilter.getItems().add(user.getUserLogin());
+        }
+    }
+
+    /**
+     * Método de listagem de normas dentro do ComboBox (cbNormFilter)
+     */
+    private void machineListCB() {
+        List<Essay> normList = essayDAO.findAll();
+        for (Essay essay : normList) {
+            if(!cbNormFilter.getItems().contains(essay.getEssayNorm())){
+                cbNormFilter.getItems().add(essay.getEssayNorm());
+            }
+        }
+    }
+
+    /**
+     * Método de listagem de normas dentro do ComboBox (cbNormFilter)
+     */
+    private void normListCB() {
+        List<Essay> machineList = essayDAO.findAll();
+        for (Essay essay : machineList) {
+            if(!cbEssayUsedMachineFilter.getItems().contains(essay.getEssayUsedMachine())){
+                cbEssayUsedMachineFilter.getItems().add(essay.getEssayUsedMachine());
+            }
+        }
+    }
+
+    /**
+     * Metodo que lista ensaios salvos baseado na data informada
+     * @param day
+     */
+    @FXML
+    private void savedEssayByDateView(String day){
+        ObservableList<Essay> newObsEssayList = FXCollections.observableArrayList();
+        for(Essay essay : obsEssayList){
+            if(essay!=null){
+                if(essay.getEssayDay().equals(day)){
+                    newObsEssayList.add(essay);
+                }
+            }
+        }
+        lvSavedEssay.setItems(newObsEssayList);
+    }
+
+    /**
+     * Metodo que lista ensaios salvos baseado na data informada
+     * @param essayUser
+     */
+    @FXML
+    private void savedEssayByUserView(String essayUser){
+        User user = userDAO.findByLogin(essayUser);
+        ObservableList<Essay> newObsEssayList = obsEssayList.filtered(x -> x.getUserId() == user.getUserId());
+        lvSavedEssay.setItems(newObsEssayList);
+    }
+
+    /**
+     * Metodo que lista ensaios salvos baseado na norma informada
+     * @param norm
+     */
+    @FXML
+    private void savedEssayByNormView(String norm){
+        ObservableList<Essay> newObsEssayList = FXCollections.observableArrayList();
+        for(Essay essay : obsEssayList){
+            if(essay!=null){
+                if(essay.getEssayNorm().equals(norm)){
+                    newObsEssayList.add(essay);
+                }
+            }
+        }
+        lvSavedEssay.setItems(newObsEssayList);
+    }
+
+    /**
+     * Metodo que lista ensaios salvos baseado no equipamento informada
+     * @param machine
+     */
+    @FXML
+    private void savedEssayByMachineView(String machine){
+        ObservableList<Essay> newObsEssayList = FXCollections.observableArrayList();
+        for(Essay essay : obsEssayList){
+            if(essay!=null){
+                if(essay.getEssayUsedMachine().equals(machine)){
+                    newObsEssayList.add(essay);
+                }
+            }
+        }
+        lvSavedEssay.setItems(newObsEssayList);
     }
 
     /**
@@ -207,47 +314,8 @@ public class ReportSceneController implements Initializable {
         }
     }
 
-    @FXML
-    private void savedEssayByDateView(Date date){
-        User user = new UserDAO().findByLogin(cbUserFilter.getSelectionModel().getSelectedItem().toString());
-        if(sysVar.getUserId()<=2){
-            essayList.addAll(essayDAO.findByUser(user.getUserId()));
-        } else{
-            essayList.addAll(null);
-        }
-        essayList.addAll(essayDAO.findByDate(String.valueOf(date)));
-        obsEssayList = FXCollections.observableList(essayList);
-        lvSavedEssay.setItems(obsEssayList);
-    }
-
-    @FXML
-    private void savedEssayByUserView(String login){
-        User user = new UserDAO().findByLogin(cbUserFilter.getSelectionModel().getSelectedItem().toString());
-        if(sysVar.getUserId()<=2){
-            essayList.addAll(essayDAO.findByUser(user.getUserId()));
-        } else{
-            essayList.addAll(null);
-        }
-        obsEssayList = FXCollections.observableList(essayList);
-        lvSavedEssay.setItems(obsEssayList);
-    }
-
-    @FXML
-    private void savedEssayByNormView(String norm){
-        //essayList.addAll((Collection<? extends Essay>) userDAO.findByNorm(norm));
-        obsEssayList = FXCollections.observableList(essayList);
-        lvSavedEssay.setItems(obsEssayList);
-    }
-
-    @FXML
-    private void savedEssayByTypeView(String type){
-        //essayList.addAll((Collection<? extends Essay>) userDAO.findByType(type));
-        obsEssayList = FXCollections.observableList(essayList);
-        lvSavedEssay.setItems(obsEssayList);
-    }
-
     /**
-     * Método que busca um essay pelo id e apresenta na lwEssayInfo de forma tratada
+     * Método que busca um essay pelo “id” e apresenta na lwEssayInfo de forma tratada
      *
      * @param pk
      */
@@ -380,10 +448,6 @@ public class ReportSceneController implements Initializable {
         }
         System.out.println("Sucesso");
     }
-
-
-
-
 
 
     public class getJasperParameter{

@@ -115,7 +115,7 @@ public class EssaySceneController implements Initializable {
         extensometer2List();
         forceUnitSelection();
         positionUnitSelection();
-        if(serialConn.testConnection()){
+        if(serialConn.testConnection()==true){
             autoConnect();
         } else{
             txtConnected.setText("Desconectado");
@@ -636,7 +636,7 @@ public class EssaySceneController implements Initializable {
     }
 
     /**
-     * Método de listagem de idiomas dentro do ComboBox (cbLanguage)
+     * Método de listagem de normas dentro do ComboBox (cbNormList)
      */
     private void normList() {
         String[] normList = new String[]{"ISO 6892-1", "NBR13384", "NBR5739"};

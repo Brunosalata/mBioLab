@@ -113,7 +113,7 @@
                                                    <children>
                                                       <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="109.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <children>
-                                                            <ImageView fx:id="ivEssayUser" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="ivEssayUser" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                                                <image>
                                                                   <Image url="@img/darkIcon/icons8-profile-96.png" />
                                                                </image>
@@ -395,7 +395,7 @@
                                  <children>
                                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <DatePicker maxWidth="110.0" minWidth="75.0" prefWidth="100.0" promptText="Data">
+                                          <DatePicker fx:id="dpEssayByDate" maxWidth="110.0" minWidth="75.0" prefWidth="100.0" promptText="Data">
                                              <VBox.margin>
                                                 <Insets left="5.0" />
                                              </VBox.margin>
@@ -415,7 +415,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <ComboBox fx:id="cbEssayTypeFilter" maxWidth="110.0" minWidth="75.0" prefWidth="100.0" promptText="Tipo" />
+                                          <ComboBox fx:id="cbEssayUsedMachineFilter" maxWidth="110.0" minWidth="75.0" prefWidth="100.0" promptText="Tipo" />
                                        </children>
                                        <HBox.margin>
                                           <Insets />
