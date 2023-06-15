@@ -14,12 +14,14 @@ package br.com.biopdi.mbiolabv2.controller.report;
  *  limitations under the License.
  */
 
+import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import win.zqxu.jrviewer.JRViewerFX;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -33,15 +35,17 @@ import java.util.Map;
  * @project Essay.java
  */
 public class Report {
-
+    @FXML
+    private JRViewerFX jrDashboardReport = new JRViewerFX();
     private Image img;
+    @FXML
     public void reportCreator(List<?> objList, InputStream reportPath){
         try{
-            // Converte lista para JRBeanCollectionDataSource
+//            // Converte lista para JRBeanCollectionDataSource
             JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(objList);
-
-            //Map para Armazenar os parametros do relatorio Jasper
-            Map<String, Object> parameters = new HashMap<String, Object>();
+//
+//            //Map para Armazenar os parametros do relatorio Jasper
+            Map parameters = new HashMap();
             parameters.put("CollectionBeanParam", itemsJRBean);
 
             JasperDesign jasperDesign = JRXmlLoader.load(reportPath);
@@ -50,12 +54,15 @@ public class Report {
             JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
 
             // Gerar pdf a partir do objeto jasperReport
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, new JRBeanCollectionDataSource(objList));
 
             // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
             JasperViewer jv = new JasperViewer(jasperPrint, false);
             jv.setTitle("Emissão de relatório");
             jv.setVisible(true);
+
+            jrDashboardReport.setReport(jasperPrint);
+            jrDashboardReport.print();
         } catch (JRException e) {
             throw new RuntimeException(e);
         }

@@ -89,8 +89,11 @@
             <artifactId>jfxtras-icalendaragenda</artifactId>
             <version>17-r1</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>8.0.0</version>
+        </dependency>
         <!-- Report creator-->
         <!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
         <dependency>

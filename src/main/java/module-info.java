@@ -7,11 +7,14 @@ module br.com.biopdi.mbiolabv2 {
     requires jasperreports;
     requires jrviewer.fx;
     requires jfxtras.icalendaragenda;
+    requires kernel;
+    requires layout;
 
 
     opens br.com.biopdi.mbiolabv2 to javafx.fxml;
     exports br.com.biopdi.mbiolabv2;
     exports br.com.biopdi.mbiolabv2.controller.SceneController;
+    exports br.com.biopdi.mbiolabv2.model.bean;
     opens br.com.biopdi.mbiolabv2.controller.SceneController to javafx.fxml;
     exports br.com.biopdi.mbiolabv2.controller.SceneController.switchScene;
     opens br.com.biopdi.mbiolabv2.controller.SceneController.switchScene to javafx.fxml;

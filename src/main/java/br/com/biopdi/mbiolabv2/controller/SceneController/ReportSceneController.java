@@ -33,19 +33,20 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import win.zqxu.jrviewer.JRViewerFX;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -71,7 +72,7 @@ public class ReportSceneController implements Initializable {
     @FXML
     private Label lbCurrentData, lbEssayUserName, lbFmax, lbPmax, lbTmax, lbTesc, lbAlong, lbRedArea, lbMYoung;
     @FXML
-    private Button btnEssayByUserId, btnEssaySave;
+    private Button btnEssayByUserId, btnEssaySave, btnReportSave, btnCsvExport, btnReportPrint;
     @FXML
     private ComboBox cbUserFilter, cbEssayUsedMachineFilter, cbNormFilter;
     @FXML
@@ -79,7 +80,9 @@ public class ReportSceneController implements Initializable {
     @FXML
     private DatePicker dpEssayByDate;
     @FXML
-    private JRViewerFX jvReport;
+    private JRViewerFX jvReport = new JRViewerFX();
+    @FXML
+    private AnchorPane apEssayFilterOption;
     @FXML
     private ListView<Essay> lvSavedEssay;
     @FXML
@@ -106,10 +109,7 @@ public class ReportSceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ivEssayUser.setClip(new Circle(15,15,15));
-        userListCB();
-        normListCB();
-        machineListCB();
+        initialSetup();
         lastEssay();
         savedEssayView(sysVar.getUserId());
 
@@ -158,6 +158,21 @@ public class ReportSceneController implements Initializable {
             }
         });
 
+    }
+
+    /**
+     * Configuracoes iniciais quando o fxml e chamado
+     */
+    private void initialSetup() {
+        ivEssayUser.setClip(new Circle(15,15,15));
+        userListCB();
+        normListCB();
+        machineListCB();
+        if(sysVar.getUserId()>3){
+            cbUserFilter.setVisible(false);
+        } else if(sysVar.getUserId()==3){
+            apEssayFilterOption.setVisible(false);
+        }
     }
 
     /**
@@ -364,48 +379,74 @@ public class ReportSceneController implements Initializable {
     @FXML
     private void reportSave() {
 
+        Stage stage = (Stage) btnReportSave.getScene().getWindow();
+
         Platform.runLater(() ->{
 
-            try {
-//                // selecao do objeto a ser inserido (ou lista de objetos)
-//                List<Essay> currentEssayList = new ArrayList<Essay>();
-//                currentEssayList.add(currentEssay);
-//                // Leitura do arquivo jrxml e criacao do objeto jasperdesign
-//                InputStream input = new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jasper"));
-//                // Instancia classe de emissao de relatorio
-//                ReportFX report = new ReportFX();
-//
-//                Platform.runLater(()->{
-//                    JasperPrint jasperPrint = report.reportCreator(Collections.singletonList(currentEssayList), input);
-//                    jvReport.setReport(jasperPrint);
-//                    jvReport.print();
-//                });
+            try{
+                List<Essay> reportEssayList = new ArrayList<>();
+                reportEssayList.add(currentEssay);
 
                 // Converte lista para JRBeanCollectionDataSource
-                JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(essayList);
+                JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(reportEssayList);
 
-                //Map para Armazenar os parametros do relatorio Jasper
-                Map<String, Object> parameters = new HashMap<String, Object>();
+                // Map para Armazenar os parametros do relatorio Jasper
+                Map parameters = new HashMap();
                 parameters.put("CollectionBeanParam", itemsJRBean);
-                JasperDesign jasperDesign = JRXmlLoader.load("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jasper");
+                // Adicao de novos parametros para preenchimento de campos do relatorio
+                parameters.put("testeString", "Parâmetro enviado com sucesso!");
+
+                JasperDesign jasperDesign = JRXmlLoader.load(new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jrxml")));
+
                 // Compilando jrxml com a classe JasperReport
                 JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-                JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 
+                // Gerar pdf a partir do objeto jasperReport
+                JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JRBeanCollectionDataSource(reportEssayList));
 
-                jvReport.setReport(jasperPrint);
-                jvReport.print();
+                // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
+                JasperViewer jv = new JasperViewer(jasperPrint, false);
+                jv.setTitle("Emissão de relatório");
+                jv.setVisible(true);
+
+            } catch (JRException e) {
+                throw new RuntimeException(e);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
+
+    }
+
+    @FXML
+    private void reportPrint() throws JRException, URISyntaxException {;
+
+        Platform.runLater(()->{
+
+            try {
+                jvReport.printWithPrintDialog();
+                jvReport.setReport((JasperPrint) JRLoader.loadObject(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jasper")));
+            jvReport.print();
 
             } catch (JRException e) {
                 throw new RuntimeException(e);
             }
         });
 
-    }
 
-    @FXML
-    private void reportPrint(){;
 
+//        JRDataSource dataSource = new MyJRDataSource((List<Object>) currentEssay);
+//        String reportPath = "src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jasper";
+//        JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, null, new JREmptyDataSource());
+//        jvReport.export(new Stage(), jasperPrint);
+
+//        Platform.runLater(() -> {
+//
+//                jvReport.setReport(viewer.getReport());
+//                jvReport.print();
+//
+//        });
     }
 
     /**
@@ -450,7 +491,7 @@ public class ReportSceneController implements Initializable {
     }
 
 
-    public class getJasperParameter{
+    public class MyJRDataSource implements net.sf.jasperreports.engine.JRDataSource{
         public String getIdentification(){
             return currentEssay.getEssayIdentification();
         }
@@ -474,6 +515,39 @@ public class ReportSceneController implements Initializable {
         }
         public Double getMYoung(){
             return currentEssay.getEssayMYoung();
+        }
+
+        private Iterator<Object> iterator;
+        public MyJRDataSource(List<Object> collection){
+            this.iterator = collection.iterator();
+        }
+        @Override
+        public boolean next() throws JRException {
+            return iterator.hasNext();
+        }
+        @Override
+        public Object getFieldValue(JRField jrField) throws JRException {
+            Object object = iterator.next();
+
+            // Retorne o valor do campo com base no objeto atual
+            if (jrField.getName().equals("identification")) {
+                return currentEssay.getEssayIdentification();
+            } else if (jrField.getName().equals("maxForce")) {
+                return currentEssay.getEssayMaxForce();
+            } else if (jrField.getName().equals("maxPosition")){
+                return currentEssay.getEssayMaxPosition();
+            } else if (jrField.getName().equals("maxTension")){
+                return currentEssay.getEssayMaxTension();
+            } else if (jrField.getName().equals("escapeTension")){
+                return currentEssay.getEssayEscapeTension();
+            } else if (jrField.getName().equals("along")){
+                return currentEssay.getEssayAlong();
+            } else if (jrField.getName().equals("areaRed")){
+                return currentEssay.getEssayAreaRed();
+            } else if (jrField.getName().equals("mYoung")){
+                return currentEssay.getEssayMYoung();
+            }
+            return null;
         }
     }
 }

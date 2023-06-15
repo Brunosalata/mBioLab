@@ -80,9 +80,38 @@ public class SwitchMenuSceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ivUserImage.setClip(new Circle(25,25,25));
         clockView();
+        initialSetup();
 
+        // Ocultar e expor menu lateral
+        btnMenuSlider.setOnMouseClicked(event -> {
+            TranslateTransition slide = new TranslateTransition();
+            slide.setDuration(Duration.seconds(0.4));
+            slide.setNode(vbMenuBar);
+
+            if(menuSliderIn == false){
+                slide.setToX(0);
+                slide.play();
+                vbMenuBar.setTranslateX(vbMenuBar.getWidth());
+                menuSliderIn=true;
+            } else{
+                slide.setToX(vbMenuBar.getWidth());
+                slide.play();
+                vbMenuBar.setTranslateX(0);
+                // Define as propriedades de layout para estender o elemento
+                menuSliderIn=false;
+            }
+        });
+
+
+    }
+
+    /**
+     * Configuracoes iniciais quando o fxml e chamado
+     */
+    private void initialSetup() {
+        // Configuracao do formato da imagem de perfil do usuario
+        ivUserImage.setClip(new Circle(25,25,25));
         // Alteração do lbUserName e lbLogin dependendo do retorno do banco de dados (quando userId = 3 -> sem login)
         if(user.getUserId()==3){
             lbUserName.setText("Visitante");
@@ -103,26 +132,8 @@ public class SwitchMenuSceneController implements Initializable {
                 System.out.println(user.getUserImagePath());
             }
         }
+        // Chamando o arquivo fxml para home
         switchToHomeScene(new ActionEvent());
-        // Ocultar e expor menu lateral
-        btnMenuSlider.setOnMouseClicked(event -> {
-            TranslateTransition slide = new TranslateTransition();
-            slide.setDuration(Duration.seconds(0.4));
-            slide.setNode(vbMenuBar);
-
-            if(menuSliderIn == false){
-                slide.setToX(0);
-                slide.play();
-                vbMenuBar.setTranslateX(vbMenuBar.getWidth());
-                menuSliderIn=true;
-            } else{
-                slide.setToX(vbMenuBar.getWidth());
-                slide.play();
-                vbMenuBar.setTranslateX(0);
-                menuSliderIn=false;
-            }
-        });
-
 
     }
 
