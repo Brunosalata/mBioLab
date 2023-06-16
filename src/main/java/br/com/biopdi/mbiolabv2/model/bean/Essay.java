@@ -30,11 +30,10 @@ import java.util.Objects;
 public class Essay {
 
     private Integer essayId, userId;
-    private String essayIdentification, essayNorm, essayUsedMachine;
+    private String essayIdentification, essayNorm, essayUsedMachine, essayChart, essayDay, essayHour;
     private Double essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, essayFinalPosition,
             essayDislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, essayMaxForce,
             essayMaxPosition, essayMaxTension, essayEscapeTension, essayAlong, essayAreaRed, essayMYoung;
-    private String essayChart, essayDay, essayHour;
 
     public Essay() {
     }

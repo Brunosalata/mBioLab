@@ -189,17 +189,25 @@ public class SerialConnection {
     /**
      * Metodo para teste de conexao com equipamento
      */
-    public boolean testConnection(){
-        openPort();
-        serialConnVerification();
-        if(port.bytesAvailable()!=0){
-            port.flushIOBuffers();
-            closePort();
-            return true;
-        } else{
-            closePort();
-            return false;
-        }
+    public boolean testConnection(){ // REQUER CORRECOES - IMPLEMENTACAO CORRETA
+//        openPort();
+//        try{
+//            serialConnVerification();
+//            Thread.sleep(0);
+//            if(port.bytesAvailable()!=0){
+//                port.flushIOBuffers();
+//                System.out.println("Bom");
+//                closePort();
+//                return true;
+//            } else{
+//                System.out.println("Ruim");
+//                closePort();
+//                return false;
+//            }
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+        return true;
     }
 
     /**

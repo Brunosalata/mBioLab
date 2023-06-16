@@ -388,26 +388,90 @@ public class ReportSceneController implements Initializable {
                 reportEssayList.add(currentEssay);
 
                 // Converte lista para JRBeanCollectionDataSource
-                JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(reportEssayList);
+                JRBeanCollectionDataSource essayCollection = new JRBeanCollectionDataSource(reportEssayList);
 
                 // Map para Armazenar os parametros do relatorio Jasper
-                Map parameters = new HashMap();
-                parameters.put("CollectionBeanParam", itemsJRBean);
+                Map<String, Object> parameters = new HashMap<String, Object>();
+                parameters.put("CollectionBeanParam", essayCollection);
                 // Adicao de novos parametros para preenchimento de campos do relatorio
-                parameters.put("testeString", "Parâmetro enviado com sucesso!");
+                parameters.put("introduction", "Parâmetro enviado com sucesso!");
+                parameters.put("essayIdentification", currentEssay.getEssayIdentification());
+                parameters.put("essayUsedMachine", currentEssay.getEssayUsedMachine());
+                parameters.put("essayNorm", currentEssay.getEssayNorm());
+                parameters.put("chargeCell", currentEssay.getEssayChargeCell());
+                parameters.put("essayVelocity", currentEssay.getEssayDislocationVelocity());
+                parameters.put("velocityUnit", "mm/min");
+                parameters.put("essayType", "Requer implementar código");
+                parameters.put("essayDay", currentEssay.getEssayDay());
+                parameters.put("essayHour", currentEssay.getEssayHour());
+                parameters.put("essayPreCharge", currentEssay.getEssayPreCharge());
+                parameters.put("essayTemperature", currentEssay.getEssayTemperature());
+                parameters.put("essayRelativeHumidity", currentEssay.getEssayRelativeHumidity());
+                parameters.put("chartTitle", "Título");
+                parameters.put("xAxisLabel", "Eixo X");
+                parameters.put("yAxisLabel", "Eixo Y");
+                User user = userDAO.findById(currentEssay.getUserId());
+                parameters.put("author", user.getUserName());
 
+                // Incluindo dados no grafico do Jasper Report
+                List<ChartAxisValueToJR> XYChartData = new ArrayList<ChartAxisValueToJR>();
+
+                // Conversao da String chartEssay para valores double
+                String strArraySplit[] = currentEssay.getEssayChart().split(",");
+                for (String str : strArraySplit) {
+                    String dot[] = str.split(";");
+                    for (int i = 0; i < dot.length; i += 2) {
+                        // Preenchimento das listas de dados
+                        XYChartData.add(new ChartAxisValueToJR((Double.parseDouble(dot[i])), Double.parseDouble(dot[i + 1]),
+                                "Título do Gráfico", "xAxis", "yAxis"));
+                    }
+                }
+
+                JRBeanCollectionDataSource teste = new JRBeanCollectionDataSource(XYChartData);
+
+                // Adição da lista de dados ao mapa de parâmetros
+                parameters.put("xyChartData", teste);
+
+//                // Incluindo dados no grafico do Jasper Report
+//                List<Double> xData = new ArrayList<>();
+//                List<Double> yData = new ArrayList<>();
+//
+//                // Conversao da String chartEssay para valores double
+//                String strArraySplit[] = currentEssay.getEssayChart().split(",");
+//                for (String str : strArraySplit) {
+//                    String dot[] = str.split(";");
+//                    for (int i = 0; i < dot.length; i += 2) {
+//                        // Preenchimento das listas de dados
+//                        xData.add(Double.parseDouble(dot[i]));
+//                        yData.add(Double.parseDouble(dot[i + 1]));
+//                    }
+//                }
+//
+//                Double[] xDataArray = xData.toArray(new Double[xData.size()]);
+//                Double[] yDataArray = yData.toArray(new Double[yData.size()]);
+//
+//                // Adição da lista de dados ao mapa de parâmetros
+//                parameters.put("XData", xData);
+//                parameters.put("YData", yData);
+
+
+
+
+                // Preenchimento do relatorio
                 JasperDesign jasperDesign = JRXmlLoader.load(new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jrxml")));
 
                 // Compilando jrxml com a classe JasperReport
                 JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
 
                 // Gerar pdf a partir do objeto jasperReport
-                JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JRBeanCollectionDataSource(reportEssayList));
+                JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 
                 // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
+
                 JasperViewer jv = new JasperViewer(jasperPrint, false);
                 jv.setTitle("Emissão de relatório");
                 jv.setVisible(true);
+
 
             } catch (JRException e) {
                 throw new RuntimeException(e);
@@ -416,6 +480,102 @@ public class ReportSceneController implements Initializable {
             }
 
         });
+
+    }
+
+    public class ChartAxisValueToJR extends JRAbstractScriptlet{
+        private Double xAxis, yAxis;
+        private String chartTitle, xAxisLabel, yAxisLabel;
+
+        public ChartAxisValueToJR() {
+        }
+        public ChartAxisValueToJR(Double xAxis, Double yAxis, String chartTitle, String xAxisLabel, String yAxisLabel) {
+            this.xAxis = xAxis;
+            this.yAxis = yAxis;
+            this.chartTitle = chartTitle;
+            this.xAxisLabel = xAxisLabel;
+            this.yAxisLabel = yAxisLabel;
+        }
+
+        public Double getxAxis() {
+            return xAxis;
+        }
+
+        public void setxAxis(Double xAxis) {
+            this.xAxis = xAxis;
+        }
+
+        public Double getyAxis() {
+            return yAxis;
+        }
+
+        public void setyAxis(Double yAxis) {
+            this.yAxis = yAxis;
+        }
+
+        public String getChartTitle() {
+            return chartTitle;
+        }
+
+        public void setChartTitle(String chartTitle) {
+            this.chartTitle = chartTitle;
+        }
+
+        public String getxAxisLabel() {
+            return xAxisLabel;
+        }
+
+        public void setxAxisLabel(String xAxisLabel) {
+            this.xAxisLabel = xAxisLabel;
+        }
+
+        public String getyAxisLabel() {
+            return yAxisLabel;
+        }
+
+        public void setyAxisLabel(String yAxisLabel) {
+            this.yAxisLabel = yAxisLabel;
+        }
+
+        @Override
+        public void beforeReportInit() throws JRScriptletException {
+
+        }
+        @Override
+        public void afterReportInit() throws JRScriptletException {
+
+        }
+        @Override
+        public void beforePageInit() throws JRScriptletException {
+
+        }
+        @Override
+        public void afterPageInit() throws JRScriptletException {
+        }
+        @Override
+        public void beforeColumnInit() throws JRScriptletException {
+
+        }
+        @Override
+        public void afterColumnInit() throws JRScriptletException {
+
+        }
+        @Override
+        public void beforeGroupInit(String groupName) throws JRScriptletException {
+
+        }
+        @Override
+        public void afterGroupInit(String groupName) throws JRScriptletException {
+
+        }
+        @Override
+        public void beforeDetailEval() throws JRScriptletException {
+
+        }
+        @Override
+        public void afterDetailEval() throws JRScriptletException {
+
+        }
 
     }
 
@@ -433,20 +593,6 @@ public class ReportSceneController implements Initializable {
                 throw new RuntimeException(e);
             }
         });
-
-
-
-//        JRDataSource dataSource = new MyJRDataSource((List<Object>) currentEssay);
-//        String reportPath = "src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jasper";
-//        JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, null, new JREmptyDataSource());
-//        jvReport.export(new Stage(), jasperPrint);
-
-//        Platform.runLater(() -> {
-//
-//                jvReport.setReport(viewer.getReport());
-//                jvReport.print();
-//
-//        });
     }
 
     /**

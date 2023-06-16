@@ -105,9 +105,9 @@ public class EssaySceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(serialConn.testConnection()){
-            serialConn.setupParameter();
-        }
+//        if(serialConn.testConnection()){
+//            serialConn.setupParameter();
+//        }
         normList();
         essayTypeList();
         savedMethodList();
@@ -115,7 +115,7 @@ public class EssaySceneController implements Initializable {
         extensometer2List();
         forceUnitSelection();
         positionUnitSelection();
-        if(serialConn.testConnection()==true){
+        if(serialConn.testConnection()){
             autoConnect();
         } else{
             txtConnected.setText("Desconectado");
@@ -375,6 +375,14 @@ public class EssaySceneController implements Initializable {
                     currentBasePosition = Double.valueOf(serialConn.inputValue()) * positionMultipFactor();
                     currentMmPosition = currentBasePosition * mmPositionConversionFactor;
                     currentPolPosition = currentBasePosition * mmPositionConversionFactor * 0.0393701; // conversao de mm para in
+                    System.out.println(currentBaseForce);
+                    System.out.println(taredCurrentForce);
+                    System.out.println(currentNewtonForce);
+                    System.out.println(currentKgForce);
+                    System.out.println(currentBasePosition);
+                    System.out.println(currentMmPosition);
+                    System.out.println(currentPolPosition);
+                    System.out.println("***********************");
                     // Obtendo informacao sobre qual celula de carga esta conectada (reflete no indice multiplicador
                     // de conversao de unidade de forca)
                     serialConn.chargeCellRequest();
