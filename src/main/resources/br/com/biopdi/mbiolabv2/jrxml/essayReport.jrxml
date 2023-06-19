@@ -42,16 +42,14 @@
 		<field name="essayAreaRed" class="java.lang.Double"/>
 		<field name="essayMYoung" class="java.lang.Double"/>
 	</subDataset>
-	<subDataset name="CHART_DATASET" scriptletClass="java.util.List">
+	<subDataset name="CHART_DATASET">
 		<parameter name="essayIdentification" class="java.lang.String"/>
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
 		<field name="xAxis" class="java.lang.Double"/>
 		<field name="yAxis" class="java.lang.Double"/>
-		<field name="yAxisLabel" class="java.lang.String"/>
-		<field name="chartTitle" class="java.lang.String"/>
-		<field name="xAxisLabel" class="java.lang.String"/>
+		<field name="chartSerieTitle" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="CollectionBeanParam" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<parameter name="essayIdentification" class="java.lang.String"/>
@@ -71,7 +69,7 @@
 	<parameter name="yAxisLabel" class="java.lang.String"/>
 	<parameter name="chartTitle" class="java.lang.String"/>
 	<parameter name="velocityUnit" class="java.lang.String"/>
-	<parameter name="xyChartData" class="java.util.List"/>
+	<parameter name="xyChartData" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -189,7 +187,7 @@
 				</textField>
 			</frame>
 			<xyLineChart>
-				<chart isShowLegend="false" evaluationTime="Report" theme="default">
+				<chart isShowLegend="true" theme="default">
 					<reportElement x="2" y="110" width="551" height="320"/>
 					<chartTitle>
 						<titleExpression><![CDATA[$P{chartTitle}]]></titleExpression>
@@ -197,7 +195,18 @@
 					<chartSubtitle/>
 					<chartLegend/>
 				</chart>
-				<xyDataset/>
+				<xyDataset>
+					<dataset>
+						<datasetRun subDataset="CHART_DATASET">
+							<dataSourceExpression><![CDATA[$P{xyChartData}]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+					<xySeries>
+						<seriesExpression><![CDATA[$F{chartSerieTitle}]]></seriesExpression>
+						<xValueExpression><![CDATA[$F{xAxis}]]></xValueExpression>
+						<yValueExpression><![CDATA[$F{yAxis}]]></yValueExpression>
+					</xySeries>
+				</xyDataset>
 				<linePlot isShowLines="true">
 					<plot/>
 					<categoryAxisLabelExpression><![CDATA[$P{xAxisLabel}]]></categoryAxisLabelExpression>
@@ -209,9 +218,7 @@
 						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
 					</valueAxisFormat>
 					<domainAxisMinValueExpression><![CDATA[0]]></domainAxisMinValueExpression>
-					<domainAxisMaxValueExpression><![CDATA[100]]></domainAxisMaxValueExpression>
 					<rangeAxisMinValueExpression><![CDATA[0]]></rangeAxisMinValueExpression>
-					<rangeAxisMaxValueExpression><![CDATA[100]]></rangeAxisMaxValueExpression>
 				</linePlot>
 			</xyLineChart>
 			<staticText>
@@ -259,7 +266,7 @@
 			<textField>
 				<reportElement x="388" y="10" width="155" height="13"/>
 				<textElement verticalAlignment="Middle" lineSpacing="Single"/>
-				<textFieldExpression class=""><![CDATA[$P{essayDay} + " - " + $P{essayHour}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{essayDay} + "  " + $P{essayHour}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="293" y="23" width="90" height="13"/>

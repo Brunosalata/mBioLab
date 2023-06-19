@@ -413,6 +413,10 @@ public class ReportSceneController implements Initializable {
                 User user = userDAO.findById(currentEssay.getUserId());
                 parameters.put("author", user.getUserName());
 
+
+///////////////////////////
+
+
                 // Incluindo dados no grafico do Jasper Report
                 List<ChartAxisValueToJR> XYChartData = new ArrayList<ChartAxisValueToJR>();
 
@@ -422,8 +426,8 @@ public class ReportSceneController implements Initializable {
                     String dot[] = str.split(";");
                     for (int i = 0; i < dot.length; i += 2) {
                         // Preenchimento das listas de dados
-                        XYChartData.add(new ChartAxisValueToJR((Double.parseDouble(dot[i])), Double.parseDouble(dot[i + 1]),
-                                "Título do Gráfico", "xAxis", "yAxis"));
+                        XYChartData.add(new ChartAxisValueToJR(Double.parseDouble(dot[i]), Double.parseDouble(dot[i + 1]),
+                                "série 1"));
                     }
                 }
 
@@ -455,7 +459,7 @@ public class ReportSceneController implements Initializable {
 //                parameters.put("YData", yData);
 
 
-
+/////////////////////////////////////////////////////////////
 
                 // Preenchimento do relatorio
                 JasperDesign jasperDesign = JRXmlLoader.load(new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jrxml")));
@@ -483,18 +487,16 @@ public class ReportSceneController implements Initializable {
 
     }
 
-    public class ChartAxisValueToJR extends JRAbstractScriptlet{
+    public class ChartAxisValueToJR {
         private Double xAxis, yAxis;
-        private String chartTitle, xAxisLabel, yAxisLabel;
+        private String chartSerieTitle;
 
         public ChartAxisValueToJR() {
         }
-        public ChartAxisValueToJR(Double xAxis, Double yAxis, String chartTitle, String xAxisLabel, String yAxisLabel) {
+        public ChartAxisValueToJR(Double xAxis, Double yAxis, String chartSerieTitle) {
             this.xAxis = xAxis;
             this.yAxis = yAxis;
-            this.chartTitle = chartTitle;
-            this.xAxisLabel = xAxisLabel;
-            this.yAxisLabel = yAxisLabel;
+            this.chartSerieTitle = chartSerieTitle;
         }
 
         public Double getxAxis() {
@@ -513,69 +515,53 @@ public class ReportSceneController implements Initializable {
             this.yAxis = yAxis;
         }
 
-        public String getChartTitle() {
-            return chartTitle;
+        public String getChartSerieTitle() {
+            return chartSerieTitle;
         }
 
-        public void setChartTitle(String chartTitle) {
-            this.chartTitle = chartTitle;
+        public void setChartSerieTitle(String chartSerieTitle) {
+            this.chartSerieTitle = chartSerieTitle;
         }
 
-        public String getxAxisLabel() {
-            return xAxisLabel;
-        }
 
-        public void setxAxisLabel(String xAxisLabel) {
-            this.xAxisLabel = xAxisLabel;
-        }
-
-        public String getyAxisLabel() {
-            return yAxisLabel;
-        }
-
-        public void setyAxisLabel(String yAxisLabel) {
-            this.yAxisLabel = yAxisLabel;
-        }
-
-        @Override
-        public void beforeReportInit() throws JRScriptletException {
-
-        }
-        @Override
-        public void afterReportInit() throws JRScriptletException {
-
-        }
-        @Override
-        public void beforePageInit() throws JRScriptletException {
-
-        }
-        @Override
-        public void afterPageInit() throws JRScriptletException {
-        }
-        @Override
-        public void beforeColumnInit() throws JRScriptletException {
-
-        }
-        @Override
-        public void afterColumnInit() throws JRScriptletException {
-
-        }
-        @Override
-        public void beforeGroupInit(String groupName) throws JRScriptletException {
-
-        }
-        @Override
-        public void afterGroupInit(String groupName) throws JRScriptletException {
-
-        }
-        @Override
-        public void beforeDetailEval() throws JRScriptletException {
-
-        }
-        @Override
-        public void afterDetailEval() throws JRScriptletException {
-
-        }
+//        @Override
+//        public void beforeReportInit() throws JRScriptletException {
+//
+//        }
+//        @Override
+//        public void afterReportInit() throws JRScriptletException {
+//
+//        }
+//        @Override
+//        public void beforePageInit() throws JRScriptletException {
+//
+//        }
+//        @Override
+//        public void afterPageInit() throws JRScriptletException {
+//        }
+//        @Override
+//        public void beforeColumnInit() throws JRScriptletException {
+//
+//        }
+//        @Override
+//        public void afterColumnInit() throws JRScriptletException {
+//
+//        }
+//        @Override
+//        public void beforeGroupInit(String groupName) throws JRScriptletException {
+//
+//        }
+//        @Override
+//        public void afterGroupInit(String groupName) throws JRScriptletException {
+//
+//        }
+//        @Override
+//        public void beforeDetailEval() throws JRScriptletException {
+//
+//        }
+//        @Override
+//        public void afterDetailEval() throws JRScriptletException {
+//        }
 
     }
 
