@@ -15,7 +15,6 @@ package br.com.biopdi.mbiolabv2.controller.SceneController;
  *  limitations under the License.
  */
 
-import br.com.biopdi.mbiolabv2.controller.report.Report;
 import br.com.biopdi.mbiolabv2.controller.repository.dao.*;
 import br.com.biopdi.mbiolabv2.mBioLabv2Application;
 import br.com.biopdi.mbiolabv2.model.bean.Essay;
@@ -40,6 +39,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 import java.io.*;
 import java.net.URL;
@@ -71,7 +76,7 @@ public class DashboardSceneController implements Initializable {
             lbTEscMax, lbTEscMin, lbTEscMed, lbTEscDev, lbAlongMax, lbAlongMin, lbAlongMed, lbAlongDev, lbRedAreaMax,
             lbRedAreaMin, lbRedAreaMed, lbRedAreaDev, lbMYoungMax, lbMYoungMin, lbMYoungMed, lbMYoungDev, lbEssayUserName;
     @FXML
-    private Button btnReport, btnChartClear;
+    private Button btnReport, btnChartClear, btnReportSave;
     @FXML
     private TextField txtLed;
     @FXML
@@ -96,6 +101,12 @@ public class DashboardSceneController implements Initializable {
     private List<Double> stanDevAlong = new ArrayList<>();
     private List<Double> stanDevRedArea = new ArrayList<>();
     private List<Double> stanDevMYoung = new ArrayList<>();
+    JRBeanCollectionDataSource essayCollection;
+
+    // Lista de agrupa objetos do tipo ChartAxisValueToJR, que representam cada serie do grafico no JR
+    List<ChartAxisValueToJR> XYChartData = new ArrayList<ChartAxisValueToJR>();
+    // Map para Armazenar os parametros do relatorio Jasper
+    Map<String, Object> parameters = new HashMap<String, Object>();
     private final List<Essay> csvEssayList = new ArrayList<>();
     private ObservableList<Setup> obsSetupList;
     private ObservableList<User> obsUserList;
@@ -136,6 +147,9 @@ public class DashboardSceneController implements Initializable {
                         addEssayChart(currentEssay.getEssayId());
                         selectedEssayList.add(currentEssay);
                         essayInfo(currentEssay.getEssayId());
+
+                        // Incluindo dados da serie na List a ser inserida no grafico do Jasper Report
+                        serieInclude();
 
                     } else {
                         System.out.println("Problemas ao carregar ensaio. Ensaio = null.");
@@ -431,18 +445,24 @@ public class DashboardSceneController implements Initializable {
      * Método que reseta o gráfico e a lista de essay analizados
      */
     @FXML
-    private void multiDataReset() {
-        // Zerar lista de ensaios selecionados
-        selectedEssayList.clear();
-        // Zerar variaveis calculadas
-        infoReset();
-        // Atualizar UI com valores zerados
-        setUIValues();
-        // Zerar lista
-        obsEssayList.clear();
-        //zerar gráficos
-        chartMultiLine.getData().clear();
-        savedEssayList();
+    private synchronized void multiDataReset() {
+        Platform.runLater(()->{
+            // Zerar lista de ensaios selecionados
+            selectedEssayList.clear();
+            // Zerar XYChartData (List<ChartAxisValueToJR>)
+            XYChartData.clear();
+            // Zerar Map<String, Object> parameters = new HashMap<String, Object>() que define os parametros enviados ao JR
+            parameters.clear();
+            // Zerar variaveis calculadas
+            infoReset();
+            // Atualizar UI com valores zerados
+            setUIValues();
+            // Zerar lista
+            obsEssayList.clear();
+            //zerar gráficos
+            chartMultiLine.getData().clear();
+            savedEssayList();
+        });
     }
 
     /**
@@ -464,21 +484,144 @@ public class DashboardSceneController implements Initializable {
     @FXML
     private void reportSave() {
 
+        Stage stage = (Stage) btnReportSave.getScene().getWindow();
+
         Platform.runLater(() ->{
 
-            try {
-                // Leitura do arquivo jrxml e criacao do objeto jasperdesign
-                InputStream input = new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/dashboardReport.jrxml"));
+            try{
+                // Converte lista para JRBeanCollectionDataSource
+                essayCollection = new JRBeanCollectionDataSource(selectedEssayList);
 
-                // Instancia classe de emissao de relatorio
-                Report report = new Report();
-                report.reportCreator(selectedEssayList, input);
+                // Adicao de novos parametros para preenchimento de campos do relatorio
+                User user = userDAO.findById(currentEssay.getUserId());
+                parameters.put("author", user.getUserName());
+                parameters.put("introduction", "Parâmetro enviado com sucesso!");
+                parameters.put("reportIdentification", "reportIdentification");
+                parameters.put("essayUsedMachine", currentEssay.getEssayUsedMachine());
+                parameters.put("essayNorm", currentEssay.getEssayNorm());
+                parameters.put("chargeCell", currentEssay.getEssayChargeCell());
+                parameters.put("essayVelocity", currentEssay.getEssayDislocationVelocity());
+                parameters.put("velocityUnit", "mm/min");
+                parameters.put("essayType", "Requer implementar código");
+                parameters.put("essayDay", currentEssay.getEssayDay());
+                parameters.put("essayHour", currentEssay.getEssayHour());
+                parameters.put("essayPreCharge", currentEssay.getEssayPreCharge());
+                parameters.put("essayTemperature", currentEssay.getEssayTemperature());
+                parameters.put("essayRelativeHumidity", currentEssay.getEssayRelativeHumidity());
+                parameters.put("chartTitle", "Título");
+                parameters.put("xAxisLabel", "Eixo X");
+                parameters.put("yAxisLabel", "Eixo Y");
+                // Preenchimento da tabela
+                parameters.put("CollectionBeanParam", essayCollection);
+                // Preenchimento das analises dos ensaios
+                parameters.put("maxFMax", maxFMax);
+                parameters.put("maxPMax", maxPMax);
+                parameters.put("maxTMax", maxTMax);
+                parameters.put("maxTEsc", maxTEsc);
+                parameters.put("maxAlong", maxAlong);
+                parameters.put("maxRedArea", maxRedArea);
+                parameters.put("maxMYoung", maxMYoung);
+                parameters.put("minFMax", minFMax);
+                parameters.put("minPMax", minPMax);
+                parameters.put("minTMax", minTMax);
+                parameters.put("minTEsc", minTEsc);
+                parameters.put("minAlong", minAlong);
+                parameters.put("minRedArea", minRedArea);
+                parameters.put("minMYoung", minMYoung);
+                parameters.put("medFMax", medFMax);
+                parameters.put("medPMax", medPMax);
+                parameters.put("medTMax", medTMax);
+                parameters.put("medTEsc", medTEsc);
+                parameters.put("medAlong", medAlong);
+                parameters.put("medRedArea", medRedArea);
+                parameters.put("medMYoung", medMYoung);
+                parameters.put("devFMax", devFMax);
+                parameters.put("devPMax", devPMax);
+                parameters.put("devTMax", devTMax);
+                parameters.put("devTEsc", devTEsc);
+                parameters.put("devAlong", devAlong);
+                parameters.put("devRedArea", devRedArea);
+                parameters.put("devMYoung", devMYoung);
 
+                // Conversao da List<XYChartData> em uma fonte de dados de classe JRBeanCollectionDataSource
+                JRBeanCollectionDataSource xyChartDataJR = new JRBeanCollectionDataSource(XYChartData);
+
+                // Adição da lista de dados ao mapa de parâmetros
+                parameters.put("xyChartData", xyChartDataJR);
+
+
+                // Preenchimento do relatorio
+                JasperDesign jasperDesign = JRXmlLoader.load(new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/dashboardReport.jrxml")));
+
+                // Compilando jrxml com a classe JasperReport
+                JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+
+                // Gerar pdf a partir do objeto jasperReport
+                JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+
+                // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
+
+                JasperViewer jv = new JasperViewer(jasperPrint, false);
+                jv.setTitle("Emissão de relatório");
+                jv.setVisible(true);
+
+
+            } catch (JRException e) {
+                throw new RuntimeException(e);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
+
         });
 
+    }
+
+    private void serieInclude(){
+        // Conversao da String chartEssay para valores double
+        String strArraySplit[] = currentEssay.getEssayChart().split(",");
+        for (String str : strArraySplit) {
+            String dot[] = str.split(";");
+            for (int i = 0; i < dot.length; i += 2) {
+                // Preenchimento das listas de dados
+                XYChartData.add(new ChartAxisValueToJR(Double.parseDouble(dot[i]), Double.parseDouble(dot[i + 1]),
+                        currentEssay.getEssayIdentification()));
+            }
+        }
+    }
+
+    /**
+     * Classe para a criacao de objeto para preenchimento do grafico no Jasper Report
+     */
+    public class ChartAxisValueToJR {
+        private Double xAxis, yAxis;
+        private String chartSerieTitle;
+
+        public ChartAxisValueToJR() {
+        }
+        public ChartAxisValueToJR(Double xAxis, Double yAxis, String chartSerieTitle) {
+            this.xAxis = xAxis;
+            this.yAxis = yAxis;
+            this.chartSerieTitle = chartSerieTitle;
+        }
+
+        public Double getxAxis() {
+            return xAxis;
+        }
+        public void setxAxis(Double xAxis) {
+            this.xAxis = xAxis;
+        }
+        public Double getyAxis() {
+            return yAxis;
+        }
+        public void setyAxis(Double yAxis) {
+            this.yAxis = yAxis;
+        }
+        public String getChartSerieTitle() {
+            return chartSerieTitle;
+        }
+        public void setChartSerieTitle(String chartSerieTitle) {
+            this.chartSerieTitle = chartSerieTitle;
+        }
     }
 
     @FXML

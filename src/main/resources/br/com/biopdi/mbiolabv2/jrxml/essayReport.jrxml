@@ -43,7 +43,6 @@
 		<field name="essayMYoung" class="java.lang.Double"/>
 	</subDataset>
 	<subDataset name="CHART_DATASET">
-		<parameter name="essayIdentification" class="java.lang.String"/>
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
@@ -146,7 +145,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="481" splitType="Stretch">
+		<band height="440" splitType="Stretch">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="555" height="1"/>
 				<graphicElement>

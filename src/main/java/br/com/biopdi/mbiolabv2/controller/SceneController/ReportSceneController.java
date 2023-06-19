@@ -414,9 +414,6 @@ public class ReportSceneController implements Initializable {
                 parameters.put("author", user.getUserName());
 
 
-///////////////////////////
-
-
                 // Incluindo dados no grafico do Jasper Report
                 List<ChartAxisValueToJR> XYChartData = new ArrayList<ChartAxisValueToJR>();
 
@@ -431,35 +428,11 @@ public class ReportSceneController implements Initializable {
                     }
                 }
 
-                JRBeanCollectionDataSource teste = new JRBeanCollectionDataSource(XYChartData);
+                JRBeanCollectionDataSource xyChartDataJR = new JRBeanCollectionDataSource(XYChartData);
 
                 // Adição da lista de dados ao mapa de parâmetros
-                parameters.put("xyChartData", teste);
+                parameters.put("xyChartData", xyChartDataJR);
 
-//                // Incluindo dados no grafico do Jasper Report
-//                List<Double> xData = new ArrayList<>();
-//                List<Double> yData = new ArrayList<>();
-//
-//                // Conversao da String chartEssay para valores double
-//                String strArraySplit[] = currentEssay.getEssayChart().split(",");
-//                for (String str : strArraySplit) {
-//                    String dot[] = str.split(";");
-//                    for (int i = 0; i < dot.length; i += 2) {
-//                        // Preenchimento das listas de dados
-//                        xData.add(Double.parseDouble(dot[i]));
-//                        yData.add(Double.parseDouble(dot[i + 1]));
-//                    }
-//                }
-//
-//                Double[] xDataArray = xData.toArray(new Double[xData.size()]);
-//                Double[] yDataArray = yData.toArray(new Double[yData.size()]);
-//
-//                // Adição da lista de dados ao mapa de parâmetros
-//                parameters.put("XData", xData);
-//                parameters.put("YData", yData);
-
-
-/////////////////////////////////////////////////////////////
 
                 // Preenchimento do relatorio
                 JasperDesign jasperDesign = JRXmlLoader.load(new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jrxml")));
@@ -487,6 +460,9 @@ public class ReportSceneController implements Initializable {
 
     }
 
+    /**
+     * Classe para a criacao de objeto para preenchimento do grafico no Jasper Report
+     */
     public class ChartAxisValueToJR {
         private Double xAxis, yAxis;
         private String chartSerieTitle;
@@ -502,67 +478,21 @@ public class ReportSceneController implements Initializable {
         public Double getxAxis() {
             return xAxis;
         }
-
         public void setxAxis(Double xAxis) {
             this.xAxis = xAxis;
         }
-
         public Double getyAxis() {
             return yAxis;
         }
-
         public void setyAxis(Double yAxis) {
             this.yAxis = yAxis;
         }
-
         public String getChartSerieTitle() {
             return chartSerieTitle;
         }
-
         public void setChartSerieTitle(String chartSerieTitle) {
             this.chartSerieTitle = chartSerieTitle;
         }
-
-
-//        @Override
-//        public void beforeReportInit() throws JRScriptletException {
-//
-//        }
-//        @Override
-//        public void afterReportInit() throws JRScriptletException {
-//
-//        }
-//        @Override
-//        public void beforePageInit() throws JRScriptletException {
-//
-//        }
-//        @Override
-//        public void afterPageInit() throws JRScriptletException {
-//        }
-//        @Override
-//        public void beforeColumnInit() throws JRScriptletException {
-//
-//        }
-//        @Override
-//        public void afterColumnInit() throws JRScriptletException {
-//
-//        }
-//        @Override
-//        public void beforeGroupInit(String groupName) throws JRScriptletException {
-//
-//        }
-//        @Override
-//        public void afterGroupInit(String groupName) throws JRScriptletException {
-//
-//        }
-//        @Override
-//        public void beforeDetailEval() throws JRScriptletException {
-//
-//        }
-//        @Override
-//        public void afterDetailEval() throws JRScriptletException {
-//        }
-
     }
 
     @FXML
