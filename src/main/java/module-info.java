@@ -9,6 +9,8 @@ module br.com.biopdi.mbiolabv2 {
     requires jfxtras.icalendaragenda;
     requires kernel;
     requires layout;
+    requires java.desktop;
+    requires javafx.swing;
 
 
     opens br.com.biopdi.mbiolabv2 to javafx.fxml;

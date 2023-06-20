@@ -26,14 +26,18 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -45,6 +49,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import win.zqxu.jrviewer.JRViewerFX;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -380,8 +385,10 @@ public class ReportSceneController implements Initializable {
     private void reportSave() {
 
         Stage stage = (Stage) btnReportSave.getScene().getWindow();
+        SwingNode swingNode = new SwingNode();
+        StackPane stackPane = new StackPane(swingNode);
 
-        Platform.runLater(() ->{
+
 
             try{
                 List<Essay> reportEssayList = new ArrayList<>();
@@ -433,7 +440,6 @@ public class ReportSceneController implements Initializable {
                 // Adição da lista de dados ao mapa de parâmetros
                 parameters.put("xyChartData", xyChartDataJR);
 
-
                 // Preenchimento do relatorio
                 JasperDesign jasperDesign = JRXmlLoader.load(new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jrxml")));
 
@@ -445,22 +451,35 @@ public class ReportSceneController implements Initializable {
 
                 // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
 
-                JasperViewer jv = new JasperViewer(jasperPrint, false);
-                jv.setTitle("Emissão de relatório");
-                jv.setVisible(true);
+                if (jasperPrint != null && !jasperPrint.getPages().isEmpty()) {
 
+                    Stage reportStage = new Stage();
+                    reportStage.initOwner(stage);
+                    reportStage.setTitle("Emissão de relatório");
+                    reportStage.getIcons().add(new Image(mBioLabv2Application.class.getResourceAsStream("img/iconBiopdi.png")));
+                    reportStage.setOnCloseRequest(event -> swingNode.setContent(null));
 
+                    // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
+                    JasperViewer viewer = new JasperViewer(jasperPrint, false);
+
+                    swingNode.setContent((JComponent) viewer.getContentPane());
+
+                    stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                    StackPane.setMargin(swingNode, new Insets(10));
+
+                    reportStage.setScene(new Scene(stackPane, 800, 600));
+                    reportStage.show();
+                }
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e);
             } catch (JRException e) {
                 throw new RuntimeException(e);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
-
-        });
-
     }
 
-    /**
+        /**
      * Classe para a criacao de objeto para preenchimento do grafico no Jasper Report
      */
     public class ChartAxisValueToJR {

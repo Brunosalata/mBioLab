@@ -26,8 +26,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
@@ -38,6 +41,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import net.sf.jasperreports.engine.*;
@@ -46,11 +50,13 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 
 /**
  * @author Bruno Salata Lima - 16/05/2023
@@ -485,95 +491,103 @@ public class DashboardSceneController implements Initializable {
     private void reportSave() {
 
         Stage stage = (Stage) btnReportSave.getScene().getWindow();
+        SwingNode swingNode = new SwingNode();
+        StackPane stackPane = new StackPane(swingNode);
 
-        Platform.runLater(() ->{
+        try{
+            // Converte lista para JRBeanCollectionDataSource
+            essayCollection = new JRBeanCollectionDataSource(selectedEssayList);
 
-            try{
-                // Converte lista para JRBeanCollectionDataSource
-                essayCollection = new JRBeanCollectionDataSource(selectedEssayList);
+            // Adicao de novos parametros para preenchimento de campos do relatorio
+            User user = userDAO.findById(currentEssay.getUserId());
+            parameters.put("author", user.getUserName());
+            parameters.put("introduction", "Parâmetro enviado com sucesso!");
+            parameters.put("reportIdentification", "reportIdentification");
+            parameters.put("essayUsedMachine", currentEssay.getEssayUsedMachine());
+            parameters.put("essayNorm", currentEssay.getEssayNorm());
+            parameters.put("chargeCell", currentEssay.getEssayChargeCell());
+            parameters.put("essayVelocity", currentEssay.getEssayDislocationVelocity());
+            parameters.put("velocityUnit", "mm/min");
+            parameters.put("essayType", "Requer implementar código");
+            parameters.put("essayDay", currentEssay.getEssayDay());
+            parameters.put("essayHour", currentEssay.getEssayHour());
+            parameters.put("essayPreCharge", currentEssay.getEssayPreCharge());
+            parameters.put("essayTemperature", currentEssay.getEssayTemperature());
+            parameters.put("essayRelativeHumidity", currentEssay.getEssayRelativeHumidity());
+            parameters.put("chartTitle", "Título");
+            parameters.put("xAxisLabel", "Eixo X");
+            parameters.put("yAxisLabel", "Eixo Y");
+            // Preenchimento da tabela
+            parameters.put("CollectionBeanParam", essayCollection);
+            // Preenchimento das analises dos ensaios
+            parameters.put("maxFMax", maxFMax);
+            parameters.put("maxPMax", maxPMax);
+            parameters.put("maxTMax", maxTMax);
+            parameters.put("maxTEsc", maxTEsc);
+            parameters.put("maxAlong", maxAlong);
+            parameters.put("maxRedArea", maxRedArea);
+            parameters.put("maxMYoung", maxMYoung);
+            parameters.put("minFMax", minFMax);
+            parameters.put("minPMax", minPMax);
+            parameters.put("minTMax", minTMax);
+            parameters.put("minTEsc", minTEsc);
+            parameters.put("minAlong", minAlong);
+            parameters.put("minRedArea", minRedArea);
+            parameters.put("minMYoung", minMYoung);
+            parameters.put("medFMax", medFMax);
+            parameters.put("medPMax", medPMax);
+            parameters.put("medTMax", medTMax);
+            parameters.put("medTEsc", medTEsc);
+            parameters.put("medAlong", medAlong);
+            parameters.put("medRedArea", medRedArea);
+            parameters.put("medMYoung", medMYoung);
+            parameters.put("devFMax", devFMax);
+            parameters.put("devPMax", devPMax);
+            parameters.put("devTMax", devTMax);
+            parameters.put("devTEsc", devTEsc);
+            parameters.put("devAlong", devAlong);
+            parameters.put("devRedArea", devRedArea);
+            parameters.put("devMYoung", devMYoung);
 
-                // Adicao de novos parametros para preenchimento de campos do relatorio
-                User user = userDAO.findById(currentEssay.getUserId());
-                parameters.put("author", user.getUserName());
-                parameters.put("introduction", "Parâmetro enviado com sucesso!");
-                parameters.put("reportIdentification", "reportIdentification");
-                parameters.put("essayUsedMachine", currentEssay.getEssayUsedMachine());
-                parameters.put("essayNorm", currentEssay.getEssayNorm());
-                parameters.put("chargeCell", currentEssay.getEssayChargeCell());
-                parameters.put("essayVelocity", currentEssay.getEssayDislocationVelocity());
-                parameters.put("velocityUnit", "mm/min");
-                parameters.put("essayType", "Requer implementar código");
-                parameters.put("essayDay", currentEssay.getEssayDay());
-                parameters.put("essayHour", currentEssay.getEssayHour());
-                parameters.put("essayPreCharge", currentEssay.getEssayPreCharge());
-                parameters.put("essayTemperature", currentEssay.getEssayTemperature());
-                parameters.put("essayRelativeHumidity", currentEssay.getEssayRelativeHumidity());
-                parameters.put("chartTitle", "Título");
-                parameters.put("xAxisLabel", "Eixo X");
-                parameters.put("yAxisLabel", "Eixo Y");
-                // Preenchimento da tabela
-                parameters.put("CollectionBeanParam", essayCollection);
-                // Preenchimento das analises dos ensaios
-                parameters.put("maxFMax", maxFMax);
-                parameters.put("maxPMax", maxPMax);
-                parameters.put("maxTMax", maxTMax);
-                parameters.put("maxTEsc", maxTEsc);
-                parameters.put("maxAlong", maxAlong);
-                parameters.put("maxRedArea", maxRedArea);
-                parameters.put("maxMYoung", maxMYoung);
-                parameters.put("minFMax", minFMax);
-                parameters.put("minPMax", minPMax);
-                parameters.put("minTMax", minTMax);
-                parameters.put("minTEsc", minTEsc);
-                parameters.put("minAlong", minAlong);
-                parameters.put("minRedArea", minRedArea);
-                parameters.put("minMYoung", minMYoung);
-                parameters.put("medFMax", medFMax);
-                parameters.put("medPMax", medPMax);
-                parameters.put("medTMax", medTMax);
-                parameters.put("medTEsc", medTEsc);
-                parameters.put("medAlong", medAlong);
-                parameters.put("medRedArea", medRedArea);
-                parameters.put("medMYoung", medMYoung);
-                parameters.put("devFMax", devFMax);
-                parameters.put("devPMax", devPMax);
-                parameters.put("devTMax", devTMax);
-                parameters.put("devTEsc", devTEsc);
-                parameters.put("devAlong", devAlong);
-                parameters.put("devRedArea", devRedArea);
-                parameters.put("devMYoung", devMYoung);
+            // Conversao da List<XYChartData> em uma fonte de dados de classe JRBeanCollectionDataSource
+            JRBeanCollectionDataSource xyChartDataJR = new JRBeanCollectionDataSource(XYChartData);
 
-                // Conversao da List<XYChartData> em uma fonte de dados de classe JRBeanCollectionDataSource
-                JRBeanCollectionDataSource xyChartDataJR = new JRBeanCollectionDataSource(XYChartData);
+            // Adição da lista de dados ao mapa de parâmetros
+            parameters.put("xyChartData", xyChartDataJR);
 
-                // Adição da lista de dados ao mapa de parâmetros
-                parameters.put("xyChartData", xyChartDataJR);
+            // Preenchimento do relatorio
+            JasperDesign jasperDesign = JRXmlLoader.load(new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/dashboardReport.jrxml")));
 
+            // Compilando jrxml com a classe JasperReport
+            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
 
-                // Preenchimento do relatorio
-                JasperDesign jasperDesign = JRXmlLoader.load(new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/dashboardReport.jrxml")));
+            // Gerar pdf a partir do objeto jasperReport
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 
-                // Compilando jrxml com a classe JasperReport
-                JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+            if (jasperPrint != null && !jasperPrint.getPages().isEmpty()) {
 
-                // Gerar pdf a partir do objeto jasperReport
-                JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+                Stage reportStage = new Stage();
+                reportStage.initOwner(stage);
+                reportStage.setTitle("Emissão de relatório");
+                reportStage.getIcons().add(new Image(mBioLabv2Application.class.getResourceAsStream("img/iconBiopdi.png")));
+                reportStage.setOnCloseRequest(event -> swingNode.setContent(null));
 
                 // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
+                JasperViewer viewer = new JasperViewer(jasperPrint, false);
 
-                JasperViewer jv = new JasperViewer(jasperPrint, false);
-                jv.setTitle("Emissão de relatório");
-                jv.setVisible(true);
+                swingNode.setContent((JComponent) viewer.getContentPane());
 
+                stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                StackPane.setMargin(swingNode, new Insets(10));
 
-            } catch (JRException e) {
-                throw new RuntimeException(e);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+                reportStage.setScene(new Scene(stackPane, 800, 600));
+                reportStage.show();
             }
-
-        });
-
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void serieInclude(){
