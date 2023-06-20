@@ -53,6 +53,15 @@ public class mBioLabv2Application extends Application {
         primaryStage.setResizable(false);  // Impede redimensionamento da janela
         primaryStage.setScene(new Scene(login));
         primaryStage.show();
+
+
+        // Chama SplashScene a partir da classe SplashSceneController
+//        initialSetup();
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("splashScene.fxml"));
+//        Parent splash = loader.load();
+//        primaryStage.initStyle(StageStyle.UNDECORATED);
+//        primaryStage.setScene(new Scene(splash));
+//        primaryStage.show();
     }
 
     /**

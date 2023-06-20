@@ -5,23 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02b74ee7-7c41-4de8-9b11-7638723b4e97" name="Changes" comment="git branch adjust">
-      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/SplashSceneController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/splashScene.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/mBioLabDB.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/mBioLabDB.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/LoginSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/LoginSceneController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/SplashSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/SplashSceneController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/mBioLabv2Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/mBioLabv2Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/reportScene.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/reportScene.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/LoginSceneController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/LoginSceneController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/mBioLabv2Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/mBioLabv2Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/reportScene.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/reportScene.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/module-info.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/module-info.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
