@@ -15,7 +15,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import win.zqxu.jrviewer.JRViewerFX?>
 
 <!--
   ~  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -353,11 +352,10 @@
                                                          <children>
                                                             <BorderPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                                                <center>
-                                                                  <JRViewerFX fx:id="jvReport" BorderPane.alignment="CENTER">
-                                                                     <BorderPane.margin>
-                                                                        <Insets left="10.0" right="10.0" />
-                                                                     </BorderPane.margin>
-                                                                  </JRViewerFX>
+
+                                                               </center>
+                                                               <center>
+                                                                  <ImageView fx:id="ivPreviewReport" fitHeight="470.0" fitWidth="363.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
                                                                </center>
                                                             </BorderPane>
                                                          </children>

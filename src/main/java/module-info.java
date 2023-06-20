@@ -11,6 +11,7 @@ module br.com.biopdi.mbiolabv2 {
     requires layout;
     requires java.desktop;
     requires javafx.swing;
+    requires javafx.media;
 
 
     opens br.com.biopdi.mbiolabv2 to javafx.fxml;

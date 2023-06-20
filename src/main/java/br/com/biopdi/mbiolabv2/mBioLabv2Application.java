@@ -39,11 +39,11 @@ public class mBioLabv2Application extends Application {
     private SystemVariableDAO sysVarDAO = new SystemVariableDAO();
     private SystemVariable sysVar = sysVarDAO.find();
     private SerialConnection serialConnection = new SerialConnection();
+    public static Boolean isSplashLoaded = false;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        splashScene();
         initialSetup();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("loginScene.fxml"));
@@ -61,13 +61,6 @@ public class mBioLabv2Application extends Application {
     private void initialSetup() {
         sysVar.setUserId(3);
         sysVarDAO.updateUser(sysVar);
-    }
-
-    /**
-     * Método que carrega splash Scene
-     */
-    public void splashScene() {
-
     }
 
     public static void main(String[] args) {

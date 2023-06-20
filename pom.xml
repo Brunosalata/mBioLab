@@ -89,11 +89,14 @@
             <artifactId>jfxtras-icalendaragenda</artifactId>
             <version>17-r1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/itext7-core -->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext7-core</artifactId>
             <version>8.0.0</version>
+            <type>pom</type>
         </dependency>
+
         <!-- Report creator-->
         <!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
         <dependency>
@@ -161,12 +164,17 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
-            <version>17.0.2</version>
+            <version>19.0.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
             <version>19.0.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>17.0.2</version>
         </dependency>
     </dependencies>
 

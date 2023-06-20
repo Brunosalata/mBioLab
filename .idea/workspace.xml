@@ -5,17 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02b74ee7-7c41-4de8-9b11-7638723b4e97" name="Changes" comment="git branch adjust">
-      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/CustomJasperViewer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/SplashSceneController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/splashScene.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/mBioLabDB.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/mBioLabDB.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/LoginSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/LoginSceneController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/mBioLabv2Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/mBioLabv2Application.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/reportScene.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/reportScene.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/DashboardSceneController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/LoginSceneController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/LoginSceneController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/ReportSceneController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/mBioLabv2Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/mBioLabv2Application.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/reportScene.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/reportScene.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/module-info.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/module-info.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,8 +37,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="FxmlFile" />
         <option value="Interface" />
+        <option value="FxmlFile" />
         <option value="Class" />
       </list>
     </option>
@@ -144,6 +149,19 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.mBioLabv2Application">
+    <configuration name="SplashScreenApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="br.com.biopdi.mbiolabv2.SplashScreenApp" />
+      <module name="mBioLabv2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="br.com.biopdi.mbiolabv2.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="mBioLabv2Application" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="azul-17" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -172,10 +190,12 @@
     </configuration>
     <list>
       <item itemvalue="Application.mBioLabv2Application" />
+      <item itemvalue="Application.SplashScreenApp" />
       <item itemvalue="JUnit.All in mBioLabv2" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.SplashScreenApp" />
         <item itemvalue="JUnit.All in mBioLabv2" />
       </list>
     </recent_temporary>

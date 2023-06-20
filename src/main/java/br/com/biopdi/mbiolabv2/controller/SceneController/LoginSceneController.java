@@ -20,6 +20,7 @@ import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 import br.com.biopdi.mbiolabv2.mBioLabv2Application;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import br.com.biopdi.mbiolabv2.model.bean.User;
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,11 +39,14 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Bruno Salata Lima - 16/05/2023
@@ -56,6 +60,7 @@ public class LoginSceneController implements Initializable {
     private final SystemVariableDAO sysVarDAO = new SystemVariableDAO();
     @FXML
     private AnchorPane apLogin, apUserRegister;
+    public static AnchorPane rootP;
     @FXML
     private TextField txtLogin;
     @FXML
@@ -66,7 +71,10 @@ public class LoginSceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        if(!mBioLabv2Application.isSplashLoaded){
+            loadSplashScreen();
+        }
+        rootP = apLogin;
     }
 
     /**
@@ -210,5 +218,45 @@ public class LoginSceneController implements Initializable {
 
     }
 
+    private void loadSplashScreen() {
+        try {
+            mBioLabv2Application.isSplashLoaded = true;
+            //Load splash screen view FXML
+            AnchorPane pane = FXMLLoader.load(mBioLabv2Application.class.getResource("splashScene.fxml"));
+            //Add it to root container (Can be StackPane, AnchorPane etc)
+            apLogin.getChildren().setAll(pane);
+
+            //Load splash screen with fade in effect
+            FadeTransition fadeIn = new FadeTransition(Duration.seconds(3), pane);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+            fadeIn.setCycleCount(1);
+
+            //Finish splash with fade out effect
+            FadeTransition fadeOut = new FadeTransition(Duration.seconds(3), pane);
+            fadeOut.setFromValue(1);
+            fadeOut.setToValue(0);
+            fadeOut.setCycleCount(1);
+
+            fadeIn.play();
+
+            //After fade in, start fade out
+            fadeIn.setOnFinished((e) -> {
+                fadeOut.play();
+            });
+
+            //After fade out, load actual content
+            fadeOut.setOnFinished((e) -> {
+                try {
+                    AnchorPane parentContent = FXMLLoader.load(mBioLabv2Application.class.getResource("loginScene.fxml"));
+                    apLogin.getChildren().setAll(parentContent);
+                } catch (IOException ex) {
+                    Logger.getLogger(mBioLabv2Application.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        } catch (IOException ex) {
+            Logger.getLogger(mBioLabv2Application.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 }

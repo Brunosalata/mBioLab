@@ -81,7 +81,7 @@ public class ReportSceneController implements Initializable {
     @FXML
     private ComboBox cbUserFilter, cbEssayUsedMachineFilter, cbNormFilter;
     @FXML
-    private ImageView ivEssayUser;
+    private ImageView ivEssayUser, ivPreviewReport;
     @FXML
     private DatePicker dpEssayByDate;
     @FXML
@@ -450,7 +450,6 @@ public class ReportSceneController implements Initializable {
                 JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 
                 // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
-
                 if (jasperPrint != null && !jasperPrint.getPages().isEmpty()) {
 
                     Stage reportStage = new Stage();

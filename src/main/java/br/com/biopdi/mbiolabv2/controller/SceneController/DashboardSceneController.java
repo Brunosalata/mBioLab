@@ -86,7 +86,7 @@ public class DashboardSceneController implements Initializable {
     @FXML
     private TextField txtLed;
     @FXML
-    private ImageView ivEssayUser;
+    private ImageView ivEssayUser, ivPreviewDashboard;
     @FXML
     private LineChart<Number, Number> chartMultiLine;
     private XYChart.Series seriesMulti;
@@ -589,6 +589,8 @@ public class DashboardSceneController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+
 
     private void serieInclude(){
         // Conversao da String chartEssay para valores double
