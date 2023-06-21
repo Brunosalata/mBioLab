@@ -30,7 +30,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -58,16 +64,17 @@ public class SystemSettingSceneController implements Initializable {
     @FXML
     private RadioButton rbUserEssayDelete;
     @FXML
-    private Label lbCurrentData, lbUserUpdate, lbUserUpdateAlert;
+    private Label lbCurrentData, lbUserUpdate, lbUserUpdateAlert, lbLastBackupDate;
     @FXML
     private TextField txtName, txtLogin, txtPassword;
     private SerialPort port;
 
 
-    Date systemDate = new Date();
+    Date systemDate;
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    SimpleDateFormat brasilianDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-    String currentDate = brasilianDate.format(systemDate);
+    SimpleDateFormat brasilianDay = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat brasilianHour = new SimpleDateFormat("HH-mm");
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -95,6 +102,8 @@ public class SystemSettingSceneController implements Initializable {
         cbLanguage.setPromptText(systemParameter.getSystemLanguage());
         cbSound.setPromptText(systemParameter.getSoundOn());
         cbTheme.setPromptText(systemParameter.getTheme());
+
+        lastBackupDate();
 
     }
 
@@ -265,6 +274,66 @@ public class SystemSettingSceneController implements Initializable {
         for(Essay essay : essayList){
             essayDAO.delete(essay);
         }
+    }
+
+    /**
+     * Metodo que gera um backup do banco de dados SQLite e armazena na pasta /backup
+     */
+    @FXML
+    public void backupDB() {
+        systemDate = new Date();
+        String currentDay = brasilianDay.format(systemDate);
+        String currentHour = brasilianHour.format(systemDate);
+        Path origin = Path.of("database/mBioLabDB.db");
+        Path output = Path.of("database/BackupDB/mBioLabDB_BACKUP_"+ currentDay +"_" + currentHour + ".db");
+
+        try {
+            Files.copy(origin, output, StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("Arquivo copiado com sucesso.");
+        } catch (IOException e) {
+            System.out.println("Ocorreu um erro ao copiar o arquivo: " + e.getMessage());
+        }
+        lastBackupDate();
+    }
+
+    /**
+     * Metodo que expoe data e hora do ultimo backup realizado
+     */
+    public void lastBackupDate(){
+        String diretory = "database/BackupDB";
+
+        File dir = new File(diretory);
+        File lastBackupFile = null;
+        long lastBackupDate = Long.MIN_VALUE;
+
+        if (dir.isDirectory()) {
+            File[] fileList = dir.listFiles();
+
+            for (File file : fileList) {
+                try {
+                    Path arquivoPath = file.toPath();
+                    BasicFileAttributes attributes = Files.readAttributes(arquivoPath, BasicFileAttributes.class);
+                    long modificationDate = attributes.lastModifiedTime().toMillis();
+
+                    if (modificationDate > lastBackupDate) {
+                        lastBackupDate = modificationDate;
+                        lastBackupFile = file;
+                    }
+                } catch (IOException e) {
+                    System.out.println("Ocorreu um erro ao ler os atributos do arquivo: " + e.getMessage());
+                }
+            }
+        }
+
+        if (lastBackupFile != null) {
+            System.out.println("Arquivo mais recente: " + lastBackupFile.getAbsolutePath());
+            lbLastBackupDate.setText(lastBackupFile.getName());
+        } else {
+            System.out.println("Diretório vazio ou inválido.");
+            lbLastBackupDate.setText("Nenhum backup realizado");
+        }
+
+
     }
 
 }

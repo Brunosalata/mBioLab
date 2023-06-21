@@ -20,6 +20,8 @@ import br.com.biopdi.mbiolabv2.controller.repository.dao.UserDAO;
 import br.com.biopdi.mbiolabv2.mBioLabv2Application;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import br.com.biopdi.mbiolabv2.model.bean.User;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -72,11 +74,8 @@ public class SwitchMenuSceneController implements Initializable {
     private HBox hbMenuBar;
     private boolean menuSliderIn = false;
 
-
-    Date systemDate = new Date();
-    SimpleDateFormat dateComplete = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    SimpleDateFormat brasilianDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-    String currentDate = brasilianDate.format(systemDate);
+    
+    SimpleDateFormat brasilianDate = new SimpleDateFormat("EEEEE dd/MM/yyyy HH:mm");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -319,9 +318,15 @@ public class SwitchMenuSceneController implements Initializable {
      */
     @FXML
     private void clockView() {
-        // Thread to update the clock textLabel from GUI
-        Thread clock = new Thread(new clockReader());
-        clock.start();
+        // agora ligamos um loop infinito que roda a cada segundo e atualiza nosso label chamando atualizaHoras.
+        KeyFrame frame = new KeyFrame(Duration.millis(1000), e -> hourUpdate());
+        Timeline timeline = new Timeline(frame);
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+    private void hourUpdate(){
+        Date now = new Date();
+        lbCurrentData.setText(brasilianDate.format(now));
     }
 
     /**

@@ -96,12 +96,11 @@ public class EssaySceneController implements Initializable {
     private VBox vBoxEssayStart;
 
 
-    Date systemDate = new Date();
+    Date systemDate;
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat brasilianDay = new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat brasilianHour = new SimpleDateFormat("HH:mm");
-    String currentDay = brasilianDay.format(systemDate);
-    String currentHour = brasilianHour.format(systemDate);
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -1539,6 +1538,9 @@ public class EssaySceneController implements Initializable {
                         method.setChartViewIndex(1);
                     }
                     method.setMethodName(txtMethodName.getText());
+                    systemDate = new Date();
+                    String currentDay = brasilianDay.format(systemDate);
+                    String currentHour = brasilianHour.format(systemDate);
                     method.setMethodDate(currentDay + " - " + currentHour);
                     method.setEssayVelocity(Double.valueOf(txtEssayVelocity.getText()));
                     method.setSpecimenCrossSectionArea(Double.valueOf(txtSpecimenCrossSectionArea.getText()));
@@ -1615,6 +1617,9 @@ public class EssaySceneController implements Initializable {
             essayFinalyzed.setEssayAreaRed(redArea);
             essayFinalyzed.setEssayMYoung(mYoung);
             essayFinalyzed.setEssayChart(chartString);
+            systemDate = new Date();
+            String currentDay = brasilianDay.format(systemDate);
+            String currentHour = brasilianHour.format(systemDate);
             essayFinalyzed.setEssayDay(currentDay);
             essayFinalyzed.setEssayHour(currentHour);
 
