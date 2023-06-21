@@ -74,8 +74,6 @@ public class SwitchMenuSceneController implements Initializable {
     private HBox hbMenuBar;
     private boolean menuSliderIn = false;
 
-    
-    SimpleDateFormat brasilianDate = new SimpleDateFormat("EEEEE dd/MM/yyyy HH:mm");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -101,8 +99,6 @@ public class SwitchMenuSceneController implements Initializable {
                 menuSliderIn=false;
             }
         });
-
-
     }
 
     /**
@@ -135,7 +131,6 @@ public class SwitchMenuSceneController implements Initializable {
         switchToHomeScene(new ActionEvent());
 
     }
-
 
     /**
      * Método que abre a Scene Home dentro da SwitchMenu
@@ -288,33 +283,7 @@ public class SwitchMenuSceneController implements Initializable {
     }
 
     /**
-     * Classe que define o algorítmo da Thread que faz a leitura dinâmica do relógio
-     */
-    class clockReader implements Runnable {
-        // SystemVariableDAO systemVariableDAO = new SystemVariableDAO();
-        @FXML
-        @Override
-        public synchronized void run() {
-            //Atualização da UI pela Thread
-            Platform.runLater(()->{
-                try{
-//                    while(true){
-//                        lbCurrentData.setText(currentDate);
-//                        try {
-//                            Thread.sleep(10000);
-//                        } catch (InterruptedException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                    }
-                } catch (RuntimeException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        }
-    }
-
-    /**
-     * Método de exibição do relógio no rodapé da janela
+     * Método de cicla o monitoramento do horário no sistema e atualiza a aplicacao via metodo hourUpdate
      */
     @FXML
     private void clockView() {
@@ -324,9 +293,24 @@ public class SwitchMenuSceneController implements Initializable {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
+
+    /**
+     * Metodo que cria e atualiza horario na label clock da SwitchMenuScene, consumido pelo metodo clockView
+     */
     private void hourUpdate(){
+        String s1, s2, s3, s4, s5;
         Date now = new Date();
-        lbCurrentData.setText(brasilianDate.format(now));
+        SimpleDateFormat weekDay = new SimpleDateFormat("EEEEE");
+        s1 = weekDay.format(now);
+        SimpleDateFormat day = new SimpleDateFormat("dd");
+        s2 = day.format(now);
+        SimpleDateFormat month = new SimpleDateFormat("MMMMM");
+        s3 = month.format(now);
+        SimpleDateFormat year = new SimpleDateFormat("yyyy");
+        s4 = year.format(now);
+        SimpleDateFormat hour = new SimpleDateFormat("HH:mm");
+        s5 = hour.format(now);
+        lbCurrentData.setText(s1 + ", " + s2 + " de " + s3 + " de " + s4 + "  " + s5);
     }
 
     /**

@@ -6,9 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="02b74ee7-7c41-4de8-9b11-7638723b4e97" name="Changes" comment="git branch adjust">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/jrxml/dashboardReport.jrxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/jrxml/dashboardReport.jrxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jrxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jrxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/supportScene.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/br/com/biopdi/mbiolabv2/supportScene.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/mBioLabDB.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/mBioLabDB.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/switchScene/SwitchMenuSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/biopdi/mbiolabv2/controller/SceneController/switchScene/SwitchMenuSceneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/switchScene/SwitchMenuSceneController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/com/biopdi/mbiolabv2/controller/SceneController/switchScene/SwitchMenuSceneController.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
