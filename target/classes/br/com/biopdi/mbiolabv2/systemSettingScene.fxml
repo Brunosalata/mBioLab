@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 
 <!--
-  ~  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~  Copyright (c) 2023.
   ~  Licensed under the Biopdi® License, Version 1.0.
   ~  You may not use this file except in compliance with the License.
   ~  You may obtain a copy of the License at
@@ -180,21 +180,17 @@
                                     <Insets left="20.0" right="20.0" top="10.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label prefHeight="21.0" prefWidth="231.0" text="Login">
+                              <Label alignment="CENTER" prefHeight="21.0" prefWidth="231.0" text="Login">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
                                  <VBox.margin>
                                     <Insets left="40.0" right="40.0" top="20.0" />
                                  </VBox.margin>
-                                 <padding>
-                                    <Insets left="55.0" />
-                                 </padding>
                               </Label>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <ComboBox fx:id="cbLoginList" onAction="#loginList" prefWidth="150.0" AnchorPane.leftAnchor="40.0" />
-                                    <Button fx:id="btnFindUser" mnemonicParsing="false" onAction="#showUser" text="Buscar" AnchorPane.rightAnchor="40.0" />
+                                    <ComboBox fx:id="cbLoginList" prefWidth="150.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
                                  </children>
                               </AnchorPane>
                               <Label alignment="CENTER" contentDisplay="CENTER" text="Editar usuário">
@@ -295,7 +291,7 @@
                                  </font>
                               </Label>
                               <Button fx:id="btnBackupDB" layoutX="95.0" layoutY="55.0" mnemonicParsing="false" onAction="#backupDB" prefHeight="25.0" prefWidth="100.0" text="Fazer backup" />
-                              <Label fx:id="lbLastBackupDate" alignment="CENTER" layoutX="28.0" layoutY="102.0" prefHeight="17.0" prefWidth="131.0" text="Label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                              <Label fx:id="lbLastBackupDate" alignment="CENTER" layoutX="28.0" layoutY="102.0" prefHeight="17.0" prefWidth="131.0" text="Backup não encontrado" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                            </children>
                         </AnchorPane>
                      </children>

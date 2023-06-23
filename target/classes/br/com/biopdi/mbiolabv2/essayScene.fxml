@@ -24,7 +24,7 @@
 <?import javafx.scene.text.Font?>
 
 <!--
-  ~  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~  Copyright (c) 2023.
   ~  Licensed under the Biopdi® License, Version 1.0.
   ~  You may not use this file except in compliance with the License.
   ~  You may obtain a copy of the License at
@@ -927,7 +927,7 @@
                                                                                           </Label>
                                                                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="184.0" VBox.vgrow="ALWAYS">
                                                                                              <children>
-                                                                                                <TextField fx:id="txtSpecimenAValueRectangle" alignment="CENTER" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="75.0" promptText="0.00">
+                                                                                                <TextField fx:id="txtSpecimenAValueRectangle" alignment="CENTER" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="75.0" text="1.00">
                                                                                                    <HBox.margin>
                                                                                                       <Insets />
                                                                                                    </HBox.margin>
@@ -949,7 +949,7 @@
                                                                                           </Label>
                                                                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="184.0">
                                                                                              <children>
-                                                                                                <TextField fx:id="txtSpecimenBValueRectangle" alignment="CENTER" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="75.0" promptText="0.00">
+                                                                                                <TextField fx:id="txtSpecimenBValueRectangle" alignment="CENTER" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="75.0" text="1.00">
                                                                                                    <HBox.margin>
                                                                                                       <Insets />
                                                                                                    </HBox.margin>
@@ -1014,7 +1014,7 @@
                                                                                           </Label>
                                                                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="184.0" VBox.vgrow="ALWAYS">
                                                                                              <children>
-                                                                                                <TextField fx:id="txtSpecimenAValueCylinder" alignment="CENTER" disable="true" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="75.0" promptText="0.00">
+                                                                                                <TextField fx:id="txtSpecimenAValueCylinder" alignment="CENTER" disable="true" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="75.0">
                                                                                                    <HBox.margin>
                                                                                                       <Insets />
                                                                                                    </HBox.margin>
@@ -1036,7 +1036,7 @@
                                                                                           </Label>
                                                                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="184.0">
                                                                                              <children>
-                                                                                                <TextField fx:id="txtSpecimenBValueCylinder" alignment="CENTER" disable="true" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="75.0" promptText="0.00">
+                                                                                                <TextField fx:id="txtSpecimenBValueCylinder" alignment="CENTER" disable="true" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="75.0">
                                                                                                    <HBox.margin>
                                                                                                       <Insets />
                                                                                                    </HBox.margin>
@@ -1102,7 +1102,7 @@
                                                                                           </Label>
                                                                                           <HBox alignment="CENTER" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="201.0" VBox.vgrow="ALWAYS">
                                                                                              <children>
-                                                                                                <TextField fx:id="txtSpecimenValueTubular" alignment="CENTER" disable="true" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="75.0" promptText="0.00">
+                                                                                                <TextField fx:id="txtSpecimenValueTubular" alignment="CENTER" disable="true" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="75.0">
                                                                                                    <HBox.margin>
                                                                                                       <Insets />
                                                                                                    </HBox.margin>
@@ -1158,7 +1158,7 @@
                                                                               </Label>
                                                                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="411.0" VBox.vgrow="ALWAYS">
                                                                                  <children>
-                                                                                    <TextField fx:id="txtSpecimenCrossSectionCalcule" alignment="CENTER" editable="false" prefWidth="150.0" promptText="0.00">
+                                                                                    <TextField fx:id="txtSpecimenCrossSectionCalcule" alignment="CENTER" editable="false" prefWidth="150.0" promptText="0.00" text="1.00">
                                                                                        <HBox.margin>
                                                                                           <Insets />
                                                                                        </HBox.margin>
@@ -1187,7 +1187,7 @@
                                                                               </Label>
                                                                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="184.0" VBox.vgrow="ALWAYS">
                                                                                  <children>
-                                                                                    <TextField fx:id="txtSpecimenCrossSectionArea" alignment="CENTER" prefWidth="150.0" promptText="0.00">
+                                                                                    <TextField fx:id="txtSpecimenCrossSectionArea" alignment="CENTER" prefWidth="150.0" promptText="0.00" text="1.00">
                                                                                        <HBox.margin>
                                                                                           <Insets />
                                                                                        </HBox.margin>
@@ -1216,12 +1216,12 @@
                                                                               </Label>
                                                                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="184.0" VBox.vgrow="ALWAYS">
                                                                                  <children>
-                                                                                    <TextField fx:id="txtSpecimenCrossSectionLength" alignment="CENTER" prefWidth="150.0" promptText="0.00">
+                                                                                    <TextField fx:id="txtSpecimenCrossSectionLength" alignment="CENTER" prefWidth="150.0" text="1.00">
                                                                                        <HBox.margin>
                                                                                           <Insets />
                                                                                        </HBox.margin>
                                                                                     </TextField>
-                                                                                    <Label text="mm²" HBox.hgrow="ALWAYS">
+                                                                                    <Label text="mm" HBox.hgrow="ALWAYS">
                                                                                        <HBox.margin>
                                                                                           <Insets left="5.0" />
                                                                                        </HBox.margin>
@@ -1873,7 +1873,7 @@
                                                                                              <children>
                                                                                                 <HBox alignment="CENTER" prefHeight="32.0" prefWidth="109.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                                                    <children>
-                                                                                                      <ImageView fx:id="ivEssayUser" fitHeight="33.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                      <ImageView fx:id="ivEssayUser1" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                                                                                          <image>
                                                                                                             <Image url="@img/darkIcon/icons8-profile-96.png" />
                                                                                                          </image>
@@ -2085,7 +2085,7 @@
                                                 </HBox>
                                              </children>
                                           </VBox>
-                                          <AnchorPane maxHeight="-Infinity" prefHeight="87.0" prefWidth="748.0" style="-fx-background-color: #dddddd;" VBox.vgrow="SOMETIMES">
+                                          <AnchorPane prefHeight="87.0" prefWidth="748.0" style="-fx-background-color: #dddddd;" VBox.vgrow="SOMETIMES">
                                              <children>
                                                 <VBox prefHeight="96.0" prefWidth="748.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                                    <children>
@@ -2114,9 +2114,9 @@
                                                                   </Label>
                                                                   <AnchorPane prefHeight="31.0" prefWidth="109.0" VBox.vgrow="ALWAYS">
                                                                      <children>
-                                                                        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="109.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                        <HBox alignment="CENTER" prefHeight="40.0" prefWidth="109.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                            <children>
-                                                                              <ImageView fx:id="ivEssayUser2" fitHeight="33.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                                                              <ImageView fx:id="ivEssayUser" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                                                                                  <image>
                                                                                     <Image url="@img/darkIcon/icons8-profile-96.png" />
                                                                                  </image>
@@ -2146,7 +2146,7 @@
                                                                   </Label>
                                                                   <Label fx:id="lbFMax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="73.0" text="0.000">
                                                                      <VBox.margin>
-                                                                        <Insets />
+                                                                        <Insets top="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
                                                                </children>
@@ -2163,7 +2163,7 @@
                                                                   </Label>
                                                                   <Label fx:id="lbPMax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="81.0" text="0.000">
                                                                      <VBox.margin>
-                                                                        <Insets />
+                                                                        <Insets top="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
                                                                </children>
@@ -2180,7 +2180,7 @@
                                                                   </Label>
                                                                   <Label fx:id="lbTMax" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="74.0" text="0.000">
                                                                      <VBox.margin>
-                                                                        <Insets />
+                                                                        <Insets top="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
                                                                </children>
@@ -2197,7 +2197,7 @@
                                                                   </Label>
                                                                   <Label fx:id="lbTEsc" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="80.0" text="0.000">
                                                                      <VBox.margin>
-                                                                        <Insets />
+                                                                        <Insets top="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
                                                                </children>
@@ -2214,7 +2214,7 @@
                                                                   </Label>
                                                                   <Label fx:id="lbAlong" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="89.0" text="0.000">
                                                                      <VBox.margin>
-                                                                        <Insets />
+                                                                        <Insets top="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
                                                                </children>
@@ -2231,7 +2231,7 @@
                                                                   </Label>
                                                                   <Label fx:id="lbRedArea" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="90.0" text="0.000">
                                                                      <VBox.margin>
-                                                                        <Insets />
+                                                                        <Insets top="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
                                                                </children>
@@ -2248,7 +2248,7 @@
                                                                   </Label>
                                                                   <Label fx:id="lbMYoung" alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="90.0" text="0.000">
                                                                      <VBox.margin>
-                                                                        <Insets />
+                                                                        <Insets top="3.0" />
                                                                      </VBox.margin>
                                                                   </Label>
                                                                </children>

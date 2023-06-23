@@ -1,7 +1,7 @@
 package br.com.biopdi.mbiolabv2.controller.SceneController;
 
 /*
- *  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *  Copyright (c) 2023.
  *  Licensed under the Biopdi® License, Version 1.0.
  *  You may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -24,6 +24,8 @@ import br.com.biopdi.mbiolabv2.model.bean.SystemParameter;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import br.com.biopdi.mbiolabv2.model.bean.User;
 import com.fazecast.jSerialComm.SerialPort;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -70,8 +72,6 @@ public class SystemSettingSceneController implements Initializable {
     private SerialPort port;
 
 
-    Date systemDate;
-    SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat brasilianDay = new SimpleDateFormat("dd-MM-yyyy");
     SimpleDateFormat brasilianHour = new SimpleDateFormat("HH-mm");
 
@@ -104,6 +104,12 @@ public class SystemSettingSceneController implements Initializable {
         cbTheme.setPromptText(systemParameter.getTheme());
 
         lastBackupDate();
+        cbLoginList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                showUser();
+            }
+        });
 
     }
 
@@ -181,7 +187,7 @@ public class SystemSettingSceneController implements Initializable {
             if(sysVar.getUserId()==1 && login.getUserId()>1){
                 cbLoginList.getItems().add(login.getUserLogin());
             } else if(sysVar.getUserId()==2){
-                if(login.getUserId()==2 && login.getUserId()>3){
+                if (login.getUserId()==2 || login.getUserId()>3){
                     cbLoginList.getItems().add(login.getUserLogin());
                 }
             }
@@ -235,7 +241,6 @@ public class SystemSettingSceneController implements Initializable {
         txtLogin.setText("");
         txtName.setText("");
         txtPassword.setText("");
-        cbLoginList.getItems().clear();
         lbUserUpdate.setVisible(false);
         lbUserUpdateAlert.setVisible(false);
     }
@@ -281,7 +286,7 @@ public class SystemSettingSceneController implements Initializable {
      */
     @FXML
     public void backupDB() {
-        systemDate = new Date();
+        Date systemDate = new Date();
         String currentDay = brasilianDay.format(systemDate);
         String currentHour = brasilianHour.format(systemDate);
         Path origin = Path.of("database/mBioLabDB.db");

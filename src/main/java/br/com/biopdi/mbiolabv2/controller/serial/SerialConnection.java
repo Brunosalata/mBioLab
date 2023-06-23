@@ -1,6 +1,6 @@
 package br.com.biopdi.mbiolabv2.controller.serial;
 /*
- *  Copyright (c) 2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *  Copyright (c) 2023.
  *  Licensed under the Biopdi® License, Version 1.0.
  *  You may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at

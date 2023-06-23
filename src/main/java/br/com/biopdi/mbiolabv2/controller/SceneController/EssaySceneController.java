@@ -17,14 +17,12 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * @author Bruno Salata Lima - 16/05/2023
@@ -34,6 +32,7 @@ import java.util.ResourceBundle;
  */
 public class EssaySceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
+    static {Locale.setDefault(Locale.US);}  // Define a localidade para usar ponto como separador decimal
     private final UserDAO userDAO = new UserDAO();
     private final EssayDAO essayDAO = new EssayDAO();
     private final SetupDAO setupDAO = new SetupDAO();
@@ -41,7 +40,7 @@ public class EssaySceneController implements Initializable {
     private final SystemVariableDAO sysVarDAO = new SystemVariableDAO();
     private SystemVariable sysVar = sysVarDAO.find();
     private User user = userDAO.findById(sysVar.getUserId());
-    private Setup setup = setupDAO.find();
+    private Setup setup;
     private SerialConnection serialConn = new SerialConnection();
     private Essay essayFinalyzed;
 
@@ -86,10 +85,10 @@ public class EssaySceneController implements Initializable {
             forceTare = 0D, currentBasePosition = 0D, currentMmPosition = 0D, currentPolPosition = 0D,
             referencePosition = 0D, currentTension = 1D, currentDeformation = 0D, initialForce, finalForce, initialPosition,
             finalPosition, fMax, pMax, tMax, tEsc, along, redArea, mYoung, nForceConversionFactor = 1D,
-            kgForceConversionFactor = 1D, mmPositionConversionFactor = 1D, inPositionConversionFactor = 1D;
+            kgForceConversionFactor = 1D, inPositionConversionFactor = 1D;
     private String chartString = null, chartStringTensionXDeform = null, currentForceUnit = "N", currentPositionUnit = "mm";
     private Boolean moving = false, errorEmergencyButton = false, errorInfLimit = false, errorSupLimit = false,
-            errorChargeCellLimit = false, errorChargeCellDisconnected = false;
+            errorChargeCellLimit = false, errorChargeCellDisconnected = false, essayfinished = true;
     private Integer forceAdjustInversion = 1, positionAdjustInversion = 1, forceAdjustInversionView = 1,
             positionAdjustInversionView = 1, currentChargeCell = 0, chargeCellMultipFactor = 1, errorDecValue = 0;
     @FXML
@@ -97,16 +96,17 @@ public class EssaySceneController implements Initializable {
 
 
     Date systemDate;
-    SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat brasilianDay = new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat brasilianHour = new SimpleDateFormat("HH:mm");
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        if(serialConn.testConnection()){
-//            serialConn.setupParameter();
-//        }
+        if(serialConn.testConnection()){
+            serialConn.setupParameter();
+        }
+        setup = setupDAO.find();
+        ivEssayUser.setClip(new Circle(20,20,20));
         normList();
         essayTypeList();
         savedMethodList();
@@ -173,10 +173,10 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
-                    txtSpecimenCrossSectionCalcule.setText("0.0000");
+                    txtSpecimenCrossSectionCalcule.setText("1.00");
                     if(Double.parseDouble(txtSpecimenAValueRectangle.getText())!=0 &&
                             Double.parseDouble(txtSpecimenBValueRectangle.getText())!=0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Double.parseDouble(txtSpecimenAValueRectangle.getText()) *
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueRectangle.getText()) *
                                 Double.parseDouble(txtSpecimenBValueRectangle.getText())));
                     }
                 });
@@ -186,10 +186,10 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
-                    txtSpecimenCrossSectionCalcule.setText("0.0000");
+                    txtSpecimenCrossSectionCalcule.setText("1.00");
                     if(Double.parseDouble(txtSpecimenAValueRectangle.getText())!=0 &&
                             Double.parseDouble(txtSpecimenBValueRectangle.getText())!=0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Double.parseDouble(txtSpecimenAValueRectangle.getText()) *
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueRectangle.getText()) *
                                 Double.parseDouble(txtSpecimenBValueRectangle.getText())));
                     }
                 });
@@ -201,10 +201,10 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
-                    txtSpecimenCrossSectionCalcule.setText("0.0000");
+                    txtSpecimenCrossSectionCalcule.setText("1.00");
                     if(Double.parseDouble(txtSpecimenAValueCylinder.getText())!=0 &&
                             Double.parseDouble(txtSpecimenBValueCylinder.getText())!=0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Double.parseDouble(txtSpecimenAValueCylinder.getText()) *
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueCylinder.getText()) *
                                 Double.parseDouble(txtSpecimenBValueCylinder.getText())));
                     }
                 });
@@ -214,10 +214,10 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
-                    txtSpecimenCrossSectionCalcule.setText("0.0000");
+                    txtSpecimenCrossSectionCalcule.setText("1.00");
                     if(Double.parseDouble(txtSpecimenAValueCylinder.getText())!=0 &&
                             Double.parseDouble(txtSpecimenBValueCylinder.getText())!=0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Double.parseDouble(txtSpecimenAValueCylinder.getText()) *
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueCylinder.getText()) *
                                 Double.parseDouble(txtSpecimenBValueCylinder.getText())));
                     }
                 });
@@ -229,9 +229,9 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
-                        txtSpecimenCrossSectionCalcule.setText("0.0000");
+                        txtSpecimenCrossSectionCalcule.setText("1.00");
                     if(Double.parseDouble(txtSpecimenAValueCylinder.getText())==0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.4f",Math.pow(Double.parseDouble(txtSpecimenValueTubular.getText()),2)));
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Math.pow(Double.parseDouble(txtSpecimenValueTubular.getText()),2)));
                     }
                 });
             }
@@ -251,14 +251,16 @@ public class EssaySceneController implements Initializable {
         rbRectangle.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                    txtSpecimenAValueRectangle.setText("0.0000");
-                    txtSpecimenBValueRectangle.setText("0.0000");
+                    txtSpecimenAValueRectangle.setText("1.00");
+                    txtSpecimenBValueRectangle.setText("1.00");
                 if(rbRectangle.isSelected()){
                     txtSpecimenAValueRectangle.setDisable(false);
                     txtSpecimenBValueRectangle.setDisable(false);
                 } else{
                     txtSpecimenAValueRectangle.setDisable(true);
                     txtSpecimenBValueRectangle.setDisable(true);
+                    txtSpecimenAValueRectangle.setText(null);
+                    txtSpecimenBValueRectangle.setText(null);
                 }
             }
         });
@@ -266,14 +268,16 @@ public class EssaySceneController implements Initializable {
         rbCylinder.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                    txtSpecimenAValueCylinder.setText("0.0000");
-                    txtSpecimenBValueCylinder.setText("0.0000");
+                    txtSpecimenAValueCylinder.setText("1.00");
+                    txtSpecimenBValueCylinder.setText("1.00");
                 if(rbCylinder.isSelected()){
                     txtSpecimenAValueCylinder.setDisable(false);
                     txtSpecimenBValueCylinder.setDisable(false);
                 } else{
                     txtSpecimenAValueCylinder.setDisable(true);
                     txtSpecimenBValueCylinder.setDisable(true);
+                    txtSpecimenAValueCylinder.setText(null);
+                    txtSpecimenBValueCylinder.setText(null);
                 }
             }
         });
@@ -281,11 +285,12 @@ public class EssaySceneController implements Initializable {
         rbTubular.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                    txtSpecimenValueTubular.setText("0.0000");
+                    txtSpecimenValueTubular.setText("1.00");
                 if(rbTubular.isSelected()){
                     txtSpecimenValueTubular.setDisable(false);
                 } else{
                     txtSpecimenValueTubular.setDisable(true);
+                    txtSpecimenValueTubular.setText(null);
                 }
             }
         });
@@ -344,6 +349,28 @@ public class EssaySceneController implements Initializable {
                 }
             }
         });
+        // Altera campo txtSpecimenReducedArea quando txtSpecimenCrossSectionArea for alterado
+        txtSpecimenCrossSectionArea.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                Platform.runLater(()->{
+                    txtSpecimenReducedArea.setText(txtSpecimenCrossSectionArea.getText());
+                });
+            }
+        });
+        // Altera valor de Reducao de Area calculado quando txtSpecimenReducedArea é alterado
+        txtSpecimenReducedArea.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                //Identifica valor de Reducao de Area %
+                Double specimenArea = Double.parseDouble(txtSpecimenCrossSectionArea.getText());
+                Double reducedArea = Double.parseDouble(txtSpecimenReducedArea.getText());
+                Platform.runLater(() -> {
+                    // Update UI.
+                    lbRedArea.setText(String.format("%.2f",((specimenArea-reducedArea)/specimenArea)*100));
+                });
+            }
+        });
 
     }
 
@@ -360,53 +387,88 @@ public class EssaySceneController implements Initializable {
                 Thread.sleep(1000);
                 while (true) {
                     // Obtendo valor digital da forca
-                    serialConn.forceRequest();  // Requerimento do valor da força
-                    Thread.sleep(0);
-                    // Conversao do valor digital
-                    currentBaseForce = Double.valueOf(serialConn.inputValue()) * chargeCellMultipFactor;
-                    taredCurrentForce = currentBaseForce - forceTare;
-                    currentNewtonForce = taredCurrentForce * kgForceConversionFactor * 9.78; // convertendo valor em Newton
-                    currentKgForce = taredCurrentForce * kgForceConversionFactor; // convertendo valor em Kgf
+                    calculatedForce();
                     // Obtendo valor de pulsos da posicao
-                    serialConn.positionRequest();  // requerimento do valor da posição
-                    Thread.sleep(0);
-                    // conversão de pulsos em posicao (mm)
-                    currentBasePosition = Double.valueOf(serialConn.inputValue()) * positionMultipFactor();
-                    currentMmPosition = currentBasePosition * mmPositionConversionFactor;
-                    currentPolPosition = currentBasePosition * mmPositionConversionFactor * 0.0393701; // conversao de mm para in
-                    System.out.println(currentBaseForce);
-                    System.out.println(taredCurrentForce);
-                    System.out.println(currentNewtonForce);
-                    System.out.println(currentKgForce);
-                    System.out.println(currentBasePosition);
-                    System.out.println(currentMmPosition);
-                    System.out.println(currentPolPosition);
-                    System.out.println("***********************");
+                    calculatedPosition();
                     // Obtendo informacao sobre qual celula de carga esta conectada (reflete no indice multiplicador
                     // de conversao de unidade de forca)
-                    serialConn.chargeCellRequest();
-                    Thread.sleep(0);
-                    currentChargeCell = Integer.valueOf(serialConn.inputValue());
+                    chargeCellRequest();
                     // Leitura do sinal de erro
-                    serialConn.errorRead();
-                    Thread.sleep(0);
-                    errorDecValue = Integer.valueOf(serialConn.inputValue());
-
+                    errorRequest();
                     // Definicao do fator multiplicativo para conversao de unidade de forca em funcao da celula de carga
                     unitConvertion(currentChargeCell);
 
                     // Monitoramento do erro em tempo real e resposta imediata na interface
                     Platform.runLater(()->{
-                        errorIdentification();
+//                        errorIdentification();
                     });
 
                     // Atualização da UI pela Thread a partir das variáveis globais
                     Platform.runLater(() -> {
-                        txtForceView.setText(String.format("%.2f", selectedUnitForceValue() * forceAdjustInversionView));
-                        txtPositionView.setText(String.format("%.2f", selectedUnitPositionValue() * positionAdjustInversionView));
+                        txtForceView.setText(String.format("%.5f", selectedUnitForceValue() * forceAdjustInversionView));
+                        txtPositionView.setText(String.format("%.5f", selectedUnitPositionValue() * positionAdjustInversionView));
                     });
                 }
 
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        private void calculatedForce(){
+            try{
+                serialConn.forceRequest();  // Requerimento do valor da força
+                Thread.sleep(0);
+                // Conversao do valor digital
+                currentBaseForce = Double.valueOf(serialConn.inputValue()) * chargeCellMultipFactor;
+                taredCurrentForce = currentBaseForce - forceTare;
+//                System.out.println("kgConversionForce: " + kgForceConversionFactor);
+//                System.out.println("taredForce: " + taredCurrentForce);
+//                System.out.println("newtonForce antes: " + currentNewtonForce);
+//                System.out.println("kgForce antes: " + currentKgForce);
+                currentNewtonForce = taredCurrentForce * kgForceConversionFactor * 9.78; // convertendo valor em Newton
+                currentKgForce = taredCurrentForce * kgForceConversionFactor; // convertendo valor em Kgf
+//                System.out.println("newtonForce depois: " + currentNewtonForce);
+//                System.out.println("kgForce depois: " + currentKgForce);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        private void calculatedPosition(){
+            try{
+                serialConn.positionRequest();  // requerimento do valor da posição
+                Thread.sleep(0);
+                // conversão de pulsos em posicao (mm)
+//                System.out.println("basePosition: " + currentBasePosition);
+//                System.out.println("basePosition input: "+ Double.valueOf(serialConn.inputValue()));
+                currentBasePosition = Double.valueOf(serialConn.inputValue()) * positionMultipFactor();
+//                System.out.println("basePosition: " + currentBasePosition);
+//                System.out.println("currentMmPosition antes: " + currentMmPosition);
+//                System.out.println("currentPolPosition antes: " + currentPolPosition);
+                currentMmPosition = currentBasePosition;
+                currentPolPosition = currentBasePosition * 0.0393701; // conversao de mm para in
+//                System.out.println("currentMmPosition depois: " + currentMmPosition);
+//                System.out.println("currentPolPosition depois: " + currentPolPosition);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        private void chargeCellRequest(){
+            try{
+                serialConn.chargeCellRequest();
+                Thread.sleep(0);
+                currentChargeCell = Integer.valueOf(serialConn.inputValue());
+//                System.out.println(currentChargeCell);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        private void errorRequest(){
+            try{
+                serialConn.errorRead();
+                Thread.sleep(0);
+                errorDecValue = Integer.valueOf(serialConn.inputValue());
+//                System.out.println(errorDecValue);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -420,21 +482,21 @@ public class EssaySceneController implements Initializable {
         switch(chargeCell){
 
             case 0: errorChargeCellDisconnected = true;
-            case 1: kgForceConversionFactor = setup.getMC1M1() / 1000000000D;
-            case 2: kgForceConversionFactor = setup.getMC2M1() / 1000000000D;
-            case 3: kgForceConversionFactor = setup.getMC3M1() / 100000000D;
-            case 4: kgForceConversionFactor = setup.getMC4M1() / 100000000D;
-            case 5: kgForceConversionFactor = setup.getMC5M1() / 100000000D;
-            case 6: kgForceConversionFactor = setup.getMC6M1() / 10000000D;
-            case 7: kgForceConversionFactor = setup.getMC7M1() / 10000000D;
-            case 8: kgForceConversionFactor = setup.getMC8M1() / 10000000D;
-            case 9: kgForceConversionFactor = setup.getMC9M1() / 1000000D;
-            case 10: kgForceConversionFactor = setup.getMC10M1() / 1000000D;
-            case 11: kgForceConversionFactor = setup.getMC11M1() / 1000000D;
-            case 12: kgForceConversionFactor = setup.getMC12M1() / 100000D;
-            case 13: kgForceConversionFactor = setup.getMC13M1() / 100000D;
-            case 14: kgForceConversionFactor = setup.getMC14M1() / 100000D;
-            case 15: kgForceConversionFactor = setup.getMC15M1() / 100000D;
+            case 1: kgForceConversionFactor = setup.getMC1M1() / 1000000000D; break;
+            case 2: kgForceConversionFactor = setup.getMC2M1() / 1000000000D; break;
+            case 3: kgForceConversionFactor = setup.getMC3M1() / 100000000D; break;
+            case 4: kgForceConversionFactor = setup.getMC4M1() / 100000000D; break;
+            case 5: kgForceConversionFactor = setup.getMC5M1() / 100000000D; break;
+            case 6: kgForceConversionFactor = setup.getMC6M1() / 10000000D; break;
+            case 7: kgForceConversionFactor = setup.getMC7M1() / 10000000D; break;
+            case 8: kgForceConversionFactor = setup.getMC8M1() / 10000000D; break;
+            case 9: kgForceConversionFactor = setup.getMC9M1() / 1000000D; break;
+            case 10: kgForceConversionFactor = setup.getMC10M1() / 1000000D; break;
+            case 11: kgForceConversionFactor = setup.getMC11M1() / 1000000D; break;
+            case 12: kgForceConversionFactor = setup.getMC12M1() / 100000D; break;
+            case 13: kgForceConversionFactor = setup.getMC13M1() / 100000D; break;
+            case 14: kgForceConversionFactor = setup.getMC14M1() / 100000D; break;
+            case 15: kgForceConversionFactor = setup.getMC15M1() / 100000D; break;
         }
     }
 
@@ -442,8 +504,16 @@ public class EssaySceneController implements Initializable {
      * Metodo para determinar fator multiplicador para calcular posicao (mm)
      */
     private Double positionMultipFactor(){
+        // Necessario explicitar as variaveis, uma vez que sua inclusao na expressao direto so setup.getMC pode gerar
+        // inteiros truncados e refletir no resultado
+        int mc19M1 = setup.getMC19M1();
+        int mc20M1 = setup.getMC20M1();
+        int mc21M1 = setup.getMC21M1();
+        int mc22M1 = setup.getMC22M1();
+        int mc17M1 = setup.getMC17M1();
+
         // ((Polia motor / (Polia fuso * Redutor)) * Passo fuso) / PPR  -> que será multiplicado pela leitura de pulsos
-        Double multFactor = (double) (( setup.getMC19M1() / (setup.getMC20M1() * setup.getMC21M1())) * setup.getMC22M1()) / setup.getMC17M1();
+        double multFactor = ((double) mc19M1 / (mc20M1 * mc21M1)) * mc22M1 / mc17M1;
         return multFactor;
     }
 
@@ -733,12 +803,13 @@ public class EssaySceneController implements Initializable {
 
         @Override
         public synchronized void run() {
+
             fMax = 0D;
             pMax = 0D;
             tMax = 0D;
             tEsc = 0D;
             along = 0D;
-            redArea = 0D;
+
             mYoung = 0D;
             var ref = new Object() {
                 Double minDotT = 0D;
@@ -747,12 +818,12 @@ public class EssaySceneController implements Initializable {
                 Double maxDotP = 0D;
             };
 
-            Double count = 0D;
+
             final Double[] mYoungcount = {0D};
-            Double adjustedForce;
-            Double adjustedPosition;
+            Double adjustedForce = 0D;
+            Double adjustedPosition = 0D;
             Double specimenArea = Double.valueOf(txtSpecimenCrossSectionArea.getText());
-            Double parallelLineAvg[] = new Double[2];
+            Double parallelLineAvg[] = {0D,0D};
 
             if(forceAdjustInversion==-1){
                 forceAdjustInversionView=-1;
@@ -769,9 +840,10 @@ public class EssaySceneController implements Initializable {
             List<Double> escDeformChartList = new ArrayList<>();
 
             try {
-                while (count<60) {
+
+                while (autoBreak()==false) {
 //                while(autoBreak()==false){
-                    Thread.sleep(10);
+                    Thread.sleep(50);
 
                     // Aquisicao dos valores ja convertidos para a unidade selecionada e ajustados para ensaio para
                     // cima ou para baixo
@@ -779,7 +851,7 @@ public class EssaySceneController implements Initializable {
                     adjustedPosition = selectedUnitPositionValue() * positionAdjustInversion;
                     Double currentDeform = (adjustedPosition - initialPosition) / initialPosition;
                     // Calculo da tensao
-                    currentTension = kgForceConversionFactor / specimenArea;
+                    currentTension = adjustedForce / specimenArea;
 
 
                     forceList.add(adjustedForce);
@@ -862,13 +934,9 @@ public class EssaySceneController implements Initializable {
                     //Identifica valor de Alongamento %
                     Platform.runLater(() -> {
                         // Update UI.
-                            lbAlong.setText(String.valueOf(((pMax-initialPosition)/initialPosition)*100));
+                        lbAlong.setText(String.format("%.2f",((pMax-initialPosition)/initialPosition)*100));
                     });
-                    //Identifica valor de Reducao de Area %
-                    Platform.runLater(() -> {
-                        // Update UI.
-                        lbRedArea.setText(String.valueOf(((specimenArea-Double.parseDouble(txtSpecimenReducedArea.getText()))/specimenArea)*100));
-                    });
+
                     //Identifica valor de M. Young MPa
                     Platform.runLater(() -> {
                         // Update UI.
@@ -909,7 +977,7 @@ public class EssaySceneController implements Initializable {
                                 }
                             }
                         }
-                        lbMYoung.setText(String.format("%.3f", (ref.maxDotT - ref.minDotT)/(ref.maxDotP - ref.minDotP)));
+                        lbMYoung.setText(String.format("%.4f", (ref.maxDotT - ref.minDotT)/(ref.maxDotP - ref.minDotP)));
                     });
                     // Setting final values
                     Double finalAdjustedForce = adjustedForce;
@@ -950,6 +1018,7 @@ public class EssaySceneController implements Initializable {
                     System.out.println(chartStringTensionXDeform);
                     count++;
                 }
+                essayfinished = true;
                 serialConn.stopMove();
                 try{
                     Platform.runLater(()->{
@@ -1007,101 +1076,6 @@ public class EssaySceneController implements Initializable {
         chartEssayLine.getData().add(seriesSingle);
     }
 
-//    /**
-//     * Método genérico para injeção do output, aplicável para os diferentes processos port.OutputStream() que requeiram uma 'string'
-//     *
-//     * @param stg
-//     */
-//    private synchronized void outputInjection(String stg) {
-//        PrintWriter output = new PrintWriter(port.getOutputStream(), true);
-//        output.print(stg);
-//        output.flush();
-//    }
-//
-//    /**
-//     * Método que recebe o valor real do input
-//     *
-//     * @return String
-//     */
-//    private synchronized String inputValue() {
-//        Scanner s = new Scanner(port.getInputStream());
-//        return s.nextLine();
-//    }
-//
-//    // INICIO*********** Métodos pré ensaio ***********
-//
-//    /**
-//     * Método que zera a posição (injeção de '0')
-//     */
-//    @FXML
-//    private synchronized void resetPosition() {
-//        outputInjection("0");
-//    }
-//
-//    /**
-//     * Método que solicita o valor da força (injeção de '1')
-//     */
-//    @FXML
-//    private synchronized void forceRequest() throws InterruptedException {
-//        outputInjection("1");
-//    }
-//
-//    /**
-//     * Método que solicita o valor da posição (injeção de '2')
-//     */
-//    @FXML
-//    private synchronized void positionRequest() throws InterruptedException {
-//        outputInjection("2");
-//    }
-//
-//    // FIM*********** Métodos pré ensaio ***********
-//
-//    // INICIO*********** Métodos de Movimento ***********
-//
-//    /**
-//     * Método que solicita interrupção do movimento (injeção de '3')
-//     */
-//    @FXML
-//    private synchronized void stopMove() {
-//        outputInjection("3");
-//    }
-//
-//    /**
-//     * Método que solicita movimento de ajuste para cima (injeção de '4')
-//     */
-//    @FXML
-//    private synchronized void moveUp() {
-//        outputInjection("4");
-//    }
-//
-//    /**
-//     * Método que solicita movimento de ajuste para baixo (injeção de '5')
-//     */
-//    @FXML
-//    private synchronized void moveDown() {
-//        outputInjection("5");
-//    }
-//
-//    /**
-//     * Método que solicita movimento de ensaio para cima (injeção de '6')
-//     */
-//    @FXML
-//    private synchronized void moveUpEssay() {
-//        outputInjection("6");
-//    }
-//
-//    /**
-//     * Método que solicita movimento de ensaio para baixo (injeção de '7')
-//     */
-//    @FXML
-//    private synchronized void moveDownEssay() {
-//        outputInjection("7");
-//    }
-//
-//    // FIM*********** Métodos de Movimento ***********
-//
-//    // INICIO*********** Métodos Ajuste de Velocidade ***********
-//
     /**
      * REQUER IMPLEMENTACAO CORRETA: Método que define a velocidade de ajuste
      */
@@ -1191,7 +1165,7 @@ public class EssaySceneController implements Initializable {
     @FXML
     private synchronized void test() throws InterruptedException {
 
-
+        essayfinished = false;
         try{
             // Mudando background do ensaio para amarelo (preparando)
             vBoxEssayStart.setStyle("-fx-background-color: #BCAA06");
@@ -1341,14 +1315,17 @@ public class EssaySceneController implements Initializable {
      */
     @FXML
     private Double selectedUnitForceValue(){
-        if(cbForceUnitSelection.getSelectionModel().getSelectedItem().toString() == "N"){
+        String selectedItem = cbForceUnitSelection.getSelectionModel().getSelectedItem().toString();
+
+        if (selectedItem.equals("N")) {
             currentForceUnit = "N";
             return currentNewtonForce;
-        } else if(cbForceUnitSelection.getSelectionModel().getSelectedItem().toString() == "Kg"){
+        } else if (selectedItem.equals("Kg")) {
             currentForceUnit = "Kg";
             return currentKgForce;
         }
-        return null;
+
+        return null; // Caso nenhuma condição seja atendida, retorne null ou outro valor adequado.
     }
 
     /**
@@ -1401,9 +1378,9 @@ public class EssaySceneController implements Initializable {
      */
     @FXML
     private boolean autoBreak() {
-        if(fMax>0 && pMax>0 ){
+        if(taredCurrentForce>2500 && pMax>0 ){
             if(rbForceDownBreak.isSelected()){
-                if(selectedUnitForceValue() >= fMax * (100 - Double.valueOf(String.valueOf(txtForcePercentageBreak)))/100) {
+                if(selectedUnitForceValue() >= fMax * (100 - Double.valueOf(txtForcePercentageBreak.getText()))/100) {
                     return false;
                 }
                 return true;
@@ -1594,65 +1571,75 @@ public class EssaySceneController implements Initializable {
      */
     @FXML
     private void essaySave() {
-        if(chartString!=null && txtEssayIdentification.getText()!=""){
-            essayFinalyzed = new Essay();
-            essayFinalyzed.setUserId(sysVar.getUserId()); // Substituir por ID referente ao login
-            essayFinalyzed.setEssayIdentification(txtEssayIdentification.getText());
-            essayFinalyzed.setEssayNorm(cbNormList.getSelectionModel().getSelectedItem().toString());
-            essayFinalyzed.setEssayUsedMachine(null);
-            essayFinalyzed.setEssayChargeCell(0.0);
-            essayFinalyzed.setEssayInitialForce(initialForce);
-            essayFinalyzed.setEssayFinalForce(finalForce);
-            essayFinalyzed.setEssayInitialPosition(initialPosition);
-            essayFinalyzed.setEssayFinalPosition(finalPosition);
-            essayFinalyzed.setEssayDislocationVelocity(Double.parseDouble(txtEssayVelocity.getText()));
-            essayFinalyzed.setEssayTemperature(0.0);
-            essayFinalyzed.setEssayPreCharge(0.0);
-            essayFinalyzed.setEssayRelativeHumidity(0.0);
-            essayFinalyzed.setEssayMaxForce(fMax);
-            essayFinalyzed.setEssayMaxPosition(pMax);
-            essayFinalyzed.setEssayMaxTension(tMax);
-            essayFinalyzed.setEssayEscapeTension(tEsc);
-            essayFinalyzed.setEssayAlong(along);
-            essayFinalyzed.setEssayAreaRed(redArea);
-            essayFinalyzed.setEssayMYoung(mYoung);
-            essayFinalyzed.setEssayChart(chartString);
-            systemDate = new Date();
-            String currentDay = brasilianDay.format(systemDate);
-            String currentHour = brasilianHour.format(systemDate);
-            essayFinalyzed.setEssayDay(currentDay);
-            essayFinalyzed.setEssayHour(currentHour);
+        if(essayfinished = true){
+            if(chartString!=null && txtEssayIdentification.getText()!=""){
+                essayFinalyzed = new Essay();
+                essayFinalyzed.setUserId(sysVar.getUserId()); // Substituir por ID referente ao login
+                essayFinalyzed.setEssayIdentification(txtEssayIdentification.getText());
+                essayFinalyzed.setEssayNorm(cbNormList.getSelectionModel().getSelectedItem().toString());
+                essayFinalyzed.setEssayUsedMachine(null);
+                essayFinalyzed.setEssayChargeCell(0.0);
+                essayFinalyzed.setEssayInitialForce(initialForce);
+                essayFinalyzed.setEssayFinalForce(finalForce);
+                essayFinalyzed.setEssayInitialPosition(initialPosition);
+                essayFinalyzed.setEssayFinalPosition(finalPosition);
+                essayFinalyzed.setEssayDislocationVelocity(Double.parseDouble(txtEssayVelocity.getText()));
+                essayFinalyzed.setEssayTemperature(0.0);
+                essayFinalyzed.setEssayPreCharge(0.0);
+                essayFinalyzed.setEssayRelativeHumidity(0.0);
+                essayFinalyzed.setEssayMaxForce(fMax);
+                essayFinalyzed.setEssayMaxPosition(pMax);
+                essayFinalyzed.setEssayMaxTension(tMax);
+                essayFinalyzed.setEssayEscapeTension(tEsc);
+                essayFinalyzed.setEssayAlong(along);
+                essayFinalyzed.setEssayAreaRed(redArea);
+                essayFinalyzed.setEssayMYoung(mYoung);
+                essayFinalyzed.setEssayChart(chartString);
+                systemDate = new Date();
+                String currentDay = brasilianDay.format(systemDate);
+                String currentHour = brasilianHour.format(systemDate);
+                essayFinalyzed.setEssayDay(currentDay);
+                essayFinalyzed.setEssayHour(currentHour);
 
-            if(sysVar.getUserId()==3){
-                essayFinalyzed.setEssayId(1);
-                essayDAO.update(essayFinalyzed);
-            } else{
-                essayDAO.create(essayFinalyzed);
+                if(sysVar.getUserId()==3){
+                    essayFinalyzed.setEssayId(1);
+                    essayDAO.update(essayFinalyzed);
+                } else{
+                    essayDAO.create(essayFinalyzed);
+                }
+                System.out.println(essayFinalyzed);
+
+                // Alerta de confirmação de registro de ensaio
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Registro de ensaio");
+                alert.setHeaderText("Ensaio salvo com sucesso! Ele está disponível em Relatório");
+                Stage stage = (Stage) btnEssaySave.getScene().getWindow();
+                alert.initOwner(stage);
+                alert.showAndWait();
+                newEssay();
+                tpEssayFlow.getSelectionModel().select(0);
+            } else if(chartString==null){
+                // Alerta de realização incorreta do ensaio
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Registro de ensaio");
+                alert.setHeaderText("Finalize o ensaio para gerar os dados!");
+                Stage stage = (Stage) btnEssaySave.getScene().getWindow();
+                alert.initOwner(stage);
+                alert.show();
+            } else if(txtEssayIdentification.getText()==""){
+                // Alerta de ausencia de nome para o ensaio
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Registro de ensaio");
+                alert.setHeaderText("Preencha o nome do ensaio!");
+                Stage stage = (Stage) btnEssaySave.getScene().getWindow();
+                alert.initOwner(stage);
+                alert.show();
             }
-            System.out.println(essayFinalyzed);
-
-            // Alerta de confirmação de registro de ensaio
+        } else{
+            // Alerta de ensaio nao finalizado corretamente
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Registro de ensaio");
-            alert.setHeaderText("Ensaio salvo com sucesso! Ele está disponível em Relatório");
-            Stage stage = (Stage) btnEssaySave.getScene().getWindow();
-            alert.initOwner(stage);
-            alert.showAndWait();
-            newEssay();
-            tpEssayFlow.getSelectionModel().select(0);
-        } else if(chartString==null){
-            // Alerta de realização incorreta do ensaio
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Registro de ensaio");
-            alert.setHeaderText("Finalize o ensaio para gerar os dados!");
-            Stage stage = (Stage) btnEssaySave.getScene().getWindow();
-            alert.initOwner(stage);
-            alert.show();
-        } else if(txtEssayIdentification.getText()==""){
-            // Alerta de ausencia de nome para o ensaio
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Registro de ensaio");
-            alert.setHeaderText("Preencha o nome do ensaio!");
+            alert.setTitle("Erro de ensaio");
+            alert.setHeaderText("O ensaio não foi finalizado corretamente! Descarte o ensaio e tente novamente.");
             Stage stage = (Stage) btnEssaySave.getScene().getWindow();
             alert.initOwner(stage);
             alert.show();
@@ -1748,6 +1735,22 @@ public class EssaySceneController implements Initializable {
 
     // INICIO*********** Métodos de realização do Ensaio ***********
 }
+
+
+/*
+ *  Copyright (c) 2023.
+ *  Licensed under the Biopdi® License, Version 1.0.
+ *  You may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       https://biopdi.com.br/
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 
 //         Criando Thread >> Método contendo Thread, que chama método que contém Platform.runLater
