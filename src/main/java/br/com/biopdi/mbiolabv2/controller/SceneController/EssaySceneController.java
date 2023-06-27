@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Bruno Salata Lima - 16/05/2023
@@ -77,7 +78,7 @@ public class EssaySceneController implements Initializable {
     @FXML
     private ImageView ivEssayUser;
     @FXML
-    private Slider shAdjustVelocity;
+    private Slider shAdjustVelocity, shEssayVelocity;
     @FXML
     private TabPane tpEssayFlow;
 
@@ -94,6 +95,8 @@ public class EssaySceneController implements Initializable {
     @FXML
     private VBox vBoxEssayStart;
 
+    private ReentrantLock lock;
+
 
     Date systemDate;
     SimpleDateFormat brasilianDay = new SimpleDateFormat("dd/MM/yyyy");
@@ -102,9 +105,6 @@ public class EssaySceneController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(serialConn.testConnection()){
-            serialConn.setupParameter();
-        }
         setup = setupDAO.find();
         ivEssayUser.setClip(new Circle(20,20,20));
         normList();
@@ -121,6 +121,8 @@ public class EssaySceneController implements Initializable {
             txtConnected.setStyle("-fx-background-color: #BCAA06");
         }
         xyAxisAdjust();
+        // Inicializa o lock
+        lock = new ReentrantLock();
         newEssay();
 
         // Altera opcao de unidade de forca e os rotulos do grafico do ensaio
@@ -154,20 +156,60 @@ public class EssaySceneController implements Initializable {
                 essayType();
             }
         });
-        // Atualizacao do valor no txtField de adjustVelocity em funcao da mudanca no slider
-        shAdjustVelocity.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                txtAdjustVelocity.setText(String.format("%.0f",shAdjustVelocity.getValue()));
+
+        // VELOCIDADE DE AJUSTE
+        // Adicionar um filtro de texto para aceitar apenas números inteiros
+        txtAdjustVelocity.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtAdjustVelocity.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
-        // Evento que chama medoto que define velocidade de ajuste assim o usuario solta o slider
-        shAdjustVelocity.setOnMouseReleased(event -> {
+
+        // Listener na txtAdjustVelocity que chama adjustVelocityValidator para garantir valor valido para o textField
+        txtAdjustVelocity.setOnAction(event -> {
             Platform.runLater(()->{
-                adjustVelocity(Integer.valueOf(txtAdjustVelocity.getText()));
+                adjustVelocityValidator(Integer.valueOf(txtAdjustVelocity.getText()));
+                shAdjustVelocity.setValue(Double.parseDouble(txtAdjustVelocity.getText()));
+                setAdjustVelocity(shAdjustVelocity.getValue());
             });
         });
 
+        // Evento que chama medoto que define velocidade de ajuste assim que o usuario solta o slider
+        shAdjustVelocity.setOnMouseReleased(event -> {
+            Platform.runLater(()->{
+                // Converter para inteiro removendo as casas decimais
+                txtAdjustVelocity.setText(String.valueOf(shAdjustVelocity.valueProperty().intValue()));
+                setAdjustVelocity(shAdjustVelocity.getValue());
+            });
+        });
+
+        // VELOCIDADE DE ENSAIO
+        // Adicionar um filtro de texto para aceitar apenas números inteiros
+        txtEssayVelocity.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtEssayVelocity.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        // Listener na txtAdjustVelocity que chama adjustVelocityValidator para garantir valor valido para o textField
+        txtEssayVelocity.setOnAction(event -> {
+            Platform.runLater(()->{
+                essayVelocityValidator(Integer.valueOf(txtEssayVelocity.getText()));
+                shEssayVelocity.setValue(Double.parseDouble(txtEssayVelocity.getText()));
+                setEssayVelocity(shEssayVelocity.getValue());
+            });
+        });
+
+        // Evento que chama medoto que define velocidade de ajuste assim que o usuario solta o slider
+        shEssayVelocity.setOnMouseReleased(event -> {
+            Platform.runLater(()->{
+                // Converter para inteiro removendo as casas decimais
+                txtEssayVelocity.setText(String.valueOf(shEssayVelocity.valueProperty().intValue()));
+                setEssayVelocity(shEssayVelocity.getValue());
+            });
+        });
+
+        // PROPRIEDADES DO CORPO DA AMOSTRA
         // Atualiza valor de area calculada para o corpo de amostra retangular
         txtSpecimenAValueRectangle.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -381,7 +423,7 @@ public class EssaySceneController implements Initializable {
 
         @FXML
         @Override
-        public synchronized void run() {
+        public void run() {
 
             try {
                 Thread.sleep(1000);
@@ -415,27 +457,31 @@ public class EssaySceneController implements Initializable {
             }
         }
 
-        private void calculatedForce(){
-            try{
+        private void calculatedForce() throws InterruptedException {
+            lock.lock();
+            try {
                 serialConn.forceRequest();  // Requerimento do valor da força
                 Thread.sleep(0);
-                // Conversao do valor digital
-                currentBaseForce = Double.valueOf(serialConn.inputValue()) * chargeCellMultipFactor;
-                taredCurrentForce = currentBaseForce - forceTare;
+            // Conversao do valor digital
+            currentBaseForce = Double.valueOf(serialConn.inputValue()) * chargeCellMultipFactor;
+            taredCurrentForce = currentBaseForce - forceTare;
 //                System.out.println("kgConversionForce: " + kgForceConversionFactor);
 //                System.out.println("taredForce: " + taredCurrentForce);
 //                System.out.println("newtonForce antes: " + currentNewtonForce);
 //                System.out.println("kgForce antes: " + currentKgForce);
-                currentNewtonForce = taredCurrentForce * kgForceConversionFactor * 9.78; // convertendo valor em Newton
-                currentKgForce = taredCurrentForce * kgForceConversionFactor; // convertendo valor em Kgf
+            currentNewtonForce = taredCurrentForce * kgForceConversionFactor * 9.78; // convertendo valor em Newton
+            currentKgForce = taredCurrentForce * kgForceConversionFactor; // convertendo valor em Kgf
 //                System.out.println("newtonForce depois: " + currentNewtonForce);
 //                System.out.println("kgForce depois: " + currentKgForce);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
+            } finally {
+                lock.unlock();
             }
         }
-        private void calculatedPosition(){
-            try{
+        private void calculatedPosition() throws InterruptedException {
+            lock.lock();
+            try {
                 serialConn.positionRequest();  // requerimento do valor da posição
                 Thread.sleep(0);
                 // conversão de pulsos em posicao (mm)
@@ -451,19 +497,27 @@ public class EssaySceneController implements Initializable {
 //                System.out.println("currentPolPosition depois: " + currentPolPosition);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
+            } finally {
+                lock.unlock();
             }
+
         }
-        private void chargeCellRequest(){
-            try{
-                serialConn.chargeCellRequest();
+        private void chargeCellRequest() throws InterruptedException {
+            lock.lock();
+            try {
+            serialConn.chargeCellRequest();
                 Thread.sleep(0);
-                currentChargeCell = Integer.valueOf(serialConn.inputValue());
+            currentChargeCell = Integer.valueOf(serialConn.inputValue());
 //                System.out.println(currentChargeCell);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
+            }finally {
+                lock.unlock();
             }
+
         }
-        private void errorRequest(){
+        private void errorRequest() throws InterruptedException {
+            lock.lock();
             try{
                 serialConn.errorRead();
                 Thread.sleep(0);
@@ -471,6 +525,8 @@ public class EssaySceneController implements Initializable {
 //                System.out.println(errorDecValue);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
+            }finally {
+                lock.unlock();
             }
         }
     }
@@ -518,15 +574,6 @@ public class EssaySceneController implements Initializable {
     }
 
     /**
-     * Metodo para determinar fator multiplicador para calcular frequencia (mm/min)
-     */
-    private Double velocityMultipFactor(){
-        // Frequencia max / Velocidade max  -> que sera multiplicado pela velocidade para determinar a frequencia velocidade
-        Double multFactor = (double) (setup.getMC16M1()/setup.getMC18M1());
-        return multFactor;
-    }
-
-    /**
      * Metodo para conversao de decimal em binario e interpretacao do sinal de erro em tempo de execucao
      */
     private void errorIdentification(){
@@ -539,60 +586,60 @@ public class EssaySceneController implements Initializable {
         if(splitBin[0]==1){
             errorEmergencyButton = false;
             Platform.runLater(()->{
-
+                System.out.println("Botão e emergência destravado.");
             });
         } else if(splitBin[0]==0){
             errorEmergencyButton = true;
             Platform.runLater(()->{
-
+                System.out.println("Botão e emergência acionado!");
             });
         }
         // Erro - Fim do curso inferior
         if(splitBin[1]==1){
             errorInfLimit = false;
             Platform.runLater(()->{
-
+                System.out.println("Acima do Fim de curso inferior.");
             });
         } else if(splitBin[1]==0){
             errorInfLimit = true;
             Platform.runLater(()->{
-
+                System.out.println("Fim de curso inferior!");
             });
         }
         // Erro - Fim do curso superior
         if(splitBin[2]==1){
             errorSupLimit = false;
             Platform.runLater(()->{
-
+                System.out.println("Abaixo do Fim de curso superior.");
             });
         } else if(splitBin[2]==0){
             errorSupLimit = true;
             Platform.runLater(()->{
-
+                System.out.println("Fim de curso superior!");
             });
         }
         // Erro - Limite de celula de carga
         if(splitBin[3]==1){
             errorChargeCellLimit = false;
             Platform.runLater(()->{
-
+                System.out.println("Abaixo do Limite da célula de carga.");
             });
         } else if(splitBin[3]==0){
             errorChargeCellLimit = true;
             Platform.runLater(()->{
-
+                System.out.println("Limite da célula de carga!");
             });
         }
         // Erro - Celula de carga desconectada
         if(splitBin[4]==1){
             errorChargeCellDisconnected = false;
             Platform.runLater(()->{
-
+                System.out.println("Célula de carga Conectada!");
             });
         } else if(splitBin[4]==0){
             errorChargeCellDisconnected = true;
             Platform.runLater(()->{
-
+                System.out.println("Célula de carga desconectada!");
             });
         }
 
@@ -602,7 +649,7 @@ public class EssaySceneController implements Initializable {
      * Método de conexão automática, buscando o portName do systemSetting no DB
      */
     @FXML
-    private synchronized void autoConnect() {
+    private void autoConnect() {
 
 //        // Instance to get an object SystemParameter from tb_systemParameter (single line)
 //        SystemParameter sysPar = systemParameterDAO.find();
@@ -1077,25 +1124,21 @@ public class EssaySceneController implements Initializable {
     }
 
     /**
-     * REQUER IMPLEMENTACAO CORRETA: Método que define a velocidade de ajuste
+     * Metodo que corrige valor do slider e do textBox para o intervalo valido
+     * @param vel
      */
     @FXML
-    private synchronized void adjustVelocity(Integer value) {
-        Double essayVel = value * velocityMultipFactor();
-        //Incluir range minimo, maximo e null (IF ou SWITCH)
-        if (essayVel != null) {
-            if(value >= 600){
-                txtEssayVelocity.setText("600");
-                serialConn.adjustVelocity(600);
-            } else if(value >= 1){
-                serialConn.adjustVelocity(value);
+    private void adjustVelocityValidator(Integer vel){
+        if(vel != null){
+            if(vel >= 600){
+                txtAdjustVelocity.setText("600");
+            } else if(vel >= 1){
+                txtAdjustVelocity.setText(String.valueOf(vel));
             } else {
-                txtEssayVelocity.setText("1");
-                serialConn.adjustVelocity(1);
+                txtAdjustVelocity.setText("1");
             }
-        } else {
-            txtEssayVelocity.setText("1");
-            serialConn.adjustVelocity(1);
+        } else{
+            txtAdjustVelocity.setText("1");
         }
     }
 
@@ -1103,22 +1146,80 @@ public class EssaySceneController implements Initializable {
      * REQUER IMPLEMENTACAO CORRETA: Método que define a velocidade de ensaio
      */
     @FXML
-    private synchronized void essayVelocity(Integer value) {
-        Double essayVel = value * velocityMultipFactor();
+    private void essayVelocity(Integer value) {
+        Integer essayVel = (int) shEssayVelocity.getValue();
         //Incluir range minimo, maximo e null (IF ou SWITCH)
-        if (essayVel != null) {
-            if(value >= 600){
-                txtEssayVelocity.setText("600");
-                serialConn.essayVelocity(600);
-            } else if(value >= 1){
+        Platform.runLater(()->{
+            if (essayVel != null) {
                 serialConn.essayVelocity(value);
             } else {
                 txtEssayVelocity.setText("1");
                 serialConn.essayVelocity(1);
             }
-        } else {
-            txtEssayVelocity.setText("1");
-            serialConn.essayVelocity(1);
+        });
+    }
+
+    /**
+     * Metodo que corrige valor do slider e do textBox para o intervalo valido
+     * @param vel
+     */
+    @FXML
+    private void essayVelocityValidator(Integer vel){
+        Platform.runLater(()->{
+            if(vel != null){
+                if(vel >= 600){
+                    txtEssayVelocity.setText("600");
+                } else if(vel >= 1){
+                    txtEssayVelocity.setText(String.valueOf(vel));
+                } else {
+                    txtEssayVelocity.setText("1");
+                }
+            } else{
+                txtEssayVelocity.setText("1");
+            }
+        });
+    }
+
+    /**
+     * Metodo para determinar fator multiplicador para calcular frequencia (mm/min)
+     */
+    private Double velocityMultipFactor(){
+        // Frequencia max / Velocidade max  -> que sera multiplicado pela velocidade para determinar a frequencia velocidade
+        Double multFactor = (double) (setup.getMC16M1()/setup.getMC18M1());
+        return multFactor;
+    }
+
+    /**
+     * Metodo que armazena nova velocidade de ajuste via porta serial
+     * @param value
+     */
+    private synchronized void setAdjustVelocity(Double value){
+        lock.lock();
+        try{
+            serialConn.adjustVelocity((int) (value * velocityMultipFactor()));
+            Thread.sleep(1000);
+            serialConn.port.flushIOBuffers();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    /**
+     * Metodo que armazena nova velocidade de ajuste via porta serial
+     * @param value
+     */
+    private synchronized void setEssayVelocity(Double value){
+        lock.lock();
+        try{
+            serialConn.essayVelocity((int) (value * velocityMultipFactor()));
+            Thread.sleep(1000);
+            serialConn.port.flushIOBuffers();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
         }
     }
 
@@ -1128,7 +1229,6 @@ public class EssaySceneController implements Initializable {
     @FXML
     public synchronized void moveUpAdjust() {
         serialConn.moveUpAdjust();
-        System.out.println("Moveu CIMA 4");
     }
 
     /**
@@ -1137,7 +1237,6 @@ public class EssaySceneController implements Initializable {
     @FXML
     public synchronized void moveDownAdjust() {
         serialConn.moveDownAdjust();
-        System.out.println("Moveu BAIXO 5");
     }
 
     /**
@@ -1684,9 +1783,7 @@ public class EssaySceneController implements Initializable {
         lbRedArea.setText("0.000");
         lbMYoung.setText("0.000");
         txtEssayVelocity.setText("1");
-//        essayVelocity(1);
         txtAdjustVelocity.setText("1");
-//        adjustVelocity(1);
         txtEssayIdentification.setText("");
         txtForcePercentageBreak.setText("20");
         txtMaxForceBreak.setText("0.00");

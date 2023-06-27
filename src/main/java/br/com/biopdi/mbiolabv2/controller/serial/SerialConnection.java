@@ -30,7 +30,7 @@ import java.util.Scanner;
  * @version 1.0
  * @project mBioLabv2
  */
-public class SerialConnection {
+public class SerialConnection extends Thread {
     private final SetupDAO setupDAO = new SetupDAO();
     private final SystemParameterDAO sysParDAO = new SystemParameterDAO();
     public SerialPort port;
@@ -51,6 +51,10 @@ public class SerialConnection {
         port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
     }
 
+    /**
+     * Boolean que indica se porta serial esta aberta ou nao
+     * @return
+     */
     public boolean isOpen(){
         if(port.isOpen()){
             return true;
@@ -58,6 +62,10 @@ public class SerialConnection {
             return false;
         }
     }
+
+    /**
+     * Metodo para fechar porta serial
+     */
     public void closePort(){
         port.closePort();
     }
@@ -79,8 +87,17 @@ public class SerialConnection {
      * @return String
      */
     public synchronized String inputValue() {
-        Scanner s = new Scanner(port.getInputStream());
-        return s.nextLine();
+        StringBuilder sb = new StringBuilder();
+        try {
+            Scanner scanner = new Scanner(port.getInputStream());
+            if (scanner.hasNextLine()) {
+                sb.append(scanner.nextLine());
+            }
+            scanner.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
     }
 
     // INICIO*********** Métodos pré ensaio ***********
@@ -93,7 +110,7 @@ public class SerialConnection {
     }
 
     /**
-     * Metodo que le sinla de erro emitido via serial (injeção de '>')
+     * Metodo que solicita sinal de erro emitido via serial (injeção de '>')
      */
     public synchronized void errorRead() {
         outputInjection(">");
@@ -176,14 +193,14 @@ public class SerialConnection {
      * Metodo que define a velocidade de ajuste (injeção de '8')
      */
     public synchronized void adjustVelocity(Integer adjustVel) {
-        outputInjection(String.valueOf(8 + adjustVel));
+        outputInjection(8 + String.valueOf(adjustVel));
     }
 
     /**
      * Metodo que define a velocidade de ensaio (injeção de '9')
      */
     public synchronized void essayVelocity(Integer essayVel) {
-        outputInjection(String.valueOf(9 + essayVel));
+        outputInjection(9 + String.valueOf(essayVel));
     }
 
     /**
@@ -214,7 +231,7 @@ public class SerialConnection {
      * Método de conexão automática, buscando o portName do systemSetting no DB
      */
     @FXML
-    public void setupParameter() {
+    public synchronized void setupParameter() {
         // abertura de porta
         openPort();
         if(isOpen()){
@@ -350,6 +367,7 @@ public class SerialConnection {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            System.out.println("Parâmetros armazenados com sucesso!");
             // fechando porta serial
             closePort();
         } else{

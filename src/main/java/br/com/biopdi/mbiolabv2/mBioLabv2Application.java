@@ -44,7 +44,7 @@ public class mBioLabv2Application extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        initialSetup();
+
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("loginScene.fxml"));
         Parent login = loader.load();
@@ -54,6 +54,15 @@ public class mBioLabv2Application extends Application {
         primaryStage.setScene(new Scene(login));
         primaryStage.show();
 
+        // Carrega parâmetros iniciais durante exposicao da cena splash
+        SerialConnection serialConn = new SerialConnection();
+        Thread t1 = new Thread(()->{
+            initialSetup();
+            if(serialConn.testConnection()){
+                serialConn.setupParameter();
+            }
+        });
+        t1.start();
 
         // Chama SplashScene a partir da classe SplashSceneController
 //        initialSetup();
