@@ -21,7 +21,6 @@ import br.com.biopdi.mbiolabv2.model.bean.Essay;
 import br.com.biopdi.mbiolabv2.model.bean.Setup;
 import br.com.biopdi.mbiolabv2.model.bean.SystemVariable;
 import br.com.biopdi.mbiolabv2.model.bean.User;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -44,18 +43,15 @@ import javafx.stage.Stage;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import win.zqxu.jrviewer.JRViewerFX;
 
 import javax.swing.*;
 import java.io.*;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -79,7 +75,7 @@ public class ReportSceneController implements Initializable {
     @FXML
     private Button btnEssayByUserId, btnEssaySave, btnReportSave, btnCsvExport, btnReportPrint;
     @FXML
-    private ComboBox cbUserFilter, cbEssayUsedMachineFilter, cbNormFilter;
+    private ComboBox cbUserFilter, cbEssayTypeFilter, cbNormFilter;
     @FXML
     private ImageView ivEssayUser, ivPreviewReport;
     @FXML
@@ -124,43 +120,56 @@ public class ReportSceneController implements Initializable {
             public void changed(ObservableValue<? extends Essay> observable, Essay oldValue, Essay newValue) {
 
                 try {
-                    // currentEssay recebe o objeto selecionado na lvSavedEssay
-                    currentEssay = newValue;
-                    if (currentEssay.getEssayChart() == null) {
-                        System.out.println("Problema ao carregar os dados do gráfico! Verifique no banco de dados.");
+                    if(currentEssay!=null){
+                        // currentEssay recebe o objeto selecionado na lvSavedEssay
+                        currentEssay = newValue;
+                        if (currentEssay.getEssayChart() == null) {
+                            System.out.println("Problema ao carregar os dados do gráfico! Verifique no banco de dados.");
+                        }
+                        essayChart(currentEssay.getEssayId());
+                        essayInfo(currentEssay.getEssayId());
+                    } else{
+                        System.out.println("currentEssay = null");
                     }
-                    essayChart(currentEssay.getEssayId());
-                    essayInfo(currentEssay.getEssayId());
-//                    reportSave();
 
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());
                 }
             }
         });
-        dpEssayByDate.valueProperty().addListener(new ChangeListener<LocalDate>() {
-            @Override
-            public void changed(ObservableValue<? extends LocalDate> observableValue, LocalDate localDate, LocalDate t1) {
-                savedEssayByDateView(t1.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            }
+
+
+        dpEssayByDate.setOnAction(event -> {
+                if(dpEssayByDate.getValue()!=null){
+                    savedEssayByDateView(dpEssayByDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                    cbUserFilter.getSelectionModel().clearSelection();
+                    cbNormFilter.getSelectionModel().clearSelection();
+                    cbEssayTypeFilter.getSelectionModel().clearSelection();
+                }
         });
-        cbUserFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                savedEssayByUserView(t1.toString());
-            }
+        cbUserFilter.setOnAction(event -> {
+                if(cbUserFilter.getSelectionModel().getSelectedItem()!=null){
+                    savedEssayByUserView(cbUserFilter.getSelectionModel().getSelectedItem().toString());
+                    dpEssayByDate.setValue(null);
+                    cbNormFilter.getSelectionModel().select(null);
+                    cbEssayTypeFilter.getSelectionModel().select(null);
+                }
         });
-        cbNormFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                savedEssayByNormView(t1.toString());
-            }
+        cbNormFilter.setOnAction(event -> {
+                if(cbNormFilter.getSelectionModel().getSelectedItem()!=null){
+                    savedEssayByNormView(cbNormFilter.getSelectionModel().getSelectedItem().toString());
+                    dpEssayByDate.setValue(null);
+                    cbUserFilter.getSelectionModel().select(null);
+                    cbEssayTypeFilter.getSelectionModel().select(null);
+                }
         });
-        cbEssayUsedMachineFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                savedEssayByMachineView(t1.toString());
-            }
+        cbEssayTypeFilter.setOnAction(event -> {
+                if(cbEssayTypeFilter.getSelectionModel().getSelectedItem()!=null){
+                    savedEssayByEssayTypeView(cbEssayTypeFilter.getSelectionModel().getSelectedItem().toString());
+                    dpEssayByDate.setValue(null);
+                    cbUserFilter.getSelectionModel().select(null);
+                    cbNormFilter.getSelectionModel().select(null);
+                }
         });
 
     }
@@ -172,7 +181,7 @@ public class ReportSceneController implements Initializable {
         ivEssayUser.setClip(new Circle(15,15,15));
         userListCB();
         normListCB();
-        machineListCB();
+        essayTypeListCB();
         if(sysVar.getUserId()>3){
             cbUserFilter.setVisible(false);
         } else if(sysVar.getUserId()==3){
@@ -185,6 +194,7 @@ public class ReportSceneController implements Initializable {
      */
     @FXML
     private void userListCB() {
+        cbUserFilter.getItems().clear();
         List<User> userList = userDAO.findAll();
         for (User user : userList) {
             cbUserFilter.getItems().add(user.getUserLogin());
@@ -194,7 +204,7 @@ public class ReportSceneController implements Initializable {
     /**
      * Método de listagem de normas dentro do ComboBox (cbNormFilter)
      */
-    private void machineListCB() {
+    private void normListCB() {
         List<Essay> normList = essayDAO.findAll();
         for (Essay essay : normList) {
             if(!cbNormFilter.getItems().contains(essay.getEssayNorm())){
@@ -206,11 +216,12 @@ public class ReportSceneController implements Initializable {
     /**
      * Método de listagem de normas dentro do ComboBox (cbNormFilter)
      */
-    private void normListCB() {
-        List<Essay> machineList = essayDAO.findAll();
-        for (Essay essay : machineList) {
-            if(!cbEssayUsedMachineFilter.getItems().contains(essay.getEssayUsedMachine())){
-                cbEssayUsedMachineFilter.getItems().add(essay.getEssayUsedMachine());
+    private void essayTypeListCB() {
+        cbEssayTypeFilter.getItems().clear();
+        List<Essay> typeList = essayDAO.findAll();
+        for (Essay essay : typeList) {
+            if(!cbEssayTypeFilter.getItems().contains(essay.getEssayType())){
+                cbEssayTypeFilter.getItems().add(essay.getEssayType());
             }
         }
     }
@@ -230,6 +241,7 @@ public class ReportSceneController implements Initializable {
             }
         }
         lvSavedEssay.setItems(newObsEssayList);
+
     }
 
     /**
@@ -262,14 +274,14 @@ public class ReportSceneController implements Initializable {
 
     /**
      * Metodo que lista ensaios salvos baseado no equipamento informada
-     * @param machine
+     * @param type
      */
     @FXML
-    private void savedEssayByMachineView(String machine){
+    private void savedEssayByEssayTypeView(String type){
         ObservableList<Essay> newObsEssayList = FXCollections.observableArrayList();
         for(Essay essay : obsEssayList){
             if(essay!=null){
-                if(essay.getEssayUsedMachine().equals(machine)){
+                if(essay.getEssayType().equals(type)){
                     newObsEssayList.add(essay);
                 }
             }
@@ -297,7 +309,7 @@ public class ReportSceneController implements Initializable {
             String dot[] = str.split(";");
             for (int i = 0; i < dot.length; i += 2) {
                 System.out.println(dot[i] + " " + dot[i + 1]);
-                seriesSingle.getData().add(new XYChart.Data(Double.parseDouble(dot[i]), Double.parseDouble(dot[i + 1])));
+                seriesSingle.getData().add(new XYChart.Data(Double.parseDouble(dot[i + 1]), Double.parseDouble(dot[i])));
             }
         }
         chartSingleLine.getData().add(seriesSingle);
@@ -441,7 +453,7 @@ public class ReportSceneController implements Initializable {
                 parameters.put("xyChartData", xyChartDataJR);
 
                 // Preenchimento do relatorio
-                JasperDesign jasperDesign = JRXmlLoader.load(new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jrxml")));
+                JasperDesign jasperDesign = JRXmlLoader.load(new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReportV2.jrxml")));
 
                 // Compilando jrxml com a classe JasperReport
                 JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
@@ -513,21 +525,7 @@ public class ReportSceneController implements Initializable {
         }
     }
 
-    @FXML
-    private void reportPrint() throws JRException, URISyntaxException {;
 
-        Platform.runLater(()->{
-
-            try {
-                jvReport.printWithPrintDialog();
-                jvReport.setReport((JasperPrint) JRLoader.loadObject(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReport.jasper")));
-            jvReport.print();
-
-            } catch (JRException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
 
     /**
      * Metodo que exporta um csv do ensaio selecionado para a pasta /report na raiz do programa
@@ -570,64 +568,4 @@ public class ReportSceneController implements Initializable {
         System.out.println("Sucesso");
     }
 
-
-    public class MyJRDataSource implements net.sf.jasperreports.engine.JRDataSource{
-        public String getIdentification(){
-            return currentEssay.getEssayIdentification();
-        }
-        public Double getMaxForce(){
-            return currentEssay.getEssayMaxForce();
-        }
-        public Double getMaxPosition(){
-            return currentEssay.getEssayMaxPosition();
-        }
-        public Double getMaxTension(){
-            return currentEssay.getEssayMaxTension();
-        }
-        public Double getEscapeTension(){
-            return currentEssay.getEssayEscapeTension();
-        }
-        public Double getAlong(){
-            return currentEssay.getEssayMaxForce();
-        }
-        public Double getAreaRed(){
-            return currentEssay.getEssayAreaRed();
-        }
-        public Double getMYoung(){
-            return currentEssay.getEssayMYoung();
-        }
-
-        private Iterator<Object> iterator;
-        public MyJRDataSource(List<Object> collection){
-            this.iterator = collection.iterator();
-        }
-        @Override
-        public boolean next() throws JRException {
-            return iterator.hasNext();
-        }
-        @Override
-        public Object getFieldValue(JRField jrField) throws JRException {
-            Object object = iterator.next();
-
-            // Retorne o valor do campo com base no objeto atual
-            if (jrField.getName().equals("identification")) {
-                return currentEssay.getEssayIdentification();
-            } else if (jrField.getName().equals("maxForce")) {
-                return currentEssay.getEssayMaxForce();
-            } else if (jrField.getName().equals("maxPosition")){
-                return currentEssay.getEssayMaxPosition();
-            } else if (jrField.getName().equals("maxTension")){
-                return currentEssay.getEssayMaxTension();
-            } else if (jrField.getName().equals("escapeTension")){
-                return currentEssay.getEssayEscapeTension();
-            } else if (jrField.getName().equals("along")){
-                return currentEssay.getEssayAlong();
-            } else if (jrField.getName().equals("areaRed")){
-                return currentEssay.getEssayAreaRed();
-            } else if (jrField.getName().equals("mYoung")){
-                return currentEssay.getEssayMYoung();
-            }
-            return null;
-        }
-    }
 }

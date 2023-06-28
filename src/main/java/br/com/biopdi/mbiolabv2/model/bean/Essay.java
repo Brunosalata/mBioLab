@@ -30,7 +30,7 @@ import java.util.Objects;
 public class Essay {
 
     private Integer essayId, userId;
-    private String essayIdentification, essayNorm, essayUsedMachine, essayChart, essayDay, essayHour;
+    private String essayIdentification, essayType, essayNorm, essayUsedMachine, essayChart, essayDay, essayHour;
     private Double essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, essayFinalPosition,
             essayDislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, essayMaxForce,
             essayMaxPosition, essayMaxTension, essayEscapeTension, essayAlong, essayAreaRed, essayMYoung;
@@ -38,7 +38,7 @@ public class Essay {
     public Essay() {
     }
 
-    public Essay(Integer essayId, Integer userId, String essayIdentification, String essayNorm, String essayUsedMachine,
+    public Essay(Integer essayId, Integer userId, String essayIdentification, String essayType, String essayNorm, String essayUsedMachine,
                  double essayChargeCell, double essayInitialForce, double essayFinalForce, double essayInitialPosition,
                  double essayFinalPosition, double essayDislocationVelocity, double essayTemperature, double essayPreCharge,
                  double essayRelativeHumidity, double essayMaxForce, double essayMaxPosition, double essayMaxTension,
@@ -47,6 +47,7 @@ public class Essay {
         this.essayId = essayId;
         this.userId = userId;
         this.essayIdentification = essayIdentification;
+        this.essayType = essayType;
         this.essayNorm = essayNorm;
         this.essayUsedMachine = essayUsedMachine;
         this.essayChargeCell = essayChargeCell;
@@ -69,7 +70,7 @@ public class Essay {
         this.essayDay = essayDay;
         this.essayHour = essayHour;
     }
-    public Essay(Integer userId, String essayIdentification, String essayNorm, String essayUsedMachine,
+    public Essay(Integer userId, String essayIdentification, String essayType, String essayNorm, String essayUsedMachine,
                  double essayChargeCell, double essayInitialForce, double essayFinalForce, double essayInitialPosition,
                  double essayFinalPosition, double essayDislocationVelocity, double essayTemperature, double essayPreCharge,
                  double essayRelativeHumidity, double essayMaxForce, double essayMaxPosition, double essayMaxTension,
@@ -77,6 +78,7 @@ public class Essay {
                  String essayDay, String essayHour) {
         this.userId = userId;
         this.essayIdentification = essayIdentification;
+        this.essayType = essayType;
         this.essayNorm = essayNorm;
         this.essayUsedMachine = essayUsedMachine;
         this.essayChargeCell = essayChargeCell;
@@ -122,6 +124,14 @@ public class Essay {
 
     public void setEssayIdentification(String essayIdentification) {
         this.essayIdentification = essayIdentification;
+    }
+
+    public String getEssayType() {
+        return essayType;
+    }
+
+    public void setEssayType(String essayType) {
+        this.essayType = essayType;
     }
 
     public String getEssayNorm() {
@@ -302,38 +312,12 @@ public class Essay {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Essay essay = (Essay) o;
-        return Double.compare(essay.essayChargeCell, essayChargeCell) == 0 &&
-                Double.compare(essay.essayInitialForce, essayInitialForce) == 0 &&
-                Double.compare(essay.essayFinalForce, essayFinalForce) == 0 &&
-                Double.compare(essay.essayInitialPosition, essayInitialPosition) == 0 &&
-                Double.compare(essay.essayFinalPosition, essayFinalPosition) == 0 &&
-                Double.compare(essay.essayDislocationVelocity, essayDislocationVelocity) == 0 &&
-                Double.compare(essay.essayTemperature, essayTemperature) == 0 &&
-                Double.compare(essay.essayPreCharge, essayPreCharge) == 0 &&
-                Double.compare(essay.essayRelativeHumidity, essayRelativeHumidity) == 0 &&
-                Double.compare(essay.essayMaxForce, essayMaxForce) == 0 &&
-                Double.compare(essay.essayMaxPosition, essayMaxPosition) == 0 &&
-                Double.compare(essay.essayMaxTension, essayMaxTension) == 0 &&
-                Double.compare(essay.essayEscapeTension, essayEscapeTension) == 0 &&
-                Double.compare(essay.essayAlong, essayAlong) == 0 &&
-                Double.compare(essay.essayAreaRed, essayAreaRed) == 0 &&
-                Double.compare(essay.essayMYoung, essayMYoung) == 0 &&
-                Objects.equals(essayId, essay.essayId) &&
-                Objects.equals(userId, essay.userId) &&
-                Objects.equals(essayIdentification, essay.essayIdentification) &&
-                Objects.equals(essayNorm, essay.essayNorm) &&
-                Objects.equals(essayUsedMachine, essay.essayUsedMachine) &&
-                Objects.equals(essayChart, essay.essayChart) &&
-                Objects.equals(essayDay, essay.essayDay) &&
-                Objects.equals(essayHour, essay.essayHour);
+        return Objects.equals(essayId, essay.essayId) && Objects.equals(userId, essay.userId) && Objects.equals(essayIdentification, essay.essayIdentification) && Objects.equals(essayType, essay.essayType) && Objects.equals(essayNorm, essay.essayNorm) && Objects.equals(essayUsedMachine, essay.essayUsedMachine) && Objects.equals(essayChart, essay.essayChart) && Objects.equals(essayDay, essay.essayDay) && Objects.equals(essayHour, essay.essayHour) && Objects.equals(essayChargeCell, essay.essayChargeCell) && Objects.equals(essayInitialForce, essay.essayInitialForce) && Objects.equals(essayFinalForce, essay.essayFinalForce) && Objects.equals(essayInitialPosition, essay.essayInitialPosition) && Objects.equals(essayFinalPosition, essay.essayFinalPosition) && Objects.equals(essayDislocationVelocity, essay.essayDislocationVelocity) && Objects.equals(essayTemperature, essay.essayTemperature) && Objects.equals(essayPreCharge, essay.essayPreCharge) && Objects.equals(essayRelativeHumidity, essay.essayRelativeHumidity) && Objects.equals(essayMaxForce, essay.essayMaxForce) && Objects.equals(essayMaxPosition, essay.essayMaxPosition) && Objects.equals(essayMaxTension, essay.essayMaxTension) && Objects.equals(essayEscapeTension, essay.essayEscapeTension) && Objects.equals(essayAlong, essay.essayAlong) && Objects.equals(essayAreaRed, essay.essayAreaRed) && Objects.equals(essayMYoung, essay.essayMYoung);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(essayId, userId, essayIdentification, essayNorm, essayUsedMachine, essayChargeCell,
-                essayInitialForce, essayFinalForce, essayInitialPosition, essayFinalPosition, essayDislocationVelocity,
-                essayTemperature, essayPreCharge, essayRelativeHumidity, essayMaxForce, essayMaxPosition, essayMaxTension,
-                essayEscapeTension, essayAlong, essayAreaRed, essayMYoung, essayChart, essayDay, essayHour);
+        return Objects.hash(essayId, userId, essayIdentification, essayType, essayNorm, essayUsedMachine, essayChart, essayDay, essayHour, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, essayFinalPosition, essayDislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, essayMaxForce, essayMaxPosition, essayMaxTension, essayEscapeTension, essayAlong, essayAreaRed, essayMYoung);
     }
 
     /**
@@ -346,8 +330,12 @@ public class Essay {
                 "essayId=" + essayId +
                 ", userId=" + userId +
                 ", essayIdentification='" + essayIdentification + '\'' +
+                ", essayType='" + essayType + '\'' +
                 ", essayNorm='" + essayNorm + '\'' +
                 ", essayUsedMachine='" + essayUsedMachine + '\'' +
+                ", essayChart='" + essayChart + '\'' +
+                ", essayDay='" + essayDay + '\'' +
+                ", essayHour='" + essayHour + '\'' +
                 ", essayChargeCell=" + essayChargeCell +
                 ", essayInitialForce=" + essayInitialForce +
                 ", essayFinalForce=" + essayFinalForce +
@@ -364,11 +352,12 @@ public class Essay {
                 ", essayAlong=" + essayAlong +
                 ", essayAreaRed=" + essayAreaRed +
                 ", essayMYoung=" + essayMYoung +
-                ", essayChart='" + essayChart + '\'' +
-                ", essayDay='" + essayDay + '\'' +
-                ", essayHour='" + essayHour + '\'' +
                 '}';
     }
+
+
+
+
 
     //------------------ DAO VERIFY -----------------
 

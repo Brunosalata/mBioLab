@@ -118,13 +118,11 @@ public class SwitchMenuSceneController implements Initializable {
             lbLogin.setText("Logout");
             btnLogin.getStyleClass().add(1,"logout");
 
-            System.out.println(user.getUserImagePath());
             // AJUSTAR para imagem do usuário (Não está puxando userImagePath do DB)
             if(user.getUserImagePath()==null){
                 ivUserImage.setImage(new Image(mBioLabv2Application.class.getResource("img/lightIcon/user.png").toExternalForm()));
             } else{
                 ivUserImage.setImage(new Image("file:\\" + user.getUserImagePath()));
-                System.out.println(user.getUserImagePath());
             }
         }
         // Chamando o arquivo fxml para home
@@ -139,7 +137,6 @@ public class SwitchMenuSceneController implements Initializable {
      */
     @FXML
     private void switchToHomeScene(ActionEvent event) {
-        System.out.println("Carregando Home");
         FxmlLoader object = new FxmlLoader();
         Pane view = object.getPage("homeScene.fxml");
         mainPane.setCenter(view);
@@ -152,7 +149,6 @@ public class SwitchMenuSceneController implements Initializable {
      */
     @FXML
     private void switchToDashboardScene(ActionEvent event) {
-        System.out.println("Carregando Dashboard");
         FxmlLoader object = new FxmlLoader();
         Pane view = object.getPage("dashboardScene.fxml");
         mainPane.setCenter(view);
@@ -165,7 +161,6 @@ public class SwitchMenuSceneController implements Initializable {
      */
     @FXML
     private void switchToEssayScene(ActionEvent event) {
-        System.out.println("Carregando Essay");
         FxmlLoader object = new FxmlLoader();
         Pane view = object.getPage("essayScene.fxml");
         mainPane.setCenter(view);
@@ -178,7 +173,6 @@ public class SwitchMenuSceneController implements Initializable {
      */
     @FXML
     private void switchToReportScene(ActionEvent event) {
-        System.out.println("Carregando Report");
         FxmlLoader object = new FxmlLoader();
         Pane view = object.getPage("reportScene.fxml");
         mainPane.setCenter(view);
@@ -191,7 +185,6 @@ public class SwitchMenuSceneController implements Initializable {
      */
     @FXML
     private void switchToSupportScene(ActionEvent event) {
-        System.out.println("Carregando Support");
         FxmlLoader object = new FxmlLoader();
         Pane view = object.getPage("supportScene.fxml");
         mainPane.setCenter(view);
@@ -204,7 +197,6 @@ public class SwitchMenuSceneController implements Initializable {
      */
     @FXML
     private void switchToSystemSettingScene(ActionEvent event) {
-        System.out.println("Carregando System Setting");
         FxmlLoader object = new FxmlLoader();
         Pane view = object.getPage("systemSettingScene.fxml");
         mainPane.setCenter(view);

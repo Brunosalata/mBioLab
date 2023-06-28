@@ -672,7 +672,7 @@
                                                                                     <Label alignment="CENTER" prefHeight="17.0" prefWidth="74.0" text="Obtida" VBox.vgrow="ALWAYS" />
                                                                                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                                                                        <children>
-                                                                                          <TextField fx:id="txtPercentObtainedForce" alignment="CENTER" prefWidth="75.0" text="0">
+                                                                                          <TextField fx:id="txtPercentObtainedForce" alignment="CENTER" prefWidth="75.0" text="0.00">
                                                                                              <HBox.margin>
                                                                                                 <Insets />
                                                                                              </HBox.margin>
@@ -701,7 +701,7 @@
                                                                         </Label>
                                                                         <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="308.0" VBox.vgrow="ALWAYS">
                                                                            <children>
-                                                                              <TextField fx:id="txtObtainedForce" alignment="CENTER" prefHeight="25.0" promptText="0.0" text="0.0">
+                                                                              <TextField fx:id="txtObtainedForce" alignment="CENTER" prefHeight="25.0" text="0.000">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
@@ -742,7 +742,7 @@
                                                                         </Label>
                                                                         <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                                                            <children>
-                                                                              <TextField fx:id="txtMaxForceBreak" alignment="CENTER" disable="true" text="0.0">
+                                                                              <TextField fx:id="txtMaxForceBreak" alignment="CENTER" disable="true" text="0.000">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
@@ -780,7 +780,7 @@
                                                                         </Label>
                                                                         <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                                                            <children>
-                                                                              <TextField fx:id="txtDislocationValueBreak" alignment="CENTER" disable="true" text="0.0">
+                                                                              <TextField fx:id="txtDislocationValueBreak" alignment="CENTER" disable="true" text="0.000">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>
@@ -818,7 +818,7 @@
                                                                         </Label>
                                                                         <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                                                            <children>
-                                                                              <TextField fx:id="txtDislocationValuePause" alignment="CENTER" disable="true" text="0.0">
+                                                                              <TextField fx:id="txtDislocationValuePause" alignment="CENTER" disable="true" text="0.000">
                                                                                  <HBox.margin>
                                                                                     <Insets />
                                                                                  </HBox.margin>

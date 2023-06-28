@@ -442,13 +442,13 @@ public class EssaySceneController implements Initializable {
 
                     // Monitoramento do erro em tempo real e resposta imediata na interface
                     Platform.runLater(()->{
-//                        errorIdentification();
+                        errorIdentification();
                     });
 
                     // Atualização da UI pela Thread a partir das variáveis globais
                     Platform.runLater(() -> {
-                        txtForceView.setText(String.format("%.5f", selectedUnitForceValue() * forceAdjustInversionView));
-                        txtPositionView.setText(String.format("%.5f", selectedUnitPositionValue() * positionAdjustInversionView));
+                        txtForceView.setText(String.format("%.3f", selectedUnitForceValue() * forceAdjustInversionView));
+                        txtPositionView.setText(String.format("%.3f", selectedUnitPositionValue() * positionAdjustInversionView));
                     });
                 }
 
@@ -578,71 +578,79 @@ public class EssaySceneController implements Initializable {
      */
     private void errorIdentification(){
         String binary = Integer.toBinaryString(errorDecValue);
+        int diff = 5 - binary.length();
         Character[] splitBin = new Character[5];
-        for(int i =0; i < splitBin.length; i++){
-            splitBin[i] = binary.charAt(i);
-        }
-        // Erro - Botao de emergencia
-        if(splitBin[0]==1){
-            errorEmergencyButton = false;
-            Platform.runLater(()->{
-                System.out.println("Botão e emergência destravado.");
-            });
-        } else if(splitBin[0]==0){
-            errorEmergencyButton = true;
-            Platform.runLater(()->{
-                System.out.println("Botão e emergência acionado!");
-            });
-        }
-        // Erro - Fim do curso inferior
-        if(splitBin[1]==1){
-            errorInfLimit = false;
-            Platform.runLater(()->{
-                System.out.println("Acima do Fim de curso inferior.");
-            });
-        } else if(splitBin[1]==0){
-            errorInfLimit = true;
-            Platform.runLater(()->{
-                System.out.println("Fim de curso inferior!");
-            });
-        }
-        // Erro - Fim do curso superior
-        if(splitBin[2]==1){
-            errorSupLimit = false;
-            Platform.runLater(()->{
-                System.out.println("Abaixo do Fim de curso superior.");
-            });
-        } else if(splitBin[2]==0){
-            errorSupLimit = true;
-            Platform.runLater(()->{
-                System.out.println("Fim de curso superior!");
-            });
-        }
-        // Erro - Limite de celula de carga
-        if(splitBin[3]==1){
-            errorChargeCellLimit = false;
-            Platform.runLater(()->{
-                System.out.println("Abaixo do Limite da célula de carga.");
-            });
-        } else if(splitBin[3]==0){
-            errorChargeCellLimit = true;
-            Platform.runLater(()->{
-                System.out.println("Limite da célula de carga!");
-            });
-        }
-        // Erro - Celula de carga desconectada
-        if(splitBin[4]==1){
-            errorChargeCellDisconnected = false;
-            Platform.runLater(()->{
-                System.out.println("Célula de carga Conectada!");
-            });
-        } else if(splitBin[4]==0){
-            errorChargeCellDisconnected = true;
-            Platform.runLater(()->{
-                System.out.println("Célula de carga desconectada!");
-            });
+        for(int i =0; i < splitBin.length + diff; i++){
+            if(diff!=0){    // Caso o binario tenha menos que 5 caracteres, cada posicao inicial recebe zero
+                for(int j = 0; j < diff; j++){
+                    splitBin[j] = 0;
+                }
+            }
+            for(int b = diff; b < binary.length() + diff; b++){     // segue completando o vetor com os caracteres do
+                splitBin[b] = binary.charAt(b-diff);                // valor binario
+            }
         }
 
+        // Erro - Botao de emergencia
+        if(splitBin[0]=='1'){
+            errorEmergencyButton = false;
+//            Platform.runLater(()->{
+
+//            });
+        } else if(splitBin[0]=='0'){
+            errorEmergencyButton = true;
+//            Platform.runLater(()->{
+                System.out.println("Botão e emergência acionado!");
+//            });
+        }
+        // Erro - Fim do curso inferior
+        if(splitBin[1]=='1'){
+            errorInfLimit = false;
+//            Platform.runLater(()->{
+
+//            });
+        } else if(splitBin[1]=='0'){
+            errorInfLimit = true;
+//            Platform.runLater(()->{
+                System.out.println("Fim de curso inferior!");
+//            });
+        }
+        // Erro - Fim do curso superior
+        if(splitBin[2]=='1'){
+            errorSupLimit = false;
+//            Platform.runLater(()->{
+
+//            });
+        } else if(splitBin[2]=='0'){
+            errorSupLimit = true;
+//            Platform.runLater(()->{
+                System.out.println("Fim de curso superior!");
+//            });
+        }
+        // Erro - Limite de celula de carga
+        if(splitBin[3]=='1'){
+            errorChargeCellLimit = false;
+//            Platform.runLater(()->{
+
+//            });
+        } else if(splitBin[3]=='0'){
+            errorChargeCellLimit = true;
+//            Platform.runLater(()->{
+                System.out.println("Limite da célula de carga!");
+//            });
+        }
+        // Erro - Celula de carga desconectada
+        if(splitBin[4]=='1'){
+            errorChargeCellDisconnected = false;
+//            Platform.runLater(()->{
+
+//            });
+        } else if(splitBin[4]=='0'){
+            errorChargeCellDisconnected = true;
+//            Platform.runLater(()->{
+                System.out.println("Célula de carga desconectada!");
+//            });
+        }
     }
 
     /**
@@ -1673,8 +1681,9 @@ public class EssaySceneController implements Initializable {
         if(essayfinished = true){
             if(chartString!=null && txtEssayIdentification.getText()!=""){
                 essayFinalyzed = new Essay();
-                essayFinalyzed.setUserId(sysVar.getUserId()); // Substituir por ID referente ao login
+                essayFinalyzed.setUserId(sysVar.getUserId()); // Substitui por ID referente ao login
                 essayFinalyzed.setEssayIdentification(txtEssayIdentification.getText());
+                essayFinalyzed.setEssayType(cbEssayType.getSelectionModel().getSelectedItem().toString());
                 essayFinalyzed.setEssayNorm(cbNormList.getSelectionModel().getSelectedItem().toString());
                 essayFinalyzed.setEssayUsedMachine(null);
                 essayFinalyzed.setEssayChargeCell(0.0);
@@ -1762,7 +1771,7 @@ public class EssaySceneController implements Initializable {
         alert.showAndWait();
         newEssay();
         newChart();
-        tpEssayFlow.getSelectionModel().select(0);
+//        tpEssayFlow.getSelectionModel().select(0);
     }
 
     /**
@@ -1783,7 +1792,9 @@ public class EssaySceneController implements Initializable {
         lbRedArea.setText("0.000");
         lbMYoung.setText("0.000");
         txtEssayVelocity.setText("1");
+        shEssayVelocity.setValue(1);
         txtAdjustVelocity.setText("1");
+        shAdjustVelocity.setValue(1);
         txtEssayIdentification.setText("");
         txtForcePercentageBreak.setText("20");
         txtMaxForceBreak.setText("0.00");
@@ -1791,6 +1802,10 @@ public class EssaySceneController implements Initializable {
         txtDislocationValuePause.setText("0.00");
         rbForceXPosition.isSelected();
         rbForceDownBreak.isSelected();
+        rbRectangle.isSelected();
+        txtSpecimenAValueRectangle.setText("1.00");
+        txtSpecimenBValueRectangle.setText("1.00");
+        txtSpecimenCrossSectionLength.setText("1.00");
         tpEssayFlow.getSelectionModel().select(0);
         forceTare();
         initialForce = 0D;

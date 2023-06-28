@@ -12,12 +12,12 @@ comparativa entre dois ou mais para suportar os estudos do cliente.
 
 ---
 
-## 🚀 Sobre o código
+##  Sobre o código
 
 A obtenção de cópias do projeto para fins de desenvolvimento e teste são extritamente proibidos, salvo com o 
 consentimento do seu desenvolvedor <a href=“https://github.com/Brunosalata“>Brunosalata</a>
 
-### 📋 Pré-requisitos
+###  Pré-requisitos
 
 A comunicação serial acontece entre aplicação e placa de automação no interior do equipamento, sendo impossível
 desfrutar de todas as funcionalidades da aplicação, visto que os dados gerados pelo ensaio acontecem no equipamento.
@@ -26,7 +26,7 @@ Com isso, a plena utilização desse projeto implica na aquisição de um dos eq
 e ao menos dois núcleos de processamento, para gerantir melhor experiência do usuário.
 
 
-### 🔧 Aplicação
+###  Aplicação
 
 Para criar o ambiente necessário para sua utilização, será necessário executar a aplicação em 
 computador que atenda aos requisitos mínimos do sistema e esteja conectado via porta USB ao
@@ -54,11 +54,11 @@ Preparo do equipamento:
 
 Boas práticas na utilização da aplicação garantem resultados de melhor qualidade.
 
-## ⚙️ Testes automatizados
+##  Testes automatizados
 
 Até o momento não foram inseridos testes automatizados no sistema.
 
-### 🔩 Testes unitários e validações
+###  Testes unitários e validações
 
 Inserir testes e motivos.
 
@@ -66,11 +66,11 @@ Inserir testes e motivos.
 Exemplos
 ```
 
-## 📦 Implantação
+##  Implantação
 
 A implantação será realizada pela equipe técnica, que fornecerá todas as informações pertinentes.
 
-## 🛠️ Desenvolvimento
+##  Desenvolvimento
 
 Para o desenvolvimento do projeto foram adotados:
 
@@ -102,20 +102,20 @@ mapeamento de objetos XML -> Java
 * [JUnit 5](https://junit.org/junit5/) - Realização de testes unitários (não implementado ainda)
 
 
-## 📌 Versão
+##  Versão
 
 O controle de versão é feito via Git e GitHub. PAra acessá-las, observe as Tags presentes no projeto
 
-## ✒️ Autor
+##  Autor
 
 * **Bruno Salata Lima** - *Projeto completo* - [Brunosalata](https://github.com/Brunosalata)
 
 
-## 📄 Licença
+##  Licença
 
 Este projeto está sob a licença "Biopdi license" - Acesse [BiopdiLicense.md](https://github.com/Biopdi) para detalhes.
 
-## 🎁 Agradecimentos
+##  Agradecimentos
 
 Um grande privilégio ter tido a oportunidade de desenvolver, e estar desenvolvendo, este projeto. Meu primeiro projeto
 profissional como desenvolvedor Java e tenho muito orgulho de escrever que cada linha inserida foi meticulosamente 
@@ -125,6 +125,7 @@ Obrigado, Biopdi<span style="font-size:10px; vertical-align: super"> ®</span>, 
 
 
 ---
+Por [Bruno Salata Lima](https://github.com/Brunosalata) - Desenvolvedor Java
 </body>
 
-<footer> Por [Bruno Salata Lima](https://gist.github.com/Brunosalata) </footer>
+<footer>  </footer>

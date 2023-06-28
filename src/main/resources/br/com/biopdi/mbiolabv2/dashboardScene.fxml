@@ -774,7 +774,7 @@
                                                                   <Insets right="10.0" />
                                                                </HBox.margin>
                                                             </Button>
-                                                            <Button fx:id="btnReportPrint" mnemonicParsing="false" onAction="#reportPrint" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: #474747;" styleClass="print" stylesheets="@css/style.css">
+                                                            <Button fx:id="btnReportPrint" mnemonicParsing="false" prefHeight="45.0" prefWidth="45.0" style="-fx-background-color: #474747;" styleClass="print" stylesheets="@css/style.css">
                                                                <HBox.margin>
                                                                   <Insets right="10.0" />
                                                                </HBox.margin>

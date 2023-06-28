@@ -117,10 +117,9 @@ public class HomeSceneController implements Initializable {
      */
     @FXML
     private void scheduleDelete(){
-        if(sysVar.getUserId() == currentSchedule.getUserId()){
+        if(sysVar.getUserId() == currentSchedule.getUserId() || sysVar.getUserId()<=2){
             scheduleDAO.delete(currentSchedule);
             scheduleListRefresh();
-            System.out.println("Deletou");
         } else{
             // Alerta de usuario agendado e logado divergentes
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

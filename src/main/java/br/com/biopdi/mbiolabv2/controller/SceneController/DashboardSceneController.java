@@ -186,7 +186,7 @@ public class DashboardSceneController implements Initializable {
             String dot[] = str.split(";");
             for (int i = 0; i < dot.length; i += 2) {
                 System.out.println(dot[i] + " " + dot[i + 1]);
-                seriesMulti.getData().add(new XYChart.Data(Double.parseDouble(dot[i]), Double.parseDouble(dot[i + 1])));
+                seriesMulti.getData().add(new XYChart.Data(Double.parseDouble(dot[i + 1]), Double.parseDouble(dot[i])));
             }
         }
         chartMultiLine.getData().add(seriesMulti);
@@ -640,11 +640,10 @@ public class DashboardSceneController implements Initializable {
         }
     }
 
-    @FXML
-    private void reportPrint(){
-
-    }
-
+    /**
+     * Metodo que exporta os ensaios no formato CSV
+     * @throws IOException
+     */
     @FXML
     private void csvExport() throws IOException {
 
