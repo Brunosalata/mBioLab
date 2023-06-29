@@ -43,6 +43,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -54,6 +55,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -580,7 +582,7 @@ public class DashboardSceneController implements Initializable {
                 stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 StackPane.setMargin(swingNode, new Insets(10));
 
-                reportStage.setScene(new Scene(stackPane, 800, 600));
+                reportStage.setScene(new Scene(stackPane, 850, 600));
                 reportStage.show();
             }
         } catch (JRException e) {
@@ -591,7 +593,9 @@ public class DashboardSceneController implements Initializable {
     }
 
 
-
+    /**
+     * Metodo que chama a stringChart do ensaio e plota os valores na area do grafico da interface
+     */
     private void serieInclude(){
         // Conversao da String chartEssay para valores double
         String strArraySplit[] = currentEssay.getEssayChart().split(",");
@@ -599,7 +603,7 @@ public class DashboardSceneController implements Initializable {
             String dot[] = str.split(";");
             for (int i = 0; i < dot.length; i += 2) {
                 // Preenchimento das listas de dados
-                XYChartData.add(new ChartAxisValueToJR(Double.parseDouble(dot[i]), Double.parseDouble(dot[i + 1]),
+                XYChartData.add(new ChartAxisValueToJR(Double.parseDouble(dot[i + 1]), Double.parseDouble(dot[i]),
                         currentEssay.getEssayIdentification()));
             }
         }
@@ -647,16 +651,27 @@ public class DashboardSceneController implements Initializable {
     @FXML
     private void csvExport() throws IOException {
 
-        // Criacao do arquivo a ser preenchido com os dados
-        File csvFile = new File("src/main/resources/br/com/biopdi/mbiolabv2/export/dashboard/export_" + currentDay + "_" + currentHour + ".csv");
-        OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(csvFile), StandardCharsets.ISO_8859_1);
+        // Criar um seletor de arquivo
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Salvar arquivo CSV");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Arquivos CSV", "*.csv"));
+
+        // Abrir a janela de seleção de arquivo
+        File selectedFile = fileChooser.showSaveDialog((Stage) btnReportSave.getScene().getWindow());
+
+        if (selectedFile == null) {
+            // O usuário cancelou a seleção do arquivo
+            return;
+        }
+
+        OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(selectedFile), StandardCharsets.ISO_8859_1);
         try{
             // Criacao do header, inserindo coluna Forca e Posicao com o nome de cada ensaio
             for(Essay essay : selectedEssayList){
                 // definição do header da planilha
-                fileWriter.append("Força - " + essay.getEssayIdentification());
-                fileWriter.append(';');
                 fileWriter.append("Posição - " + essay.getEssayIdentification());
+                fileWriter.append(';');
+                fileWriter.append("Força - " + essay.getEssayIdentification());
                 // inclui coluna vazia entre dois ensaios, ou quebra linha se for o ultimo ensaio
                 if(selectedEssayList.get(selectedEssayList.size() - 1) != essay){
                     fileWriter.append(';'+""+';');
@@ -687,10 +702,11 @@ public class DashboardSceneController implements Initializable {
                     String strArraySplitDot[] = new String[count];
                     String strArraySplitDotAux[] = essayDot.getEssayChart().split(",");    // quebra string em pontos
                     strArraySplitDot = Arrays.copyOf(strArraySplitDotAux,strArraySplitDot.length);
+                    DecimalFormat decimalFormat = new DecimalFormat("0.0000"); // Formato para manter duas casas decimais
 
                     if(strArraySplitDot[i] != null){
                         String dot[] = strArraySplitDot[i].split(";");  // quebra em forca e posicao
-                        fileWriter.append(dot[0] + ';' + dot[1]);
+                        fileWriter.append(decimalFormat.format(Double.parseDouble((dot[1]))) + ';' + decimalFormat.format(Double.parseDouble(dot[0])));
                         fileWriter.append(';'+""+';');
                     } else{
                         fileWriter.append("" + ';' + "");
@@ -707,102 +723,7 @@ public class DashboardSceneController implements Initializable {
             fileWriter.close();
         }
         System.out.println("Sucesso");
-
-////  METODO 2 - Alinhamento vertical (Colua unica)
-//        File csvFile = new File("src/main/resources/br/com/biopdi/mbiolabv2/export/dashboard/export_" + currentDay + "_" + currentHour + ".csv");
-//        OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(csvFile), StandardCharsets.ISO_8859_1);
-//        System.out.println(csvFile);
-//        try{
-//            fileWriter.append('\n');
-//            for(Essay essay : selectedEssayList){
-//
-//                fileWriter.append("Força - " + essay.getEssayIdentification());
-//                fileWriter.append('\n');
-//
-//                String strArraySplit[] = essay.getEssayChart().split(",");
-//                for (String force : strArraySplit) {
-//                    String dotF[] = force.split(";");
-//                    // Incluindo valores de forca
-//                    for (int i = 0; i < dotF.length; i += 2) {
-//                        fileWriter.append(dotF[i]);
-//                        if (i < dotF.length - 1) {
-//                            fileWriter.append(';');
-//                        }
-//                        fileWriter.append('\n');
-//                    }
-//                }
-//                fileWriter.append("Posição - " + essay.getEssayIdentification());
-//                fileWriter.append('\n');
-//
-//                for (String position : strArraySplit) {
-//                    String dotP[] = position.split(";");
-//                    // Incluindo valores de posicao
-//                    for (int i = 0; i < dotP.length; i += 2) {
-//                        fileWriter.append(dotP[i+1]);
-//                        if(i < dotP.length - 1){
-//                            fileWriter.append(';');
-//                        }
-//                        fileWriter.append('\n');
-//                    }
-//
-//                }
-//
-//            }
-//
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        } finally {
-//            fileWriter.flush();
-//            fileWriter.close();
-//        }
-//        System.out.println("Sucesso");
-
-////  METODO 1 - Header horizontal ok, dados vertical na coluna 1 apenas)
-//        File csvFile = new File("src/main/resources/br/com/biopdi/mbiolabv2/export/dashboard/export_" + currentDay + "_" + currentHour + ".csv");
-//        OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(csvFile), StandardCharsets.ISO_8859_1);
-//        System.out.println(csvFile);
-//        try{
-//            for(Essay essay : selectedEssayList){
-//                // definição do header da planilha
-//                fileWriter.append("Força - " + essay.getEssayIdentification());
-//                fileWriter.append(';');
-//                fileWriter.append("Posição - " + essay.getEssayIdentification());
-//
-//                if(selectedEssayList.get(selectedEssayList.size() - 1) != essay){
-//                    fileWriter.append(';');
-//                } else {
-//                    fileWriter.append('\n');
-//                }
-//            }
-//
-//            for(Essay essay : selectedEssayList){
-//
-//                String strArraySplit[] = essay.getEssayChart().split(",");
-//                for (String str : strArraySplit) {
-//                    String dot[] = str.split(";");
-//                    for (int i = 0; i < dot.length; i += 2) {
-//                        System.out.println(dot[i] + " " + dot[i + 1]);
-//                        fileWriter.append(dot[i]);
-//                        fileWriter.append(';');
-//                        fileWriter.append(dot[i+1]);
-//                        fileWriter.append('\n');
-//                    }
-//                }
-//            }
-//            System.out.println(csvFile);
-//            System.out.println("csv criado");
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        } finally {
-//            fileWriter.flush();
-//            fileWriter.close();
-//        }
-//        System.out.println("Sucesso");
-
     }
 
-    private void convertCsv(){
-
-    }
 
 }

@@ -37,8 +37,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.TilePane;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -51,6 +51,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -99,7 +100,6 @@ public class ReportSceneController implements Initializable {
     private ObservableList<Essay> obsEssayList;
     private ObservableList<Essay> obsEssayByUserIdList;
     private Stage stage2 = new Stage();
-    private TilePane r = new TilePane();
 
 
     Date systemDate = new Date();
@@ -108,6 +108,11 @@ public class ReportSceneController implements Initializable {
     String currentDay = expDay.format(systemDate);
     String currentHour = expHour.format(systemDate);
 
+    /**
+     * Metodo chamado ao iniciar a scene
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initialSetup();
@@ -120,7 +125,7 @@ public class ReportSceneController implements Initializable {
             public void changed(ObservableValue<? extends Essay> observable, Essay oldValue, Essay newValue) {
 
                 try {
-                    if(currentEssay!=null){
+                    if(newValue!=null){
                         // currentEssay recebe o objeto selecionado na lvSavedEssay
                         currentEssay = newValue;
                         if (currentEssay.getEssayChart() == null) {
@@ -129,7 +134,7 @@ public class ReportSceneController implements Initializable {
                         essayChart(currentEssay.getEssayId());
                         essayInfo(currentEssay.getEssayId());
                     } else{
-                        System.out.println("currentEssay = null");
+                        System.out.println("newValue = null");
                     }
 
                 } catch (Exception e) {
@@ -138,7 +143,7 @@ public class ReportSceneController implements Initializable {
             }
         });
 
-
+        // Listener no DatePicker, que filtra a lista baseado na data selecionada, alem de deselecionar os comboBox
         dpEssayByDate.setOnAction(event -> {
                 if(dpEssayByDate.getValue()!=null){
                     savedEssayByDateView(dpEssayByDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
@@ -147,6 +152,7 @@ public class ReportSceneController implements Initializable {
                     cbEssayTypeFilter.getSelectionModel().clearSelection();
                 }
         });
+        // Listener nos ComboBox, que filtram a lista baseado no parâmetro selecionado, alem de deselecionar os demais elementos de busca
         cbUserFilter.setOnAction(event -> {
                 if(cbUserFilter.getSelectionModel().getSelectedItem()!=null){
                     savedEssayByUserView(cbUserFilter.getSelectionModel().getSelectedItem().toString());
@@ -290,7 +296,7 @@ public class ReportSceneController implements Initializable {
     }
 
     /**
-     * Método que busca a String do DB e o converte em pontos no gráfico
+     * Método que busca a stringChart do DB, converte em pontos e plota na area de gráfico na interface
      *
      * @param pk
      */
@@ -393,6 +399,9 @@ public class ReportSceneController implements Initializable {
         lastEssay();
     }
 
+    /**
+     * Metodo que cria janela Jasper com o preenchimento do jrxml, permitindo save e export para diferentes formatos
+     */
     @FXML
     private void reportSave() {
 
@@ -478,7 +487,7 @@ public class ReportSceneController implements Initializable {
                     stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                     StackPane.setMargin(swingNode, new Insets(10));
 
-                    reportStage.setScene(new Scene(stackPane, 800, 600));
+                    reportStage.setScene(new Scene(stackPane, 850, 600));
                     reportStage.show();
                 }
             } catch (NumberFormatException e) {
@@ -490,7 +499,7 @@ public class ReportSceneController implements Initializable {
             }
     }
 
-        /**
+    /**
      * Classe para a criacao de objeto para preenchimento do grafico no Jasper Report
      */
     public class ChartAxisValueToJR {
@@ -525,8 +534,6 @@ public class ReportSceneController implements Initializable {
         }
     }
 
-
-
     /**
      * Metodo que exporta um csv do ensaio selecionado para a pasta /report na raiz do programa
      * @throws IOException
@@ -534,38 +541,44 @@ public class ReportSceneController implements Initializable {
     @FXML
     private void csvExport() throws IOException {
 
-        File csvFile = new File("src/main/resources/br/com/biopdi/mbiolabv2/export/report/export_" + currentDay + "_" + currentHour + ".csv");
-        OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(csvFile), StandardCharsets.ISO_8859_1);
-        System.out.println(csvFile);
-        try{
-            // definição do header da planilha
-            fileWriter.append("Força");
-            fileWriter.append(';');
-            fileWriter.append("Posição");
-            fileWriter.append('\n');
-            Essay essay = essayDAO.findById(currentEssay.getEssayId());
-            // 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
+        // Criar um seletor de arquivo
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Salvar arquivo CSV"); // Título da janela de seleção
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Arquivos CSV", "*.csv")); // Filtro de extensão para exibir apenas arquivos CSV
 
-            String strArraySplit[] = essay.getEssayChart().split(",");
-            for (String str : strArraySplit) {
-                String dot[] = str.split(";");
-                for (int i = 0; i < dot.length; i += 2) {
-                    System.out.println(dot[i] + " " + dot[i + 1]);
-                    fileWriter.append(dot[i]);
-                    fileWriter.append(';');
-                    fileWriter.append(dot[i+1]);
-                    fileWriter.append('\n');
+        // Abrir a janela de seleção de arquivo
+        File selectedFile = fileChooser.showSaveDialog((Stage) btnReportSave.getScene().getWindow());
+
+        if (selectedFile != null) {
+            OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(selectedFile), StandardCharsets.ISO_8859_1);
+            try {
+                // Definição do header da planilha
+                fileWriter.append("Posição");
+                fileWriter.append(';');
+                fileWriter.append("Força");
+                fileWriter.append('\n');
+
+                Essay essay = essayDAO.findById(currentEssay.getEssayId());
+                String strArraySplit[] = essay.getEssayChart().split(",");
+                DecimalFormat decimalFormat = new DecimalFormat("0.0000"); // Formato para manter duas casas decimais
+                for (String str : strArraySplit) {
+                    String dot[] = str.split(";");
+                    for (int i = 0; i < dot.length; i += 2) {
+                        System.out.println(dot[i] + " " + dot[i + 1]);
+                        fileWriter.append(decimalFormat.format(Double.parseDouble(dot[i + 1])));
+                        fileWriter.append(';');
+                        fileWriter.append(decimalFormat.format(Double.parseDouble(dot[i])));
+                        fileWriter.append('\n');
+                    }
                 }
+                System.out.println("Arquivo CSV exportado com sucesso!");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } finally {
+                fileWriter.flush();
+                fileWriter.close();
             }
-            System.out.println(csvFile);
-            System.out.println("csv criado");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            fileWriter.flush();
-            fileWriter.close();
         }
-        System.out.println("Sucesso");
     }
 
 }
