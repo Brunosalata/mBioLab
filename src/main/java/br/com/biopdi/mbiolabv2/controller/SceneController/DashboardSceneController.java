@@ -129,6 +129,8 @@ public class DashboardSceneController implements Initializable {
     SimpleDateFormat expHour = new SimpleDateFormat("HH-mm-ss");
     String currentDay = expDay.format(systemDate);
     String currentHour = expHour.format(systemDate);
+    DecimalFormat decimalFormat = new DecimalFormat("0.000");
+    DecimalFormat percentageFormat = new DecimalFormat("0.00");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -144,8 +146,8 @@ public class DashboardSceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Essay> observable, Essay oldValue, Essay newValue) {
                 try {
-                    currentEssay = lvSavedEssay.getSelectionModel().getSelectedItem();
-                    if (currentEssay != null) {
+                    if (newValue != null) {
+                        currentEssay = lvSavedEssay.getSelectionModel().getSelectedItem();
                         if (currentEssay.getEssayChart() == null) {
                             //condicao de nulidade?
                             System.out.println("Problema ao carregar os dados do gráfico! Verifique no banco de dados.");
@@ -343,47 +345,48 @@ public class DashboardSceneController implements Initializable {
      * Metodo que atualiza as label dos calculos da UI
      */
     private void setUIValues(){
+
         // Atualização das labels de Forca Maxima
-        lbFMax.setText(String.valueOf(maxFMax));
-        lbFMin.setText(String.valueOf(minFMax));
-        lbFMed.setText(String.valueOf(medFMax));
-        lbFDev.setText(String.valueOf(devFMax));
+        lbFMax.setText(decimalFormat.format(maxFMax));
+        lbFMin.setText(decimalFormat.format(minFMax));
+        lbFMed.setText(decimalFormat.format(medFMax));
+        lbFDev.setText(decimalFormat.format(devFMax));
 
         // Atualização das labels de Posicao Maxima
-        lbPMax.setText(String.valueOf(maxPMax));
-        lbPMin.setText(String.valueOf(minPMax));
-        lbPMed.setText(String.valueOf(medPMax));
-        lbPDev.setText(String.valueOf(devPMax));
+        lbPMax.setText(decimalFormat.format(maxPMax));
+        lbPMin.setText(decimalFormat.format(minPMax));
+        lbPMed.setText(decimalFormat.format(medPMax));
+        lbPDev.setText(decimalFormat.format(devPMax));
 
         // Atualização das labels de Tensao Maxima
-        lbTMax.setText(String.valueOf(maxTMax));
-        lbTMin.setText(String.valueOf(minTMax));
-        lbTMed.setText(String.valueOf(medTMax));
-        lbTDev.setText(String.valueOf(devTMax));
+        lbTMax.setText(decimalFormat.format(maxTMax));
+        lbTMin.setText(decimalFormat.format(minTMax));
+        lbTMed.setText(decimalFormat.format(medTMax));
+        lbTDev.setText(decimalFormat.format(devTMax));
 
         // Atualização das labels de Tensao de escoamento
-        lbTEscMax.setText(String.valueOf(maxTEsc));
-        lbTEscMin.setText(String.valueOf(minTEsc));
-        lbTEscMed.setText(String.valueOf(medTEsc));
-        lbTEscDev.setText(String.valueOf(devTEsc));
+        lbTEscMax.setText(decimalFormat.format(maxTEsc));
+        lbTEscMin.setText(decimalFormat.format(minTEsc));
+        lbTEscMed.setText(decimalFormat.format(medTEsc));
+        lbTEscDev.setText(decimalFormat.format(devTEsc));
 
         // Atualização das labels de Alongamento
-        lbAlongMax.setText(String.valueOf(maxAlong));
-        lbAlongMin.setText(String.valueOf(minAlong));
-        lbAlongMed.setText(String.valueOf(medAlong));
-        lbAlongDev.setText(String.valueOf(devAlong));
+        lbAlongMax.setText(percentageFormat.format(maxAlong));
+        lbAlongMin.setText(percentageFormat.format(minAlong));
+        lbAlongMed.setText(percentageFormat.format(medAlong));
+        lbAlongDev.setText(decimalFormat.format(devAlong));
 
         // Atualização das labels de Redução de Area
-        lbRedAreaMax.setText(String.valueOf(maxRedArea));
-        lbRedAreaMin.setText(String.valueOf(minRedArea));
-        lbRedAreaMed.setText(String.valueOf(medRedArea));
-        lbRedAreaDev.setText(String.valueOf(devRedArea));
+        lbRedAreaMax.setText(percentageFormat.format(maxRedArea));
+        lbRedAreaMin.setText(percentageFormat.format(minRedArea));
+        lbRedAreaMed.setText(percentageFormat.format(medRedArea));
+        lbRedAreaDev.setText(decimalFormat.format(devRedArea));
 
         // Atualização das labels de M. Young
-        lbMYoungMax.setText(String.valueOf(maxMYoung));
-        lbMYoungMin.setText(String.valueOf(minMYoung));
-        lbMYoungMed.setText(String.valueOf(medMYoung));
-        lbMYoungDev.setText(String.valueOf(devMYoung));
+        lbMYoungMax.setText(decimalFormat.format(maxMYoung));
+        lbMYoungMin.setText(decimalFormat.format(minMYoung));
+        lbMYoungMed.setText(decimalFormat.format(medMYoung));
+        lbMYoungDev.setText(decimalFormat.format(devMYoung));
     }
 
     /**
@@ -510,7 +513,7 @@ public class DashboardSceneController implements Initializable {
             parameters.put("chargeCell", currentEssay.getEssayChargeCell());
             parameters.put("essayVelocity", currentEssay.getEssayDislocationVelocity());
             parameters.put("velocityUnit", "mm/min");
-            parameters.put("essayType", "Requer implementar código");
+            parameters.put("essayType", currentEssay.getEssayType());
             parameters.put("essayDay", currentEssay.getEssayDay());
             parameters.put("essayHour", currentEssay.getEssayHour());
             parameters.put("essayPreCharge", currentEssay.getEssayPreCharge());
@@ -522,34 +525,34 @@ public class DashboardSceneController implements Initializable {
             // Preenchimento da tabela
             parameters.put("CollectionBeanParam", essayCollection);
             // Preenchimento das analises dos ensaios
-            parameters.put("maxFMax", maxFMax);
-            parameters.put("maxPMax", maxPMax);
-            parameters.put("maxTMax", maxTMax);
-            parameters.put("maxTEsc", maxTEsc);
-            parameters.put("maxAlong", maxAlong);
-            parameters.put("maxRedArea", maxRedArea);
-            parameters.put("maxMYoung", maxMYoung);
-            parameters.put("minFMax", minFMax);
-            parameters.put("minPMax", minPMax);
-            parameters.put("minTMax", minTMax);
-            parameters.put("minTEsc", minTEsc);
-            parameters.put("minAlong", minAlong);
-            parameters.put("minRedArea", minRedArea);
-            parameters.put("minMYoung", minMYoung);
-            parameters.put("medFMax", medFMax);
-            parameters.put("medPMax", medPMax);
-            parameters.put("medTMax", medTMax);
-            parameters.put("medTEsc", medTEsc);
-            parameters.put("medAlong", medAlong);
-            parameters.put("medRedArea", medRedArea);
-            parameters.put("medMYoung", medMYoung);
-            parameters.put("devFMax", devFMax);
-            parameters.put("devPMax", devPMax);
-            parameters.put("devTMax", devTMax);
-            parameters.put("devTEsc", devTEsc);
-            parameters.put("devAlong", devAlong);
-            parameters.put("devRedArea", devRedArea);
-            parameters.put("devMYoung", devMYoung);
+            parameters.put("maxFMax", decimalFormat.format(maxFMax));
+            parameters.put("maxPMax", decimalFormat.format(maxPMax));
+            parameters.put("maxTMax", decimalFormat.format(maxTMax));
+            parameters.put("maxTEsc", decimalFormat.format(maxTEsc));
+            parameters.put("maxAlong", percentageFormat.format(maxAlong));
+            parameters.put("maxRedArea", percentageFormat.format(maxRedArea));
+            parameters.put("maxMYoung", decimalFormat.format(maxMYoung));
+            parameters.put("minFMax", decimalFormat.format(minFMax));
+            parameters.put("minPMax", decimalFormat.format(minPMax));
+            parameters.put("minTMax", decimalFormat.format(minTMax));
+            parameters.put("minTEsc", decimalFormat.format(minTEsc));
+            parameters.put("minAlong", percentageFormat.format(minAlong));
+            parameters.put("minRedArea", percentageFormat.format(minRedArea));
+            parameters.put("minMYoung", decimalFormat.format(minMYoung));
+            parameters.put("medFMax", decimalFormat.format(medFMax));
+            parameters.put("medPMax", decimalFormat.format(medPMax));
+            parameters.put("medTMax", decimalFormat.format(medTMax));
+            parameters.put("medTEsc", decimalFormat.format(medTEsc));
+            parameters.put("medAlong", percentageFormat.format(medAlong));
+            parameters.put("medRedArea", percentageFormat.format(medRedArea));
+            parameters.put("medMYoung", decimalFormat.format(medMYoung));
+            parameters.put("devFMax", decimalFormat.format(devFMax));
+            parameters.put("devPMax", decimalFormat.format(devPMax));
+            parameters.put("devTMax", decimalFormat.format(devTMax));
+            parameters.put("devTEsc", decimalFormat.format(devTEsc));
+            parameters.put("devAlong", decimalFormat.format(devAlong));
+            parameters.put("devRedArea", decimalFormat.format(devRedArea));
+            parameters.put("devMYoung", decimalFormat.format(devMYoung));
 
             // Conversao da List<XYChartData> em uma fonte de dados de classe JRBeanCollectionDataSource
             JRBeanCollectionDataSource xyChartDataJR = new JRBeanCollectionDataSource(XYChartData);
@@ -653,14 +656,14 @@ public class DashboardSceneController implements Initializable {
 
         // Criar um seletor de arquivo
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Salvar arquivo CSV");
+        fileChooser.setTitle("Exportar CSV");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Arquivos CSV", "*.csv"));
 
         // Abrir a janela de seleção de arquivo
         File selectedFile = fileChooser.showSaveDialog((Stage) btnReportSave.getScene().getWindow());
 
         if (selectedFile == null) {
-            // O usuário cancelou a seleção do arquivo
+            // O usuario cancelou a seleção do arquivo
             return;
         }
 

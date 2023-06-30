@@ -494,7 +494,7 @@ email: notafiscal@biopdi.com.br]]></text>
 				<text><![CDATA[Observações]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="2" y="270" width="551" height="60" isRemoveLineWhenBlank="true">
+				<reportElement x="2" y="270" width="551" height="36" isRemoveLineWhenBlank="true">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -506,133 +506,135 @@ email: notafiscal@biopdi.com.br]]></text>
 						<dataSourceExpression><![CDATA[$P{CollectionBeanParam}]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="78">
-						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+						<jr:columnHeader style="Table_CH" height="18" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="78" height="30"/>
+								<reportElement mode="Opaque" x="0" y="0" width="78" height="18" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-									<font fontName="Arial"/>
+									<font fontName="Arial" isBold="true"/>
 								</textElement>
 								<text><![CDATA[F máx
 (N)]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table_TD" height="30">
+						<jr:detailCell style="Table_TD" height="18">
 							<textField>
-								<reportElement x="0" y="0" width="78" height="30"/>
+								<reportElement x="0" y="0" width="78" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
 								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayMaxForce}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="79">
-						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+						<jr:columnHeader style="Table_CH" height="18" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="79" height="30"/>
+								<reportElement mode="Opaque" x="0" y="0" width="79" height="18" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-									<font fontName="Arial"/>
+									<font fontName="Arial" isBold="true"/>
 								</textElement>
 								<text><![CDATA[P máx
 (mm)]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table_TD" height="30">
+						<jr:detailCell style="Table_TD" height="18">
 							<textField>
-								<reportElement x="0" y="0" width="79" height="30"/>
+								<reportElement x="0" y="0" width="79" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
 								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayMaxPosition}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="78">
-						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+						<jr:columnHeader style="Table_CH" height="18" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="78" height="30"/>
+								<reportElement mode="Opaque" x="0" y="0" width="78" height="18" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-									<font fontName="Arial"/>
+									<font fontName="Arial" isBold="true"/>
 								</textElement>
 								<text><![CDATA[T máx
 (MPa)]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table_TD" height="30">
+						<jr:detailCell style="Table_TD" height="18">
 							<textField>
-								<reportElement x="0" y="0" width="78" height="30"/>
+								<reportElement x="0" y="0" width="78" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
 								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayMaxTension}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="79">
-						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+						<jr:columnHeader style="Table_CH" height="18" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="79" height="30"/>
+								<reportElement mode="Opaque" x="0" y="0" width="79" height="18" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-									<font fontName="Arial"/>
+									<font fontName="Arial" isBold="true"/>
 								</textElement>
 								<text><![CDATA[T esc
 (MPa)]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table_TD" height="30">
+						<jr:detailCell style="Table_TD" height="18">
 							<textField>
-								<reportElement x="0" y="0" width="79" height="30"/>
+								<reportElement x="0" y="0" width="79" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
 								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayEscapeTension}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="79">
-						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+						<jr:columnHeader style="Table_CH" height="18" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="79" height="30"/>
+								<reportElement mode="Opaque" x="0" y="0" width="79" height="18" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-									<font fontName="Arial"/>
+									<font fontName="Arial" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Along
 (%)]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table_TD" height="30">
+						<jr:detailCell style="Table_TD" height="18">
 							<textField>
-								<reportElement x="0" y="0" width="79" height="30"/>
+								<reportElement x="0" y="0" width="79" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
 								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayAlong}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="79">
-						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+						<jr:columnHeader style="Table_CH" height="18" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="79" height="30"/>
+								<reportElement mode="Opaque" x="0" y="0" width="79" height="18" backcolor="#FFFFFF">
+									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+								</reportElement>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-									<font fontName="Arial"/>
+									<font fontName="Arial" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Red. área
 (%)]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table_TD" height="30">
+						<jr:detailCell style="Table_TD" height="18">
 							<textField>
-								<reportElement x="0" y="0" width="79" height="30"/>
+								<reportElement x="0" y="0" width="79" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
 								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayAreaRed}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="79">
-						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+						<jr:columnHeader style="Table_CH" height="18" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="79" height="30"/>
+								<reportElement mode="Opaque" x="0" y="0" width="79" height="18" backcolor="#FFFFFF"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-									<font fontName="Arial"/>
+									<font fontName="Arial" isBold="true"/>
 								</textElement>
 								<text><![CDATA[M. Young
 (MPa)]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table_TD" height="30">
+						<jr:detailCell style="Table_TD" height="18">
 							<textField>
-								<reportElement x="0" y="0" width="79" height="30"/>
+								<reportElement x="0" y="0" width="79" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
 								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayMYoung}]]></textFieldExpression>
 							</textField>

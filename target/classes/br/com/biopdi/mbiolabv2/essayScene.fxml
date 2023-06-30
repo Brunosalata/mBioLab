@@ -101,7 +101,14 @@
                         </VBox>
                         <VBox prefHeight="100.0" prefWidth="451.0">
                            <children>
-                              <VBox prefHeight="100.0" prefWidth="0.0" VBox.vgrow="ALWAYS" />
+                              <VBox alignment="CENTER" prefHeight="100.0" prefWidth="0.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <Label fx:id="lbDot" textFill="#310aff">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                 </children></VBox>
                            </children>
                         </VBox>
                         <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="180.0">
@@ -804,10 +811,13 @@
                                                                               <Insets left="10.0" right="10.0" top="10.0" />
                                                                            </VBox.margin>
                                                                            <children>
-                                                                              <RadioButton fx:id="rbDislocationPause" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" prefHeight="30.0" text="Pausa por deslocamento" textFill="WHITE" toggleGroup="$autoBreak" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                              <RadioButton fx:id="rbDislocationPause" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" prefHeight="30.0" text="Pausa por deslocamento" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                                  <padding>
                                                                                     <Insets left="20.0" />
                                                                                  </padding>
+                                                                                 <toggleGroup>
+                                                                                    <ToggleGroup fx:id="autoBreakPaused" />
+                                                                                 </toggleGroup>
                                                                               </RadioButton>
                                                                            </children>
                                                                         </AnchorPane>
@@ -1817,12 +1827,12 @@
                                                                         <Insets left="20.0" right="10.0" />
                                                                      </HBox.margin>
                                                                   </Button>
-                                                                  <Button fx:id="btnPause" alignment="CENTER" minHeight="35.0" minWidth="100.0" mnemonicParsing="false" onAction="#essayPause" prefHeight="35.0" prefWidth="100.0" text="Pause" HBox.hgrow="ALWAYS">
+                                                                  <Button fx:id="btnPause" alignment="CENTER" minHeight="35.0" minWidth="100.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Pause" HBox.hgrow="ALWAYS">
                                                                      <HBox.margin>
                                                                         <Insets left="10.0" right="10.0" />
                                                                      </HBox.margin>
                                                                   </Button>
-                                                                  <Button fx:id="btnStopMove" alignment="CENTER" minHeight="35.0" minWidth="100.0" mnemonicParsing="false" onAction="#essayStop" prefHeight="35.0" prefWidth="100.0" text="Stop" HBox.hgrow="ALWAYS">
+                                                                  <Button fx:id="btnStop" alignment="CENTER" minHeight="35.0" minWidth="100.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Stop" HBox.hgrow="ALWAYS">
                                                                      <HBox.margin>
                                                                         <Insets left="10.0" />
                                                                      </HBox.margin>
@@ -2036,6 +2046,95 @@
                                                                                                 <Insets />
                                                                                              </VBox.margin>
                                                                                           </Label>
+                                                                                       </children>
+                                                                                       <FlowPane.margin>
+                                                                                          <Insets right="10.0" top="10.0" />
+                                                                                       </FlowPane.margin>
+                                                                                    </VBox>
+                                                                                    <VBox alignment="TOP_CENTER" prefHeight="83.0" prefWidth="110.0">
+                                                                                       <children>
+                                                                                          <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="110.0" text="Início da zona elástica" textAlignment="CENTER" wrapText="true">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="12.0" />
+                                                                                             </font>
+                                                                                             <VBox.margin>
+                                                                                                <Insets bottom="3.0" />
+                                                                                             </VBox.margin>
+                                                                                          </Label>
+                                                                                          <HBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="200.0">
+                                                                                             <children>
+                                                                                                <Label prefHeight="17.0" text="X:">
+                                                                                                   <font>
+                                                                                                      <Font size="15.0" />
+                                                                                                   </font>
+                                                                                                </Label>
+                                                                                                <TextField fx:id="txtElasticAreaBeginX" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="71.0" text="0.000">
+                                                                                                   <HBox.margin>
+                                                                                                      <Insets left="10.0" />
+                                                                                                   </HBox.margin>
+                                                                                                </TextField>
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                          <HBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="200.0">
+                                                                                             <children>
+                                                                                                <Label prefHeight="17.0" text="Y:">
+                                                                                                   <font>
+                                                                                                      <Font size="15.0" />
+                                                                                                   </font>
+                                                                                                </Label>
+                                                                                                <TextField fx:id="txtElasticAreaBeginY" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="71.0" text="0.000">
+                                                                                                   <HBox.margin>
+                                                                                                      <Insets left="10.0" />
+                                                                                                   </HBox.margin>
+                                                                                                </TextField>
+                                                                                             </children>
+                                                                                             <VBox.margin>
+                                                                                                <Insets bottom="5.0" />
+                                                                                             </VBox.margin>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <VBox alignment="TOP_CENTER" prefHeight="83.0" prefWidth="110.0">
+                                                                                       <children>
+                                                                                          <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="110.0" text="Final da zona elástica" textAlignment="CENTER" wrapText="true">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="12.0" />
+                                                                                             </font>
+                                                                                             <VBox.margin>
+                                                                                                <Insets bottom="3.0" />
+                                                                                             </VBox.margin>
+                                                                                          </Label>
+                                                                                          <HBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="200.0">
+                                                                                             <children>
+                                                                                                <Label prefHeight="17.0" text="X:">
+                                                                                                   <font>
+                                                                                                      <Font size="15.0" />
+                                                                                                   </font>
+                                                                                                </Label>
+                                                                                                <TextField fx:id="txtElasticAreaEndX" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="71.0" text="0.000">
+                                                                                                   <HBox.margin>
+                                                                                                      <Insets left="10.0" />
+                                                                                                   </HBox.margin>
+                                                                                                </TextField>
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                          <HBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="200.0">
+                                                                                             <children>
+                                                                                                <Label prefHeight="17.0" text="Y:">
+                                                                                                   <font>
+                                                                                                      <Font size="15.0" />
+                                                                                                   </font>
+                                                                                                </Label>
+                                                                                                <TextField fx:id="txtElasticAreaEndY" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="71.0" text="0.000">
+                                                                                                   <HBox.margin>
+                                                                                                      <Insets left="10.0" />
+                                                                                                   </HBox.margin>
+                                                                                                </TextField>
+                                                                                             </children>
+                                                                                             <VBox.margin>
+                                                                                                <Insets bottom="5.0" />
+                                                                                             </VBox.margin>
+                                                                                          </HBox>
                                                                                        </children>
                                                                                        <FlowPane.margin>
                                                                                           <Insets right="10.0" top="10.0" />

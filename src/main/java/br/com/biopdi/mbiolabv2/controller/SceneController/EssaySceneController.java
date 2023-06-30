@@ -8,19 +8,23 @@ import br.com.biopdi.mbiolabv2.model.bean.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
@@ -34,6 +38,14 @@ import java.util.concurrent.locks.ReentrantLock;
 public class EssaySceneController implements Initializable {
     //    INICIO ******************** Declarações iniciais **********************
     static {Locale.setDefault(Locale.US);}  // Define a localidade para usar ponto como separador decimal
+
+    private final double ZOOM_FACTOR = 1.1; // Fator de zoom para o gráfico
+    private final double SCROLL_SPEED = 0.01; // Velocidade de rolagem do zoom para o gráfico
+    private final double MIN_SCALE = 0.1; // Escala mínima
+    private final double MAX_SCALE = 10.0; // Escala máxima
+
+    private double currentXRange = 1.0; // Intervalo atual do eixo X
+    private double currentYRange = 1.0; // Intervalo atual do eixo Y
     private final UserDAO userDAO = new UserDAO();
     private final EssayDAO essayDAO = new EssayDAO();
     private final SetupDAO setupDAO = new SetupDAO();
@@ -58,7 +70,7 @@ public class EssaySceneController implements Initializable {
     private NumberAxis yAxis = new NumberAxis();
     private XYChart.Series<Number, Number> series, seriesTxD;
     @FXML
-    private Label lbFMax, lbPMax, lbTMax, lbTEsc, lbAlong, lbRedArea, lbMYoung, lbEssayTemperature,
+    private Label lbDot, lbFMax, lbPMax, lbTMax, lbTEsc, lbAlong, lbRedArea, lbMYoung, lbEssayTemperature,
             lbEssayRelativeHumidity;
     @FXML
     private TextField txtConnected, txtForceView, txtPositionView, txtEssayVelocity, txtAdjustVelocity,
@@ -68,7 +80,8 @@ public class EssaySceneController implements Initializable {
             txtMethodName, txtOffsetIntersectionLine, txtGainIntersectionLine, txtSpecimenCrossSectionCalcule,
             txtSpecimenCrossSectionArea, txtSpecimenCrossSectionLength, txtSpecimenAValueRectangle,
             txtSpecimenBValueRectangle, txtSpecimenAValueCylinder, txtSpecimenBValueCylinder, txtSpecimenValueTubular,
-            txtPercentObtainedForce, txtObtainedForce, txtSpecimenReducedArea;
+            txtPercentObtainedForce, txtObtainedForce, txtSpecimenReducedArea, txtElasticAreaBeginX,
+            txtElasticAreaBeginY, txtElasticAreaEndX, txtElasticAreaEndY;
     @FXML
     private Button btnPositionUp, btnPositionDown, btnStart, btnPause, btnStop, btnChargeMethod,
             btnEssayByUserId, btnEssaySave, btnEssayDiscart, btnForceZero, btnSaveMethod;
@@ -88,19 +101,23 @@ public class EssaySceneController implements Initializable {
             finalPosition, fMax, pMax, tMax, tEsc, along, redArea, mYoung, nForceConversionFactor = 1D,
             kgForceConversionFactor = 1D, inPositionConversionFactor = 1D;
     private String chartString = null, chartStringTensionXDeform = null, currentForceUnit = "N", currentPositionUnit = "mm";
-    private Boolean moving = false, errorEmergencyButton = false, errorInfLimit = false, errorSupLimit = false,
-            errorChargeCellLimit = false, errorChargeCellDisconnected = false, essayfinished = true;
+    private Boolean moving = false, autoBreakPauseDone = false, essayStoped = false, essayPaused = false,
+            errorEmergencyButton = false, errorInfLimit = false, errorSupLimit = false, errorChargeCellLimit = false,
+            errorChargeCellDisconnected = false, essayfinished = true;
     private Integer forceAdjustInversion = 1, positionAdjustInversion = 1, forceAdjustInversionView = 1,
             positionAdjustInversionView = 1, currentChargeCell = 0, chargeCellMultipFactor = 1, errorDecValue = 0;
     @FXML
     private VBox vBoxEssayStart;
 
     private ReentrantLock lock;
+    private Thread chartThread = new Thread(new RTChartCreate());
 
 
     Date systemDate;
     SimpleDateFormat brasilianDay = new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat brasilianHour = new SimpleDateFormat("HH:mm");
+    DecimalFormat decimalFormat = new DecimalFormat("0.000");
+    DecimalFormat percentageFormat = new DecimalFormat("0.00");
 
 
     @Override
@@ -407,10 +424,110 @@ public class EssaySceneController implements Initializable {
                 //Identifica valor de Reducao de Area %
                 Double specimenArea = Double.parseDouble(txtSpecimenCrossSectionArea.getText());
                 Double reducedArea = Double.parseDouble(txtSpecimenReducedArea.getText());
+                redArea = ((specimenArea-reducedArea)/specimenArea)*100;
                 Platform.runLater(() -> {
                     // Update UI.
-                    lbRedArea.setText(String.format("%.2f",((specimenArea-reducedArea)/specimenArea)*100));
+                    lbRedArea.setText(String.format("%.2f", redArea));
                 });
+            }
+        });
+        // Calculo do Modulo de Young a partir de 2 pontos do grafico
+        txtElasticAreaBeginX.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if(txtElasticAreaBeginY.getText()!="" && txtElasticAreaEndX.getText()!="" && txtElasticAreaEndY.getText()!=""){
+                    mYoungCalculator();
+                }
+            }
+        });
+        txtElasticAreaBeginY.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if(txtElasticAreaBeginX.getText()!="" && txtElasticAreaEndX.getText()!="" && txtElasticAreaEndY.getText()!=""){
+                    mYoungCalculator();
+                }
+            }
+        });
+        txtElasticAreaEndX.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if(txtElasticAreaBeginY.getText()!="" && txtElasticAreaBeginX.getText()!="" && txtElasticAreaEndY.getText()!=""){
+                    mYoungCalculator();
+                }
+            }
+        });
+        txtElasticAreaEndY.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if(txtElasticAreaBeginY.getText()!="" && txtElasticAreaEndX.getText()!="" && txtElasticAreaBeginX.getText()!=""){
+                    mYoungCalculator();
+                }
+            }
+        });
+
+
+
+        // IMPLEMENTAR ZOOM
+        // Adicionar evento de rolagem do mouse para implementar o zoom
+        chartEssayLine.setOnScroll(event -> {
+
+            double zoomFactor = event.getDeltaY() > 0 ? ZOOM_FACTOR : 1 / ZOOM_FACTOR;
+
+            // Obtenha as coordenadas do mouse em relação ao gráfico
+            Point2D mousePoint = new Point2D(event.getX(), event.getY());
+            double xAxisPosition = xAxis.getValueForDisplay(mousePoint.getX()).doubleValue();
+            double yAxisPosition = yAxis.getValueForDisplay(mousePoint.getY()).doubleValue();
+
+            // Ajuste o intervalo dos eixos X e Y
+            double xAxisRange = xAxis.getUpperBound() - xAxis.getLowerBound();
+            double yAxisRange = yAxis.getUpperBound() - yAxis.getLowerBound();
+
+            double newLowerX = xAxisPosition - (xAxisRange / 2) * zoomFactor;
+            double newUpperX = xAxisPosition + (xAxisRange / 2) * zoomFactor;
+            double newLowerY = yAxisPosition - (yAxisRange / 2) * zoomFactor;
+            double newUpperY = yAxisPosition + (yAxisRange / 2) * zoomFactor;
+
+            // Verifique se os novos limites estão dentro dos limites dos dados do gráfico
+            double dataMinX = xAxis.getLowerBound();
+            double dataMaxX = xAxis.getUpperBound();
+            double dataMinY = yAxis.getLowerBound();
+            double dataMaxY = yAxis.getUpperBound();
+
+            if (newLowerX >= dataMinX && newUpperX <= dataMaxX) {
+                xAxis.setLowerBound(newLowerX);
+                xAxis.setUpperBound(newUpperX);
+            }
+            if (newLowerY >= dataMinY && newUpperY <= dataMaxY) {
+                yAxis.setLowerBound(newLowerY);
+                yAxis.setUpperBound(newUpperY);
+            }
+            event.consume();
+        });
+
+        // Realiza a pausa do ensaio
+        btnPause.setOnAction(event -> {
+            if(chartThread.isAlive()){
+                if(essayPaused==false){
+                    essayPaused = true;
+                    serialConn.stopMove();
+                    System.out.println("Pausado!");
+                } else{
+                    essayPaused=false;
+                    essayTypeMove();
+                    System.out.println("Ensaio retomado!");
+                }
+            } else{
+                System.out.println("Ensaio parado. Botão sem função no momento");
+            }
+        });
+
+        // Realiza a parada do ensaio
+        btnStop.setOnAction(event -> {
+            if(chartThread.isAlive()){
+                essayStoped=true;
+                System.out.println("Ensaio Interrompido!");
+            } else{
+                System.out.println("Ensaio parado. Botão sem função no momento");
             }
         });
 
@@ -592,65 +709,78 @@ public class EssaySceneController implements Initializable {
         }
 
         // Erro - Botao de emergencia
-        if(splitBin[0]=='1'){
+        if(splitBin[0]=='0'){
             errorEmergencyButton = false;
 //            Platform.runLater(()->{
 
 //            });
-        } else if(splitBin[0]=='0'){
+        } else if(splitBin[0]=='1'){
             errorEmergencyButton = true;
 //            Platform.runLater(()->{
                 System.out.println("Botão e emergência acionado!");
 //            });
         }
         // Erro - Fim do curso inferior
-        if(splitBin[1]=='1'){
+        if(splitBin[1]=='0'){
             errorInfLimit = false;
 //            Platform.runLater(()->{
 
 //            });
-        } else if(splitBin[1]=='0'){
+        } else if(splitBin[1]=='1'){
             errorInfLimit = true;
 //            Platform.runLater(()->{
                 System.out.println("Fim de curso inferior!");
 //            });
         }
         // Erro - Fim do curso superior
-        if(splitBin[2]=='1'){
+        if(splitBin[2]=='0'){
             errorSupLimit = false;
-//            Platform.runLater(()->{
-
-//            });
-        } else if(splitBin[2]=='0'){
-            errorSupLimit = true;
 //            Platform.runLater(()->{
                 System.out.println("Fim de curso superior!");
 //            });
-        }
-        // Erro - Limite de celula de carga
-        if(splitBin[3]=='1'){
-            errorChargeCellLimit = false;
+        } else if(splitBin[2]=='1'){
+            errorSupLimit = true;
 //            Platform.runLater(()->{
 
 //            });
-        } else if(splitBin[3]=='0'){
-            errorChargeCellLimit = true;
+        }
+        // Erro - Limite de celula de carga
+        if(splitBin[3]=='0'){
+            errorChargeCellLimit = false;
 //            Platform.runLater(()->{
                 System.out.println("Limite da célula de carga!");
 //            });
-        }
-        // Erro - Celula de carga desconectada
-        if(splitBin[4]=='1'){
-            errorChargeCellDisconnected = false;
+        } else if(splitBin[3]=='1'){
+            errorChargeCellLimit = true;
 //            Platform.runLater(()->{
 
 //            });
-        } else if(splitBin[4]=='0'){
-            errorChargeCellDisconnected = true;
+        }
+        // Erro - Celula de carga desconectada
+        if(splitBin[4]=='0'){
+            errorChargeCellDisconnected = false;
 //            Platform.runLater(()->{
                 System.out.println("Célula de carga desconectada!");
 //            });
+        } else if(splitBin[4]=='1'){
+            errorChargeCellDisconnected = true;
+//            Platform.runLater(()->{
+
+//            });
         }
+    }
+
+    /**
+     * Metodo que calcula M Young a partir do preenchimento das textFields com os pontos
+     */
+    @FXML
+    private void mYoungCalculator(){
+        double BeginX = Double.parseDouble(txtElasticAreaBeginX.getText());
+        double BeginY = Double.parseDouble(txtElasticAreaBeginY.getText());
+        double EndX = Double.parseDouble(txtElasticAreaEndX.getText());
+        double EndY = Double.parseDouble(txtElasticAreaEndY.getText());
+        mYoung = (EndY - BeginY)/(EndX - BeginX);
+        lbMYoung.setText(decimalFormat.format(mYoung));
     }
 
     /**
@@ -697,7 +827,7 @@ public class EssaySceneController implements Initializable {
     }
 
     /**
-     * Método que carrega um método já salvo a partir de uma comboBox
+     * Método que carrega um método já salvo a partir da comboBox cbMethodList
      *
      * @return method
      */
@@ -849,7 +979,7 @@ public class EssaySceneController implements Initializable {
     }
 
     /**
-     * MODIFICAR CÓDIGO (TROCAR COUNT POR CONDICOES) >> Método que cria, em tempo real, o gráfico do ensaio.
+     * Método que cria, em tempo real, o gráfico do ensaio.
      * Nele, podemos implementar switch (para alteração dos parâmetros N/mm ou MPa/%)
      */
     class RTChartCreate implements Runnable {
@@ -864,8 +994,10 @@ public class EssaySceneController implements Initializable {
             tMax = 0D;
             tEsc = 0D;
             along = 0D;
-
             mYoung = 0D;
+
+            initialPosition = Double.parseDouble(txtSpecimenCrossSectionLength.getText());
+
             var ref = new Object() {
                 Double minDotT = 0D;
                 Double maxDotT = 0D;
@@ -875,8 +1007,9 @@ public class EssaySceneController implements Initializable {
 
 
             final Double[] mYoungcount = {0D};
-            Double adjustedForce = 0D;
-            Double adjustedPosition = 0D;
+            Double adjustedForce;
+            Double adjustedPosition;
+            Double deslocation;
             Double specimenArea = Double.valueOf(txtSpecimenCrossSectionArea.getText());
             Double parallelLineAvg[] = {0D,0D};
 
@@ -895,22 +1028,24 @@ public class EssaySceneController implements Initializable {
             List<Double> escDeformChartList = new ArrayList<>();
 
             try {
+                do {
+                    while(essayPaused){
 
-                while (autoBreak()==false) {
-//                while(autoBreak()==false){
+                    }
                     Thread.sleep(50);
 
                     // Aquisicao dos valores ja convertidos para a unidade selecionada e ajustados para ensaio para
                     // cima ou para baixo
                     adjustedForce = selectedUnitForceValue() * forceAdjustInversion;
-                    adjustedPosition = selectedUnitPositionValue() * positionAdjustInversion;
+                    adjustedPosition = initialPosition + (selectedUnitPositionValue() * positionAdjustInversion);
+                    deslocation = adjustedPosition - initialPosition;
                     Double currentDeform = (adjustedPosition - initialPosition) / initialPosition;
                     // Calculo da tensao
                     currentTension = adjustedForce / specimenArea;
 
 
                     forceList.add(adjustedForce);
-                    positionList.add(adjustedPosition);
+                    positionList.add(deslocation);
                     tensionList.add(currentTension);
                     if(ref.maxDotT == 0D){
                         for(int i = 1; i > mYoungList.length - 1; i++){
@@ -920,7 +1055,7 @@ public class EssaySceneController implements Initializable {
                             mYoungList[i-1][1] = mYoungList[i][1];
                         }
                         mYoungList[mYoungList.length - 1][0] = adjustedForce;
-                        mYoungList[mYoungList.length - 1][1] = adjustedPosition;
+                        mYoungList[mYoungList.length - 1][1] = deslocation;
                     }
 
 
@@ -930,19 +1065,19 @@ public class EssaySceneController implements Initializable {
                         for(Double force : forceList) {
                             if (force > fMax) {
                                 fMax = force;
-                                lbFMax.setText(String.format("%.2f", Double.valueOf(fMax)));
+                                lbFMax.setText(String.format("%.3f", Double.valueOf(fMax)));
                             }
                         }
                     });
                     //Identifica valor de Posicao Max
                     Platform.runLater(() -> {
                         // Update UI.
-                         for(Double position : positionList) {
-                             if (position > pMax) {
-                                 pMax = position;
-                                 lbPMax.setText(String.format("%.2f", Double.valueOf(pMax)));
-                             }
-                         }
+                        for(Double position : positionList) {
+                            if (position > pMax) {
+                                pMax = position;
+                                lbPMax.setText(String.format("%.3f", Double.valueOf(pMax)));
+                            }
+                        }
                     });
                     //Identifica valor de Tensao Max MPa
                     Platform.runLater(() -> {
@@ -950,7 +1085,7 @@ public class EssaySceneController implements Initializable {
                         for(Double tension : tensionList) {
                             if (tension > tMax) {
                                 tMax = tension;
-                                lbTMax.setText(String.format("%.2f", Double.valueOf(tMax)));
+                                lbTMax.setText(String.format("%.3f", Double.valueOf(tMax)));
                             }
                         }
                     });
@@ -983,84 +1118,111 @@ public class EssaySceneController implements Initializable {
                                 }
                             }
                         } else{
-                            lbTEsc.setText(String.format("%.2f", tEsc));
+                            lbTEsc.setText(String.format("%.3f", tEsc));
                         }
                     });
                     //Identifica valor de Alongamento %
                     Platform.runLater(() -> {
                         // Update UI.
-                        lbAlong.setText(String.format("%.2f",((pMax-initialPosition)/initialPosition)*100));
+                        along = (pMax/initialPosition)*100;
+                        lbAlong.setText(String.format("%.2f",along));
                     });
 
-                    //Identifica valor de M. Young MPa
-                    Platform.runLater(() -> {
-                        // Update UI.
-                        Double prop;
-                        Double sum = 0D;
-                        Double currentProp;
-                        if(tEsc==0){
-                            escTensionChartList.add(currentTension); // Incluir currentDeformation
-                            escDeformChartList.add(currentDeform);
-                        }
-                        if(forceList.size()>30){
-                                currentProp = mYoungList[mYoungList.length - 1][0]/mYoungList[mYoungList.length - 1][1];
-                            if(ref.minDotT == 0){
-                                mYoungcount[0]++;
-                                for (int i = mYoungList.length - 1; i < mYoungList.length; i--) {
-                                    prop = mYoungList[i][0]/mYoungList[i][1];
-                                    sum += prop;
-                                }
-                                Double avg = sum/mYoungList.length;
-                                Double avgMaxLim = avg * 1.05;
-                                Double avgMinLim = avg * 0.95;
-                                if(avgMinLim <= currentProp || avgMaxLim >= currentProp){
-                                    ref.minDotT = mYoungList[0][0];
-                                    ref.minDotP = mYoungList[0][1];
-                                }
-                            } else if(ref.maxDotT == 0){
-                                mYoungcount[0]++;
-                                for (int i = mYoungList.length - 1; i < mYoungList.length; i--) {
-                                    prop = mYoungList[i][0]/mYoungList[i][1];
-                                    sum += prop;
-                                }
-                                Double avg = sum/mYoungList.length;
-                                Double avgMaxLim = avg * 1.05;
-                                Double avgMinLim = avg * 0.95;
-                                if(avgMinLim >= currentProp || avgMaxLim <= currentProp){
-                                    ref.maxDotT = mYoungList[0][0];
-                                    ref.maxDotP = mYoungList[0][1];
-                                }
-                            }
-                        }
-                        lbMYoung.setText(String.format("%.4f", (ref.maxDotT - ref.minDotT)/(ref.maxDotP - ref.minDotP)));
-                    });
+//                    //Identifica valor de M. Young MPa
+//                    Platform.runLater(() -> {
+//                        // Update UI.
+//                        Double prop;
+//                        Double sum = 0D;
+//                        Double currentProp;
+//                        if(tEsc==0){
+//                            escTensionChartList.add(currentTension); // Incluir currentDeformation
+//                            escDeformChartList.add(currentDeform);
+//                        }
+//                        if(currentBaseForce > 2500){
+//                                currentProp = mYoungList[mYoungList.length - 1][0]/mYoungList[mYoungList.length - 1][1];
+//                            if(ref.minDotT == 0){
+//                                mYoungcount[0]++;
+//                                for (int i = mYoungList.length - 1; i < mYoungList.length; i--) {
+//                                    prop = mYoungList[i][0]/mYoungList[i][1];
+//                                    sum += prop;
+//                                }
+//                                Double avg = sum/mYoungList.length;
+//                                Double avgMaxLim = avg * 1.05;
+//                                Double avgMinLim = avg * 0.95;
+//                                if(avgMinLim <= currentProp && avgMaxLim >= currentProp){
+//                                    ref.minDotT = mYoungList[0][0];
+//                                    ref.minDotP = mYoungList[0][1];
+//                                }
+//                            } else if(ref.maxDotT == 0){
+//                                mYoungcount[0]++;
+//                                for (int i = mYoungList.length - 1; i < mYoungList.length; i--) {
+//                                    prop = mYoungList[i][0]/mYoungList[i][1];
+//                                    sum += prop;
+//                                }
+//                                Double avg = sum/mYoungList.length;
+//                                Double avgMaxLim = avg * 1.05;
+//                                Double avgMinLim = avg * 0.95;
+//                                if(avgMinLim >= currentProp || avgMaxLim <= currentProp){
+//                                    ref.maxDotT = mYoungList[0][0];
+//                                    ref.maxDotP = mYoungList[0][1];
+//                                }
+//                            }
+//                        }
+//                        System.out.println("ParallelLineAvg = " + parallelLineAvg[0] + " - " + parallelLineAvg[1]);
+//                        for(int i = 0; i<mYoungList.length; i++){
+//                            System.out.println("mYoung[][] = " + mYoungList[i][0] + " - " + mYoungList[i][1]);
+//                        }
+//                        System.out.println("mYoung count = " + mYoungcount);
+//                        System.out.println("mYoung value = " + mYoung);
+//                        lbMYoung.setText(String.format("%.3f", (ref.maxDotT - ref.minDotT)/(ref.maxDotP - ref.minDotP)));
+//                    });
+
+
                     // Setting final values
-                    Double finalAdjustedForce = adjustedForce;
-                    Double finalAdjustedPosition = adjustedPosition;
-                    Platform.runLater(() -> {
-                        // Update UI.
-                        finalForce = finalAdjustedForce;
-                        finalPosition = finalAdjustedPosition;
-                    });
+//                    Double finalAdjustedForce = adjustedForce;
+//                    Double finalAdjustedPosition = adjustedPosition - initialPosition;
 
-                    System.out.println(adjustedForce + " " + adjustedPosition);
+                    finalForce = adjustedForce;
+                    finalPosition = deslocation;
+
+
+//                    System.out.println(adjustedForce + " " + adjustedPosition);
                     // Exposicao dos valores no grafico em funcao da escolha do usuario MPa x % ou N x mm
                     // INCLUIR FORMULA DE CONVERSAO DOS VALORES
                     Platform.runLater(() -> {
                         // Update UI.
                         if(rbForceXPosition.isSelected()){
-                            series.getData().add(new XYChart.Data<>(finalAdjustedPosition, finalAdjustedForce));
+                            series.getData().add(new XYChart.Data<>(finalPosition, finalForce));
                         } else if(rbStrainXDeform.isSelected()) {
                             series.getData().add(new XYChart.Data<>(currentDeform, currentTension));
                         }
                     });
 
+                    // Criar uma cópia da lista de dados
+                    List<XYChart.Data<Number, Number>> obsData = new ArrayList<>(series.getData());
+
+                    // MouseEvent e Tooltip para aquisicao de pontos do grafico
+                    for (final XYChart.Data<Number, Number> data : obsData) {
+                        data.getNode().addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
+                                lbDot.setText(String.format("X: %.3f",data.getXValue()) + String.format("\nY : %.3f",data.getYValue()));
+                            }
+                        });
+                        data.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<javafx.scene.input.MouseEvent>() {
+                            @Override
+                            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
+                                Tooltip.install(data.getNode(), new Tooltip("X : " + String.format("%.3f",data.getXValue()) + "\nY : " + String.format("%.3f",data.getYValue())));
+                            }
+                        });
+                    }
+
                     // Adding dot values in a global String chartString
                     // essayChart String type: 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
                     if (chartString != null) {
-                        chartString += "," + String.format("%.4f", adjustedForce) + ";" + String.format("%.4f", adjustedPosition);
+                        chartString += "," + String.format("%.4f", adjustedForce) + ";" + String.format("%.4f", deslocation);
                     } else {
-                        chartString = String.format("%.4f", adjustedForce) + ";" + String.format("%.4f", adjustedPosition);
+                        chartString = String.format("%.4f", adjustedForce) + ";" + String.format("%.4f", deslocation);
                     }
 
                     // Adicionando pontos ao chartString global para tensao por deformacao
@@ -1072,7 +1234,9 @@ public class EssaySceneController implements Initializable {
                     System.out.println(chartString);
                     System.out.println(chartStringTensionXDeform);
                     count++;
-                }
+                    autoBreakPause();
+                } while (!autoBreak() && !essayStoped);
+
                 essayfinished = true;
                 serialConn.stopMove();
                 try{
@@ -1272,8 +1436,24 @@ public class EssaySceneController implements Initializable {
     @FXML
     private synchronized void test() throws InterruptedException {
 
+        // INCLUIR CAMPO DE FORCA MINIMA PARA INICIAR ENSAIO, CASO SEJA NECESSARIO INICIAR ENSAIO SEM CONTATO COM
+        // CELULA DE CARGA, INICIANDO A MENSURACAO APOS FORCA DE X N, PRE DEFINIDOS
+
+
+        // Verifica existencia de forca na celula de carga para iniciar ensaio
+//        while(Math.abs(taredCurrentForce)<10){
+//            // Alerta de inicio de ensaio
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            alert.setTitle("Verificar componentes");
+//            alert.setHeaderText("Amostra não está encaixada corretamente! Corrija e clique em OK.");
+//            Stage stage = (Stage) btnForceZero.getScene().getWindow();
+//            alert.initOwner(stage);
+//            alert.showAndWait();
+//        }
+
         essayfinished = false;
         try{
+            Thread.sleep(100);
             // Mudando background do ensaio para amarelo (preparando)
             vBoxEssayStart.setStyle("-fx-background-color: #BCAA06");
             // Alerta de inicio de ensaio
@@ -1309,6 +1489,7 @@ public class EssaySceneController implements Initializable {
             throw new RuntimeException(e);
         }
 
+
         // Aquisicao de valores iniciais de Forca e Posicao
         initialForce = selectedUnitForceValue();
         initialPosition = selectedUnitPositionValue();
@@ -1317,7 +1498,7 @@ public class EssaySceneController implements Initializable {
         moving = true;
 
         // Thread que atualiza os valores no grafico
-        Thread chartThread = new Thread(new RTChartCreate());
+
         Platform.runLater(() -> {
             // Inicia o movimento
             essayTypeMove();
@@ -1431,7 +1612,6 @@ public class EssaySceneController implements Initializable {
             currentForceUnit = "Kg";
             return currentKgForce;
         }
-
         return null; // Caso nenhuma condição seja atendida, retorne null ou outro valor adequado.
     }
 
@@ -1510,9 +1690,25 @@ public class EssaySceneController implements Initializable {
                 }
                 return true;
             }
-            serialConn.stopMove();
         }
         return false;
+    }
+
+    /**
+     * Metodo de interrupção automatica do ensaio
+     */
+    @FXML
+    private void autoBreakPause() {
+        if(rbDislocationPause.isSelected()){
+            if(moving==true && autoBreakPauseDone==false){
+                if(finalPosition >= Double.parseDouble(txtDislocationValuePause.getText())){
+                    autoBreakPauseDone=true;
+                    essayPaused=true;
+                    moving=false;
+                    serialConn.stopMove();
+                }
+            }
+        }
     }
 
     /**
@@ -1771,7 +1967,6 @@ public class EssaySceneController implements Initializable {
         alert.showAndWait();
         newEssay();
         newChart();
-//        tpEssayFlow.getSelectionModel().select(0);
     }
 
     /**
@@ -1826,6 +2021,8 @@ public class EssaySceneController implements Initializable {
         positionAdjustInversion = 1;
         forceAdjustInversionView = 1;
         positionAdjustInversionView = 1;
+        essayPaused=false;
+        essayStoped=false;
         // Personalizacao da imagem do usuario
         if(user.getUserImagePath()!=null){
             ivEssayUser.setImage(new Image(user.getUserImagePath()));

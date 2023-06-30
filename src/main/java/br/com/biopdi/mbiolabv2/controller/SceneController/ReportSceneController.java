@@ -336,20 +336,21 @@ public class ReportSceneController implements Initializable {
         // Construcao do grafico a partir das informacoes essayChart do DB do respectivo ensaio
         essayChart(currentEssay.getEssayId());
         //buscando informacoes do currentEssay
-        lbFmax.setText(String.valueOf(currentEssay.getEssayMaxForce()));
-        lbPmax.setText(String.valueOf(currentEssay.getEssayMaxPosition()));
-        lbTmax.setText(String.valueOf(currentEssay.getEssayMaxTension()));
-        lbTesc.setText(String.valueOf(currentEssay.getEssayEscapeTension()));
-        lbAlong.setText(String.valueOf(currentEssay.getEssayAlong()));
-        lbRedArea.setText(String.valueOf(currentEssay.getEssayAreaRed()));
-        lbMYoung.setText(String.valueOf(currentEssay.getEssayMYoung()));
-
-        User user = userDAO.findById(sysVar.getUserId());
-        if(user.getUserImagePath()!=null){
-            ivEssayUser.setImage(new Image(user.getUserImagePath()));
-        } else{
-            ivEssayUser.setImage(new Image(mBioLabv2Application.class.getResource("img\\darkIcon\\icons8-profile-96.png").toExternalForm()));
-        }
+        essayInfo(currentEssay.getEssayId());
+//        lbFmax.setText(String.valueOf(currentEssay.getEssayMaxForce()));
+//        lbPmax.setText(String.valueOf(currentEssay.getEssayMaxPosition()));
+//        lbTmax.setText(String.valueOf(currentEssay.getEssayMaxTension()));
+//        lbTesc.setText(String.valueOf(currentEssay.getEssayEscapeTension()));
+//        lbAlong.setText(String.valueOf(currentEssay.getEssayAlong()));
+//        lbRedArea.setText(String.valueOf(currentEssay.getEssayAreaRed()));
+//        lbMYoung.setText(String.valueOf(currentEssay.getEssayMYoung()));
+//
+//        User user = userDAO.findById(sysVar.getUserId());
+//        if(user.getUserImagePath()!=null){
+//            ivEssayUser.setImage(new Image(user.getUserImagePath()));
+//        } else{
+//            ivEssayUser.setImage(new Image(mBioLabv2Application.class.getResource("img\\darkIcon\\icons8-profile-96.png").toExternalForm()));
+//        }
     }
 
     /**
@@ -359,16 +360,18 @@ public class ReportSceneController implements Initializable {
      */
     @FXML
     private void essayInfo(Integer pk) {
+        DecimalFormat decimalFormat = new DecimalFormat("0.000");
+        DecimalFormat percentageFormat = new DecimalFormat("0.00");
         Essay essayInfo = essayDAO.findById(pk);
         User user = userDAO.findById(essayInfo.getUserId());
         //buscando informacoes do essayInfo
-        lbFmax.setText(String.valueOf(essayInfo.getEssayMaxForce()));
-        lbPmax.setText(String.valueOf(essayInfo.getEssayMaxPosition()));
-        lbTmax.setText(String.valueOf(essayInfo.getEssayMaxTension()));
-        lbTesc.setText(String.valueOf(essayInfo.getEssayEscapeTension()));
-        lbAlong.setText(String.valueOf(essayInfo.getEssayAlong()));
-        lbRedArea.setText(String.valueOf(essayInfo.getEssayAreaRed()));
-        lbMYoung.setText(String.valueOf(essayInfo.getEssayMYoung()));
+        lbFmax.setText(String.valueOf(decimalFormat.format(essayInfo.getEssayMaxForce())));
+        lbPmax.setText(String.valueOf(decimalFormat.format(essayInfo.getEssayMaxPosition())));
+        lbTmax.setText(String.valueOf(decimalFormat.format(essayInfo.getEssayMaxTension())));
+        lbTesc.setText(String.valueOf(decimalFormat.format(essayInfo.getEssayEscapeTension())));
+        lbAlong.setText(String.valueOf(percentageFormat.format(essayInfo.getEssayAlong())));
+        lbRedArea.setText(String.valueOf(percentageFormat.format(essayInfo.getEssayAreaRed())));
+        lbMYoung.setText(String.valueOf(decimalFormat.format(essayInfo.getEssayMYoung())));
         if(user.getUserImagePath()!=null){
             ivEssayUser.setImage(new Image("file:\\" + user.getUserImagePath()));
         } else{
@@ -409,94 +412,93 @@ public class ReportSceneController implements Initializable {
         SwingNode swingNode = new SwingNode();
         StackPane stackPane = new StackPane(swingNode);
 
+        try{
+            List<Essay> reportEssayList = new ArrayList<>();
+            reportEssayList.add(currentEssay);
+
+            // Converte lista para JRBeanCollectionDataSource
+            JRBeanCollectionDataSource essayCollection = new JRBeanCollectionDataSource(reportEssayList);
+
+            // Map para Armazenar os parametros do relatorio Jasper
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put("CollectionBeanParam", essayCollection);
+            // Adicao de novos parametros para preenchimento de campos do relatorio
+            parameters.put("introduction", "Parâmetro enviado com sucesso!");
+            parameters.put("essayIdentification", currentEssay.getEssayIdentification());
+            parameters.put("essayUsedMachine", currentEssay.getEssayUsedMachine());
+            parameters.put("essayNorm", currentEssay.getEssayNorm());
+            parameters.put("chargeCell", currentEssay.getEssayChargeCell());
+            parameters.put("essayVelocity", currentEssay.getEssayDislocationVelocity());
+            parameters.put("velocityUnit", "mm/min");
+            parameters.put("essayType", currentEssay.getEssayType());
+            parameters.put("essayDay", currentEssay.getEssayDay());
+            parameters.put("essayHour", currentEssay.getEssayHour());
+            parameters.put("essayPreCharge", currentEssay.getEssayPreCharge());
+            parameters.put("essayTemperature", currentEssay.getEssayTemperature());
+            parameters.put("essayRelativeHumidity", currentEssay.getEssayRelativeHumidity());
+            parameters.put("chartTitle", "Título");
+            parameters.put("xAxisLabel", "Eixo X");
+            parameters.put("yAxisLabel", "Eixo Y");
+            User user = userDAO.findById(currentEssay.getUserId());
+            parameters.put("author", user.getUserName());
 
 
-            try{
-                List<Essay> reportEssayList = new ArrayList<>();
-                reportEssayList.add(currentEssay);
+            // Incluindo dados no grafico do Jasper Report
+            List<ChartAxisValueToJR> XYChartData = new ArrayList<ChartAxisValueToJR>();
 
-                // Converte lista para JRBeanCollectionDataSource
-                JRBeanCollectionDataSource essayCollection = new JRBeanCollectionDataSource(reportEssayList);
-
-                // Map para Armazenar os parametros do relatorio Jasper
-                Map<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put("CollectionBeanParam", essayCollection);
-                // Adicao de novos parametros para preenchimento de campos do relatorio
-                parameters.put("introduction", "Parâmetro enviado com sucesso!");
-                parameters.put("essayIdentification", currentEssay.getEssayIdentification());
-                parameters.put("essayUsedMachine", currentEssay.getEssayUsedMachine());
-                parameters.put("essayNorm", currentEssay.getEssayNorm());
-                parameters.put("chargeCell", currentEssay.getEssayChargeCell());
-                parameters.put("essayVelocity", currentEssay.getEssayDislocationVelocity());
-                parameters.put("velocityUnit", "mm/min");
-                parameters.put("essayType", "Requer implementar código");
-                parameters.put("essayDay", currentEssay.getEssayDay());
-                parameters.put("essayHour", currentEssay.getEssayHour());
-                parameters.put("essayPreCharge", currentEssay.getEssayPreCharge());
-                parameters.put("essayTemperature", currentEssay.getEssayTemperature());
-                parameters.put("essayRelativeHumidity", currentEssay.getEssayRelativeHumidity());
-                parameters.put("chartTitle", "Título");
-                parameters.put("xAxisLabel", "Eixo X");
-                parameters.put("yAxisLabel", "Eixo Y");
-                User user = userDAO.findById(currentEssay.getUserId());
-                parameters.put("author", user.getUserName());
-
-
-                // Incluindo dados no grafico do Jasper Report
-                List<ChartAxisValueToJR> XYChartData = new ArrayList<ChartAxisValueToJR>();
-
-                // Conversao da String chartEssay para valores double
-                String strArraySplit[] = currentEssay.getEssayChart().split(",");
-                for (String str : strArraySplit) {
-                    String dot[] = str.split(";");
-                    for (int i = 0; i < dot.length; i += 2) {
-                        // Preenchimento das listas de dados
-                        XYChartData.add(new ChartAxisValueToJR(Double.parseDouble(dot[i]), Double.parseDouble(dot[i + 1]),
-                                "série 1"));
-                    }
+            // Conversao da String chartEssay para valores double
+            String strArraySplit[] = currentEssay.getEssayChart().split(",");
+            for (String str : strArraySplit) {
+                String dot[] = str.split(";");
+                for (int i = 0; i < dot.length; i += 2) {
+                    // Preenchimento das listas de dados
+                    XYChartData.add(new ChartAxisValueToJR(Double.parseDouble(dot[i + 1]), Double.parseDouble(dot[i]),
+                            "série 1"));
                 }
+            }
 
-                JRBeanCollectionDataSource xyChartDataJR = new JRBeanCollectionDataSource(XYChartData);
+            JRBeanCollectionDataSource xyChartDataJR = new JRBeanCollectionDataSource(XYChartData);
 
-                // Adição da lista de dados ao mapa de parâmetros
-                parameters.put("xyChartData", xyChartDataJR);
+            // Adição da lista de dados ao mapa de parâmetros
+            parameters.put("xyChartData", xyChartDataJR);
 
-                // Preenchimento do relatorio
-                JasperDesign jasperDesign = JRXmlLoader.load(new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReportV2.jrxml")));
+            // Preenchimento do relatorio
+            JasperDesign jasperDesign = JRXmlLoader.load(new FileInputStream(new File("src/main/resources/br/com/biopdi/mbiolabv2/jrxml/essayReportV2.jrxml")));
 
-                // Compilando jrxml com a classe JasperReport
-                JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+            // Compilando jrxml com a classe JasperReport
+            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
 
-                // Gerar pdf a partir do objeto jasperReport
-                JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+            // Gerar pdf a partir do objeto jasperReport
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+
+            // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
+            if (jasperPrint != null && !jasperPrint.getPages().isEmpty()) {
+
+                Stage reportStage = new Stage();
+                reportStage.initOwner(stage);
+                reportStage.setTitle("Emissão de relatório");
+                reportStage.getIcons().add(new Image(mBioLabv2Application.class.getResourceAsStream("img/iconBiopdi.png")));
+                reportStage.setOnCloseRequest(event -> swingNode.setContent(null));
 
                 // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
-                if (jasperPrint != null && !jasperPrint.getPages().isEmpty()) {
+                JasperViewer viewer = new JasperViewer(jasperPrint, false);
 
-                    Stage reportStage = new Stage();
-                    reportStage.initOwner(stage);
-                    reportStage.setTitle("Emissão de relatório");
-                    reportStage.getIcons().add(new Image(mBioLabv2Application.class.getResourceAsStream("img/iconBiopdi.png")));
-                    reportStage.setOnCloseRequest(event -> swingNode.setContent(null));
+                swingNode.setContent((JComponent) viewer.getContentPane());
 
-                    // Chamar ferramentas jasper para expor o relatorio na janela jasperviewer
-                    JasperViewer viewer = new JasperViewer(jasperPrint, false);
+                stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                StackPane.setMargin(swingNode, new Insets(10));
 
-                    swingNode.setContent((JComponent) viewer.getContentPane());
-
-                    stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                    StackPane.setMargin(swingNode, new Insets(10));
-
-                    reportStage.setScene(new Scene(stackPane, 850, 600));
-                    reportStage.show();
-                }
-            } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
-            } catch (JRException e) {
-                throw new RuntimeException(e);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+                reportStage.setScene(new Scene(stackPane, 850, 600));
+                reportStage.show();
             }
+        } catch (NumberFormatException e) {
+            throw new RuntimeException(e);
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     /**
@@ -543,7 +545,7 @@ public class ReportSceneController implements Initializable {
 
         // Criar um seletor de arquivo
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Salvar arquivo CSV"); // Título da janela de seleção
+        fileChooser.setTitle("Exportar CSV"); // Título da janela de seleção
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Arquivos CSV", "*.csv")); // Filtro de extensão para exibir apenas arquivos CSV
 
         // Abrir a janela de seleção de arquivo

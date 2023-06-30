@@ -172,7 +172,7 @@ public class SerialConnection extends Thread {
     /**
      * Metodo que solicita movimento de ensaio para cima (injeção de '6')
      */
-    public synchronized void moveUpAssay() {
+    public synchronized void moveUpEssay() {
         outputInjection("6");
         System.out.println("Moveu CIMA 6");
     }
@@ -180,7 +180,7 @@ public class SerialConnection extends Thread {
     /**
      * Metodo que solicita movimento de ensaio para baixo (injeção de '7')
      */
-    public synchronized void moveDownAssay() {
+    public synchronized void moveDownEssay() {
         outputInjection("7");
         System.out.println("Moveu BAIXO 7");
     }
