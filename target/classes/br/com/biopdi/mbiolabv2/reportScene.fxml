@@ -60,7 +60,7 @@
                                     <Insets left="10.0" top="10.0" />
                                  </VBox.margin>
                               </AnchorPane>
-                              <LineChart fx:id="chartSingleLine" animated="false" prefHeight="308.0" prefWidth="693.0" stylesheets="@css/style.css" title="Comparativo Força x Posição" VBox.vgrow="ALWAYS">
+                              <LineChart fx:id="chartSingleLine" animated="false" createSymbols="false" prefHeight="308.0" prefWidth="693.0" stylesheets="@css/style.css" title="Comparativo Força x Posição" VBox.vgrow="ALWAYS">
                                  <xAxis>
                                     <NumberAxis label="Deslocamento" side="BOTTOM" fx:id="xChartMulti" />
                                  </xAxis>

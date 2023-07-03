@@ -8,10 +8,11 @@ import br.com.biopdi.mbiolabv2.model.bean.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -68,7 +69,7 @@ public class EssaySceneController implements Initializable {
     private NumberAxis xAxis = new NumberAxis();
     @FXML
     private NumberAxis yAxis = new NumberAxis();
-    private XYChart.Series<Number, Number> series, seriesTxD;
+    private XYChart.Series<Number, Number> series, seriesTxD, mYoungSeries, escTSeries;
     @FXML
     private Label lbDot, lbFMax, lbPMax, lbTMax, lbTEsc, lbAlong, lbRedArea, lbMYoung, lbEssayTemperature,
             lbEssayRelativeHumidity;
@@ -233,10 +234,10 @@ public class EssaySceneController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
                     txtSpecimenCrossSectionCalcule.setText("1.00");
-                    if(Double.parseDouble(txtSpecimenAValueRectangle.getText())!=0 &&
-                            Double.parseDouble(txtSpecimenBValueRectangle.getText())!=0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueRectangle.getText()) *
-                                Double.parseDouble(txtSpecimenBValueRectangle.getText())));
+                    if(Double.parseDouble(txtSpecimenAValueRectangle.getText().replace(",", "."))!=0 &&
+                            Double.parseDouble(txtSpecimenBValueRectangle.getText().replace(",", "."))!=0){
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueRectangle.getText().replace(",", ".")) *
+                                Double.parseDouble(txtSpecimenBValueRectangle.getText().replace(",", "."))));
                     }
                 });
             }
@@ -246,10 +247,10 @@ public class EssaySceneController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
                     txtSpecimenCrossSectionCalcule.setText("1.00");
-                    if(Double.parseDouble(txtSpecimenAValueRectangle.getText())!=0 &&
-                            Double.parseDouble(txtSpecimenBValueRectangle.getText())!=0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueRectangle.getText()) *
-                                Double.parseDouble(txtSpecimenBValueRectangle.getText())));
+                    if(Double.parseDouble(txtSpecimenAValueRectangle.getText().replace(",", ".").replace(",", ".").replace(",", ".").replace(",", "."))!=0 &&
+                            Double.parseDouble(txtSpecimenBValueRectangle.getText().replace(",", ".").replace(",", ".").replace(",", ".").replace(",", "."))!=0){
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueRectangle.getText().replace(",", ".").replace(",", ".").replace(",", ".").replace(",", ".")) *
+                                Double.parseDouble(txtSpecimenBValueRectangle.getText().replace(",", ".").replace(",", ".").replace(",", ".").replace(",", "."))));
                     }
                 });
             }
@@ -261,10 +262,10 @@ public class EssaySceneController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
                     txtSpecimenCrossSectionCalcule.setText("1.00");
-                    if(Double.parseDouble(txtSpecimenAValueCylinder.getText())!=0 &&
-                            Double.parseDouble(txtSpecimenBValueCylinder.getText())!=0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueCylinder.getText()) *
-                                Double.parseDouble(txtSpecimenBValueCylinder.getText())));
+                    if(Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", ".").replace(",", ".").replace(",", "."))!=0 &&
+                            Double.parseDouble(txtSpecimenBValueCylinder.getText().replace(",", ".").replace(",", ".").replace(",", "."))!=0){
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", ".").replace(",", ".").replace(",", ".")) *
+                                Double.parseDouble(txtSpecimenBValueCylinder.getText().replace(",", ".").replace(",", ".").replace(",", "."))));
                     }
                 });
             }
@@ -274,10 +275,10 @@ public class EssaySceneController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
                     txtSpecimenCrossSectionCalcule.setText("1.00");
-                    if(Double.parseDouble(txtSpecimenAValueCylinder.getText())!=0 &&
-                            Double.parseDouble(txtSpecimenBValueCylinder.getText())!=0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueCylinder.getText()) *
-                                Double.parseDouble(txtSpecimenBValueCylinder.getText())));
+                    if(Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", ".").replace(",", "."))!=0 &&
+                            Double.parseDouble(txtSpecimenBValueCylinder.getText().replace(",", ".").replace(",", "."))!=0){
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", ".").replace(",", ".")) *
+                                Double.parseDouble(txtSpecimenBValueCylinder.getText().replace(",", ".").replace(",", "."))));
                     }
                 });
             }
@@ -289,8 +290,8 @@ public class EssaySceneController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
                         txtSpecimenCrossSectionCalcule.setText("1.00");
-                    if(Double.parseDouble(txtSpecimenAValueCylinder.getText())==0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Math.pow(Double.parseDouble(txtSpecimenValueTubular.getText()),2)));
+                    if(Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", "."))==0){
+                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Math.pow(Double.parseDouble(txtSpecimenValueTubular.getText().replace(",", ".")),2)));
                     }
                 });
             }
@@ -301,7 +302,7 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
-                    txtSpecimenCrossSectionArea.setText(txtSpecimenCrossSectionCalcule.getText());
+                    txtSpecimenCrossSectionArea.setText(txtSpecimenCrossSectionCalcule.getText().replace(",", "."));
                 });
             }
         });
@@ -422,8 +423,8 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 //Identifica valor de Reducao de Area %
-                Double specimenArea = Double.parseDouble(txtSpecimenCrossSectionArea.getText());
-                Double reducedArea = Double.parseDouble(txtSpecimenReducedArea.getText());
+                Double specimenArea = Double.parseDouble(txtSpecimenCrossSectionArea.getText().replace(",", "."));
+                Double reducedArea = Double.parseDouble(txtSpecimenReducedArea.getText().replace(",", "."));
                 redArea = ((specimenArea-reducedArea)/specimenArea)*100;
                 Platform.runLater(() -> {
                     // Update UI.
@@ -431,38 +432,31 @@ public class EssaySceneController implements Initializable {
                 });
             }
         });
-        // Calculo do Modulo de Young a partir de 2 pontos do grafico
-        txtElasticAreaBeginX.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                if(txtElasticAreaBeginY.getText()!="" && txtElasticAreaEndX.getText()!="" && txtElasticAreaEndY.getText()!=""){
-                    mYoungCalculator();
-                }
-            }
+        // Calculo do Modulo de Young a partir de 2 pontos do grafico - ao perder o foco no textField
+        txtElasticAreaBeginX.focusedProperty().addListener(event ->{
+            mYoungCalculator();
         });
-        txtElasticAreaBeginY.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                if(txtElasticAreaBeginX.getText()!="" && txtElasticAreaEndX.getText()!="" && txtElasticAreaEndY.getText()!=""){
-                    mYoungCalculator();
-                }
-            }
+        txtElasticAreaBeginY.focusedProperty().addListener(event ->{
+            mYoungCalculator();
         });
-        txtElasticAreaEndX.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                if(txtElasticAreaBeginY.getText()!="" && txtElasticAreaBeginX.getText()!="" && txtElasticAreaEndY.getText()!=""){
-                    mYoungCalculator();
-                }
-            }
+        txtElasticAreaEndX.focusedProperty().addListener(event ->{
+            mYoungCalculator();
         });
-        txtElasticAreaEndY.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                if(txtElasticAreaBeginY.getText()!="" && txtElasticAreaEndX.getText()!="" && txtElasticAreaBeginX.getText()!=""){
-                    mYoungCalculator();
-                }
-            }
+        txtElasticAreaEndY.focusedProperty().addListener(event ->{
+            mYoungCalculator();
+        });
+        // Calculo do Modulo de Young a partir de 2 pontos do grafico - ao realizar acao
+        txtElasticAreaBeginX.setOnAction(event -> {
+            mYoungCalculator();
+        });
+        txtElasticAreaBeginY.setOnAction(event -> {
+            mYoungCalculator();
+        });
+        txtElasticAreaEndX.setOnAction(event -> {
+            mYoungCalculator();
+        });
+        txtElasticAreaEndY.setOnAction(event -> {
+            mYoungCalculator();
         });
 
 
@@ -775,12 +769,68 @@ public class EssaySceneController implements Initializable {
      */
     @FXML
     private void mYoungCalculator(){
-        double BeginX = Double.parseDouble(txtElasticAreaBeginX.getText());
-        double BeginY = Double.parseDouble(txtElasticAreaBeginY.getText());
-        double EndX = Double.parseDouble(txtElasticAreaEndX.getText());
-        double EndY = Double.parseDouble(txtElasticAreaEndY.getText());
-        mYoung = (EndY - BeginY)/(EndX - BeginX);
-        lbMYoung.setText(decimalFormat.format(mYoung));
+        if(txtElasticAreaBeginX.getText()!="" && txtElasticAreaBeginY.getText()!="" && txtElasticAreaEndX.getText()!="" && txtElasticAreaEndY.getText()!=""){
+            Double beginX = Double.parseDouble(txtElasticAreaBeginX.getText().replace(",", "."));
+            txtElasticAreaBeginX.setText(String.valueOf(beginX));
+            Double beginY = Double.parseDouble(txtElasticAreaBeginY.getText().replace(",", "."));
+            txtElasticAreaBeginY.setText(String.valueOf(beginY));
+            Double endX = Double.parseDouble(txtElasticAreaEndX.getText().replace(",", "."));
+            txtElasticAreaEndX.setText(String.valueOf(endX));
+            Double endY = Double.parseDouble(txtElasticAreaEndY.getText().replace(",", "."));
+            txtElasticAreaEndY.setText(String.valueOf(endY));
+            if(!beginX.isNaN() && !beginY.isNaN() && !endX.isNaN() && !endY.isNaN()){
+                Double validator = (endY - beginY)/(endX - beginX);
+                if(validator >= 0){
+                    mYoung = validator;
+                    lbMYoung.setText(decimalFormat.format(mYoung));
+                    mYoungLineCreator(beginX, endX, beginY, endY);
+                }
+//                else{
+//                    // Alerta de valores X e Y incorretos nos pontos para M Young
+//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                    alert.setTitle("Prenchimento incorreto");
+//                    alert.setHeaderText("Módulo de Young não pode ser negativo! Verificar is valores inseridos.");
+//                    Stage stage = (Stage) btnEssaySave.getScene().getWindow();
+//                    alert.initOwner(stage);
+//                    alert.showAndWait();
+//                }
+            }
+        }
+    }
+
+    private void mYoungLineCreator(Double x1, Double x2, Double y1, Double y2) {
+
+        mYoungSeries = new XYChart.Series<>();
+        mYoungSeries.setName("mYoung Line");
+
+        // Calculo da equacao geral da reta
+        Double slope = (y2 - y1) / (x2 - x1);
+        Double intercept = y1 - slope * x1;
+
+        mYoungSeries.getData().add(new XYChart.Data<>(x1, y1));
+        mYoungSeries.getData().add(new XYChart.Data<>(x2, y2));
+        mYoungSeries.getData().add(new XYChart.Data<>(0, slope * 0 + intercept));
+        mYoungSeries.getData().add(new XYChart.Data<>(x2 * 2, slope * (x2 * 2) + intercept));
+        chartEssayLine.getData().add(mYoungSeries);
+
+//        escTLineCreator(x1, x2, y1, y2, slope);
+    }
+
+    private void escTLineCreator(Double x1, Double x2, Double y1, Double y2, Double slope) {
+        Double offset = Double.valueOf(txtOffsetIntersectionLine.getText().replace(",", "."));
+
+        escTSeries = new XYChart.Series<>();
+        escTSeries.setName("offset: " + txtOffsetIntersectionLine.getText() + " mm/min");
+
+        // Calculo da equacao geral da reta
+        Double intercept = y1 - slope * x1;
+        Double newIntercept = y1 - slope * (x1 + (x1 * offset));
+
+        escTSeries.getData().add(new XYChart.Data<>(x1, y1));
+        escTSeries.getData().add(new XYChart.Data<>(x2, y2));
+        escTSeries.getData().add(new XYChart.Data<>(0, slope * 0 + newIntercept));
+        escTSeries.getData().add(new XYChart.Data<>(x2 * 2, slope * (x2 * 2) + newIntercept));
+        chartEssayLine.getData().add(escTSeries);
     }
 
     /**
@@ -1198,24 +1248,44 @@ public class EssaySceneController implements Initializable {
                         }
                     });
 
-                    // Criar uma cópia da lista de dados
-                    List<XYChart.Data<Number, Number>> obsData = new ArrayList<>(series.getData());
+                    series.getData().addListener((ListChangeListener.Change<? extends XYChart.Data<Number, Number>> change) -> {
+                        while (change.next()) {
+                            if (change.wasAdded()) {
+                                for (XYChart.Data<Number, Number> data : change.getAddedSubList()) {
+                                    Node node = data.getNode();
+                                    if (node != null) {
+                                        node.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+                                            // Manipule o evento de clique aqui
+                                            lbDot.setText(String.format("X: %.3f", data.getXValue()) + String.format("\nY: %.3f", data.getYValue()));
+                                        });
 
-                    // MouseEvent e Tooltip para aquisicao de pontos do grafico
-                    for (final XYChart.Data<Number, Number> data : obsData) {
-                        data.getNode().addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                            @Override
-                            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
-                                lbDot.setText(String.format("X: %.3f",data.getXValue()) + String.format("\nY : %.3f",data.getYValue()));
+                                        node.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent event) -> {
+                                            Tooltip.install(node, new Tooltip("X: " + String.format("%.3f", data.getXValue()) + "\nY: " + String.format("%.3f", data.getYValue())));
+                                        });
+                                    }
+                                }
                             }
-                        });
-                        data.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<javafx.scene.input.MouseEvent>() {
-                            @Override
-                            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
-                                Tooltip.install(data.getNode(), new Tooltip("X : " + String.format("%.3f",data.getXValue()) + "\nY : " + String.format("%.3f",data.getYValue())));
-                            }
-                        });
-                    }
+                        }
+                    });
+
+//                    // Criar uma cópia da lista de dados
+//                    List<XYChart.Data<Number, Number>> obsData = new ArrayList<>(series.getData());
+//
+//                    // MouseEvent e Tooltip para aquisicao de pontos do grafico
+//                    for (final XYChart.Data<Number, Number> data : obsData) {
+//                        data.getNode().addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//                            @Override
+//                            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
+//                                lbDot.setText(String.format("X: %.3f",data.getXValue()) + String.format("\nY : %.3f",data.getYValue()));
+//                            }
+//                        });
+//                        data.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<javafx.scene.input.MouseEvent>() {
+//                            @Override
+//                            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
+//                                Tooltip.install(data.getNode(), new Tooltip("X : " + String.format("%.3f",data.getXValue()) + "\nY : " + String.format("%.3f",data.getYValue())));
+//                            }
+//                        });
+//                    }
 
                     // Adding dot values in a global String chartString
                     // essayChart String type: 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
@@ -1483,6 +1553,8 @@ public class EssaySceneController implements Initializable {
             // Criacao da serie a qual serao incluidos os valores
             series = new XYChart.Series<>();
             series.setName("Leitura");
+
+
             // Plotagem dos pontos da serie no grafico
             chartEssayLine.getData().add(series);
         } catch (Exception e) {
