@@ -122,3 +122,13 @@
     -fx-background-color: #BCAA06;
     -fx-font-color: BLACK;
 }
+
+.chart {
+    -fx-background-color: WHITE;
+    -fx-background-radius: 10;
+    -fx-plot-background-color: BLACK;
+    }
+
+.default-color0.chart-series-line { -fx-stroke: #238591;}
+.default-color1.chart-series-line { -fx-stroke: #e5d849;}
+.default-color2.chart-series-line { -fx-stroke: #ed4d51;}

@@ -2051,9 +2051,9 @@
                                                                                           <Insets right="10.0" top="10.0" />
                                                                                        </FlowPane.margin>
                                                                                     </VBox>
-                                                                                    <VBox alignment="TOP_CENTER" prefHeight="83.0" prefWidth="110.0">
+                                                                                    <VBox alignment="TOP_CENTER" prefHeight="83.0" prefWidth="100.0">
                                                                                        <children>
-                                                                                          <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="110.0" text="Início da zona elástica" textAlignment="CENTER" wrapText="true">
+                                                                                          <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="95.0" text="Início da zona elástica" textAlignment="CENTER" wrapText="true">
                                                                                              <font>
                                                                                                 <Font name="System Bold" size="12.0" />
                                                                                              </font>
@@ -2068,7 +2068,7 @@
                                                                                                       <Font size="15.0" />
                                                                                                    </font>
                                                                                                 </Label>
-                                                                                                <TextField fx:id="txtElasticAreaBeginX" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="71.0" text="0.000">
+                                                                                                <TextField fx:id="txtElasticAreaBeginX" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="71.0">
                                                                                                    <HBox.margin>
                                                                                                       <Insets left="10.0" />
                                                                                                    </HBox.margin>
@@ -2082,7 +2082,7 @@
                                                                                                       <Font size="15.0" />
                                                                                                    </font>
                                                                                                 </Label>
-                                                                                                <TextField fx:id="txtElasticAreaBeginY" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="71.0" text="0.000">
+                                                                                                <TextField fx:id="txtElasticAreaBeginY" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="71.0">
                                                                                                    <HBox.margin>
                                                                                                       <Insets left="10.0" />
                                                                                                    </HBox.margin>
@@ -2093,6 +2093,9 @@
                                                                                              </VBox.margin>
                                                                                           </HBox>
                                                                                        </children>
+                                                                                       <FlowPane.margin>
+                                                                                          <Insets right="10.0" top="10.0" />
+                                                                                       </FlowPane.margin>
                                                                                     </VBox>
                                                                                     <VBox alignment="TOP_CENTER" prefHeight="83.0" prefWidth="110.0">
                                                                                        <children>
@@ -2111,7 +2114,7 @@
                                                                                                       <Font size="15.0" />
                                                                                                    </font>
                                                                                                 </Label>
-                                                                                                <TextField fx:id="txtElasticAreaEndX" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="71.0" text="0.000">
+                                                                                                <TextField fx:id="txtElasticAreaEndX" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="71.0">
                                                                                                    <HBox.margin>
                                                                                                       <Insets left="10.0" />
                                                                                                    </HBox.margin>
@@ -2125,7 +2128,7 @@
                                                                                                       <Font size="15.0" />
                                                                                                    </font>
                                                                                                 </Label>
-                                                                                                <TextField fx:id="txtElasticAreaEndY" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="71.0" text="0.000">
+                                                                                                <TextField fx:id="txtElasticAreaEndY" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="71.0">
                                                                                                    <HBox.margin>
                                                                                                       <Insets left="10.0" />
                                                                                                    </HBox.margin>
@@ -2165,13 +2168,16 @@
                                                                                     <Insets left="10.0" right="10.0" top="10.0" />
                                                                                  </VBox.margin>
                                                                               </AnchorPane>
-                                                                              <LineChart fx:id="chartEssayLine" animated="false" legendVisible="false" prefHeight="191.0" prefWidth="646.0" title="Gráfico Força x Posição" VBox.vgrow="ALWAYS">
+                                                                              <LineChart fx:id="chartEssayLine" animated="false" createSymbols="false" legendVisible="false" prefHeight="191.0" prefWidth="646.0" stylesheets="@css/style.css" title="Gráfico Força x Posição" VBox.vgrow="ALWAYS">
                                                                                  <xAxis>
                                                                                     <NumberAxis animated="false" label="Deslocamento" side="BOTTOM" fx:id="xAxis" />
                                                                                  </xAxis>
                                                                                  <yAxis>
                                                                                     <NumberAxis fx:id="yAxis" animated="false" label="Força" side="LEFT" />
                                                                                  </yAxis>
+                                                                                 <VBox.margin>
+                                                                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                                 </VBox.margin>
                                                                               </LineChart>
                                                                            </children>
                                                                         </VBox>

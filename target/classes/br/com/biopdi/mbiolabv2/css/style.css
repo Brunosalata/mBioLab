@@ -122,3 +122,9 @@
     -fx-background-color: #BCAA06;
     -fx-font-color: BLACK;
 }
+
+.chart {
+    -fx-background-color: WHITE;
+    -fx-background-radius: 10;
+    -fx-plot-background-color: BLACK;
+    }

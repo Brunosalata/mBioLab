@@ -59,7 +59,7 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </AnchorPane>
-                              <LineChart fx:id="chartMultiLine" animated="false" legendSide="RIGHT" prefHeight="500.0" prefWidth="693.0" VBox.vgrow="ALWAYS">
+                              <LineChart fx:id="chartMultiLine" animated="false" createSymbols="false" legendSide="RIGHT" prefHeight="500.0" prefWidth="693.0" stylesheets="@css/style.css" VBox.vgrow="ALWAYS">
                                  <xAxis>
                                     <NumberAxis label="Deslocamento" side="BOTTOM" fx:id="xChartMulti" />
                                  </xAxis>
@@ -67,7 +67,7 @@
                                     <NumberAxis fx:id="yChartMulti" label="Força" side="LEFT" />
                                  </yAxis>
                                  <VBox.margin>
-                                    <Insets top="10.0" />
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </VBox.margin>
                               </LineChart>
                            </children>

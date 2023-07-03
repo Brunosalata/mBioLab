@@ -131,7 +131,7 @@ public class EssayDAO extends DBConnection {
                     "essayUsedMachine, essayChargeCell, essayInitialForce, essayFinalForce, essayInitialPosition, " +
                     "essayFinalPosition, essaydislocationVelocity, essayTemperature, essayPreCharge, essayRelativeHumidity, " +
                     "essayMaxForce, essayMaxPosition, essayMaxTension, essayEscapeTension, essayAlong, essayAreaRed, " +
-                    "essayMYoung, essayChart, essayDay, essayHour FROM tb_essay ORDER BY essayId ASC;");
+                    "essayMYoung, essayChart, essayDay, essayHour FROM tb_essay ORDER BY essayId DESC;");
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Essay essay = new Essay(

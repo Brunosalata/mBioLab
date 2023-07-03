@@ -85,3 +85,13 @@ public class mBioLabv2Application extends Application {
         launch();
     }
 }
+/*  Caixa Dialog customizada
+
+    Alert alert = new Alert(AlertType.CONFIRMATION, "Delete " + selection + " ?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+    alert.showAndWait();
+
+    if (alert.getResult() == ButtonType.YES) {
+        //do stuff
+    }
+
+ */

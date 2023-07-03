@@ -145,6 +145,7 @@ public class DashboardSceneController implements Initializable {
         lvSavedEssay.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Essay>() {
             @Override
             public void changed(ObservableValue<? extends Essay> observable, Essay oldValue, Essay newValue) {
+                boolean addedEssay = false;
                 try {
                     if (newValue != null) {
                         currentEssay = lvSavedEssay.getSelectionModel().getSelectedItem();
@@ -152,11 +153,19 @@ public class DashboardSceneController implements Initializable {
                             //condicao de nulidade?
                             System.out.println("Problema ao carregar os dados do gráfico! Verifique no banco de dados.");
                         }
-                        //alterar calculos dos indicadores
-                        //labels
-                        addEssayChart(currentEssay.getEssayId());
-                        selectedEssayList.add(currentEssay);
-                        essayInfo(currentEssay.getEssayId());
+                        // Adicao do ensaio na relacao selecionada
+                        for(Essay essay : selectedEssayList){
+                            if(currentEssay.getEssayId() == essay.getEssayId()){
+                                addedEssay=true;
+                            }
+                        }
+                        if(!addedEssay){
+                            addEssayChart(currentEssay.getEssayId());
+                            selectedEssayList.add(currentEssay);
+                            essayInfo(currentEssay.getEssayId());
+                        } else{
+                            System.out.println("Ensaio já adicionado!");
+                        }
 
                         // Incluindo dados da serie na List a ser inserida no grafico do Jasper Report
                         serieInclude();
