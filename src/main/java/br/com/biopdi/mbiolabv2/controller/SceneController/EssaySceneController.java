@@ -8,7 +8,7 @@ import br.com.biopdi.mbiolabv2.model.bean.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -69,7 +69,8 @@ public class EssaySceneController implements Initializable {
     private NumberAxis xAxis = new NumberAxis();
     @FXML
     private NumberAxis yAxis = new NumberAxis();
-    private XYChart.Series<Number, Number> series, seriesTxD, mYoungSeries, escTSeries;
+    private XYChart.Series<Number, Number> series = new XYChart.Series<>(), seriesTxD,
+            mYoungSeries = new XYChart.Series<>(), escTSeries = new XYChart.Series<>();
     @FXML
     private Label lbDot, lbFMax, lbPMax, lbTMax, lbTEsc, lbAlong, lbRedArea, lbMYoung, lbEssayTemperature,
             lbEssayRelativeHumidity;
@@ -82,7 +83,7 @@ public class EssaySceneController implements Initializable {
             txtSpecimenCrossSectionArea, txtSpecimenCrossSectionLength, txtSpecimenAValueRectangle,
             txtSpecimenBValueRectangle, txtSpecimenAValueCylinder, txtSpecimenBValueCylinder, txtSpecimenValueTubular,
             txtPercentObtainedForce, txtObtainedForce, txtSpecimenReducedArea, txtElasticAreaBeginX,
-            txtElasticAreaBeginY, txtElasticAreaEndX, txtElasticAreaEndY;
+            txtElasticAreaBeginY, txtElasticAreaEndX, txtElasticAreaEndY, txtTEsc;
     @FXML
     private Button btnPositionUp, btnPositionDown, btnStart, btnPause, btnStop, btnChargeMethod,
             btnEssayByUserId, btnEssaySave, btnEssayDiscart, btnForceZero, btnSaveMethod;
@@ -106,7 +107,8 @@ public class EssaySceneController implements Initializable {
             errorEmergencyButton = false, errorInfLimit = false, errorSupLimit = false, errorChargeCellLimit = false,
             errorChargeCellDisconnected = false, essayfinished = true;
     private Integer forceAdjustInversion = 1, positionAdjustInversion = 1, forceAdjustInversionView = 1,
-            positionAdjustInversionView = 1, currentChargeCell = 0, chargeCellMultipFactor = 1, errorDecValue = 0;
+            positionAdjustInversionView = 1, currentChargeCell = 0, chargeCellMultipFactor = 1, errorDecValue = 0,
+            chartDotsCount = 0;
     @FXML
     private VBox vBoxEssayStart;
 
@@ -459,6 +461,16 @@ public class EssaySceneController implements Initializable {
             mYoungCalculator();
         });
 
+        // Definicao da tensao de escoamento, preenchendo o txtTEsc
+        txtTEsc.setOnAction(event -> {
+            try{
+                Double escTension = Double.parseDouble(txtTEsc.getText().replace(",", "."));
+                lbTEsc.setText(decimalFormat.format(escTension));
+                tEsc = escTension;
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
 
         // IMPLEMENTAR ZOOM
@@ -783,7 +795,20 @@ public class EssaySceneController implements Initializable {
                 if(validator >= 0){
                     mYoung = validator;
                     lbMYoung.setText(decimalFormat.format(mYoung));
-                    mYoungLineCreator(beginX, endX, beginY, endY);
+                    // Verifica se a serie ja foi plotada e apaga mYoungSeries e escTSeries em caso positivo
+                    // Verificar se as séries secundárias já foram plotadas anteriormente
+                    if (chartEssayLine.getData().contains(mYoungSeries)) {
+                        chartEssayLine.getData().remove(mYoungSeries);
+                        mYoungSeries.getData().clear();
+                        chartEssayLine.getData().remove(escTSeries);
+                        escTSeries.getData().clear();
+                    }
+
+                    mYoungSeriesCreator(beginX, endX, beginY, endY);
+
+
+
+
                 }
 //                else{
 //                    // Alerta de valores X e Y incorretos nos pontos para M Young
@@ -798,39 +823,37 @@ public class EssaySceneController implements Initializable {
         }
     }
 
-    private void mYoungLineCreator(Double x1, Double x2, Double y1, Double y2) {
+    private void mYoungSeriesCreator(Double x1, Double x2, Double y1, Double y2) {
 
-        mYoungSeries = new XYChart.Series<>();
         mYoungSeries.setName("mYoung Line");
 
         // Calculo da equacao geral da reta
         Double slope = (y2 - y1) / (x2 - x1);
         Double intercept = y1 - slope * x1;
 
-        mYoungSeries.getData().add(new XYChart.Data<>(x1, y1));
-        mYoungSeries.getData().add(new XYChart.Data<>(x2, y2));
+//        mYoungSeries.getData().add(new XYChart.Data<>(x1, y1));
+//        mYoungSeries.getData().add(new XYChart.Data<>(x2, y2));
         mYoungSeries.getData().add(new XYChart.Data<>(0, slope * 0 + intercept));
-        mYoungSeries.getData().add(new XYChart.Data<>(x2 * 2, slope * (x2 * 2) + intercept));
+        mYoungSeries.getData().add(new XYChart.Data<>(x2 * 1.5, slope * (x2 * 1.5) + intercept));
         chartEssayLine.getData().add(mYoungSeries);
 
-//        escTLineCreator(x1, x2, y1, y2, slope);
+        escTLineCreator(x1, x2, y1, slope);
     }
 
-    private void escTLineCreator(Double x1, Double x2, Double y1, Double y2, Double slope) {
-        Double offset = Double.valueOf(txtOffsetIntersectionLine.getText().replace(",", "."));
+    private void escTLineCreator(Double x1, Double x2, Double y1, Double slope) {
 
-        escTSeries = new XYChart.Series<>();
-        escTSeries.setName("offset: " + txtOffsetIntersectionLine.getText() + " mm/min");
+        Double offsetIncrement = 1 + Double.parseDouble(txtOffsetIntersectionLine.getText().replace(",", "."));
+
+        escTSeries.setName("offsetLine");
 
         // Calculo da equacao geral da reta
-        Double intercept = y1 - slope * x1;
-        Double newIntercept = y1 - slope * (x1 + (x1 * offset));
+        Double intercept = y1 - slope * (x1 * offsetIncrement);
 
-        escTSeries.getData().add(new XYChart.Data<>(x1, y1));
-        escTSeries.getData().add(new XYChart.Data<>(x2, y2));
-        escTSeries.getData().add(new XYChart.Data<>(0, slope * 0 + newIntercept));
-        escTSeries.getData().add(new XYChart.Data<>(x2 * 2, slope * (x2 * 2) + newIntercept));
+        escTSeries.getData().add(new XYChart.Data<>(0, slope * 0 + intercept));
+        escTSeries.getData().add(new XYChart.Data<>(x2 * 1.5, slope * (x2 * 1.5) + intercept));
         chartEssayLine.getData().add(escTSeries);
+
+        series.getNode().toFront();
     }
 
     /**
@@ -1034,8 +1057,6 @@ public class EssaySceneController implements Initializable {
      */
     class RTChartCreate implements Runnable {
 
-        int count = 0;
-
         @Override
         public synchronized void run() {
 
@@ -1082,7 +1103,7 @@ public class EssaySceneController implements Initializable {
                     while(essayPaused){
 
                     }
-                    Thread.sleep(50);
+                    Thread.sleep(0);
 
                     // Aquisicao dos valores ja convertidos para a unidade selecionada e ajustados para ensaio para
                     // cima ou para baixo
@@ -1248,44 +1269,26 @@ public class EssaySceneController implements Initializable {
                         }
                     });
 
-                    series.getData().addListener((ListChangeListener.Change<? extends XYChart.Data<Number, Number>> change) -> {
-                        while (change.next()) {
-                            if (change.wasAdded()) {
-                                for (XYChart.Data<Number, Number> data : change.getAddedSubList()) {
-                                    Node node = data.getNode();
-                                    if (node != null) {
-                                        node.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-                                            // Manipule o evento de clique aqui
-                                            lbDot.setText(String.format("X: %.3f", data.getXValue()) + String.format("\nY: %.3f", data.getYValue()));
-                                        });
-
-                                        node.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent event) -> {
-                                            Tooltip.install(node, new Tooltip("X: " + String.format("%.3f", data.getXValue()) + "\nY: " + String.format("%.3f", data.getYValue())));
-                                        });
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-//                    // Criar uma cópia da lista de dados
-//                    List<XYChart.Data<Number, Number>> obsData = new ArrayList<>(series.getData());
+//                    series.getData().addListener((ListChangeListener.Change<? extends XYChart.Data<Number, Number>> change) -> {
+//                        while (change.next()) {
+//                            if (change.wasAdded()) {
+//                                for (XYChart.Data<Number, Number> data : change.getAddedSubList()) {
+//                                    Node node = data.getNode();
+//                                    if (node != null) {
+//                                        node.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+//                                            // Manipule o evento de clique aqui
+//                                            lbDot.setText(String.format("X: %.3f", data.getXValue()) + String.format("\nY: %.3f", data.getYValue()));
+//                                        });
 //
-//                    // MouseEvent e Tooltip para aquisicao de pontos do grafico
-//                    for (final XYChart.Data<Number, Number> data : obsData) {
-//                        data.getNode().addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-//                            @Override
-//                            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
-//                                lbDot.setText(String.format("X: %.3f",data.getXValue()) + String.format("\nY : %.3f",data.getYValue()));
+//                                        node.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent event) -> {
+//                                            Tooltip.install(node, new Tooltip("X: " + String.format("%.3f", data.getXValue()) + "\nY: " + String.format("%.3f", data.getYValue())));
+//                                        });
+//                                    }
+//                                }
 //                            }
-//                        });
-//                        data.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<javafx.scene.input.MouseEvent>() {
-//                            @Override
-//                            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
-//                                Tooltip.install(data.getNode(), new Tooltip("X : " + String.format("%.3f",data.getXValue()) + "\nY : " + String.format("%.3f",data.getYValue())));
-//                            }
-//                        });
-//                    }
+//                        }
+//                    });
+
 
                     // Adding dot values in a global String chartString
                     // essayChart String type: 1;1,2;2,3;3,4;4,5;5,6;6,7;7,8;8,9;9,10;10
@@ -1303,9 +1306,33 @@ public class EssaySceneController implements Initializable {
                     }
                     System.out.println(chartString);
                     System.out.println(chartStringTensionXDeform);
-                    count++;
+                    chartDotsCount++;
                     autoBreakPause();
                 } while (!autoBreak() && !essayStoped);
+
+                // Criar uma cópia da lista de dados
+                List<XYChart.Data<Number, Number>> obsData = new ArrayList<>(series.getData());
+
+                Platform.runLater(() -> {
+                    // MouseEvent e Tooltip para aquisicao de pontos do grafico
+                    for (final XYChart.Data<Number, Number> data : obsData) {
+                        Node node = data.getNode();
+                        if (node != null) {
+                            node.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(javafx.scene.input.MouseEvent mouseEvent) {
+                                    lbDot.setText(String.format("X: %.3f",data.getXValue()) + String.format("\nY : %.3f",data.getYValue()));
+                                }
+                            });
+                            node.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<javafx.scene.input.MouseEvent>() {
+                                @Override
+                                public void handle(javafx.scene.input.MouseEvent mouseEvent) {
+                                    Tooltip.install(node, new Tooltip("X : " + String.format("%.3f",data.getXValue()) + "\nY : " + String.format("%.3f",data.getYValue())));
+                                }
+                            });
+                        }
+                    }
+                });
 
                 essayfinished = true;
                 serialConn.stopMove();
@@ -1554,7 +1581,6 @@ public class EssaySceneController implements Initializable {
             series = new XYChart.Series<>();
             series.setName("Leitura");
 
-
             // Plotagem dos pontos da serie no grafico
             chartEssayLine.getData().add(series);
         } catch (Exception e) {
@@ -1651,7 +1677,7 @@ public class EssaySceneController implements Initializable {
 
         // Construcao do grafico, da serie e inclusao de parametros do grafico
         chartEssayLine.getData().clear();
-        series = new XYChart.Series<>();
+//        series = new XYChart.Series<>();
         if(txtEssayIdentification.getText()!=""){
             series.setName(txtEssayIdentification.getText());
         } else{
@@ -2073,6 +2099,12 @@ public class EssaySceneController implements Initializable {
         txtSpecimenAValueRectangle.setText("1.00");
         txtSpecimenBValueRectangle.setText("1.00");
         txtSpecimenCrossSectionLength.setText("1.00");
+        txtElasticAreaBeginX.setText("");
+        txtElasticAreaBeginY.setText("");
+        txtElasticAreaEndX.setText("");
+        txtElasticAreaEndY.setText("");
+        txtOffsetIntersectionLine.setText("0.000");
+        txtTEsc.setText("0.000");
         tpEssayFlow.getSelectionModel().select(0);
         forceTare();
         initialForce = 0D;
@@ -2112,6 +2144,9 @@ public class EssaySceneController implements Initializable {
         chartStringTensionXDeform = null;
         chartEssayLine.getData().clear();
         series.getData().clear();
+        mYoungSeries.getData().clear();
+        escTSeries.getData().clear();
+        chartDotsCount=0;
     }
 
     // INICIO*********** Métodos de realização do Ensaio ***********
