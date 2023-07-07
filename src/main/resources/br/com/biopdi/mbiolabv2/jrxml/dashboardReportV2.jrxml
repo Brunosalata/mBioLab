@@ -70,34 +70,34 @@
 	<parameter name="chartTitle" class="java.lang.String"/>
 	<parameter name="velocityUnit" class="java.lang.String"/>
 	<parameter name="xyChartData" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
-	<parameter name="maxFMax" class="java.lang.Double"/>
-	<parameter name="maxPMax" class="java.lang.Double"/>
-	<parameter name="maxTMax" class="java.lang.Double"/>
-	<parameter name="maxTEsc" class="java.lang.Double"/>
-	<parameter name="maxAlong" class="java.lang.Double"/>
-	<parameter name="maxRedArea" class="java.lang.Double"/>
-	<parameter name="maxMYoung" class="java.lang.Double"/>
-	<parameter name="minFMax" class="java.lang.Double"/>
-	<parameter name="minPMax" class="java.lang.Double"/>
-	<parameter name="minTMax" class="java.lang.Double"/>
-	<parameter name="minTEsc" class="java.lang.Double"/>
-	<parameter name="minAlong" class="java.lang.Double"/>
-	<parameter name="minRedArea" class="java.lang.Double"/>
-	<parameter name="minMYoung" class="java.lang.Double"/>
-	<parameter name="medFMax" class="java.lang.Double"/>
-	<parameter name="medPMax" class="java.lang.Double"/>
-	<parameter name="medTMax" class="java.lang.Double"/>
-	<parameter name="medTEsc" class="java.lang.Double"/>
-	<parameter name="medAlong" class="java.lang.Double"/>
-	<parameter name="medRedArea" class="java.lang.Double"/>
-	<parameter name="medMYoung" class="java.lang.Double"/>
-	<parameter name="devFMax" class="java.lang.Double"/>
-	<parameter name="devPMax" class="java.lang.Double"/>
-	<parameter name="devTMax" class="java.lang.Double"/>
-	<parameter name="devTEsc" class="java.lang.Double"/>
-	<parameter name="devAlong" class="java.lang.Double"/>
-	<parameter name="devRedArea" class="java.lang.Double"/>
-	<parameter name="devMYoung" class="java.lang.Double"/>
+	<parameter name="maxFMax" class="java.lang.String"/>
+	<parameter name="maxPMax" class="java.lang.String"/>
+	<parameter name="maxTMax" class="java.lang.String"/>
+	<parameter name="maxTEsc" class="java.lang.String"/>
+	<parameter name="maxAlong" class="java.lang.String"/>
+	<parameter name="maxRedArea" class="java.lang.String"/>
+	<parameter name="maxMYoung" class="java.lang.String"/>
+	<parameter name="minFMax" class="java.lang.String"/>
+	<parameter name="minPMax" class="java.lang.String"/>
+	<parameter name="minTMax" class="java.lang.String"/>
+	<parameter name="minTEsc" class="java.lang.String"/>
+	<parameter name="minAlong" class="java.lang.String"/>
+	<parameter name="minRedArea" class="java.lang.String"/>
+	<parameter name="minMYoung" class="java.lang.String"/>
+	<parameter name="medFMax" class="java.lang.String"/>
+	<parameter name="medPMax" class="java.lang.String"/>
+	<parameter name="medTMax" class="java.lang.String"/>
+	<parameter name="medTEsc" class="java.lang.String"/>
+	<parameter name="medAlong" class="java.lang.String"/>
+	<parameter name="medRedArea" class="java.lang.String"/>
+	<parameter name="medMYoung" class="java.lang.String"/>
+	<parameter name="devFMax" class="java.lang.String"/>
+	<parameter name="devPMax" class="java.lang.String"/>
+	<parameter name="devTMax" class="java.lang.String"/>
+	<parameter name="devTEsc" class="java.lang.String"/>
+	<parameter name="devAlong" class="java.lang.String"/>
+	<parameter name="devRedArea" class="java.lang.String"/>
+	<parameter name="devMYoung" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -504,7 +504,7 @@ email: notafiscal@biopdi.com.br]]></text>
 						<yValueExpression><![CDATA[$F{yAxis}]]></yValueExpression>
 					</xySeries>
 				</xyDataset>
-				<linePlot isShowLines="true">
+				<linePlot isShowLines="true" isShowShapes="false">
 					<plot/>
 					<categoryAxisLabelExpression><![CDATA[$P{xAxisLabel}]]></categoryAxisLabelExpression>
 					<categoryAxisFormat>
@@ -553,7 +553,7 @@ email: notafiscal@biopdi.com.br]]></text>
 											<textElement verticalAlignment="Middle" lineSpacing="Single">
 												<font size="8" isBold="true"/>
 											</textElement>
-											<textFieldExpression class="java.lang.String"><![CDATA[$F{essayIdentification}]]></textFieldExpression>
+											<textFieldExpression><![CDATA[$F{essayIdentification}]]></textFieldExpression>
 										</textField>
 									</jr:detailCell>
 								</jr:column>
@@ -581,7 +581,7 @@ email: notafiscal@biopdi.com.br]]></text>
 											<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 												<font size="8"/>
 											</textElement>
-											<textFieldExpression class="java.lang.String"><![CDATA[$F{essayMaxForce}]]></textFieldExpression>
+											<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.###").format($F{essayMaxForce})]]></textFieldExpression>
 										</textField>
 									</jr:detailCell>
 								</jr:column>
@@ -607,7 +607,7 @@ email: notafiscal@biopdi.com.br]]></text>
 											<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 												<font size="8"/>
 											</textElement>
-											<textFieldExpression class="java.lang.String"><![CDATA[$F{essayMaxPosition}]]></textFieldExpression>
+											<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.###").format($F{essayMaxForce})]]></textFieldExpression>
 										</textField>
 									</jr:detailCell>
 								</jr:column>
@@ -633,7 +633,7 @@ email: notafiscal@biopdi.com.br]]></text>
 											<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 												<font size="8"/>
 											</textElement>
-											<textFieldExpression class="java.lang.String"><![CDATA[$F{essayMaxTension}]]></textFieldExpression>
+											<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.###").format($F{essayMaxForce})]]></textFieldExpression>
 										</textField>
 									</jr:detailCell>
 								</jr:column>
@@ -659,7 +659,7 @@ email: notafiscal@biopdi.com.br]]></text>
 											<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 												<font size="8"/>
 											</textElement>
-											<textFieldExpression class="java.lang.String"><![CDATA[$F{essayEscapeTension}]]></textFieldExpression>
+											<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.###").format($F{essayMaxForce})]]></textFieldExpression>
 										</textField>
 									</jr:detailCell>
 								</jr:column>
@@ -687,7 +687,7 @@ email: notafiscal@biopdi.com.br]]></text>
 											<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 												<font size="8"/>
 											</textElement>
-											<textFieldExpression class="java.lang.String"><![CDATA[$F{essayAlong}]]></textFieldExpression>
+											<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.##").format($F{essayMaxForce})]]></textFieldExpression>
 										</textField>
 									</jr:detailCell>
 								</jr:column>
@@ -713,7 +713,7 @@ email: notafiscal@biopdi.com.br]]></text>
 											<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 												<font size="8"/>
 											</textElement>
-											<textFieldExpression class="java.lang.String"><![CDATA[$F{essayAreaRed}]]></textFieldExpression>
+											<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.##").format($F{essayMaxForce})]]></textFieldExpression>
 										</textField>
 									</jr:detailCell>
 								</jr:column>
@@ -739,7 +739,7 @@ email: notafiscal@biopdi.com.br]]></text>
 											<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 												<font size="8"/>
 											</textElement>
-											<textFieldExpression class="java.lang.String"><![CDATA[$F{essayMYoung}]]></textFieldExpression>
+											<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.###").format($F{essayMaxForce})]]></textFieldExpression>
 										</textField>
 									</jr:detailCell>
 								</jr:column>

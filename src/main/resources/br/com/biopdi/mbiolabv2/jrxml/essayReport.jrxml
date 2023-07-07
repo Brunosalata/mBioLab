@@ -326,7 +326,7 @@ email: notafiscal@biopdi.com.br]]></text>
 						<yValueExpression><![CDATA[$F{yAxis}]]></yValueExpression>
 					</xySeries>
 				</xyDataset>
-				<linePlot isShowLines="true">
+				<linePlot isShowLines="true" isShowShapes="false">
 					<plot/>
 					<categoryAxisLabelExpression><![CDATA[$P{xAxisLabel}]]></categoryAxisLabelExpression>
 					<categoryAxisFormat>
@@ -366,15 +366,14 @@ email: notafiscal@biopdi.com.br]]></text>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
-								<text><![CDATA[F máx
-(N)]]></text>
+								<text><![CDATA[F máx (N)]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="18">
 							<textField>
 								<reportElement x="0" y="0" width="78" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
-								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayMaxForce}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.###").format($F{essayAreaRed})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -385,15 +384,14 @@ email: notafiscal@biopdi.com.br]]></text>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
-								<text><![CDATA[P máx
-(mm)]]></text>
+								<text><![CDATA[P máx (mm)]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="18">
 							<textField>
 								<reportElement x="0" y="0" width="79" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
-								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayMaxPosition}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.###").format($F{essayAreaRed})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -404,15 +402,14 @@ email: notafiscal@biopdi.com.br]]></text>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
-								<text><![CDATA[T máx
-(MPa)]]></text>
+								<text><![CDATA[T máx (MPa)]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="18">
 							<textField>
 								<reportElement x="0" y="0" width="78" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
-								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayMaxTension}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.###").format($F{essayAreaRed})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -423,15 +420,14 @@ email: notafiscal@biopdi.com.br]]></text>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
-								<text><![CDATA[T esc
-(MPa)]]></text>
+								<text><![CDATA[T esc (MPa)]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="18">
 							<textField>
 								<reportElement x="0" y="0" width="79" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
-								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayEscapeTension}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.###").format($F{essayAreaRed})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -442,15 +438,14 @@ email: notafiscal@biopdi.com.br]]></text>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Along
-(%)]]></text>
+								<text><![CDATA[Along (%)]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="18">
 							<textField>
 								<reportElement x="0" y="0" width="79" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
-								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayAlong}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.##").format($F{essayAreaRed})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -461,15 +456,14 @@ email: notafiscal@biopdi.com.br]]></text>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Red. área
-(%)]]></text>
+								<text><![CDATA[Red. área (%)]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="18">
 							<textField>
 								<reportElement x="0" y="0" width="79" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
-								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayAreaRed}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.##").format($F{essayAreaRed})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -480,15 +474,14 @@ email: notafiscal@biopdi.com.br]]></text>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
-								<text><![CDATA[M. Young
-(MPa)]]></text>
+								<text><![CDATA[M. Young (MPa)]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="18">
 							<textField>
 								<reportElement x="0" y="0" width="79" height="18"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
-								<textFieldExpression class="java.lang.String"><![CDATA[$F{essayMYoung}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.###").format($F{essayAreaRed})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

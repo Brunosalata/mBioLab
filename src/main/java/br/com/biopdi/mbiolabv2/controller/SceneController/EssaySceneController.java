@@ -28,6 +28,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -113,7 +114,7 @@ public class EssaySceneController implements Initializable {
     private VBox vBoxEssayStart;
 
     private ReentrantLock lock;
-    private Thread chartThread = new Thread(new RTChartCreate());
+    private Thread chartThread;
 
 
     Date systemDate;
@@ -143,7 +144,9 @@ public class EssaySceneController implements Initializable {
         xyAxisAdjust();
         // Inicializa o lock
         lock = new ReentrantLock();
-        newEssay();
+        Thread newEssayThread = new Thread(()->{
+            newEssay();
+        });newEssayThread.start();
 
         // Altera opcao de unidade de forca e os rotulos do grafico do ensaio
         cbForceUnitSelection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -236,10 +239,12 @@ public class EssaySceneController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
                     txtSpecimenCrossSectionCalcule.setText("1.00");
-                    if(Double.parseDouble(txtSpecimenAValueRectangle.getText().replace(",", "."))!=0 &&
-                            Double.parseDouble(txtSpecimenBValueRectangle.getText().replace(",", "."))!=0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueRectangle.getText().replace(",", ".")) *
-                                Double.parseDouble(txtSpecimenBValueRectangle.getText().replace(",", "."))));
+                    if(!txtSpecimenAValueRectangle.isDisable()){
+                        if(Double.parseDouble(txtSpecimenAValueRectangle.getText().replace(",", "."))!=0 &&
+                                Double.parseDouble(txtSpecimenBValueRectangle.getText().replace(",", "."))!=0){
+                            txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueRectangle.getText().replace(",", ".")) *
+                                    Double.parseDouble(txtSpecimenBValueRectangle.getText().replace(",", "."))));
+                        }
                     }
                 });
             }
@@ -249,10 +254,12 @@ public class EssaySceneController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
                     txtSpecimenCrossSectionCalcule.setText("1.00");
-                    if(Double.parseDouble(txtSpecimenAValueRectangle.getText().replace(",", ".").replace(",", ".").replace(",", ".").replace(",", "."))!=0 &&
-                            Double.parseDouble(txtSpecimenBValueRectangle.getText().replace(",", ".").replace(",", ".").replace(",", ".").replace(",", "."))!=0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueRectangle.getText().replace(",", ".").replace(",", ".").replace(",", ".").replace(",", ".")) *
-                                Double.parseDouble(txtSpecimenBValueRectangle.getText().replace(",", ".").replace(",", ".").replace(",", ".").replace(",", "."))));
+                    if(!txtSpecimenBValueRectangle.isDisable()){
+                        if(Double.parseDouble(txtSpecimenAValueRectangle.getText().replace(",", ".").replace(",", ".").replace(",", ".").replace(",", "."))!=0 &&
+                                Double.parseDouble(txtSpecimenBValueRectangle.getText().replace(",", ".").replace(",", ".").replace(",", ".").replace(",", "."))!=0){
+                            txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueRectangle.getText().replace(",", ".").replace(",", ".").replace(",", ".").replace(",", ".")) *
+                                    Double.parseDouble(txtSpecimenBValueRectangle.getText().replace(",", ".").replace(",", ".").replace(",", ".").replace(",", "."))));
+                        }
                     }
                 });
             }
@@ -264,10 +271,12 @@ public class EssaySceneController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
                     txtSpecimenCrossSectionCalcule.setText("1.00");
-                    if(Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", ".").replace(",", ".").replace(",", "."))!=0 &&
-                            Double.parseDouble(txtSpecimenBValueCylinder.getText().replace(",", ".").replace(",", ".").replace(",", "."))!=0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", ".").replace(",", ".").replace(",", ".")) *
-                                Double.parseDouble(txtSpecimenBValueCylinder.getText().replace(",", ".").replace(",", ".").replace(",", "."))));
+                    if(!txtSpecimenAValueCylinder.isDisable()){
+                        if(Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", ".").replace(",", ".").replace(",", "."))!=0 &&
+                                Double.parseDouble(txtSpecimenBValueCylinder.getText().replace(",", ".").replace(",", ".").replace(",", "."))!=0){
+                            txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", ".").replace(",", ".").replace(",", ".")) *
+                                    Double.parseDouble(txtSpecimenBValueCylinder.getText().replace(",", ".").replace(",", ".").replace(",", "."))));
+                        }
                     }
                 });
             }
@@ -277,10 +286,12 @@ public class EssaySceneController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
                     txtSpecimenCrossSectionCalcule.setText("1.00");
-                    if(Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", ".").replace(",", "."))!=0 &&
-                            Double.parseDouble(txtSpecimenBValueCylinder.getText().replace(",", ".").replace(",", "."))!=0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", ".").replace(",", ".")) *
-                                Double.parseDouble(txtSpecimenBValueCylinder.getText().replace(",", ".").replace(",", "."))));
+                    if(!txtSpecimenBValueCylinder.isDisable()){
+                        if(Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", ".").replace(",", "."))!=0 &&
+                                Double.parseDouble(txtSpecimenBValueCylinder.getText().replace(",", ".").replace(",", "."))!=0){
+                            txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", ".").replace(",", ".")) *
+                                    Double.parseDouble(txtSpecimenBValueCylinder.getText().replace(",", ".").replace(",", "."))));
+                        }
                     }
                 });
             }
@@ -291,9 +302,11 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
-                        txtSpecimenCrossSectionCalcule.setText("1.00");
-                    if(Double.parseDouble(txtSpecimenAValueCylinder.getText().replace(",", "."))==0){
-                        txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Math.pow(Double.parseDouble(txtSpecimenValueTubular.getText().replace(",", ".")),2)));
+                    txtSpecimenCrossSectionCalcule.setText("1.00");
+                    if(!txtSpecimenValueTubular.isDisable()){
+                        if(Double.parseDouble(txtSpecimenValueTubular.getText().replace(",", "."))!=0){
+                            txtSpecimenCrossSectionCalcule.setText(String.format("%.2f",Math.pow(Double.parseDouble(txtSpecimenValueTubular.getText().replace(",", ".")),2)));
+                        }
                     }
                 });
             }
@@ -304,7 +317,9 @@ public class EssaySceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 Platform.runLater(()->{
-                    txtSpecimenCrossSectionArea.setText(txtSpecimenCrossSectionCalcule.getText().replace(",", "."));
+                    if(!txtSpecimenCrossSectionCalcule.isDisable()){
+                        txtSpecimenCrossSectionArea.setText(txtSpecimenCrossSectionCalcule.getText().replace(",", "."));
+                    }
                 });
             }
         });
@@ -313,8 +328,8 @@ public class EssaySceneController implements Initializable {
         rbRectangle.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                    txtSpecimenAValueRectangle.setText("1.00");
-                    txtSpecimenBValueRectangle.setText("1.00");
+                txtSpecimenAValueRectangle.setText("1.00");
+                txtSpecimenBValueRectangle.setText("1.00");
                 if(rbRectangle.isSelected()){
                     txtSpecimenAValueRectangle.setDisable(false);
                     txtSpecimenBValueRectangle.setDisable(false);
@@ -330,8 +345,8 @@ public class EssaySceneController implements Initializable {
         rbCylinder.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                    txtSpecimenAValueCylinder.setText("1.00");
-                    txtSpecimenBValueCylinder.setText("1.00");
+                txtSpecimenAValueCylinder.setText("1.00");
+                txtSpecimenBValueCylinder.setText("1.00");
                 if(rbCylinder.isSelected()){
                     txtSpecimenAValueCylinder.setDisable(false);
                     txtSpecimenBValueCylinder.setDisable(false);
@@ -347,7 +362,7 @@ public class EssaySceneController implements Initializable {
         rbTubular.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                    txtSpecimenValueTubular.setText("1.00");
+                txtSpecimenValueTubular.setText("1.00");
                 if(rbTubular.isSelected()){
                     txtSpecimenValueTubular.setDisable(false);
                 } else{
@@ -361,9 +376,9 @@ public class EssaySceneController implements Initializable {
         rbForceDownBreak.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                    txtForcePercentageBreak.setText("20");
-                    txtPercentObtainedForce.setText("0.00");
-                    txtObtainedForce.setText("0.00");
+                txtForcePercentageBreak.setText("20");
+                txtPercentObtainedForce.setText("0.00");
+                txtObtainedForce.setText("0.00");
                 if(rbForceDownBreak.isSelected()){
                     txtForcePercentageBreak.setDisable(false);
                     txtPercentObtainedForce.setDisable(false);
@@ -585,20 +600,21 @@ public class EssaySceneController implements Initializable {
             try {
                 serialConn.forceRequest();  // Requerimento do valor da força
                 Thread.sleep(0);
-            // Conversao do valor digital
-            currentBaseForce = Double.valueOf(serialConn.inputValue()) * chargeCellMultipFactor;
-            taredCurrentForce = currentBaseForce - forceTare;
+                // Conversao do valor digital
+                currentBaseForce = Double.valueOf(serialConn.inputValue()) * chargeCellMultipFactor;
+                taredCurrentForce = currentBaseForce - forceTare;
 //                System.out.println("kgConversionForce: " + kgForceConversionFactor);
 //                System.out.println("taredForce: " + taredCurrentForce);
 //                System.out.println("newtonForce antes: " + currentNewtonForce);
 //                System.out.println("kgForce antes: " + currentKgForce);
-            currentNewtonForce = taredCurrentForce * kgForceConversionFactor * 9.78; // convertendo valor em Newton
-            currentKgForce = taredCurrentForce * kgForceConversionFactor; // convertendo valor em Kgf
+                currentNewtonForce = taredCurrentForce * kgForceConversionFactor * 9.78; // convertendo valor em Newton
+                currentKgForce = taredCurrentForce * kgForceConversionFactor; // convertendo valor em Kgf
 //                System.out.println("newtonForce depois: " + currentNewtonForce);
 //                System.out.println("kgForce depois: " + currentKgForce);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } finally {
+//                System.out.println(currentBaseForce);
                 lock.unlock();
             }
         }
@@ -621,6 +637,7 @@ public class EssaySceneController implements Initializable {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } finally {
+//                System.out.println(currentBasePosition);
                 lock.unlock();
             }
 
@@ -628,13 +645,13 @@ public class EssaySceneController implements Initializable {
         private void chargeCellRequest() throws InterruptedException {
             lock.lock();
             try {
-            serialConn.chargeCellRequest();
+                serialConn.chargeCellRequest();
                 Thread.sleep(0);
-            currentChargeCell = Integer.valueOf(serialConn.inputValue());
-//                System.out.println(currentChargeCell);
+                currentChargeCell = Integer.valueOf(serialConn.inputValue());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }finally {
+//                System.out.println(currentChargeCell);
                 lock.unlock();
             }
 
@@ -645,10 +662,10 @@ public class EssaySceneController implements Initializable {
                 serialConn.errorRead();
                 Thread.sleep(0);
                 errorDecValue = Integer.valueOf(serialConn.inputValue());
-//                System.out.println(errorDecValue);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }finally {
+//                System.out.println(errorDecValue);
                 lock.unlock();
             }
         }
@@ -723,7 +740,7 @@ public class EssaySceneController implements Initializable {
         } else if(splitBin[0]=='1'){
             errorEmergencyButton = true;
 //            Platform.runLater(()->{
-                System.out.println("Botão e emergência acionado!");
+            System.out.println("Botão e emergência acionado!");
 //            });
         }
         // Erro - Fim do curso inferior
@@ -735,14 +752,14 @@ public class EssaySceneController implements Initializable {
         } else if(splitBin[1]=='1'){
             errorInfLimit = true;
 //            Platform.runLater(()->{
-                System.out.println("Fim de curso inferior!");
+            System.out.println("Fim de curso inferior!");
 //            });
         }
         // Erro - Fim do curso superior
         if(splitBin[2]=='0'){
             errorSupLimit = false;
 //            Platform.runLater(()->{
-                System.out.println("Fim de curso superior!");
+            System.out.println("Fim de curso superior!");
 //            });
         } else if(splitBin[2]=='1'){
             errorSupLimit = true;
@@ -754,7 +771,7 @@ public class EssaySceneController implements Initializable {
         if(splitBin[3]=='0'){
             errorChargeCellLimit = false;
 //            Platform.runLater(()->{
-                System.out.println("Limite da célula de carga!");
+            System.out.println("Limite da célula de carga!");
 //            });
         } else if(splitBin[3]=='1'){
             errorChargeCellLimit = true;
@@ -766,7 +783,7 @@ public class EssaySceneController implements Initializable {
         if(splitBin[4]=='0'){
             errorChargeCellDisconnected = false;
 //            Platform.runLater(()->{
-                System.out.println("Célula de carga desconectada!");
+            System.out.println("Célula de carga desconectada!");
 //            });
         } else if(splitBin[4]=='1'){
             errorChargeCellDisconnected = true;
@@ -824,33 +841,35 @@ public class EssaySceneController implements Initializable {
     }
 
     private void mYoungSeriesCreator(Double x1, Double x2, Double y1, Double y2) {
+        Double diff = finalPosition - initialPosition;
+        if(diff!=0) {
+            if (diff < 0) {
+                diff = diff * (-1);
+            }
+            mYoungSeries.setName("mYoung Line");
 
-        mYoungSeries.setName("mYoung Line");
+            // Calculo da equacao geral da reta
+            Double slope = (y2 - y1) / (x2 - x1);
+            Double intercept = y1 - slope * x1;
 
-        // Calculo da equacao geral da reta
-        Double slope = (y2 - y1) / (x2 - x1);
-        Double intercept = y1 - slope * x1;
+            mYoungSeries.getData().add(new XYChart.Data<>(0, slope * 0 + intercept));
+            mYoungSeries.getData().add(new XYChart.Data<>(diff * 0.3, slope * diff * 0.3 + intercept));
+            chartEssayLine.getData().add(mYoungSeries);
 
-//        mYoungSeries.getData().add(new XYChart.Data<>(x1, y1));
-//        mYoungSeries.getData().add(new XYChart.Data<>(x2, y2));
-        mYoungSeries.getData().add(new XYChart.Data<>(0, slope * 0 + intercept));
-        mYoungSeries.getData().add(new XYChart.Data<>(x2 * 1.5, slope * (x2 * 1.5) + intercept));
-        chartEssayLine.getData().add(mYoungSeries);
-
-        escTLineCreator(x1, x2, y1, slope);
+            escTLineCreator(x1, y1, slope, diff);
+        }
     }
 
-    private void escTLineCreator(Double x1, Double x2, Double y1, Double slope) {
+    private void escTLineCreator(Double x1, Double y1, Double slope, Double diff) {
 
-        Double offsetIncrement = 1 + Double.parseDouble(txtOffsetIntersectionLine.getText().replace(",", "."));
-
+        Double offsetIncrement = diff * Double.parseDouble(txtOffsetIntersectionLine.getText().replace(",", ".")) / 100;
         escTSeries.setName("offsetLine");
 
         // Calculo da equacao geral da reta
-        Double intercept = y1 - slope * (x1 * offsetIncrement);
+        Double intercept = y1 - slope * (x1 + offsetIncrement);
 
-        escTSeries.getData().add(new XYChart.Data<>(0, slope * 0 + intercept));
-        escTSeries.getData().add(new XYChart.Data<>(x2 * 1.5, slope * (x2 * 1.5) + intercept));
+        escTSeries.getData().add(new XYChart.Data<>(0, 0));
+        escTSeries.getData().add(new XYChart.Data<>(diff * 0.3, slope * (diff * 0.3) + intercept));
         chartEssayLine.getData().add(escTSeries);
 
         series.getNode().toFront();
@@ -1085,13 +1104,12 @@ public class EssaySceneController implements Initializable {
             Double parallelLineAvg[] = {0D,0D};
 
             if(forceAdjustInversion==-1){
-                forceAdjustInversionView=-1;
                 positionAdjustInversionView=-1;
             }
 
-            List<Double> forceList = new ArrayList<>();
-            List<Double> positionList = new ArrayList<>();
-            List<Double> tensionList = new ArrayList<>();
+            List<Double> forceList = new CopyOnWriteArrayList<>();
+            List<Double> positionList = new CopyOnWriteArrayList<>();
+            List<Double> tensionList = new CopyOnWriteArrayList<>();
             Double[][] mYoungList = new Double[10][2];
             List<Double> escTensionLineChart = new ArrayList<>();
             List<Double> escDeformLineChart = new ArrayList<>();
@@ -1132,32 +1150,44 @@ public class EssaySceneController implements Initializable {
 
                     //Identifica valor de Forca Max
                     Platform.runLater(() -> {
-                        // Update UI.
-                        for(Double force : forceList) {
-                            if (force > fMax) {
-                                fMax = force;
-                                lbFMax.setText(String.format("%.3f", Double.valueOf(fMax)));
+                        try{
+                            // Update UI.
+                            for(Double force : forceList) {
+                                if (force > fMax) {
+                                    fMax = force;
+                                    lbFMax.setText(String.format("%.3f", Double.valueOf(fMax)));
+                                }
                             }
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
                         }
                     });
                     //Identifica valor de Posicao Max
                     Platform.runLater(() -> {
-                        // Update UI.
-                        for(Double position : positionList) {
-                            if (position > pMax) {
-                                pMax = position;
-                                lbPMax.setText(String.format("%.3f", Double.valueOf(pMax)));
+                        try{
+                            // Update UI.
+                            for(Double position : positionList) {
+                                if (position > pMax) {
+                                    pMax = position;
+                                    lbPMax.setText(String.format("%.3f", Double.valueOf(pMax)));
+                                }
                             }
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
                         }
                     });
                     //Identifica valor de Tensao Max MPa
                     Platform.runLater(() -> {
-                        // Update UI.
-                        for(Double tension : tensionList) {
-                            if (tension > tMax) {
-                                tMax = tension;
-                                lbTMax.setText(String.format("%.3f", Double.valueOf(tMax)));
+                        try{
+                            // Update UI.
+                            for(Double tension : tensionList) {
+                                if (tension > tMax) {
+                                    tMax = tension;
+                                    lbTMax.setText(String.format("%.3f", Double.valueOf(tMax)));
+                                }
                             }
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
                         }
                     });
                     // Construcao da reta a partir do minDotT e maxDotT do M Young
@@ -1304,14 +1334,14 @@ public class EssaySceneController implements Initializable {
                     } else {
                         chartStringTensionXDeform = String.format("%.4f", currentTension) + ";" + String.format("%.4f", currentDeform);
                     }
-                    System.out.println(chartString);
-                    System.out.println(chartStringTensionXDeform);
+//                    System.out.println(chartString);
+//                    System.out.println(chartStringTensionXDeform);
                     chartDotsCount++;
                     autoBreakPause();
                 } while (!autoBreak() && !essayStoped);
 
                 // Criar uma cópia da lista de dados
-                List<XYChart.Data<Number, Number>> obsData = new ArrayList<>(series.getData());
+                List<XYChart.Data<Number, Number>> obsData = new CopyOnWriteArrayList<>(series.getData());
 
                 Platform.runLater(() -> {
                     // MouseEvent e Tooltip para aquisicao de pontos do grafico
@@ -1348,15 +1378,14 @@ public class EssaySceneController implements Initializable {
                         alert.initOwner(stage);
                         alert.showAndWait();
                         // Retornando fator multiplicador dos valores Force e Position para 1 (padrao)
-                        forceAdjustInversionView=1;
                         positionAdjustInversionView=1;
                     });
 
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                System.out.println(forceList);
-                System.out.println(positionList);
+//                System.out.println(forceList);
+//                System.out.println(positionList);
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -1529,7 +1558,7 @@ public class EssaySceneController implements Initializable {
     // INICIO*********** Métodos de realização do Ensaio ***********
 
 
-///////////////////////////////////
+    ///////////////////////////////////
     @FXML
     private synchronized void test() throws InterruptedException {
 
@@ -1596,7 +1625,7 @@ public class EssaySceneController implements Initializable {
         moving = true;
 
         // Thread que atualiza os valores no grafico
-
+        chartThread = new Thread(new RTChartCreate());
         Platform.runLater(() -> {
             // Inicia o movimento
             essayTypeMove();
@@ -1733,12 +1762,12 @@ public class EssaySceneController implements Initializable {
      */
     private void essayTypeMove(){
         if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Tração"){
-//            serialConn.moveUpEssay();
-            serialConn.moveUpAdjust();
+            serialConn.moveUpEssay();
+//            serialConn.moveUpAdjust();
         } else if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Compressão" ||
                 cbEssayType.getSelectionModel().getSelectedItem().toString()=="Flexão"){
-//            serialConn.moveDownEssay();
-            serialConn.moveDownAdjust();
+            serialConn.moveDownEssay();
+//            serialConn.moveDownAdjust();
         }
     }
 
@@ -1749,12 +1778,12 @@ public class EssaySceneController implements Initializable {
         if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Tração"){
             forceAdjustInversion = 1;
             positionAdjustInversion = 1;
-            System.out.println(forceAdjustInversion + " e " + positionAdjustInversion);
+            forceAdjustInversionView=1;
         } else if(cbEssayType.getSelectionModel().getSelectedItem().toString()=="Compressão" ||
                 cbEssayType.getSelectionModel().getSelectedItem().toString()=="Flexão"){
             forceAdjustInversion = -1;
             positionAdjustInversion = -1;
-            System.out.println(forceAdjustInversion + " e " + positionAdjustInversion);
+            forceAdjustInversionView=-1;
         }
     }
 
@@ -2086,8 +2115,10 @@ public class EssaySceneController implements Initializable {
         lbMYoung.setText("0.000");
         txtEssayVelocity.setText("1");
         shEssayVelocity.setValue(1);
+        setEssayVelocity(1.0);
         txtAdjustVelocity.setText("1");
         shAdjustVelocity.setValue(1);
+        setAdjustVelocity(1.0);
         txtEssayIdentification.setText("");
         txtForcePercentageBreak.setText("20");
         txtMaxForceBreak.setText("0.00");
@@ -2129,7 +2160,7 @@ public class EssaySceneController implements Initializable {
         essayStoped=false;
         // Personalizacao da imagem do usuario
         if(user.getUserImagePath()!=null){
-            ivEssayUser.setImage(new Image(user.getUserImagePath()));
+            ivEssayUser.setImage(new Image("file:\\" +user.getUserImagePath()));
         } else{
             ivEssayUser.setImage(new Image(mBioLabv2Application.class.getResource("img/lightIcon/user.png").toExternalForm()));
         }
